@@ -1,87 +1,61 @@
 /**
- * LiveOpsCounter · três contadores subindo em tempo real.
+ * LiveOpsCounter · três indicadores auditáveis da plataforma.
  *
- * Prova sensorial da promessa "operação 24/7" · números com jitter
- * plausível pra não parecerem estáticos. Não vazam dado real de cliente.
+ * Números fixos e verificáveis (workforce catalog + status de beta).
+ * Nada de contador inflado — integridade > vaidade.
  */
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 interface Metric {
   label: string;
-  format: (n: number) => string;
-  initial: number;
-  tick: () => number;
-  intervalMs: number;
+  value: string;
+  sub: string;
 }
 
 const METRICS: Metric[] = [
   {
-    label: "Mensagens processadas hoje",
-    format: (n) => n.toLocaleString("pt-BR"),
-    initial: 184_207,
-    tick: () => 1 + Math.floor(Math.random() * 3),
-    intervalMs: 1200,
+    value: "20",
+    label: "Departamentos disponíveis",
+    sub: "Comercial, Atendimento, Marketing, Financeiro, RH…",
   },
   {
-    label: "Empresas ativas agora",
-    format: (n) => n.toLocaleString("pt-BR"),
-    initial: 35_827,
-    tick: () => 0, // fixo · número oficial aprovado
-    intervalMs: 5000,
+    value: "+200",
+    label: "Especialistas de IA prontos",
+    sub: "Cada um com playbook, memória e integrações próprias",
   },
   {
-    label: "Agentes rodando",
-    format: (n) => n.toLocaleString("pt-BR"),
-    initial: 1_412,
-    tick: () => Math.floor(Math.random() * 11) - 5, // -5..+5
-    intervalMs: 2600,
+    value: "Beta fechado",
+    label: "Vagas limitadas · 2026",
+    sub: "Early access com acompanhamento 1:1 do time Clauthor",
   },
 ];
 
 export default function LiveOpsCounter() {
-  const [values, setValues] = useState<number[]>(() => METRICS.map((m) => m.initial));
-
-  useEffect(() => {
-    const timers = METRICS.map((m, idx) =>
-      window.setInterval(() => {
-        setValues((prev) => {
-          const next = [...prev];
-          next[idx] = Math.max(0, next[idx] + m.tick());
-          return next;
-        });
-      }, m.intervalMs),
-    );
-    return () => {
-      timers.forEach((t) => window.clearInterval(t));
-    };
-  }, []);
-
   return (
     <div
       className="grid grid-cols-1 sm:grid-cols-3 gap-px rounded-3xl overflow-hidden border border-white/10 bg-white/10"
       role="group"
-      aria-label="Operação em tempo real"
+      aria-label="Escopo verificável da plataforma"
     >
-      {METRICS.map((m, idx) => (
+      {METRICS.map((m) => (
         <div key={m.label} className="relative p-8 sm:p-10 bg-black">
           <div className="flex items-center gap-2 mb-6">
             <span
               className="h-2 w-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_hsl(var(--primary))]"
               aria-hidden
             />
-            <span className="text-[10px] uppercase tracking-[0.24em] text-white/70">Ao vivo</span>
+            <span className="text-[10px] uppercase tracking-[0.24em] text-white/70">Auditável</span>
           </div>
           <motion.div
-            key={values[idx]}
             initial={{ opacity: 0.7, y: -2 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="font-display text-5xl sm:text-6xl font-semibold tracking-[-0.03em] text-white tabular-nums"
           >
-            {m.format(values[idx])}
+            {m.value}
           </motion.div>
-          <p className="mt-4 text-sm text-white/70 leading-snug">{m.label}</p>
+          <p className="mt-4 text-sm text-white/80 leading-snug font-medium">{m.label}</p>
+          <p className="mt-1 text-xs text-white/50 leading-snug">{m.sub}</p>
         </div>
       ))}
     </div>
