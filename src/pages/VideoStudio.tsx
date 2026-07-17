@@ -3,13 +3,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import {
-  Sparkles,
   Loader2,
-  Zap,
-  Lock,
   RefreshCw,
   Clapperboard,
   Settings2,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,7 +29,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+
 import VideoStage, { type StageTemplate } from "@/components/video-studio/VideoStage";
 import VideoInspector from "@/components/video-studio/VideoInspector";
 import LibraryStrip from "@/components/video-studio/LibraryStrip";
