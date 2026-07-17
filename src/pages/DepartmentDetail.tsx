@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, TrendingDown, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
