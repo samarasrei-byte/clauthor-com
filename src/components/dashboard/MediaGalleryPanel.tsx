@@ -312,7 +312,7 @@ const MediaTile = ({ item, onClick }: { item: MediaItem; onClick: () => void }) 
 const MediaModal = ({ item, onClose, onDecision, pending }: {
   item: MediaItem | null;
   onClose: () => void;
-  onDecision: (decision: "approve" | "reject", notes: string) => void;
+  onDecision: (decision: "approve" | "reject", notes: string, networks: string[]) => void;
   pending: boolean;
 }) => {
   const [notes, setNotes] = useState("");
