@@ -108,7 +108,14 @@ export default function Checkout() {
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("[Checkout] PayPal error", err);
-      toast.error(err?.message || "Erro ao iniciar pagamento. Tente novamente.");
+      const friendly = friendlyCheckoutError(err);
+      toast.error(friendly.title, {
+        description: friendly.description,
+        action: friendly.reloadFixes
+          ? { label: "Recarregar", onClick: () => window.location.reload() }
+          : undefined,
+        duration: 8000,
+      });
       setLoading(false);
     }
   };
