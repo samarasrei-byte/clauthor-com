@@ -173,9 +173,9 @@ const AuthPage = () => {
   ];
 
   return (
-    <div className="min-h-dvh w-full flex -mt-16 relative overflow-hidden bg-background">
+    <div className="min-h-dvh w-full flex flex-col lg:flex-row -mt-16 pt-16 lg:pt-0 relative bg-background">
       {/* ================= LEFT · Immersive Showcase (desktop) ================= */}
-      <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-12 xl:p-16 overflow-hidden bg-[#050505] text-white">
+      <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-8 xl:p-14 overflow-hidden bg-[#050505] text-white min-h-dvh">
         {/* Animated aurora orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
@@ -214,12 +214,12 @@ const AuthPage = () => {
         </div>
 
         {/* Middle · orbital neural viz + tagline */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center py-12">
+        <div className="relative z-10 flex-1 flex flex-col justify-center py-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.7 }}
-            className="font-display text-4xl xl:text-5xl font-bold leading-[1.05] tracking-tight max-w-md"
+            className="font-display text-3xl xl:text-5xl font-bold leading-[1.05] tracking-tight max-w-md"
           >
             Você comanda.
             <br />
@@ -237,7 +237,7 @@ const AuthPage = () => {
           </motion.p>
 
           {/* Orbital rings */}
-          <div className="relative mt-14 h-56 w-56">
+          <div className="relative mt-10 h-40 w-40 xl:h-56 xl:w-56 hidden xl:block">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -290,7 +290,7 @@ const AuthPage = () => {
       </aside>
 
       {/* ================= RIGHT · Auth form ================= */}
-      <div className="relative flex-1 flex items-center justify-center px-4 py-24 lg:py-12">
+      <div className="relative flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 lg:py-10 min-h-[calc(100dvh-4rem)] lg:min-h-dvh">
         {/* Soft glow behind form on mobile */}
         <div className="absolute inset-0 pointer-events-none lg:hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
