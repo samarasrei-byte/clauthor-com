@@ -36,8 +36,7 @@ export default function DepartmentDetail() {
   if (!dept) return <Navigate to="/departamentos" replace />;
 
   const Icon = dept.icon;
-  const savings = HUMAN_TEAM_COST - dept.priceMonthly;
-  const savingsPct = Math.round((savings / HUMAN_TEAM_COST) * 100);
+
 
   const handleAdd = () => {
     if (inCart) {
