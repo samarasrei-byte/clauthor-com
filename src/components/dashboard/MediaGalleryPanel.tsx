@@ -120,21 +120,72 @@ const MediaGalleryPanel = () => {
     },
   });
 
+  // Decisions map: media_id → última decisão registrada (aprovada/ajuste)
+  const decisionsQ = useQuery({
+    queryKey: ["media-decisions", tenantId],
+    enabled: !!tenantId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("approvals")
+        .select("content, created_at")
+        .eq("tenant_id", tenantId!)
+        .order("created_at", { ascending: false })
+        .limit(300);
+      if (error) throw error;
+      const map = new Map<string, "approved" | "revision">();
+      (data ?? []).forEach((row: any) => {
+        const c = row.content ?? {};
+        if (c.source !== "media_gallery" || !c.media_id) return;
+        if (map.has(c.media_id)) return; // já pegou a mais recente
+        map.set(c.media_id, c.client_decision === "approve" ? "approved" : "revision");
+      });
+      return map;
+    },
+  });
+
   const all = useMemo<MediaItem[]>(() => {
     return [...(videosQ.data ?? []), ...(imagesQ.data ?? [])]
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   }, [videosQ.data, imagesQ.data]);
 
-  const filtered = useMemo(() => all.filter((m) => {
-    if (filter !== "all" && m.kind !== filter) return false;
-    if (query && !m.title.toLowerCase().includes(query.toLowerCase())) return false;
-    return true;
-  }), [all, filter, query]);
+  const periodCutoff = useMemo(() => {
+    if (period === "all") return 0;
+    const now = Date.now();
+    if (period === "24h") return now - 24 * 3600 * 1000;
+    if (period === "7d") return now - 7 * 24 * 3600 * 1000;
+    return now - 30 * 24 * 3600 * 1000;
+  }, [period]);
+
+  const filtered = useMemo(() => {
+    const list = all.filter((m) => {
+      if (filter !== "all" && m.kind !== filter) return false;
+      if (query && !m.title.toLowerCase().includes(query.toLowerCase())) return false;
+      if (periodCutoff && new Date(m.created_at).getTime() < periodCutoff) return false;
+      if (status !== "all") {
+        const d = decisionsQ.data?.get(m.source_id);
+        if (status === "none" && d) return false;
+        if (status === "approved" && d !== "approved") return false;
+        if (status === "revision" && d !== "revision") return false;
+      }
+      return true;
+    });
+    if (sort === "oldest") list.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    else if (sort === "title") list.sort((a, b) => a.title.localeCompare(b.title, "pt-BR"));
+    else list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    return list;
+  }, [all, filter, query, periodCutoff, status, sort, decisionsQ.data]);
 
   const counts = {
     all: all.length,
     video: all.filter((m) => m.kind === "video").length,
     image: all.filter((m) => m.kind === "image").length,
+  };
+
+  const activeFilterCount =
+    (period !== "all" ? 1 : 0) + (status !== "all" ? 1 : 0) + (sort !== "recent" ? 1 : 0);
+
+  const clearFilters = () => {
+    setPeriod("all"); setSort("recent"); setStatus("all"); setQuery(""); setFilter("all");
   };
 
   // ─── Approval mutation: sempre passa pelo agente ────────────────────────
