@@ -173,10 +173,128 @@ const AuthPage = () => {
   ];
 
   return (
-    <div className="min-h-dvh flex items-center justify-center px-4 -mt-16 relative">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
-      </div>
+    <div className="min-h-dvh w-full flex -mt-16 relative overflow-hidden bg-background">
+      {/* ================= LEFT · Immersive Showcase (desktop) ================= */}
+      <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-12 xl:p-16 overflow-hidden bg-[#050505] text-white">
+        {/* Animated aurora orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{ x: [0, 60, -30, 0], y: [0, -40, 30, 0], scale: [1, 1.15, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] left-[10%] w-[520px] h-[520px] rounded-full blur-[120px]"
+            style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.55), transparent 65%)" }}
+          />
+          <motion.div
+            animate={{ x: [0, -50, 40, 0], y: [0, 40, -30, 0], scale: [1, 0.9, 1.1, 1] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[10%] right-[5%] w-[460px] h-[460px] rounded-full blur-[130px]"
+            style={{ background: "radial-gradient(circle, #6366f1aa, transparent 65%)" }}
+          />
+        </div>
+
+        {/* Grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.06] pointer-events-none"
+          style={{
+            backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+            maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+          }}
+        />
+
+        {/* Top · logo/badge */}
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center">
+            <Bot className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="font-display text-lg font-bold tracking-tight">Clauthor</p>
+            <p className="text-[10px] tracking-[0.24em] uppercase text-white/50">Neural Workforce</p>
+          </div>
+        </div>
+
+        {/* Middle · orbital neural viz + tagline */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center py-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.7 }}
+            className="font-display text-4xl xl:text-5xl font-bold leading-[1.05] tracking-tight max-w-md"
+          >
+            Você comanda.
+            <br />
+            <span className="bg-gradient-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent">
+              A IA executa.
+            </span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="mt-5 text-white/60 text-base max-w-sm leading-relaxed"
+          >
+            +200 especialistas de IA, 20 departamentos, aprovações inteligentes. Sua operação inteira em um só painel.
+          </motion.p>
+
+          {/* Orbital rings */}
+          <div className="relative mt-14 h-56 w-56">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border border-white/10"
+            >
+              <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rounded-full bg-primary shadow-[0_0_20px_hsl(var(--primary))]" />
+            </motion.div>
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-6 rounded-full border border-white/15"
+            >
+              <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 h-2.5 w-2.5 rounded-full bg-indigo-400 shadow-[0_0_16px_#818cf8]" />
+            </motion.div>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-12 rounded-full border border-white/20"
+            >
+              <span className="absolute -bottom-1 left-1/3 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_#34d399]" />
+            </motion.div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center shadow-[0_0_60px_hsl(var(--primary)/0.6)]">
+                <Bot className="h-7 w-7 text-white" />
+                <motion.span
+                  animate={{ scale: [1, 1.6], opacity: [0.6, 0] }}
+                  transition={{ duration: 2.2, repeat: Infinity }}
+                  className="absolute inset-0 rounded-full border-2 border-primary"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom · live signal */}
+        <div className="relative z-10 flex items-center justify-between gap-6 text-xs">
+          <div className="flex items-center gap-2 text-white/70">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            </span>
+            Rede neural ativa · 24/7
+          </div>
+          <div className="flex items-center gap-4 text-white/40">
+            <span>SOC 2 · LGPD</span>
+            <span>·</span>
+            <span>Criptografia AES-256</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* ================= RIGHT · Auth form ================= */}
+      <div className="relative flex-1 flex items-center justify-center px-4 py-24 lg:py-12">
+        {/* Soft glow behind form on mobile */}
+        <div className="absolute inset-0 pointer-events-none lg:hidden">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
+        </div>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }} className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
