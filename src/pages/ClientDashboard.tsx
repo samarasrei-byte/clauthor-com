@@ -382,6 +382,23 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
+  // Unread count for /dashboard/inbox (agent approvals inbox)
+  const { data: inboxUnread = 0 } = useQuery({
+    queryKey: ["agent-inbox-unread", user?.id],
+    enabled: !!user?.id,
+    refetchInterval: 30_000,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user!.id)
+        .in("type", ["media_approved", "media_revision_requested"])
+        .eq("is_read", false);
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+
   // ── Computed ──
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
@@ -488,6 +505,9 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
+    // Inbox do Agente (rota dedicada) — mostra badge de não lidas
+    { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
+
     // ─── IA & Voz: THOR unificado (Chat + Overview) ───
     // "Overview" (não "Central") evita colisão de nome com "Central de Aprovações"
     {
@@ -527,6 +547,7 @@ const ClientDashboard = () => {
     "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "media", "integrations", "system",
+    "route:/dashboard/inbox",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
@@ -543,6 +564,11 @@ const ClientDashboard = () => {
     if (id.startsWith("admin-route:")) {
       const route = id.replace("admin-route:", "");
       navigate(route);
+      return;
+    }
+    // Rotas dedicadas fora do sistema de "sections" (ex.: Inbox do Agente)
+    if (id.startsWith("route:")) {
+      navigate(id.replace("route:", ""));
       return;
     }
     if (id.startsWith("agent-chat-")) {
