@@ -235,6 +235,7 @@ const MediaGalleryPanel = () => {
           : "Ajuste solicitado ao agente",
       );
       qc.invalidateQueries({ queryKey: ["approvals"] });
+      qc.invalidateQueries({ queryKey: ["media-decisions", tenantId] });
       setSelected(null);
     },
     onError: (e: any) => toast.error(e.message || "Falha ao enviar ao agente"),
