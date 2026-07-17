@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, CheckCircle2, ArrowUpRight, ArrowRight } from "lucide-react";
 
 const DEPTS = [
   { icon: Briefcase, label: "Comercial", active: true, badge: 3 },
@@ -9,12 +10,6 @@ const DEPTS = [
   { icon: Scale, label: "Jurídico", active: false },
   { icon: Wallet, label: "Financeiro", active: false, badge: 2 },
   { icon: Users, label: "RH", active: false },
-];
-
-const KPIS = [
-  { label: "Leads qualificados", value: "1.284", delta: "+38%", accent: false },
-  { label: "Receita gerada", value: "R$ 2,4M", delta: "+62%", accent: true },
-  { label: "Tempo economizado", value: "184h", delta: "esta semana", accent: false },
 ];
 
 const AGENT_LINES = [
