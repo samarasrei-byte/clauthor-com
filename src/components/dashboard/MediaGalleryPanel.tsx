@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Film, Image as ImageIcon, LayoutGrid, Search, CheckCircle2, XCircle,
   Loader2, Play, Sparkles as SparklesLucide, Copy, ExternalLink,
+  SlidersHorizontal, X as XIcon, Clock, ArrowDownUp,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
 import { SOCIAL_NETWORKS, type SocialNetworkDef } from "@/components/social/SocialIconsBar";
+
+type Period = "all" | "24h" | "7d" | "30d";
+type Sort = "recent" | "oldest" | "title";
+type Status = "all" | "none" | "approved" | "revision";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type Kind = "video" | "image";
@@ -47,6 +56,9 @@ const MediaGalleryPanel = () => {
   const qc = useQueryClient();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
+  const [period, setPeriod] = useState<Period>("all");
+  const [sort, setSort] = useState<Sort>("recent");
+  const [status, setStatus] = useState<Status>("all");
   const [selected, setSelected] = useState<MediaItem | null>(null);
 
   // Videos: video_generations concluídos
@@ -108,21 +120,72 @@ const MediaGalleryPanel = () => {
     },
   });
 
+  // Decisions map: media_id → última decisão registrada (aprovada/ajuste)
+  const decisionsQ = useQuery({
+    queryKey: ["media-decisions", tenantId],
+    enabled: !!tenantId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("approvals")
+        .select("content, created_at")
+        .eq("tenant_id", tenantId!)
+        .order("created_at", { ascending: false })
+        .limit(300);
+      if (error) throw error;
+      const map = new Map<string, "approved" | "revision">();
+      (data ?? []).forEach((row: any) => {
+        const c = row.content ?? {};
+        if (c.source !== "media_gallery" || !c.media_id) return;
+        if (map.has(c.media_id)) return; // já pegou a mais recente
+        map.set(c.media_id, c.client_decision === "approve" ? "approved" : "revision");
+      });
+      return map;
+    },
+  });
+
   const all = useMemo<MediaItem[]>(() => {
     return [...(videosQ.data ?? []), ...(imagesQ.data ?? [])]
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   }, [videosQ.data, imagesQ.data]);
 
-  const filtered = useMemo(() => all.filter((m) => {
-    if (filter !== "all" && m.kind !== filter) return false;
-    if (query && !m.title.toLowerCase().includes(query.toLowerCase())) return false;
-    return true;
-  }), [all, filter, query]);
+  const periodCutoff = useMemo(() => {
+    if (period === "all") return 0;
+    const now = Date.now();
+    if (period === "24h") return now - 24 * 3600 * 1000;
+    if (period === "7d") return now - 7 * 24 * 3600 * 1000;
+    return now - 30 * 24 * 3600 * 1000;
+  }, [period]);
+
+  const filtered = useMemo(() => {
+    const list = all.filter((m) => {
+      if (filter !== "all" && m.kind !== filter) return false;
+      if (query && !m.title.toLowerCase().includes(query.toLowerCase())) return false;
+      if (periodCutoff && new Date(m.created_at).getTime() < periodCutoff) return false;
+      if (status !== "all") {
+        const d = decisionsQ.data?.get(m.source_id);
+        if (status === "none" && d) return false;
+        if (status === "approved" && d !== "approved") return false;
+        if (status === "revision" && d !== "revision") return false;
+      }
+      return true;
+    });
+    if (sort === "oldest") list.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    else if (sort === "title") list.sort((a, b) => a.title.localeCompare(b.title, "pt-BR"));
+    else list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    return list;
+  }, [all, filter, query, periodCutoff, status, sort, decisionsQ.data]);
 
   const counts = {
     all: all.length,
     video: all.filter((m) => m.kind === "video").length,
     image: all.filter((m) => m.kind === "image").length,
+  };
+
+  const activeFilterCount =
+    (period !== "all" ? 1 : 0) + (status !== "all" ? 1 : 0) + (sort !== "recent" ? 1 : 0);
+
+  const clearFilters = () => {
+    setPeriod("all"); setSort("recent"); setStatus("all"); setQuery(""); setFilter("all");
   };
 
   // ─── Approval mutation: sempre passa pelo agente ────────────────────────
@@ -172,6 +235,7 @@ const MediaGalleryPanel = () => {
           : "Ajuste solicitado ao agente",
       );
       qc.invalidateQueries({ queryKey: ["approvals"] });
+      qc.invalidateQueries({ queryKey: ["media-decisions", tenantId] });
       setSelected(null);
     },
     onError: (e: any) => toast.error(e.message || "Falha ao enviar ao agente"),
@@ -212,12 +276,97 @@ const MediaGalleryPanel = () => {
             className="pl-9 h-10 bg-muted/30 border-border/60"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <FilterChip active={filter === "all"} onClick={() => setFilter("all")} icon={LayoutGrid} label="Todos" count={counts.all} />
           <FilterChip active={filter === "video"} onClick={() => setFilter("video")} icon={Film} label="Vídeos" count={counts.video} accent="text-rose-500" />
           <FilterChip active={filter === "image"} onClick={() => setFilter("image")} icon={ImageIcon} label="Artes" count={counts.image} accent="text-emerald-500" />
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className={cn(
+                  "flex items-center gap-2 px-3 h-9 rounded-full text-xs font-medium border transition-all",
+                  activeFilterCount > 0
+                    ? "bg-primary/10 text-primary border-primary/40"
+                    : "bg-muted/30 text-muted-foreground border-border/50 hover:border-primary/40 hover:text-foreground",
+                )}
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" strokeWidth={1.8} />
+                Filtros
+                {activeFilterCount > 0 && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/20">{activeFilterCount}</span>
+                )}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-72 p-4 space-y-4">
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <Clock className="h-3 w-3" /> Período
+                </label>
+                <Select value={period} onValueChange={(v) => setPeriod(v as Period)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todo o histórico</SelectItem>
+                    <SelectItem value="24h">Últimas 24 horas</SelectItem>
+                    <SelectItem value="7d">Últimos 7 dias</SelectItem>
+                    <SelectItem value="30d">Últimos 30 dias</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <CheckCircle2 className="h-3 w-3" /> Status da decisão
+                </label>
+                <Select value={status} onValueChange={(v) => setStatus(v as Status)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="none">Aguardando revisão</SelectItem>
+                    <SelectItem value="approved">Aprovados</SelectItem>
+                    <SelectItem value="revision">Com ajuste pedido</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <ArrowDownUp className="h-3 w-3" /> Ordenação
+                </label>
+                <Select value={sort} onValueChange={(v) => setSort(v as Sort)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recent">Mais recentes primeiro</SelectItem>
+                    <SelectItem value="oldest">Mais antigos primeiro</SelectItem>
+                    <SelectItem value="title">Título (A → Z)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {activeFilterCount > 0 && (
+                <Button variant="ghost" size="sm" className="w-full gap-1.5 h-8 text-xs" onClick={clearFilters}>
+                  <XIcon className="h-3 w-3" /> Limpar filtros
+                </Button>
+              )}
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
+
+      {/* Active filter chips */}
+      {activeFilterCount > 0 && (
+        <div className="flex flex-wrap gap-1.5 -mt-1">
+          {period !== "all" && (
+            <ActiveChip label={period === "24h" ? "24h" : period === "7d" ? "7 dias" : "30 dias"} onClear={() => setPeriod("all")} />
+          )}
+          {status !== "all" && (
+            <ActiveChip
+              label={status === "none" ? "Aguardando" : status === "approved" ? "Aprovados" : "Ajuste pedido"}
+              onClear={() => setStatus("all")}
+            />
+          )}
+          {sort !== "recent" && (
+            <ActiveChip label={sort === "oldest" ? "Antigos" : "A → Z"} onClear={() => setSort("recent")} />
+          )}
+        </div>
+      )}
 
       {/* Grid */}
       {isLoading ? (
@@ -241,7 +390,7 @@ const MediaGalleryPanel = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
           <AnimatePresence>
             {filtered.map((m) => (
-              <MediaTile key={m.id} item={m} onClick={() => setSelected(m)} />
+              <MediaTile key={m.id} item={m} decision={decisionsQ.data?.get(m.source_id)} onClick={() => setSelected(m)} />
             ))}
           </AnimatePresence>
         </div>
@@ -259,7 +408,7 @@ const MediaGalleryPanel = () => {
 };
 
 // ─── Tile ─────────────────────────────────────────────────────────────────
-const MediaTile = ({ item, onClick }: { item: MediaItem; onClick: () => void }) => (
+const MediaTile = ({ item, decision, onClick }: { item: MediaItem; decision?: "approved" | "revision"; onClick: () => void }) => (
   <motion.button
     type="button"
     layout
@@ -299,6 +448,18 @@ const MediaTile = ({ item, onClick }: { item: MediaItem; onClick: () => void }) 
         <Badge variant="outline" className="absolute top-2 left-2 text-[9px] bg-background/80 backdrop-blur border-border/60">
           {item.kind === "video" ? "Vídeo" : "Arte"}
         </Badge>
+        {decision && (
+          <Badge
+            className={cn(
+              "absolute top-2 right-2 text-[9px] backdrop-blur border-0",
+              decision === "approved"
+                ? "bg-emerald-500/90 text-white"
+                : "bg-amber-500/90 text-white",
+            )}
+          >
+            {decision === "approved" ? "Aprovado" : "Ajuste"}
+          </Badge>
+        )}
       </div>
       <div className="p-2.5">
         <div className="text-xs font-medium truncate" title={item.title}>{item.title}</div>
@@ -482,6 +643,16 @@ const FilterChip = ({ active, onClick, icon: Icon, label, count, accent }: {
     <Icon className={cn("h-3.5 w-3.5", !active && accent)} strokeWidth={1.8} />
     {label}
     <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full", active ? "bg-primary-foreground/20" : "bg-background/80")}>{count}</span>
+  </button>
+);
+
+const ActiveChip = ({ label, onClear }: { label: string; onClear: () => void }) => (
+  <button
+    onClick={onClear}
+    className="inline-flex items-center gap-1 px-2.5 h-6 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 transition-colors"
+  >
+    {label}
+    <XIcon className="h-2.5 w-2.5" />
   </button>
 );
 
