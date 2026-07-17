@@ -11,10 +11,12 @@
  * e vê o número mudar em tempo real.
  */
 
-import { useMemo, useState } from "react";
-import { Calculator, TrendingUp, Clock } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Calculator, TrendingUp, Clock, Share2, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface RoiDefaults {
