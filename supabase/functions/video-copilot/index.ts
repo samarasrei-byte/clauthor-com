@@ -30,6 +30,7 @@ Deno.serve(async (req) => {
 
     // Fetch DNA da empresa para contextualizar o Thor
     let dnaBlock = "";
+    let currentUserId: string | null = null;
     try {
       const supaUser = createClient(
         Deno.env.get("SUPABASE_URL")!,
@@ -38,6 +39,7 @@ Deno.serve(async (req) => {
       );
       const { data: userData } = await supaUser.auth.getUser();
       if (userData?.user) {
+        currentUserId = userData.user.id;
         const supa = createClient(
           Deno.env.get("SUPABASE_URL")!,
           Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
