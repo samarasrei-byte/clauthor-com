@@ -105,18 +105,66 @@ export default function RoiCalculator({ departmentId, monthlyPrice, className }:
 
   const worthIt = savings > 0;
 
+  // Espelha os inputs na URL sem recarregar a página, para permitir compartilhar.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("roi_tasks", String(tasks));
+    url.searchParams.set("roi_rate", String(rate));
+    window.history.replaceState({}, "", url.toString());
+  }, [tasks, rate]);
+
+  async function handleShare() {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("roi_tasks", String(tasks));
+    url.searchParams.set("roi_rate", String(rate));
+    const link = url.toString();
+    const shareData = {
+      title: "Minha simulação de ROI · Clauthor",
+      text: `Economia estimada de ${formatBRL(savings)}/mês com um departamento de IA.`,
+      url: link,
+    };
+    try {
+      // Preferir API nativa em mobile; cair pra clipboard em desktop.
+      if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      toast.success("Link da simulação copiado", { description: "Cole em qualquer lugar — os números vão junto." });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Silencia AbortError (usuário fechou o share sheet) e falhas de clipboard.
+    }
+  }
+
   return (
     <section className={cn("space-y-4", className)} aria-labelledby="roi-calc-title">
-      <div className="flex items-center gap-2">
-        <Calculator className="w-5 h-5 text-primary" />
-        <h2 id="roi-calc-title" className="text-2xl font-display font-semibold">
-          Calcule o seu ROI
-        </h2>
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Calculator className="w-5 h-5 text-primary" />
+          <h2 id="roi-calc-title" className="text-2xl font-display font-semibold">
+            Calcule o seu ROI
+          </h2>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleShare}
+          className="gap-2 border-white/15 hover:bg-white/5"
+        >
+          {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
+          {copied ? "Copiado" : "Compartilhar simulação"}
+        </Button>
       </div>
       <p className="text-sm text-white/60 max-w-2xl">
         Ajuste os números pro seu contexto. A conta é feita em tempo real —
         sem cadastro, sem pegadinha. Você vê exatamente quando o departamento se paga.
       </p>
+
 
       <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
