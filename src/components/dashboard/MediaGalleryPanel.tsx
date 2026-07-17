@@ -127,9 +127,9 @@ const MediaGalleryPanel = () => {
 
   // ─── Approval mutation: sempre passa pelo agente ────────────────────────
   const approvalMutation = useMutation({
-    mutationFn: async ({ item, decision, notes }: { item: MediaItem; decision: "approve" | "reject"; notes: string }) => {
+    mutationFn: async ({ item, decision, notes, networks }: { item: MediaItem; decision: "approve" | "reject"; notes: string; networks: string[] }) => {
       if (!tenantId || !user) throw new Error("Sem tenant");
-      const { error } = await supabase.from("approvals").insert({
+      const { data: inserted, error } = await supabase.from("approvals").insert({
         tenant_id: tenantId,
         created_by: user.id,
         title: `[${decision === "approve" ? "Aprovado" : "Ajuste"}] ${item.title}`.slice(0, 200),
@@ -142,9 +142,28 @@ const MediaGalleryPanel = () => {
           media_id: item.source_id,
           client_decision: decision,
           client_notes: notes,
+          networks,
         } as any,
-      });
+      }).select("id").single();
       if (error) throw error;
+
+      // Notify the responsible agent/team (best-effort, non-blocking on UX)
+      try {
+        await supabase.functions.invoke("media-approval-notify", {
+          body: {
+            approval_id: inserted.id,
+            decision,
+            media_kind: item.kind,
+            media_id: item.source_id,
+            media_title: item.title,
+            media_url: item.url,
+            notes,
+            networks,
+          },
+        });
+      } catch (e) {
+        console.warn("[media-approval-notify] falhou:", e);
+      }
     },
     onSuccess: (_d, vars) => {
       toast.success(
@@ -232,7 +251,7 @@ const MediaGalleryPanel = () => {
       <MediaModal
         item={selected}
         onClose={() => setSelected(null)}
-        onDecision={(decision, notes) => selected && approvalMutation.mutate({ item: selected, decision, notes })}
+        onDecision={(decision, notes, networks) => selected && approvalMutation.mutate({ item: selected, decision, notes, networks })}
         pending={approvalMutation.isPending}
       />
     </div>
@@ -293,7 +312,7 @@ const MediaTile = ({ item, onClick }: { item: MediaItem; onClick: () => void }) 
 const MediaModal = ({ item, onClose, onDecision, pending }: {
   item: MediaItem | null;
   onClose: () => void;
-  onDecision: (decision: "approve" | "reject", notes: string) => void;
+  onDecision: (decision: "approve" | "reject", notes: string, networks: string[]) => void;
   pending: boolean;
 }) => {
   const [notes, setNotes] = useState("");
@@ -403,7 +422,7 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
                 <Button
                   className="w-full gap-2"
                   disabled={pending}
-                  onClick={() => onDecision("approve", buildNotePayload(notes, pickedNetworks))}
+                  onClick={() => onDecision("approve", notes, pickedNetworks)}
                 >
                   {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Aprovar e enviar ao agente
@@ -412,7 +431,7 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
                   variant="outline"
                   className="w-full gap-2 border-destructive/40 text-destructive hover:bg-destructive/10"
                   disabled={pending}
-                  onClick={() => onDecision("reject", buildNotePayload(notes, pickedNetworks))}
+                  onClick={() => onDecision("reject", notes, pickedNetworks)}
                 >
                   <XCircle className="h-4 w-4" /> Pedir ajuste
                 </Button>
