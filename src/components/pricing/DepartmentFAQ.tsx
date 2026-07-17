@@ -11,7 +11,7 @@ interface FAQ {
 const departmentFAQs: Record<string, FAQ[]> = {
   tecnologia: [
     { q: "Os agentes conseguem acessar meu código real?", a: "Sim, via integrações com GitHub/GitLab. Eles revisam PRs, sugerem melhorias e detectam vulnerabilidades automaticamente." },
-    { q: "Como funciona a orquestração entre Dev e DevOps?", a: "O Dev finaliza o código, o CISO revisa segurança, e o DevOps faz deploy - tudo automatizado em sequência, sem intervenção humana." },
+    { q: "Como funciona a orquestração entre Dev e DevOps?", a: "O Dev finaliza o código, o CISO revisa segurança, e o DevOps faz deploy - tudo automatizado em sequência, com aprovações inteligentes nos pontos críticos." },
     { q: "Posso usar meu stack atual?", a: "Sim. Os agentes se adaptam a qualquer stack (React, Python, Node, etc.) e aprendem com seu codebase existente." },
   ],
   comercial: [
