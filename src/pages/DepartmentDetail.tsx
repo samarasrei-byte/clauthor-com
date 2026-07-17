@@ -15,8 +15,8 @@ import SEO from "@/components/SEO";
 import { useDeptSelection } from "@/stores/deptSelection";
 import { toast } from "sonner";
 
-// Custo médio de uma equipe humana equivalente para um departamento (CLT + encargos + gestão)
-const HUMAN_TEAM_COST = 90000;
+
+
 
 export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
