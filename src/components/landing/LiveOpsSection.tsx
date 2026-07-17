@@ -18,15 +18,16 @@ export default function LiveOpsSection() {
         {/* Header */}
         <div className="max-w-3xl">
           <p className="text-[11px] uppercase tracking-[0.24em] text-white/50 mb-6">
-            A Clauthor operando agora
+            A Clauthor por dentro
           </p>
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.035em] leading-[1.02] text-white mb-6">
-            Isso não é promessa. Está rodando enquanto você lê.
+            20 departamentos prontos. Você comanda, a IA executa.
           </h2>
           <p className="text-lg text-white/60 max-w-xl leading-relaxed">
-            Enquanto times humanos dormem, os agentes qualificam leads, respondem clientes, publicam
-            campanhas e fecham o financeiro.
+            Cada departamento tem um squad de especialistas de IA com playbook, memória e
+            aprovações inteligentes nos pontos críticos.
           </p>
+
         </div>
 
         {/* Camada 1 · contadores */}
