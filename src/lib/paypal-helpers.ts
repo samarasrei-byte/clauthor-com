@@ -1,33 +1,44 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
+import { friendlyCheckoutError } from "@/lib/checkout-errors";
 
 /**
  * Creates a PayPal plan server-side and returns the planId.
- * Used to enable inline PayPal buttons (transparent checkout).
+ * Throws a friendly Error on failure so the UI can surface it (toast/dialog)
+ * instead of leaving the user stuck on "Preparing checkout...".
  */
 export async function createPayPalPlan(
   agentSlug: string,
   agentName: string,
   amount: number,
   currency: string
-): Promise<string | undefined> {
-  try {
-    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-      body: {
-        action: "create_subscription",
-        agent_slug: agentSlug,
-        agent_name: agentName,
-        amount,
-        currency,
-        return_url: `${window.location.origin}/dashboard?subscription=success`,
-        cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
-      },
-    });
-    if (error || !data?.success) return undefined;
-    return data.plan_id;
-  } catch {
-    return undefined;
+): Promise<string> {
+  const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+    body: {
+      action: "create_subscription",
+      agent_slug: agentSlug,
+      agent_name: agentName,
+      amount,
+      currency,
+      return_url: `${window.location.origin}/dashboard?subscription=success`,
+      cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
+    },
+  });
+
+  const raw =
+    (error as any)?.context?.error ??
+    (error as any)?.message ??
+    (data as any)?.error ??
+    error ??
+    data;
+
+  if (error || !data?.success || !data?.plan_id) {
+    const friendly = friendlyCheckoutError(raw);
+    const err = new Error(`${friendly.title} — ${friendly.description}`);
+    (err as any).friendly = friendly;
+    throw err;
   }
+  return data.plan_id as string;
 }
 
 /**

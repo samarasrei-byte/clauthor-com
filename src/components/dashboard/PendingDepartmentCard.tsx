@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Zap, X } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
@@ -60,13 +61,21 @@ export default function PendingDepartmentCard() {
       currency: pending.currency || "BRL",
       lang: "pt",
     };
-    const planId = await createPayPalPlan(
-      `dept-${pending.department_id}`,
-      pending.department_name,
-      priceReais,
-      pending.currency || "BRL",
-    );
-    setCheckout({ ...data, planId });
+    try {
+      const planId = await createPayPalPlan(
+        `dept-${pending.department_id}`,
+        pending.department_name,
+        priceReais,
+        pending.currency || "BRL",
+      );
+      setCheckout({ ...data, planId });
+    } catch (err: any) {
+      const f = err?.friendly ?? {
+        title: "Não conseguimos abrir o checkout",
+        description: "Tente novamente em instantes.",
+      };
+      toast.error(f.title, { description: f.description, duration: 8000 });
+    }
   };
 
   const onApproveInline = (subscriptionId: string) => {
