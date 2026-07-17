@@ -591,6 +591,7 @@ const ClientDashboard = () => {
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     files: "Arquivos",
     approvals: "Aprovações",
+    media: "Mídia",
     squads: "Equipes",
     "neural-network": "Painel Neural",
     "mission-composer": "Mission Composer",
