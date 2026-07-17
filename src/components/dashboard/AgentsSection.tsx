@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bot, Plus, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info } from "lucide-react";
+import { Bot, Plus, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info, Activity } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -317,6 +317,17 @@ const AgentsSection = ({
                   >
                      <MessageSquare className="h-3.5 w-3.5" />
                     {t("dashboard.chat_action", { defaultValue: "Conversar" })}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-xs h-8 px-2 text-muted-foreground hover:text-foreground gap-1"
+                    asChild
+                  >
+                    <Link to={`/dashboard/traces?agent=${agent.id}`}>
+                      <Activity className="h-3.5 w-3.5" />
+                      {t("dashboard.replay", { defaultValue: "Ver replay" })}
+                    </Link>
                   </Button>
                   <Button
                     size="sm"

@@ -5,9 +5,10 @@
  * Isso separa "wrapper de LLM" de "plataforma real de agentes".
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
@@ -74,6 +75,9 @@ const SPAN_COLOR: Record<Trace["span_type"], string> = {
 export default function AgentTraces() {
   const { user } = useAuth();
   const [selectedRun, setSelectedRun] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const filterAgent = searchParams.get("agent");
+  const filterRun = searchParams.get("run");
 
   const { data: traces = [], isLoading } = useQuery({
     queryKey: ["agent-traces", user?.id],
@@ -135,10 +139,26 @@ export default function AgentTraces() {
       );
   }, [traces]);
 
-  const selectedRunData = useMemo(
-    () => runs.find((r) => r.runId === selectedRun),
-    [runs, selectedRun],
+  const filteredRuns = useMemo(
+    () => (filterAgent ? runs.filter((r) => r.root.agent_id === filterAgent) : runs),
+    [runs, filterAgent],
   );
+
+  const selectedRunData = useMemo(
+    () => filteredRuns.find((r) => r.runId === selectedRun),
+    [filteredRuns, selectedRun],
+  );
+
+  // Auto-select run from ?run= or first matching agent run
+  useEffect(() => {
+    if (selectedRun) return;
+    if (filterRun && runs.some((r) => r.runId === filterRun)) {
+      setSelectedRun(filterRun);
+    } else if (filterAgent && filteredRuns.length > 0) {
+      setSelectedRun(filteredRuns[0].runId);
+    }
+  }, [filterRun, filterAgent, filteredRuns, runs, selectedRun]);
+
 
   // Aggregate metrics
   const metrics = useMemo(() => {
@@ -241,12 +261,17 @@ export default function AgentTraces() {
           <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4">
             {/* Runs list */}
             <Card className="p-2 h-[calc(100vh-320px)]">
-              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Execuções recentes
+              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
+                <span>Execuções {filterAgent ? "do agente" : "recentes"}</span>
+                {filterAgent && (
+                  <Button variant="ghost" size="sm" className="h-6 text-[10px]" onClick={() => (window.location.href = "/dashboard/traces")}>
+                    Limpar filtro
+                  </Button>
+                )}
               </div>
               <ScrollArea className="h-[calc(100%-32px)]">
                 <div className="space-y-1 pr-2">
-                  {runs.map((run, i) => (
+                  {filteredRuns.map((run, i) => (
                     <motion.button
                       key={run.runId}
                       initial={{ opacity: 0, x: -8 }}
