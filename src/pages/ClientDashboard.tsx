@@ -526,7 +526,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
-    "approvals", "integrations", "system",
+    "approvals", "media", "integrations", "system",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
