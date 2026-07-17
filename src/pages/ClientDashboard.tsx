@@ -507,6 +507,8 @@ const ClientDashboard = () => {
 
     // Inbox do Agente (rota dedicada) — mostra badge de não lidas
     { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
+    // Traces (observabilidade) — timeline de execuções, custo, latência
+    { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: zoneWork },
 
     // ─── IA & Voz: THOR unificado (Chat + Overview) ───
     // "Overview" (não "Central") evita colisão de nome com "Central de Aprovações"
