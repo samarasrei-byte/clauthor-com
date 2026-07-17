@@ -13,6 +13,7 @@ import { incrementAgentUsage, resolvePriceTier, type AgentUsageResult } from "..
 
 import { decryptValueForExecution } from "./crypto.ts";
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
+import { startRun, logSpan, finishRun, type RunHandle } from "../_shared/agent-traces.ts";
 
 // ── Episodic memory (long-term) helpers ───────────────────────────────────
 const EPISODIC_EMBED_MODEL = "openai/text-embedding-3-small";
@@ -1079,6 +1080,15 @@ Exemplo de redirecionamento:
     console.log(`[SmartRouter] complexity=${taskComplexity} quality=${agentQualityMode} model=${selectedModel}`);
 
     // === SINGLE CALL with tools - no more double call ===
+    const run: RunHandle = await startRun({
+      userId,
+      agentId: agentId || null,
+      agentName: agentName || "agent-chat",
+      name: `chat:${actionType}`,
+      input: { message: lastUserContent.slice(0, 500) },
+      metadata: { model: selectedModel, complexity: taskComplexity, quality: agentQualityMode },
+    });
+    const llmStart = Date.now();
     const firstResponse = await fetchAI({
       model: selectedModel,
       messages: [
@@ -1091,6 +1101,7 @@ Exemplo de redirecionamento:
     }, { qualityMode: agentQualityMode });
 
     if (!firstResponse.ok) {
+      finishRun(run, { status: "error", output: { http: firstResponse.status } }).catch(() => {});
       if (firstResponse.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       if (firstResponse.status === 402) return new Response(JSON.stringify({ error: "AI service payment required." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       const errorText = await firstResponse.text();
@@ -1099,6 +1110,15 @@ Exemplo de redirecionamento:
     }
 
     const aiResponse = await firstResponse.json();
+    logSpan(run, {
+      spanType: "llm_call",
+      name: "first_response",
+      status: "ok",
+      model: selectedModel,
+      tokensInput: aiResponse.usage?.prompt_tokens ?? 0,
+      tokensOutput: aiResponse.usage?.completion_tokens ?? 0,
+      latencyMs: Date.now() - llmStart,
+    }).catch(() => {});
     const firstChoice = aiResponse.choices?.[0];
     const toolCalls = firstChoice?.message?.tool_calls;
     const toolResults: any[] = [];
@@ -1110,6 +1130,7 @@ Exemplo de redirecionamento:
         let fnArgs: any = {};
         try { fnArgs = JSON.parse(toolCall.function?.arguments || "{}"); } catch { fnArgs = {}; }
         console.log(`[Autonomy] Tool requested: ${fnName}`, fnArgs);
+        const toolStart = Date.now();
 
         if (fnName === "delegate_to_agent") {
           // Delegation goes through autonomy engine
@@ -1118,6 +1139,12 @@ Exemplo de redirecionamento:
             () => delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", 0)
           );
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
+          logSpan(run, {
+            spanType: "tool_call", name: fnName,
+            status: autonomyResult.success ? "ok" : "error",
+            input: fnArgs, output: autonomyResult.result,
+            latencyMs: Date.now() - toolStart,
+          }).catch(() => {});
         } else {
           // All tools go through autonomy engine for risk classification
           const autonomyResult = await autonomousExecute(
@@ -1125,6 +1152,12 @@ Exemplo de redirecionamento:
             () => executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", policyContext, credits.used_credits, credits.total_credits)
           );
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
+          logSpan(run, {
+            spanType: "tool_call", name: fnName,
+            status: autonomyResult.success ? "ok" : "error",
+            input: fnArgs, output: autonomyResult.result,
+            latencyMs: Date.now() - toolStart,
+          }).catch(() => {});
         }
       }
 
@@ -1140,6 +1173,7 @@ Exemplo de redirecionamento:
       ];
 
       if (wantStream) {
+         finishRun(run, { status: "ok", output: { tool_calls: toolCalls.length } }).catch(() => {});
          return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls, selectedModel);
        } else {
          const secondResponse = await fetchAI({ model: selectedModel, messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false }, { qualityMode: agentQualityMode });
@@ -1161,6 +1195,7 @@ Exemplo de redirecionamento:
           }
         }
 
+        finishRun(run, { status: "ok", output: { tool_calls: toolCalls.length, tokens: totalTokens } }).catch(() => {});
         return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning, tool_results: toolResults }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     }
@@ -1197,7 +1232,10 @@ Exemplo de redirecionamento:
             }
           }
         } catch (e) { console.error("Stream pipe error:", e); }
-        finally { await writer.close(); }
+        finally {
+          finishRun(run, { status: "ok", output: { tokens: totalTokens, streamed: true } }).catch(() => {});
+          await writer.close();
+        }
       })();
 
       return new Response(readable, { headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" } });
@@ -1215,6 +1253,7 @@ Exemplo de redirecionamento:
       }
     }
 
+    finishRun(run, { status: "ok", output: { tokens: totalTokens } }).catch(() => {});
     return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (error) {

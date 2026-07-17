@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { startRun, logSpan, finishRun } from "../_shared/agent-traces.ts";
 
 /**
  * simulate-agent
@@ -18,6 +20,30 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+
+    // Best-effort resolve user id from auth header for traces
+    let currentUserId: string | null = null;
+    try {
+      const authHeader = req.headers.get("Authorization");
+      if (authHeader?.startsWith("Bearer ")) {
+        const supaUser = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+          { global: { headers: { Authorization: authHeader } } },
+        );
+        const { data } = await supaUser.auth.getUser();
+        currentUserId = data?.user?.id ?? null;
+      }
+    } catch { /* traces optional */ }
+
+    const run = currentUserId
+      ? await startRun({
+          userId: currentUserId,
+          agentName: `simulate:${agentSlug ?? agentName}`,
+          name: "simulate-agent",
+          metadata: { agentSlug, agentName },
+        })
+      : null;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
@@ -46,6 +72,7 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
 
     const userMsg = `Agente: ${agentName} (slug: ${agentSlug})${departmentContext}\n\nContexto do negócio:\n${context}`;
 
+    const llmStart = Date.now();
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -63,6 +90,7 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
     });
 
     if (!aiResp.ok) {
+      if (run) finishRun(run, { status: "error", output: { http: aiResp.status } }).catch(() => {});
       if (aiResp.status === 429) {
         return new Response(
           JSON.stringify({ error: "Muitas requisições, tente em instantes." }),
@@ -88,6 +116,18 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
         assumptions: ["Dados limitados fornecidos"],
         risks: ["Precisa de mais contexto para precisão"],
       };
+    }
+
+    if (run) {
+      logSpan(run, {
+        spanType: "llm_call",
+        name: "roi_projection",
+        model: "google/gemini-2.5-flash",
+        tokensInput: data.usage?.prompt_tokens ?? 0,
+        tokensOutput: data.usage?.completion_tokens ?? 0,
+        latencyMs: Date.now() - llmStart,
+      }).catch(() => {});
+      finishRun(run, { status: "ok", output: { confidence: parsed?.confidence } }).catch(() => {});
     }
 
     return new Response(JSON.stringify(parsed), {
