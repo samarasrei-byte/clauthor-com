@@ -321,6 +321,17 @@ const AgentsSection = ({
                   <Button
                     size="sm"
                     variant="ghost"
+                    className="text-xs h-8 px-2 text-muted-foreground hover:text-foreground gap-1"
+                    asChild
+                  >
+                    <Link to={`/dashboard/traces?agent=${agent.id}`}>
+                      <Activity className="h-3.5 w-3.5" />
+                      {t("dashboard.replay", { defaultValue: "Ver replay" })}
+                    </Link>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
                     className="text-xs h-8 px-2 text-muted-foreground hover:text-foreground"
                     onClick={() => setExpandedAgent(isExpanded ? null : agent.id)}
                    >
