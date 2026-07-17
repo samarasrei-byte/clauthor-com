@@ -72,6 +72,7 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
 
     const userMsg = `Agente: ${agentName} (slug: ${agentSlug})${departmentContext}\n\nContexto do negócio:\n${context}`;
 
+    const llmStart = Date.now();
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -89,6 +90,7 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
     });
 
     if (!aiResp.ok) {
+      if (run) finishRun(run, { status: "error", output: { http: aiResp.status } }).catch(() => {});
       if (aiResp.status === 429) {
         return new Response(
           JSON.stringify({ error: "Muitas requisições, tente em instantes." }),
