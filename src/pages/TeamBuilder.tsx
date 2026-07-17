@@ -256,9 +256,13 @@ const TeamBuilder = () => {
     };
     setCheckoutData(checkoutInfo);
     const agentSlug = `custom-team-${Date.now()}`;
-    createPayPalPlan(agentSlug, checkoutInfo.label, totalPrice, region.currency).then((planId) => {
-      setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
-    });
+    createPayPalPlan(agentSlug, checkoutInfo.label, totalPrice, region.currency)
+      .then((planId) => setCheckoutData((prev) => prev ? { ...prev, planId } : prev))
+      .catch((err) => {
+        const f = err?.friendly ?? { title: "Não conseguimos iniciar o pagamento", description: "Tente novamente em instantes." };
+        toast.error(f.title, { description: f.description });
+        setCheckoutData(null);
+      });
   }, [totalAgents, totalPrice, cartItems, user, navigate, region, lang]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
