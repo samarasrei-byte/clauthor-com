@@ -251,7 +251,7 @@ const MediaGalleryPanel = () => {
       <MediaModal
         item={selected}
         onClose={() => setSelected(null)}
-        onDecision={(decision, notes) => selected && approvalMutation.mutate({ item: selected, decision, notes })}
+        onDecision={(decision, notes, networks) => selected && approvalMutation.mutate({ item: selected, decision, notes, networks })}
         pending={approvalMutation.isPending}
       />
     </div>
