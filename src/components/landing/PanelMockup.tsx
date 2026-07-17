@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, ArrowUpRight, ArrowRight } from "lucide-react";
 
 const DEPTS = [
   { icon: Briefcase, label: "Comercial", active: true, badge: 3 },
@@ -9,12 +10,6 @@ const DEPTS = [
   { icon: Scale, label: "Jurídico", active: false },
   { icon: Wallet, label: "Financeiro", active: false, badge: 2 },
   { icon: Users, label: "RH", active: false },
-];
-
-const KPIS = [
-  { label: "Leads qualificados", value: "1.284", delta: "+38%", accent: false },
-  { label: "Receita gerada", value: "R$ 2,4M", delta: "+62%", accent: true },
-  { label: "Tempo economizado", value: "184h", delta: "esta semana", accent: false },
 ];
 
 const AGENT_LINES = [
@@ -43,6 +38,56 @@ const Typewriter = ({ text, delay = 0 }: { text: string; delay?: number }) => {
     };
   }, [text, delay]);
   return <span>{shown}</span>;
+};
+
+interface LiveKpiProps {
+  label: string;
+  base: number;
+  incrementEvery: number;
+  step?: number;
+  formatter?: (v: number) => string;
+  delta: string;
+  accent?: boolean;
+  delay?: number;
+}
+
+const LiveKpi = ({ label, base, incrementEvery, step = 1, formatter, delta, accent, delay = 0 }: LiveKpiProps) => {
+  const [value, setValue] = useState(base);
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setValue((v) => +(v + step).toFixed(2));
+      setPulse(true);
+      setTimeout(() => setPulse(false), 600);
+    }, incrementEvery);
+    return () => clearInterval(id);
+  }, [incrementEvery, step]);
+
+  const display = formatter ? formatter(value) : value.toLocaleString("pt-BR");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay }}
+      className="p-3.5 rounded-xl bg-black/40 border border-white/10"
+    >
+      <div className="text-[10px] uppercase tracking-[0.12em] text-white/45 mb-2">{label}</div>
+      <div
+        className={`text-2xl font-semibold tracking-tight transition-colors duration-500 ${
+          accent ? "text-primary" : "text-white"
+        } ${pulse ? "!text-primary" : ""}`}
+      >
+        {display}
+      </div>
+      <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-white/50">
+        <ArrowUpRight className="h-2.5 w-2.5 text-primary" />
+        {delta}
+      </div>
+    </motion.div>
+  );
 };
 
 const PanelMockup = () => {
@@ -101,45 +146,61 @@ const PanelMockup = () => {
 
         {/* Main */}
         <main className="col-span-9 p-5 space-y-4 overflow-hidden">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.14em] text-white/40 mb-1">
-                Departamento Comercial
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">
+                  Departamento Comercial
+                </div>
+                <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/25">
+                  R$ 1.700/mês
+                </span>
               </div>
               <div className="text-lg font-semibold text-white tracking-tight">
                 Operando · 12 agentes ativos
               </div>
+              <div className="mt-0.5 text-[10px] text-white/45">
+                Primeiro lead qualificado em <span className="text-white/70 font-semibold">4h 12min</span>
+              </div>
             </div>
-            <button className="text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-primary text-primary-foreground inline-flex items-center gap-1.5">
-              Aprovar todos
-              <CheckCircle2 className="h-3 w-3" />
-            </button>
+            <Link
+              to="/preview-dashboard"
+              className="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-primary text-primary-foreground inline-flex items-center gap-1.5 hover:bg-primary/90 transition-colors"
+            >
+              Ver painel real
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
 
           {/* KPI grid */}
           <div className="grid grid-cols-3 gap-3">
-            {KPIS.map((k, i) => (
-              <motion.div
-                key={k.label}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="p-3.5 rounded-xl bg-black/40 border border-white/10"
-              >
-                <div className="text-[10px] uppercase tracking-[0.12em] text-white/45 mb-2">
-                  {k.label}
-                </div>
-                <div className={`text-2xl font-semibold tracking-tight ${k.accent ? "text-primary" : "text-white"}`}>
-                  {k.value}
-                </div>
-                <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-white/50">
-                  <ArrowUpRight className="h-2.5 w-2.5 text-primary" />
-                  {k.delta}
-                </div>
-              </motion.div>
-            ))}
+            <LiveKpi
+              label="Leads qualificados"
+              base={1284}
+              incrementEvery={7000}
+              delta="+38%"
+              delay={0}
+            />
+            <LiveKpi
+              label="Receita gerada"
+              base={2.4}
+              formatter={(v) => `R$ ${v.toFixed(2).replace(".", ",")}M`}
+              incrementEvery={18000}
+              step={0.01}
+              delta="+62%"
+              accent
+              delay={0.08}
+            />
+            <LiveKpi
+              label="Tempo economizado"
+              base={184}
+              formatter={(v) => `${Math.round(v)}h`}
+              incrementEvery={11000}
+              delta="esta semana"
+              delay={0.16}
+            />
           </div>
+
 
           {/* Live agent output */}
           <div className="p-4 rounded-xl bg-black/50 border border-white/10 space-y-2">
