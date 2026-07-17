@@ -547,6 +547,7 @@ const ClientDashboard = () => {
     "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "media", "integrations", "system",
+    "route:/dashboard/inbox",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
