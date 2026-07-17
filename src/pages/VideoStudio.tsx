@@ -31,12 +31,14 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import VideoStage from "@/components/video-studio/VideoStage";
+import VideoStage, { type StageTemplate } from "@/components/video-studio/VideoStage";
 import VideoInspector from "@/components/video-studio/VideoInspector";
 import LibraryStrip from "@/components/video-studio/LibraryStrip";
 import ThorVideoCopilot from "@/components/video-studio/ThorVideoCopilot";
 import CopilotTour from "@/components/video-studio/CopilotTour";
+import StageActions from "@/components/video-studio/StageActions";
 import { useVideoCopilot } from "@/hooks/useVideoCopilot";
+
 
 type Provider = "veo3" | "replicate" | "lovable";
 
