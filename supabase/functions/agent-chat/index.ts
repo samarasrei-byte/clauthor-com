@@ -1232,7 +1232,10 @@ Exemplo de redirecionamento:
             }
           }
         } catch (e) { console.error("Stream pipe error:", e); }
-        finally { await writer.close(); }
+        finally {
+          finishRun(run, { status: "ok", output: { tokens: totalTokens, streamed: true } }).catch(() => {});
+          await writer.close();
+        }
       })();
 
       return new Response(readable, { headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" } });
