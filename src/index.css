@@ -189,13 +189,21 @@
     transition: background-color 320ms cubic-bezier(0.22, 1, 0.36, 1),
                 color 320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  html *,
-  html *::before,
-  html *::after {
+  /*
+   * Transição global de background-color/color foi REMOVIDA — causava
+   * flashes brancos ao scrollar entre seções .light e .dark porque
+   * cada elemento re-animava por 260ms na troca de contexto.
+   * Se quiser transição em toggle de tema, adicione a classe
+   * `.theme-transition` no <html> temporariamente durante o toggle.
+   */
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
     transition-property: background-color, border-color, color, fill, stroke, text-decoration-color;
     transition-duration: 260ms;
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   @media (prefers-reduced-motion: reduce) {
     html, html *, html *::before, html *::after {
       transition: none !important;
