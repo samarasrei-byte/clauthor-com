@@ -16,6 +16,7 @@ import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import HelpTooltip from "@/components/HelpTooltip";
+import { friendlyCheckoutError } from "@/lib/checkout-errors";
 
 export default function Checkout() {
   const navigate = useNavigate();
