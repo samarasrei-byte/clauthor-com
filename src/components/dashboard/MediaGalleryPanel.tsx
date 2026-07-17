@@ -389,7 +389,7 @@ const MediaGalleryPanel = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
           <AnimatePresence>
             {filtered.map((m) => (
-              <MediaTile key={m.id} item={m} onClick={() => setSelected(m)} />
+              <MediaTile key={m.id} item={m} decision={decisionsQ.data?.get(m.source_id)} onClick={() => setSelected(m)} />
             ))}
           </AnimatePresence>
         </div>
