@@ -858,7 +858,22 @@ const ClientDashboard = () => {
       )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
+      {/* Fluxo Zero-Fricção: walkthrough conversacional do Thor (Tela 4) e modal de ativação (Tela 5).
+          O DashboardTour clássico só roda depois que walkthrough_completed=true (mesma flag). */}
+      {!hasPendingCheckout && !showEmptyState && <ThorWalkthrough />}
       {!hasPendingCheckout && !showEmptyState && <DashboardTour />}
+      {searchParamsDeep.get("activate") === "1" && (
+        <Suspense fallback={null}>
+          <ActivateModal
+            open
+            onClose={() => {
+              const next = new URLSearchParams(searchParamsDeep);
+              next.delete("activate");
+              setSearchParamsDeep(next, { replace: true });
+            }}
+          />
+        </Suspense>
+      )}
     </>
   );
 };
