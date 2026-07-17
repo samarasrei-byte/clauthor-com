@@ -407,7 +407,7 @@ const MediaGalleryPanel = () => {
 };
 
 // ─── Tile ─────────────────────────────────────────────────────────────────
-const MediaTile = ({ item, onClick }: { item: MediaItem; onClick: () => void }) => (
+const MediaTile = ({ item, decision, onClick }: { item: MediaItem; decision?: "approved" | "revision"; onClick: () => void }) => (
   <motion.button
     type="button"
     layout
