@@ -6,6 +6,7 @@ import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
+import OnboardingZero from "@/pages/OnboardingZero";
 
 interface HomeReco {
   kind: "departamento" | "squad" | "agente";
