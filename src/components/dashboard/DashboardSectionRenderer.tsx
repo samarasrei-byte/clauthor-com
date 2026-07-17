@@ -28,6 +28,7 @@ const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const WorkspaceHub = lazy(() => import("./WorkspaceHub"));
 const SystemHub = lazy(() => import("./SystemHub"));
+const MediaGalleryPanel = lazy(() => import("./MediaGalleryPanel"));
 
 interface Props {
   activeSection: string;
