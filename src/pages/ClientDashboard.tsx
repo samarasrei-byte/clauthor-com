@@ -382,6 +382,23 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
+  // Unread count for /dashboard/inbox (agent approvals inbox)
+  const { data: inboxUnread = 0 } = useQuery({
+    queryKey: ["agent-inbox-unread", user?.id],
+    enabled: !!user?.id,
+    refetchInterval: 30_000,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user!.id)
+        .in("type", ["media_approved", "media_revision_requested"])
+        .eq("is_read", false);
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+
   // ── Computed ──
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
