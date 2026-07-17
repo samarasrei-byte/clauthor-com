@@ -4,6 +4,7 @@
 import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { streamAIChat, validateMessages } from "../_shared/streamChat.ts";
+import { startRun, logSpan, finishRun } from "../_shared/agent-traces.ts";
 
 interface CopilotBody {
   messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
