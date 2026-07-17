@@ -22,6 +22,8 @@ const AgentsLiveFeed = lazy(() => import("@/components/dashboard/AgentsLiveFeed"
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
+import ThorWalkthrough from "@/components/onboarding-zero/ThorWalkthrough";
+const ActivateModal = lazy(() => import("@/components/onboarding-zero/ActivateModal"));
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
