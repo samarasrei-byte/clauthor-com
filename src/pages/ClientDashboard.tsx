@@ -521,6 +521,12 @@ const ClientDashboard = () => {
 
   // ── Navigation ──
   const handleSidebarNav = (id: string) => {
+    // Admin routes (rotas separadas, não sections)
+    if (id.startsWith("admin-route:")) {
+      const route = id.replace("admin-route:", "");
+      navigate(route);
+      return;
+    }
     if (id.startsWith("agent-chat-")) {
       const agentId = id.replace("agent-chat-", "");
       const agent = agents.find(a => a.id === agentId);
@@ -531,6 +537,7 @@ const ClientDashboard = () => {
     if (id === "chat") setPreviousSection(activeSection);
     setActiveSection(id);
   };
+
 
   // Register Thor in the FloatingDock (bottom-center reserved zone).
   const { registerThor } = useFloatingDock();
