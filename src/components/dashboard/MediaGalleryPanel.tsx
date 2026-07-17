@@ -431,7 +431,7 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
                   variant="outline"
                   className="w-full gap-2 border-destructive/40 text-destructive hover:bg-destructive/10"
                   disabled={pending}
-                  onClick={() => onDecision("reject", buildNotePayload(notes, pickedNetworks))}
+                  onClick={() => onDecision("reject", notes, pickedNetworks)}
                 >
                   <XCircle className="h-4 w-4" /> Pedir ajuste
                 </Button>
