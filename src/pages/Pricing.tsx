@@ -31,6 +31,7 @@ const FLAGSHIP_IDS = ["comercial", "prospeccao", "marketing", "suporte", "financ
 
 const Pricing = () => {
   const [showTokens, setShowTokens] = useState(false);
+  const [roiDeptId, setRoiDeptId] = useState<string>("comercial");
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const region = getRegion(lang);
