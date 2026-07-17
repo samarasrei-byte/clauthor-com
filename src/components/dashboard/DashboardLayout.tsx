@@ -69,7 +69,7 @@ const DashboardLayout = () => {
         </AnimatePresence>
 
         {/* Fixed top bar */}
-        <header className="h-14 border-b border-white/[0.05] bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
+        <header className="h-14 bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
           <Link to="/" className="flex items-center group">
             <ClauthorLogo size="md" />
           </Link>
