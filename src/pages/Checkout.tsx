@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
+import IntegrationMatrix from "@/components/departments/IntegrationMatrix";
 import HelpTooltip from "@/components/HelpTooltip";
 import { friendlyCheckoutError } from "@/lib/checkout-errors";
 
@@ -231,6 +232,17 @@ export default function Checkout() {
                 );
               })}
             </div>
+
+            {/* Integrações necessárias por departamento no carrinho */}
+            {items.length > 0 && (
+              <div className="space-y-3">
+                {items.map((i) => (
+                  <IntegrationMatrix key={`int-${i.id}`} departmentId={i.id} compact />
+                ))}
+              </div>
+            )}
+
+
 
             <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
               <div className="text-xs uppercase tracking-wider text-white/40 mb-3">Incluso</div>
