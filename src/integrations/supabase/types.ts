@@ -789,6 +789,86 @@ export type Database = {
           },
         ]
       }
+      agent_traces: {
+        Row: {
+          agent_id: string | null
+          agent_name: string | null
+          cost_usd: number | null
+          created_at: string
+          eval_score: number | null
+          finished_at: string | null
+          id: string
+          input: Json | null
+          latency_ms: number | null
+          metadata: Json | null
+          model: string | null
+          name: string
+          output: Json | null
+          parent_span_id: string | null
+          run_id: string
+          span_type: string
+          started_at: string
+          status: string
+          tokens_input: number | null
+          tokens_output: number | null
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          agent_name?: string | null
+          cost_usd?: number | null
+          created_at?: string
+          eval_score?: number | null
+          finished_at?: string | null
+          id?: string
+          input?: Json | null
+          latency_ms?: number | null
+          metadata?: Json | null
+          model?: string | null
+          name: string
+          output?: Json | null
+          parent_span_id?: string | null
+          run_id?: string
+          span_type: string
+          started_at?: string
+          status?: string
+          tokens_input?: number | null
+          tokens_output?: number | null
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          agent_name?: string | null
+          cost_usd?: number | null
+          created_at?: string
+          eval_score?: number | null
+          finished_at?: string | null
+          id?: string
+          input?: Json | null
+          latency_ms?: number | null
+          metadata?: Json | null
+          model?: string | null
+          name?: string
+          output?: Json | null
+          parent_span_id?: string | null
+          run_id?: string
+          span_type?: string
+          started_at?: string
+          status?: string
+          tokens_input?: number | null
+          tokens_output?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_traces_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_usage_monthly: {
         Row: {
           actions_count: number
