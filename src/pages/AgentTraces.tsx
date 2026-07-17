@@ -261,12 +261,17 @@ export default function AgentTraces() {
           <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4">
             {/* Runs list */}
             <Card className="p-2 h-[calc(100vh-320px)]">
-              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Execuções recentes
+              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
+                <span>Execuções {filterAgent ? "do agente" : "recentes"}</span>
+                {filterAgent && (
+                  <Button variant="ghost" size="sm" className="h-6 text-[10px]" onClick={() => (window.location.href = "/dashboard/traces")}>
+                    Limpar filtro
+                  </Button>
+                )}
               </div>
               <ScrollArea className="h-[calc(100%-32px)]">
                 <div className="space-y-1 pr-2">
-                  {runs.map((run, i) => (
+                  {filteredRuns.map((run, i) => (
                     <motion.button
                       key={run.runId}
                       initial={{ opacity: 0, x: -8 }}
