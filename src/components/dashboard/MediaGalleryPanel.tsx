@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Film, Image as ImageIcon, LayoutGrid, Search, CheckCircle2, XCircle,
   Loader2, Play, Sparkles as SparklesLucide, Copy, ExternalLink,
+  SlidersHorizontal, X as XIcon, Clock, ArrowDownUp,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
 import { SOCIAL_NETWORKS, type SocialNetworkDef } from "@/components/social/SocialIconsBar";
+
+type Period = "all" | "24h" | "7d" | "30d";
+type Sort = "recent" | "oldest" | "title";
+type Status = "all" | "none" | "approved" | "revision";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type Kind = "video" | "image";
