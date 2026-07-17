@@ -474,6 +474,7 @@ const ClientDashboard = () => {
       children: [
         { id: "productivity", label: "Produtividade", icon: BriefcaseBusiness },
         { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3 },
+        { id: "media", label: "Mídia", icon: LayoutDashboard },
         { id: "approvals", label: "Central de Aprovações", icon: CheckSquare },
       ],
     },
