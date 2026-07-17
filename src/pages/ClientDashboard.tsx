@@ -22,6 +22,8 @@ const AgentsLiveFeed = lazy(() => import("@/components/dashboard/AgentsLiveFeed"
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
+import ThorWalkthrough from "@/components/onboarding-zero/ThorWalkthrough";
+const ActivateModal = lazy(() => import("@/components/onboarding-zero/ActivateModal"));
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
@@ -856,7 +858,22 @@ const ClientDashboard = () => {
       )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
+      {/* Fluxo Zero-Fricção: walkthrough conversacional do Thor (Tela 4) e modal de ativação (Tela 5).
+          O DashboardTour clássico só roda depois que walkthrough_completed=true (mesma flag). */}
+      {!hasPendingCheckout && !showEmptyState && <ThorWalkthrough />}
       {!hasPendingCheckout && !showEmptyState && <DashboardTour />}
+      {searchParamsDeep.get("activate") === "1" && (
+        <Suspense fallback={null}>
+          <ActivateModal
+            open
+            onClose={() => {
+              const next = new URLSearchParams(searchParamsDeep);
+              next.delete("activate");
+              setSearchParamsDeep(next, { replace: true });
+            }}
+          />
+        </Suspense>
+      )}
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
+import OnboardingZero from "@/pages/OnboardingZero";
 
 interface HomeReco {
   kind: "departamento" | "squad" | "agente";
@@ -38,6 +39,7 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
+  const mode = params.get("mode"); // "full" = fluxo conversacional completo (power user)
   const [homeReco, setHomeReco] = useState<HomeReco | null>(() => {
     if (typeof window === "undefined") return null;
     try {
@@ -116,12 +118,14 @@ export default function Welcome() {
         <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
       ) : fallback === "quick" ? (
         <QuickOnboarding onSkip={handleSkip} />
-      ) : (
+      ) : mode === "full" ? (
         <ThorOnboardingConversation
           homeReco={homeReco}
           onDone={handleDone}
           onSkip={handleSkip}
         />
+      ) : (
+        <OnboardingZero />
       )}
     </>
   );
