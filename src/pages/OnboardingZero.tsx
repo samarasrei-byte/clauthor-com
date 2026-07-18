@@ -9,8 +9,9 @@ import { DEPARTMENT_PACKAGES, getDepartmentById } from "@/data/departmentPackage
 import PainCapture from "@/components/onboarding-zero/PainCapture";
 import QuickPicks, { type QuickAnswers } from "@/components/onboarding-zero/QuickPicks";
 import Recommendation from "@/components/onboarding-zero/Recommendation";
+import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/CompanyInfoStep";
 
-type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "creating";
+type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "company" | "creating";
 
 const FOCUS_TO_DEPT: Record<QuickAnswers["focus"], string> = {
   vender: "comercial",
