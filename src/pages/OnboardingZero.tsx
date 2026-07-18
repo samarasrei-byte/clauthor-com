@@ -118,7 +118,7 @@ export default function OnboardingZero() {
     if (!user) {
       writeDraft({ pain, focus: picks.focus, stage: "reco" });
       const next = encodeURIComponent("/welcome");
-      navigate(`/auth?signup=1&next=${next}`, { replace: false });
+      navigate(`/auth?signup=1&redirect=${next}`, { replace: false });
       return;
     }
     setStage("company");
@@ -126,7 +126,7 @@ export default function OnboardingZero() {
 
   const finalizeContract = async (info: CompanyInfo | null) => {
     if (!user) {
-      navigate("/auth?signup=1&next=/welcome", { replace: false });
+      navigate("/auth?signup=1&redirect=/welcome", { replace: false });
       return;
     }
     setStage("creating");

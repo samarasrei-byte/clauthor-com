@@ -47,7 +47,7 @@ export default function Welcome() {
   // Modo full continua exigindo auth (é conversa longa).
   // OnboardingZero é público até o passo "reco".
   useEffect(() => {
-    if (mode === "full" && !isLoading && !user) navigate("/auth?next=/welcome?mode=full", { replace: true });
+    if (mode === "full" && !isLoading && !user) navigate("/auth?redirect=/welcome%3Fmode%3Dfull", { replace: true });
   }, [mode, isLoading, user, navigate]);
 
   if (isLoading) {
