@@ -1,9 +1,52 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+/** Draws a soft glowing ring around a [data-tour="..."] element. */
+function SpotlightRing({ target }: { target: string }) {
+  const [rect, setRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const update = () => {
+      const el = document.querySelector(`[data-tour="${target}"]`);
+      if (!el) { setRect(null); return; }
+      const r = el.getBoundingClientRect();
+      setRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+    };
+    update();
+    const t = setTimeout(update, 200);
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [target]);
+
+  if (!rect) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+      className="pointer-events-none fixed rounded-xl ring-2 ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]"
+      style={{
+        top: rect.top - 6,
+        left: rect.left - 6,
+        width: rect.width + 12,
+        height: rect.height + 12,
+        boxShadow: "0 0 0 2px hsl(var(--primary)), 0 0 40px hsl(var(--primary) / 0.5)",
+      }}
+      aria-hidden
+    />
+  );
+}
+
 
 interface Bubble {
   text: string;
@@ -11,13 +54,13 @@ interface Bubble {
 }
 
 const BUBBLES: Bubble[] = [
-  { text: "Oi! Sou o Thor. Vou te mostrar seu painel em 60 segundos — sem termos técnicos, prometo." },
-  { text: "Este é o seu Command Center. É como o escritório da sua empresa: aqui você vê tudo o que os agentes de IA estão fazendo por você, em tempo real." },
-  { text: "Do lado esquerdo fica o menu. Cada item é uma área da sua empresa — Agentes, Squads, Aprovações, Vídeos… Clique num deles para entrar." },
-  { text: "Em 'Meus Agentes' você conhece o time de IA que trabalha pra você. Cada agente tem um nome, uma função e um jeito de trabalhar — igual a um funcionário." },
-  { text: "Na 'Central de Aprovações' aparece tudo que os agentes produziram: posts, propostas, e-mails, vídeos. Você lê, dá 👍 ou 👎 e pronto." },
-  { text: "No 'Video Studio' você cria vídeos com IA em minutos — só descrever o que quer e o Thor monta o prompt pra você." },
-  { text: "Precisa de ajuda? Clique em mim (o T do lado esquerdo) que eu apareço na hora pra conversar e resolver junto com você." },
+  { text: "Oi! Sou o Thor. Em 60 segundos você aprende a usar tudo — sem termos técnicos, prometo." },
+  { text: "Este é o seu Command Center. Aqui você comanda, a IA executa. Você não precisa fazer nada operacional — só aprovar." },
+  { text: "Veja o menu à esquerda destacado. Cada item é um setor da sua empresa. Clique no primeiro item quando quiser entrar.", highlight: "nav-overview" },
+  { text: "Aqui aparecem seus agentes de IA — cada um com nome, função e memória própria, como um funcionário digital.", highlight: "nav-agents" },
+  { text: "Central de Aprovações: tudo que os agentes produzem (posts, propostas, vídeos) chega aqui pra você aprovar com 👍 ou 👎.", highlight: "nav-approvals" },
+  { text: "Video Studio: crie vídeos com IA, corte vídeos longos em Shorts/Reels automaticamente e poste nas redes conectadas.", highlight: "nav-video" },
+  { text: "Precisa de ajuda a qualquer momento? Clique no T (Thor) no rodapé que eu abro um chat pra resolver junto com você." },
 ];
 
 /**
@@ -72,15 +115,28 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
 
   return (
     <div className="fixed inset-0 z-[9998] flex items-center justify-center p-6">
-      {/* Backdrop with heavy blur so the dashboard fades behind */}
+      {/* Backdrop: heavy blur intro, spotlight (lighter blur) when highlight is set */}
       <button
         type="button"
         aria-label="Pular apresentação"
         onClick={complete}
-        className="absolute inset-0 bg-background/60 backdrop-blur-xl cursor-default"
+        className={`absolute inset-0 cursor-default transition-all duration-500 ${
+          current?.highlight
+            ? "bg-background/40 backdrop-blur-md"
+            : "bg-background/60 backdrop-blur-xl"
+        }`}
       />
 
-      <div className="relative z-10 w-full max-w-lg text-center">
+      {/* Spotlight ring around the highlighted target */}
+      {current?.highlight && (
+        <SpotlightRing target={current.highlight} />
+      )}
+
+      <div
+        className={`relative z-10 w-full max-w-lg text-center transition-transform duration-500 ${
+          current?.highlight ? "translate-y-24 sm:translate-y-16" : ""
+        }`}
+      >
         {/* Thor orb */}
         <motion.div
           initial={{ scale: 0.85, opacity: 0 }}
@@ -102,15 +158,18 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-8 leading-tight">
-                Pronto pra <span className="text-primary">ativar seu time?</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-4 leading-tight">
+                Pronto? <span className="text-primary">Vamos começar.</span>
               </h2>
+              <p className="text-sm text-muted-foreground mb-8">
+                Sugestão: abra a Central de Aprovações — seu primeiro rascunho já pode estar lá.
+              </p>
               <button
                 type="button"
                 onClick={complete}
                 className="inline-flex items-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 transition-all"
               >
-                Ativar agora <ArrowRight className="w-5 h-5" />
+                Explorar meu painel <ArrowRight className="w-5 h-5" />
               </button>
             </motion.div>
           ) : (

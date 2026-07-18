@@ -1660,6 +1660,107 @@ export type Database = {
           },
         ]
       }
+      clipper_clips: {
+        Row: {
+          caption: string | null
+          cover_url: string | null
+          created_at: string
+          end_s: number
+          hashtags: string[]
+          hook: string | null
+          id: string
+          job_id: string
+          posted_to: Json
+          rendered_urls: Json
+          start_s: number
+          status: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          cover_url?: string | null
+          created_at?: string
+          end_s: number
+          hashtags?: string[]
+          hook?: string | null
+          id?: string
+          job_id: string
+          posted_to?: Json
+          rendered_urls?: Json
+          start_s: number
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          cover_url?: string | null
+          created_at?: string
+          end_s?: number
+          hashtags?: string[]
+          hook?: string | null
+          id?: string
+          job_id?: string
+          posted_to?: Json
+          rendered_urls?: Json
+          start_s?: number
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clipper_clips_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "clipper_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clipper_jobs: {
+        Row: {
+          created_at: string
+          error: string | null
+          formats: string[]
+          hint: string | null
+          id: string
+          source_type: string
+          source_url: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          formats?: string[]
+          hint?: string | null
+          id?: string
+          source_type: string
+          source_url: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          formats?: string[]
+          hint?: string | null
+          id?: string
+          source_type?: string
+          source_url?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       community_comments: {
         Row: {
           content: string
