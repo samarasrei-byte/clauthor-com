@@ -9,7 +9,9 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
+import PrimaryCTA from "./PrimaryCTA";
 import { lazy, Suspense, useEffect, useState } from "react";
+
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
