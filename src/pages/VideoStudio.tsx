@@ -520,16 +520,6 @@ export default function VideoStudio() {
                 submitting={submitting}
                 quotaRemaining={quota?.remaining}
               />
-
-              {/* Keyboard shortcuts hint */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground px-1">
-                <Shortcut k="⌘K" label="Comandos" />
-                <Shortcut k="G" label="Gerar" />
-                <Shortcut k="L" label="Biblioteca" />
-                <Shortcut k="/" label="Chat" />
-                <Shortcut k="⇧R" label="Recomeçar" />
-                <Shortcut k="1/2" label="Motor" />
-              </div>
             </div>
 
 
