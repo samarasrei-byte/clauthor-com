@@ -92,16 +92,23 @@ export default function OnboardingZero() {
     writeDraft({ pain, focus: picks.focus, stage });
   }, [pain, picks.focus, stage]);
 
-  const handlePain = async (raw: string) => {
+  const handlePain = async (raw: string, inferredFocus?: PainFocus) => {
     setPain(raw);
-    trackKpi("thor_onboarding_step", { step: 1, source: "onboarding" });
+    trackKpi("thor_onboarding_step", { step: 1, source: "onboarding", inferred: !!inferredFocus });
     if (user) {
       try {
         await supabase.from("profiles").update({ pain_raw: raw } as never).eq("user_id", user.id);
       } catch { /* non-blocking */ }
     }
-    setStage("pick0");
+    // Salto #1: se o Thor inferiu foco com boa confiança, pula QuickPicks direto pra reco.
+    if (inferredFocus) {
+      setPicks({ focus: inferredFocus });
+      setStage("reco");
+    } else {
+      setStage("pick0");
+    }
   };
+
 
   const handlePick = (key: keyof QuickAnswers, value: string) => {
     const next = { ...picks, [key]: value } as Partial<QuickAnswers>;
