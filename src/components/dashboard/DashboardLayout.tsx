@@ -1,5 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, GraduationCap, Sparkles } from "lucide-react";
+import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
