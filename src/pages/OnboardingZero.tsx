@@ -175,6 +175,30 @@ export default function OnboardingZero() {
     navigate("/welcome?mode=full", { replace: true });
   };
 
+  // Mapa etapa interna → passo global do funil.
+  const funnelStep: FunnelStep =
+    stage === "company" ? "empresa" : stage === "creating" ? "pagar" : "squad";
+
+  // Persiste progresso a cada mudança de estágio para permitir retomar.
+  useEffect(() => {
+    writeFunnel({
+      step: funnelStep,
+      departmentId: chosenDeptId,
+      departmentLabel: (getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0]).name,
+      entry: "thor",
+    });
+  }, [funnelStep, chosenDeptId]);
+
+  const hintByStage: Record<Stage, string> = {
+    pain: "Escreva com suas palavras — mesmo curto ajuda. Ex: 'Preciso vender mais' ou 'Não dou conta do atendimento'.",
+    pick0: "Escolha o que mais dói hoje. Você pode contratar mais times depois, sem multa.",
+    pick1: "Nenhuma resposta é errada — o Thor usa isso pra montar seu time ideal.",
+    pick2: "Última pergunta. Depois disso mostro a recomendação.",
+    reco: "Se fizer sentido, aceite e siga. Se preferir entender melhor, clique em 'me explica'.",
+    company: "Só o nome já basta. Cores e site são opcionais — o Thor detecta se você preencher o website.",
+    creating: "Estou montando seu painel agora…",
+  };
+
   return (
     <>
       <Helmet>
@@ -182,6 +206,8 @@ export default function OnboardingZero() {
         <meta name="description" content="Uma conversa curta com o Thor para descobrir sua dor e montar seu time." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
+      {stage !== "creating" && <FunnelStepper current={funnelStep} />}
+      <ThorStuckHint stepKey={`onboarding-${stage}`} message={hintByStage[stage]} />
       {stage === "pain" && <PainCapture initial={pain} onDone={handlePain} />}
       {stage === "pick0" && <QuickPicks step={0} onPick={handlePick} />}
       {stage === "pick1" && <QuickPicks step={1} onPick={handlePick} />}
