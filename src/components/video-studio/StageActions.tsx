@@ -1,7 +1,9 @@
-import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check } from "lucide-react";
+import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 type Provider = "veo3" | "replicate" | "lovable";
