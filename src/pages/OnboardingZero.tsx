@@ -6,8 +6,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCompanyDna } from "@/hooks/useCompanyDna";
 import { trackKpi } from "@/lib/kpiTracker";
 import { DEPARTMENT_PACKAGES, getDepartmentById } from "@/data/departmentPackages";
-import PainCapture from "@/components/onboarding-zero/PainCapture";
+import PainCapture, { type PainFocus } from "@/components/onboarding-zero/PainCapture";
 import QuickPicks, { type QuickAnswers } from "@/components/onboarding-zero/QuickPicks";
+
 import Recommendation from "@/components/onboarding-zero/Recommendation";
 import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/CompanyInfoStep";
 import FunnelStepper from "@/components/funnel/FunnelStepper";
@@ -91,7 +92,15 @@ export default function OnboardingZero() {
     writeDraft({ pain, focus: picks.focus, stage });
   }, [pain, picks.focus, stage]);
 
-  const handlePain = async (raw: string) => {
+  // PainFocus (departamento) → QuickAnswers.focus (task). Espelho reverso de FOCUS_TO_DEPT.
+  const DEPT_TO_QUICK: Record<PainFocus, QuickAnswers["focus"]> = {
+    comercial: "vender",
+    atendimento: "clientes",
+    marketing: "conteudo",
+    financeiro: "organizar",
+  };
+
+  const handlePain = async (raw: string, inferredFocus?: PainFocus) => {
     setPain(raw);
     trackKpi("thor_onboarding_step", { step: 1, source: "onboarding" });
     if (user) {
@@ -99,8 +108,16 @@ export default function OnboardingZero() {
         await supabase.from("profiles").update({ pain_raw: raw } as never).eq("user_id", user.id);
       } catch { /* non-blocking */ }
     }
-    setStage("pick0");
+    // Salto #1: se o Thor inferiu foco com boa confiança, pula QuickPicks direto pra reco.
+    if (inferredFocus) {
+      setPicks({ focus: DEPT_TO_QUICK[inferredFocus] });
+      setStage("reco");
+    } else {
+      setStage("pick0");
+    }
   };
+
+
 
   const handlePick = (key: keyof QuickAnswers, value: string) => {
     const next = { ...picks, [key]: value } as Partial<QuickAnswers>;
@@ -191,10 +208,13 @@ export default function OnboardingZero() {
     });
 
     clearDraft();
+    // Salto #4 · trial-first: dashboard abre em modo exploração, sem paywall modal.
+    // O card inline de pagamento (PendingDepartmentCard) já cobre a conversão.
     const url = new URL("/dashboard", window.location.origin);
     url.searchParams.set("first", "1");
-    url.searchParams.set("activate", "1");
+    url.searchParams.set("trial", "1");
     if (pendingId) url.searchParams.set("pending_dept", pendingId);
+
     navigate(url.pathname + url.search, { replace: true });
   };
 
