@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
-import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen, BriefcaseBusiness, Activity } from "lucide-react";
+import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen, BriefcaseBusiness, Activity, Clapperboard } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -507,6 +507,8 @@ const ClientDashboard = () => {
 
     // Inbox do Agente (rota dedicada) — mostra badge de não lidas
     { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
+    // Video Studio — criação de vídeos com IA (Veo 3 / Replicate)
+    { id: "route:/video-studio", label: "Video Studio", icon: Clapperboard, group: zoneWork },
     // Traces (observabilidade) — timeline de execuções, custo, latência
     { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: zoneWork },
 
@@ -551,6 +553,7 @@ const ClientDashboard = () => {
     "approvals", "media", "integrations", "system",
     "route:/dashboard/inbox",
     "route:/dashboard/traces",
+    "route:/video-studio",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin

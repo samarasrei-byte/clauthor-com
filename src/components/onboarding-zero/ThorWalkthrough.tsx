@@ -11,9 +11,13 @@ interface Bubble {
 }
 
 const BUBBLES: Bubble[] = [
-  { text: "Aqui é seu painel. Todo dia seus agentes trabalham por aqui." },
-  { text: "Quando eles fizerem algo, aparece aqui pra você aprovar.", highlight: "nav-approvals" },
-  { text: "Se precisar de mim, é só clicar aqui e falar comigo.", highlight: "nav-chat" },
+  { text: "Oi! Sou o Thor. Vou te mostrar seu painel em 60 segundos — sem termos técnicos, prometo." },
+  { text: "Este é o seu Command Center. É como o escritório da sua empresa: aqui você vê tudo o que os agentes de IA estão fazendo por você, em tempo real." },
+  { text: "Do lado esquerdo fica o menu. Cada item é uma área da sua empresa — Agentes, Squads, Aprovações, Vídeos… Clique num deles para entrar." },
+  { text: "Em 'Meus Agentes' você conhece o time de IA que trabalha pra você. Cada agente tem um nome, uma função e um jeito de trabalhar — igual a um funcionário." },
+  { text: "Na 'Central de Aprovações' aparece tudo que os agentes produziram: posts, propostas, e-mails, vídeos. Você lê, dá 👍 ou 👎 e pronto." },
+  { text: "No 'Video Studio' você cria vídeos com IA em minutos — só descrever o que quer e o Thor monta o prompt pra você." },
+  { text: "Precisa de ajuda? Clique em mim (o T do lado esquerdo) que eu apareço na hora pra conversar e resolver junto com você." },
 ];
 
 /**
@@ -57,7 +61,7 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
   useEffect(() => {
     if (dismissed || isLoading || profile?.walkthrough_completed) return;
     if (idx >= BUBBLES.length) return;
-    const t = setTimeout(() => setIdx((p) => p + 1), 6000);
+    const t = setTimeout(() => setIdx((p) => p + 1), 7500);
     return () => clearTimeout(t);
   }, [idx, dismissed, isLoading, profile?.walkthrough_completed]);
 
