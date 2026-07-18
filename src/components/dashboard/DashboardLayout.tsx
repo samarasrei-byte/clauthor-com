@@ -174,6 +174,8 @@ const DashboardLayout = () => {
 
 
         <FloatingDock />
+        <PrimaryCTA />
+
 
         <Suspense fallback={null}>
           <AssistantHierarchy />
