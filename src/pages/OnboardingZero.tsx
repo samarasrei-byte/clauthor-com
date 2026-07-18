@@ -10,6 +10,9 @@ import PainCapture from "@/components/onboarding-zero/PainCapture";
 import QuickPicks, { type QuickAnswers } from "@/components/onboarding-zero/QuickPicks";
 import Recommendation from "@/components/onboarding-zero/Recommendation";
 import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/CompanyInfoStep";
+import FunnelStepper from "@/components/funnel/FunnelStepper";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { writeFunnel, type FunnelStep } from "@/lib/funnelState";
 
 type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "company" | "creating";
 
