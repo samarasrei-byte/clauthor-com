@@ -92,9 +92,17 @@ export default function OnboardingZero() {
     writeDraft({ pain, focus: picks.focus, stage });
   }, [pain, picks.focus, stage]);
 
+  // PainFocus (departamento) → QuickAnswers.focus (task). Espelho reverso de FOCUS_TO_DEPT.
+  const DEPT_TO_QUICK: Record<PainFocus, QuickAnswers["focus"]> = {
+    comercial: "vender",
+    atendimento: "clientes",
+    marketing: "conteudo",
+    financeiro: "organizar",
+  };
+
   const handlePain = async (raw: string, inferredFocus?: PainFocus) => {
     setPain(raw);
-    trackKpi("thor_onboarding_step", { step: 1, source: "onboarding", inferred: !!inferredFocus });
+    trackKpi("thor_onboarding_step", { step: 1, source: "onboarding" });
     if (user) {
       try {
         await supabase.from("profiles").update({ pain_raw: raw } as never).eq("user_id", user.id);
@@ -102,12 +110,13 @@ export default function OnboardingZero() {
     }
     // Salto #1: se o Thor inferiu foco com boa confiança, pula QuickPicks direto pra reco.
     if (inferredFocus) {
-      setPicks({ focus: inferredFocus });
+      setPicks({ focus: DEPT_TO_QUICK[inferredFocus] });
       setStage("reco");
     } else {
       setStage("pick0");
     }
   };
+
 
 
   const handlePick = (key: keyof QuickAnswers, value: string) => {
