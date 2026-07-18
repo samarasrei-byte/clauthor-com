@@ -158,7 +158,7 @@ const App = () => (
                 <Route path="/investidores" element={<InvestorPitch />} />
                 <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
-                <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+                <Route path="/welcome" element={<Welcome />} />
                 <Route path="/setup/:type/:ref" element={<ProtectedRoute><CustomerSetup /></ProtectedRoute>} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
