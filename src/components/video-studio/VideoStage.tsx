@@ -1,4 +1,6 @@
-import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap } from "lucide-react";
+import { useState } from "react";
+import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap, UploadCloud, ImagePlus } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
