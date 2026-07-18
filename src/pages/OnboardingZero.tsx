@@ -191,6 +191,13 @@ export default function OnboardingZero() {
           onExplain={handleExplain}
         />
       )}
+      {stage === "company" && (
+        <CompanyInfoStep
+          departmentName={(getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0]).name}
+          onDone={(info) => finalizeContract(info)}
+          onSkip={() => finalizeContract(null)}
+        />
+      )}
       {stage === "creating" && (
         <div className="min-h-dvh flex flex-col items-center justify-center bg-background gap-4">
           <div className="w-10 h-10 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
