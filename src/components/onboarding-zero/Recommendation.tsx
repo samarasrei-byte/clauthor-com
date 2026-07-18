@@ -79,6 +79,10 @@ export default function Recommendation({ deptId, humanBenefit, onAccept, onExpla
         <span>Aprovação em 1 clique</span>
       </motion.div>
 
+      {/* Live proof · agentes trabalhando ao vivo (salto #2) */}
+      <LiveAgentsStrip focus={deptId} />
+
+
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
