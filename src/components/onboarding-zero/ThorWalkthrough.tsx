@@ -11,13 +11,13 @@ interface Bubble {
 }
 
 const BUBBLES: Bubble[] = [
-  { text: "Oi! Sou o Thor. Vou te mostrar seu painel em 60 segundos — sem termos técnicos, prometo." },
-  { text: "Este é o seu Command Center. É como o escritório da sua empresa: aqui você vê tudo o que os agentes de IA estão fazendo por você, em tempo real." },
-  { text: "Do lado esquerdo fica o menu. Cada item é uma área da sua empresa — Agentes, Squads, Aprovações, Vídeos… Clique num deles para entrar." },
-  { text: "Em 'Meus Agentes' você conhece o time de IA que trabalha pra você. Cada agente tem um nome, uma função e um jeito de trabalhar — igual a um funcionário." },
-  { text: "Na 'Central de Aprovações' aparece tudo que os agentes produziram: posts, propostas, e-mails, vídeos. Você lê, dá 👍 ou 👎 e pronto." },
-  { text: "No 'Video Studio' você cria vídeos com IA em minutos — só descrever o que quer e o Thor monta o prompt pra você." },
-  { text: "Precisa de ajuda? Clique em mim (o T do lado esquerdo) que eu apareço na hora pra conversar e resolver junto com você." },
+  { text: "Oi! Sou o Thor. Em 60 segundos você aprende a usar tudo — sem termos técnicos, prometo." },
+  { text: "Este é o seu Command Center. Aqui você comanda, a IA executa. Você não precisa fazer nada operacional — só aprovar." },
+  { text: "Veja o menu à esquerda destacado. Cada item é um setor da sua empresa. Clique no primeiro item quando quiser entrar.", highlight: "nav-overview" },
+  { text: "Aqui aparecem seus agentes de IA — cada um com nome, função e memória própria, como um funcionário digital.", highlight: "nav-agents" },
+  { text: "Central de Aprovações: tudo que os agentes produzem (posts, propostas, vídeos) chega aqui pra você aprovar com 👍 ou 👎.", highlight: "nav-approvals" },
+  { text: "Video Studio: crie vídeos com IA, corte vídeos longos em Shorts/Reels automaticamente e poste nas redes conectadas.", highlight: "nav-video" },
+  { text: "Precisa de ajuda a qualquer momento? Clique no T (Thor) no rodapé que eu abro um chat pra resolver junto com você." },
 ];
 
 /**
