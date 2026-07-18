@@ -3,8 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
-import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
-import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
 import OnboardingZero from "@/pages/OnboardingZero";
 
@@ -22,25 +20,20 @@ interface HomeReco {
 }
 
 /**
- * Rota dedicada de onboarding conversacional · Thor 3.0.
- * - Conversa curta (6 perguntas) para coletar DNA da empresa.
- * - Reconfirma a recomendação vinda do chat da home (ou pede exploração).
- * - Ao final, cria contracted_departments com status='pending_payment'
- *   se o usuário confirmou o departamento sugerido.
- * - Redireciona pro /dashboard?first=1 (tour dispara).
+ * Rota /welcome · dois modos apenas:
+ *   default → OnboardingZero (fluxo curto público, "vovô test")
+ *   ?mode=full → ThorOnboardingConversation (fallback power-user)
  *
- * Fallbacks:
- *   ?explore=1 → RevolutionaryOnboarding clássico.
- *   Sem reco da home e usuário pular → QuickOnboarding.
+ * Rotas antigas (?explore=1, QuickOnboarding, RevolutionaryOnboarding)
+ * foram removidas para evitar fragmentação de funil.
  */
 export default function Welcome() {
   const navigate = useNavigate();
   const { user, isLoading } = useAuth();
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
-  const explore = params.get("explore") === "1";
-  const mode = params.get("mode"); // "full" = fluxo conversacional completo (power user)
-  const [homeReco, setHomeReco] = useState<HomeReco | null>(() => {
+  const mode = params.get("mode"); // "full" apenas
+  const [homeReco] = useState<HomeReco | null>(() => {
     if (typeof window === "undefined") return null;
     try {
       const raw = sessionStorage.getItem("clauthor_home_recommendation");
@@ -50,13 +43,14 @@ export default function Welcome() {
     } catch { /* ignore */ }
     return null;
   });
-  const [fallback, setFallback] = useState<"none" | "quick">("none");
 
+  // Modo full continua exigindo auth (é conversa longa).
+  // OnboardingZero é público até o passo "reco".
   useEffect(() => {
-    if (!isLoading && !user) navigate("/auth", { replace: true });
-  }, [isLoading, user, navigate]);
+    if (mode === "full" && !isLoading && !user) navigate("/auth?redirect=/welcome%3Fmode%3Dfull", { replace: true });
+  }, [mode, isLoading, user, navigate]);
 
-  if (isLoading || !user) {
+  if (isLoading) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-background">
         <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -66,7 +60,7 @@ export default function Welcome() {
 
   const handleSkip = () => {
     try { sessionStorage.setItem("onboarding-skipped-session", "1"); } catch { /* ignore */ }
-    navigate("/dashboard", { replace: true });
+    navigate(user ? "/dashboard" : "/", { replace: true });
   };
 
   const handleDone = async ({
@@ -80,7 +74,6 @@ export default function Welcome() {
     contractKind: "squad" | "departamento" | "agente" | null;
   }) => {
     const effectiveKind = contractKind ?? homeReco?.kind ?? null;
-    // Persist onboarding metadata into profiles (unlocks assistants hierarchy).
     await save({
       path: effectiveKind === "departamento" ? "department" : effectiveKind === "agente" ? "agent" : "team",
       teamGoal: "onboarding_conversation",
@@ -89,18 +82,10 @@ export default function Welcome() {
       processMaturity: "",
     });
     try { sessionStorage.removeItem("clauthor_home_recommendation"); } catch { /* ignore */ }
-
     void recommendation;
 
-    // Route by contract kind. Squad → /squads · Agente → /library · Departamento (default) → /dashboard.
-    if (effectiveKind === "squad") {
-      navigate("/squads?from=onboarding", { replace: true });
-      return;
-    }
-    if (effectiveKind === "agente") {
-      navigate("/library?from=onboarding", { replace: true });
-      return;
-    }
+    if (effectiveKind === "squad") { navigate("/squads?from=onboarding", { replace: true }); return; }
+    if (effectiveKind === "agente") { navigate("/library?from=onboarding", { replace: true }); return; }
     const dest = new URL("/dashboard", window.location.origin);
     dest.searchParams.set("first", "1");
     if (pendingDeptId) dest.searchParams.set("pending_dept", pendingDeptId);
@@ -114,11 +99,7 @@ export default function Welcome() {
         <meta name="description" content="Conversa curta com o Thor para conhecer sua empresa, aplicar sua identidade e personalizar o painel." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
-      {explore ? (
-        <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
-      ) : fallback === "quick" ? (
-        <QuickOnboarding onSkip={handleSkip} />
-      ) : mode === "full" ? (
+      {mode === "full" && user ? (
         <ThorOnboardingConversation
           homeReco={homeReco}
           onDone={handleDone}
@@ -130,3 +111,4 @@ export default function Welcome() {
     </>
   );
 }
+

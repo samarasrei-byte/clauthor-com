@@ -7,7 +7,7 @@ export type QuickAnswers = {
 };
 
 interface Props {
-  step: 0 | 1 | 2;
+  step: 0;
   onPick: (key: keyof QuickAnswers, value: string) => void;
 }
 
@@ -19,15 +19,6 @@ interface Choice {
 
 const QUESTIONS: { key: keyof QuickAnswers; question: string; choices: Choice[] }[] = [
   {
-    key: "team",
-    question: "Você trabalha sozinho ou tem time?",
-    choices: [
-      { value: "solo", emoji: "👤", label: "Sozinho" },
-      { value: "team", emoji: "👥", label: "Tenho um time" },
-      { value: "enterprise", emoji: "🏢", label: "Empresa grande" },
-    ],
-  },
-  {
     key: "focus",
     question: "O que mais te consome tempo hoje?",
     choices: [
@@ -35,16 +26,6 @@ const QUESTIONS: { key: keyof QuickAnswers; question: string; choices: Choice[] 
       { value: "conteudo", emoji: "✍️", label: "Criar conteúdo" },
       { value: "organizar", emoji: "📊", label: "Organizar tudo" },
       { value: "vender", emoji: "💼", label: "Vender mais" },
-    ],
-  },
-  {
-    key: "budget",
-    question: "Quanto você topa investir por mês?",
-    choices: [
-      { value: "1700", emoji: "💵", label: "R$ 1.700" },
-      { value: "3400", emoji: "💰", label: "R$ 3.400" },
-      { value: "5100", emoji: "💎", label: "R$ 5.100+" },
-      { value: "unknown", emoji: "🤔", label: "Não sei ainda" },
     ],
   },
 ];
