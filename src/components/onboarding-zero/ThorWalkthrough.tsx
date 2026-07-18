@@ -1,9 +1,52 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+/** Draws a soft glowing ring around a [data-tour="..."] element. */
+function SpotlightRing({ target }: { target: string }) {
+  const [rect, setRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const update = () => {
+      const el = document.querySelector(`[data-tour="${target}"]`);
+      if (!el) { setRect(null); return; }
+      const r = el.getBoundingClientRect();
+      setRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+    };
+    update();
+    const t = setTimeout(update, 200);
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [target]);
+
+  if (!rect) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+      className="pointer-events-none fixed rounded-xl ring-2 ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]"
+      style={{
+        top: rect.top - 6,
+        left: rect.left - 6,
+        width: rect.width + 12,
+        height: rect.height + 12,
+        boxShadow: "0 0 0 2px hsl(var(--primary)), 0 0 40px hsl(var(--primary) / 0.5)",
+      }}
+      aria-hidden
+    />
+  );
+}
+
 
 interface Bubble {
   text: string;
