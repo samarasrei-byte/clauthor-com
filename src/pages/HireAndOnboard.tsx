@@ -30,6 +30,17 @@ export default function HireAndOnboard() {
   const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (dept) {
+      writeFunnel({
+        step: user ? "empresa" : "squad",
+        departmentId: dept.id,
+        departmentLabel: dept.name,
+        entry: "squad",
+      });
+    }
+  }, [dept, user]);
+
   if (!dept) return <Navigate to="/departamentos" replace />;
   const Icon = dept.icon;
 
