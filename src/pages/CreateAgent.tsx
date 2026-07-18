@@ -104,13 +104,32 @@ const CreateAgentPage = () => {
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
 
-  // Pre-fill from query params (from Concierge fallback)
+  // Pre-fill from query params (from Concierge fallback or /onboarding/setor)
   useEffect(() => {
     const prefilledObjective = searchParams.get("objetivo");
     if (prefilledObjective) {
       setObjective(prefilledObjective);
       setShowTemplateSuggestions(true);
     }
+    const presetName = searchParams.get("name");
+    if (presetName) setName(presetName);
+    const presetSector = searchParams.get("sector");
+    if (presetSector) setSector(presetSector);
+    const presetTone = searchParams.get("tone");
+    if (presetTone) setTone(presetTone);
+    const presetInstructions = searchParams.get("instructions");
+    if (presetInstructions) setInstructions(presetInstructions);
+    const csv = (k: string) =>
+      (searchParams.get(k) || "").split(",").map((s) => s.trim()).filter(Boolean);
+    const intg = csv("integrations");
+    if (intg.length) setSelectedIntegrations(intg);
+    const chn = csv("channels");
+    if (chn.length) setSelectedChannels(chn);
+    const acts = csv("actions");
+    if (acts.length) setSelectedActions(acts);
+    // If a preset came in, jump straight to the guided builder
+    if (searchParams.get("preset")) setMode("guided");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
   const [sector, setSector] = useState("");
   const [instructions, setInstructions] = useState("");
