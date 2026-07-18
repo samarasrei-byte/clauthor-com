@@ -7,7 +7,7 @@ export type QuickAnswers = {
 };
 
 interface Props {
-  step: 0 | 1 | 2;
+  step: 0;
   onPick: (key: keyof QuickAnswers, value: string) => void;
 }
 
