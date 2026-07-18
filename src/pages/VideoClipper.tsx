@@ -28,12 +28,15 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
+import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
 
 type Format = "9:16" | "1:1" | "16:9";
 type ClipStatus = "proposed" | "approved" | "rendering" | "ready" | "posted" | "skipped" | "failed";
