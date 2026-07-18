@@ -657,5 +657,7 @@ function Shortcut({ k, label }: { k: string; label: string }) {
       <span>{label}</span>
     </span>
   );
+}
+
 
 
