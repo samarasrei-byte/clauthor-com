@@ -136,41 +136,42 @@ const HelpTooltip = ({
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.span
             initial={{ opacity: 0, scale: 0.88, y: position === "bottom" ? -4 : position === "top" ? 4 : 0, x: position === "right" ? -4 : position === "left" ? 4 : 0 }}
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, scale: 0.88 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className={`absolute z-50 w-64 max-w-[calc(100vw-2rem)] ${positionClasses[effectivePosition]}`}
+            className={`absolute z-50 block w-64 max-w-[calc(100vw-2rem)] ${positionClasses[effectivePosition]}`}
           >
             {/* Glassmorphism card */}
-            <div className="relative rounded-xl bg-popover/95 backdrop-blur-xl border border-border/60 shadow-2xl shadow-primary/5 overflow-hidden">
+            <span className="relative block rounded-xl bg-popover/95 backdrop-blur-xl border border-border/60 shadow-2xl shadow-primary/5 overflow-hidden">
               {/* Gradient accent bar */}
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-              
-              <div className="px-3.5 py-3 pr-8">
+              <span className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+
+              <span className="block px-3.5 py-3 pr-8">
                 {/* First visit badge */}
                 {isFirstVisit && (
-                  <div className="flex items-center gap-1.5 mb-1.5">
+                  <span className="flex items-center gap-1.5 mb-1.5">
                     <Sparkles className="h-3 w-3 text-primary" />
                     <span className="text-[9px] font-bold uppercase tracking-widest text-primary/80">Dica</span>
-                  </div>
+                  </span>
                 )}
-                <p className="text-xs leading-relaxed text-popover-foreground/90">{text}</p>
-              </div>
+                <span className="block text-xs leading-relaxed text-popover-foreground/90">{text}</span>
+              </span>
 
               {/* Close button */}
               <button
                 onClick={(e) => { e.stopPropagation(); handleDismiss(); }}
                 className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/30 transition-colors"
+                aria-label="Fechar"
               >
                 <X className="h-3 w-3" />
               </button>
-            </div>
+            </span>
 
             {/* Arrow */}
-            <div className={`absolute w-0 h-0 border-4 ${arrowClasses[effectivePosition]}`} />
-          </motion.div>
+            <span className={`absolute w-0 h-0 border-4 ${arrowClasses[effectivePosition]}`} />
+          </motion.span>
         )}
       </AnimatePresence>
     </span>
