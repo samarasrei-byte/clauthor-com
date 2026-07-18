@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface UseElevenLabsTTSOptions {
@@ -7,6 +7,15 @@ interface UseElevenLabsTTSOptions {
 }
 
 const ELEVENLABS_NATIVE_ONLY_KEY = "thor_tts_native_only";
+
+/**
+ * GLOBAL TTS LOCK · Regra obrigatória: o Thor nunca fala por cima dele mesmo.
+ * Qualquer instância do hook, ao iniciar speak(), invoca o stop da instância
+ * anterior. Isso garante uma única voz ativa em todo o app, mesmo com múltiplos
+ * componentes (ThorCore, ThorLiveGuide, ThorDailyBriefing, OmnixChat, etc.).
+ */
+let currentGlobalStop: ((notify?: boolean) => void) | null = null;
+
 
 /** Fallback to browser's native speech synthesis */
 function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: () => void): SpeechSynthesisUtterance | null {
