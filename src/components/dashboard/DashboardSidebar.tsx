@@ -346,18 +346,26 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     <motion.aside
       data-tour="sidebar"
       initial={false}
-      animate={{ width: collapsed ? 56 : 248 }}
+      animate={{ width: collapsed ? 56 : 260 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-      className="h-full flex flex-col bg-background/60 backdrop-blur-xl border-r border-border/10 shrink-0 relative [&>*:not(.sb-toggle)]:min-w-0"
+      className={cn(
+        "h-full flex flex-col shrink-0 relative [&>*:not(.sb-toggle)]:min-w-0",
+        // Notion-style floating panel: glass, rounded, elevated, page shows behind
+        "bg-background/70 dark:bg-background/60 backdrop-blur-2xl",
+        "border border-border/20 rounded-2xl shadow-2xl shadow-black/10",
+        collapsed ? "hover:bg-background/80" : ""
+      )}
       style={{ overflow: "visible" }}
     >
       <button
         onClick={() => setCollapsed(!collapsed)}
         aria-label={collapsed ? "Expandir" : "Colapsar"}
-        className="sb-toggle absolute -right-2.5 top-8 z-50 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all shadow-md ring-2 ring-background"
+        title={collapsed ? "Expandir (⌘B)" : "Recolher (⌘B)"}
+        className="sb-toggle absolute -right-2.5 top-8 z-50 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all shadow-lg ring-2 ring-background"
       >
         {collapsed ? <ChevronRight className="h-3 w-3" strokeWidth={3} /> : <ChevronLeft className="h-3 w-3" strokeWidth={3} />}
       </button>
+
 
       {/* Search */}
       {!collapsed && (
