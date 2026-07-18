@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import thorAvatar from "@/assets/thor-avatar.png";
+import thorAvatar from "@/assets/thor-orb.png";
 
 interface ThorStuckHintProps {
   /** Chave única por passo · usada para não repetir o mesmo hint. */
