@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import CheckoutSummaryDialog, { type CheckoutSummaryData } from "./CheckoutSummaryDialog";
 import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { clearFunnel, writeFunnel } from "@/lib/funnelState";
 
 interface PendingRow {
   id: string;
