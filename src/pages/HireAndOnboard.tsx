@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle2, Loader2, Diamond, Shield } from "lucide-react";
@@ -18,7 +18,6 @@ import { friendlyCheckoutError } from "@/lib/checkout-errors";
 import FunnelStepper from "@/components/funnel/FunnelStepper";
 import ThorStuckHint from "@/components/funnel/ThorStuckHint";
 import { writeFunnel } from "@/lib/funnelState";
-import { useEffect } from "react";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
