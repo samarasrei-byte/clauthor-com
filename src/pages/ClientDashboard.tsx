@@ -733,12 +733,16 @@ const ClientDashboard = () => {
       </Suspense>
 
 
-      <div className="flex h-full">
-        <div className="hidden lg:block relative z-10">
-          <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
+      <div className="relative h-full">
+        {/* Sidebar FLUTUANTE (Notion/Trello style) · página inteira renderiza atrás */}
+        <div className="hidden lg:block fixed left-3 top-20 bottom-3 z-30 pointer-events-none">
+          <div className="h-full pointer-events-auto">
+            <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="w-full h-full min-w-0 overflow-hidden">
+
           {/* THOR - stays mounted */}
           {omnixMounted && (
             <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
