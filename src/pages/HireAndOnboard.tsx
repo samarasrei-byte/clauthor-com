@@ -15,6 +15,10 @@ import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import HelpTooltip from "@/components/HelpTooltip";
 import { friendlyCheckoutError } from "@/lib/checkout-errors";
+import FunnelStepper from "@/components/funnel/FunnelStepper";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { writeFunnel } from "@/lib/funnelState";
+import { useEffect } from "react";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
