@@ -117,8 +117,19 @@ const DashboardLayout = () => {
                 </Button>
               </Link>
             )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleBeginner}
+              title={beginner ? "Modo Iniciante ativo — clique para ver menu completo" : "Modo Avançado — clique para simplificar"}
+              className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
+            >
+              {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
+              <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
+            </Button>
             <ThemeToggle />
             <LanguageSelector />
+
             <Button
               variant="ghost"
               size="sm"
