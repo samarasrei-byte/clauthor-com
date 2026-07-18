@@ -553,6 +553,7 @@ const ClientDashboard = () => {
     "approvals", "media", "integrations", "system",
     "route:/dashboard/inbox",
     "route:/dashboard/traces",
+    "route:/video-studio",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
