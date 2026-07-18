@@ -168,6 +168,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     stop(false);
     currentGlobalStop = stop;
 
+    // Resolves when speech finishes (used by waitForEnd)
+    let resolveFinished: (() => void) | null = null;
+    const finishedPromise = waitForEnd ? new Promise<void>(r => { resolveFinished = r; }) : null;
+
 
     const wrappedOnEnd = () => {
       setIsSpeaking(false);
