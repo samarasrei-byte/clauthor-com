@@ -14,7 +14,7 @@ import FunnelStepper from "@/components/funnel/FunnelStepper";
 import ThorStuckHint from "@/components/funnel/ThorStuckHint";
 import { writeFunnel, type FunnelStep } from "@/lib/funnelState";
 
-type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "company" | "creating";
+type Stage = "pain" | "pick0" | "reco" | "company" | "creating";
 
 const FOCUS_TO_DEPT: Record<QuickAnswers["focus"], string> = {
   vender: "comercial",
@@ -30,86 +30,114 @@ const FOCUS_TO_BENEFIT: Record<QuickAnswers["focus"], string> = {
   organizar: "organizar seu financeiro e sua operação",
 };
 
+const DRAFT_KEY = "clauthor:onboarding-zero-draft";
+
+interface Draft {
+  pain: string;
+  focus?: QuickAnswers["focus"];
+  stage: Stage;
+}
+
+function readDraft(): Draft | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as Draft) : null;
+  } catch { return null; }
+}
+
+function writeDraft(d: Draft) {
+  try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch { /* ignore */ }
+}
+
+function clearDraft() {
+  try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
+}
+
 /**
- * OnboardingZero · fluxo minimalista "vovô test" para leigos.
- * 5 telas · uma decisão por tela · zero jargão.
- * Salva pain_raw em profiles + cria contracted_departments pending
- * antes de navegar ao /dashboard?activate=1 (Tela 4+5 acontecem lá).
+ * OnboardingZero · fluxo "vovô test" reformulado.
+ *
+ * Ordem correta: pain (público) → focus (público) → reco (público)
+ *   → auth (se anônimo) → company → creating → dashboard.
+ *
+ * Estado é persistido em sessionStorage pra sobreviver ao redirect de auth.
  */
 export default function OnboardingZero() {
   const navigate = useNavigate();
   const { user, isLoading } = useAuth();
   const { save: saveDna } = useCompanyDna();
-  const [stage, setStage] = useState<Stage>("pain");
-  const [pain, setPain] = useState("");
-  const [picks, setPicks] = useState<Partial<QuickAnswers>>({});
-  const startedAt = useState(() => Date.now())[0];
 
-  useEffect(() => {
-    if (!isLoading && !user) navigate("/auth", { replace: true });
-  }, [isLoading, user, navigate]);
+  const draft = readDraft();
+  const [stage, setStage] = useState<Stage>(() => {
+    // Se voltou de auth com draft salvo em estado avançado, retoma no company.
+    if (draft && user && (draft.stage === "reco" || draft.stage === "company")) {
+      return "company";
+    }
+    return draft?.stage ?? "pain";
+  });
+  const [pain, setPain] = useState(draft?.pain ?? "");
+  const [picks, setPicks] = useState<Partial<QuickAnswers>>(
+    draft?.focus ? { focus: draft.focus } : {},
+  );
+  const startedAt = useState(() => Date.now())[0];
 
   useEffect(() => {
     trackKpi("thor_onboarding_started", { source: "onboarding" });
   }, []);
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-dvh flex items-center justify-center bg-background">
-        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
+  // Persiste rascunho a cada mudança relevante.
+  useEffect(() => {
+    if (stage === "creating") return;
+    writeDraft({ pain, focus: picks.focus, stage });
+  }, [pain, picks.focus, stage]);
 
   const handlePain = async (raw: string) => {
     setPain(raw);
     trackKpi("thor_onboarding_step", { step: 1, source: "onboarding" });
-    // Persist pain_raw immediately so Thor lembra mesmo se o usuário sair.
-    try {
-      await supabase
-        .from("profiles")
-        .update({ pain_raw: raw } as never)
-        .eq("user_id", user.id);
-    } catch { /* non-blocking */ }
+    if (user) {
+      try {
+        await supabase.from("profiles").update({ pain_raw: raw } as never).eq("user_id", user.id);
+      } catch { /* non-blocking */ }
+    }
     setStage("pick0");
   };
 
   const handlePick = (key: keyof QuickAnswers, value: string) => {
     const next = { ...picks, [key]: value } as Partial<QuickAnswers>;
     setPicks(next);
-    trackKpi("thor_onboarding_step", {
-      step: stage === "pick0" ? 2 : stage === "pick1" ? 3 : 4,
-      source: "onboarding",
-    });
-    if (stage === "pick0") setStage("pick1");
-    else if (stage === "pick1") setStage("pick2");
-    else setStage("reco");
+    trackKpi("thor_onboarding_step", { step: 2, source: "onboarding" });
+    // Uma única pergunta obrigatória (focus) → direto pra reco.
+    setStage("reco");
   };
 
   const chosenDeptId = picks.focus ? FOCUS_TO_DEPT[picks.focus] : "comercial";
   const chosenBenefit = picks.focus ? FOCUS_TO_BENEFIT[picks.focus] : "sua operação comercial";
 
   const handleAccept = () => {
-    // Antes de criar o pending department, coletamos o DNA mínimo:
-    // nome da empresa, website e cores da marca.
+    // Se anônimo, manda pra auth e volta pra cá. Draft já está salvo.
+    if (!user) {
+      writeDraft({ pain, focus: picks.focus, stage: "reco" });
+      const next = encodeURIComponent("/welcome");
+      navigate(`/auth?signup=1&next=${next}`, { replace: false });
+      return;
+    }
     setStage("company");
   };
 
   const finalizeContract = async (info: CompanyInfo | null) => {
+    if (!user) {
+      navigate("/auth?signup=1&next=/welcome", { replace: false });
+      return;
+    }
     setStage("creating");
     const pkg = getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0];
-    // Best-effort DNA save with pain + picks + company info.
     try {
       await saveDna({
         scope: "own",
         client_label: info?.name ?? null,
         source_url: info?.website || null,
         brand_colors: info
-          ? {
-              primary: info.colors.primary,
-              secondary: info.colors.secondary,
-              accent: info.colors.accent,
-            }
+          ? { primary: info.colors.primary, secondary: info.colors.secondary, accent: info.colors.accent }
           : {},
         fonts: [],
         logo_url: null,
@@ -120,7 +148,6 @@ export default function OnboardingZero() {
       });
     } catch { /* non-blocking */ }
 
-    // Create pending department (payment happens in dashboard modal).
     let pendingId: string | null = null;
     try {
       const { data } = await supabase
@@ -163,6 +190,7 @@ export default function OnboardingZero() {
       duration_ms: Date.now() - startedAt,
     });
 
+    clearDraft();
     const url = new URL("/dashboard", window.location.origin);
     url.searchParams.set("first", "1");
     url.searchParams.set("activate", "1");
@@ -171,15 +199,14 @@ export default function OnboardingZero() {
   };
 
   const handleExplain = () => {
-    // Fallback: envia ao modo completo (conversa com Thor).
     navigate("/welcome?mode=full", { replace: true });
   };
 
-  // Mapa etapa interna → passo global do funil.
   const funnelStep: FunnelStep =
-    stage === "company" ? "empresa" : stage === "creating" ? "pagar" : "squad";
+    stage === "company" ? "empresa"
+    : stage === "creating" ? "pagar"
+    : "squad";
 
-  // Persiste progresso a cada mudança de estágio para permitir retomar.
   useEffect(() => {
     writeFunnel({
       step: funnelStep,
@@ -192,12 +219,18 @@ export default function OnboardingZero() {
   const hintByStage: Record<Stage, string> = {
     pain: "Escreva com suas palavras — mesmo curto ajuda. Ex: 'Preciso vender mais' ou 'Não dou conta do atendimento'.",
     pick0: "Escolha o que mais dói hoje. Você pode contratar mais times depois, sem multa.",
-    pick1: "Nenhuma resposta é errada — o Thor usa isso pra montar seu time ideal.",
-    pick2: "Última pergunta. Depois disso mostro a recomendação.",
-    reco: "Se fizer sentido, aceite e siga. Se preferir entender melhor, clique em 'me explica'.",
+    reco: "Sem cartão pra ver a recomendação. Você só cria conta se decidir seguir.",
     company: "Só o nome já basta. Cores e site são opcionais — o Thor detecta se você preencher o website.",
     creating: "Estou montando seu painel agora…",
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -210,8 +243,6 @@ export default function OnboardingZero() {
       <ThorStuckHint stepKey={`onboarding-${stage}`} message={hintByStage[stage]} />
       {stage === "pain" && <PainCapture initial={pain} onDone={handlePain} />}
       {stage === "pick0" && <QuickPicks step={0} onPick={handlePick} />}
-      {stage === "pick1" && <QuickPicks step={1} onPick={handlePick} />}
-      {stage === "pick2" && <QuickPicks step={2} onPick={handlePick} />}
       {stage === "reco" && (
         <Recommendation
           deptId={chosenDeptId}
