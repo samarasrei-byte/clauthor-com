@@ -78,7 +78,10 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
   const searchRef = useRef<HTMLInputElement>(null);
 
   // Persist
-  useEffect(() => { try { localStorage.setItem(LS_KEYS.collapsed, collapsed ? "1" : "0"); } catch { /* noop */ } }, [collapsed]);
+  useEffect(() => {
+    try { localStorage.setItem(LS_KEYS.collapsed, collapsed ? "1" : "0"); } catch { /* noop */ }
+    try { window.dispatchEvent(new CustomEvent("sb:collapsed-change", { detail: { collapsed } })); } catch { /* noop */ }
+  }, [collapsed]);
   useEffect(() => writeSet(LS_KEYS.expanded, expandedGroups), [expandedGroups]);
   useEffect(() => writeSet(LS_KEYS.sections, collapsedSections), [collapsedSections]);
   useEffect(() => writeSet(LS_KEYS.pinned, pinned), [pinned]);
