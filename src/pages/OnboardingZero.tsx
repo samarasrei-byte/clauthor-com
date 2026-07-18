@@ -208,10 +208,13 @@ export default function OnboardingZero() {
     });
 
     clearDraft();
+    // Salto #4 · trial-first: dashboard abre em modo exploração, sem paywall modal.
+    // O card inline de pagamento (PendingDepartmentCard) já cobre a conversão.
     const url = new URL("/dashboard", window.location.origin);
     url.searchParams.set("first", "1");
-    url.searchParams.set("activate", "1");
+    url.searchParams.set("trial", "1");
     if (pendingId) url.searchParams.set("pending_dept", pendingId);
+
     navigate(url.pathname + url.search, { replace: true });
   };
 
