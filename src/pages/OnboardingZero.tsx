@@ -133,13 +133,16 @@ export default function OnboardingZero() {
           agent_ids: [],
           pain_point: pain || null,
           company_snapshot: {
-            name: null,
+            name: info?.name ?? null,
+            website: info?.website ?? null,
+            brand_colors: info?.colors ?? null,
             contact_name: user.user_metadata?.full_name ?? null,
             email: user.email ?? null,
           } as never,
           onboarding_snapshot: {
             pain_raw: pain,
             picks,
+            company: info,
             from: "onboarding_zero",
           } as never,
           status: "pending_payment",
