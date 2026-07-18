@@ -369,7 +369,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
       {/* Search */}
       {!collapsed && (
-        <div className="px-3 pt-3 pb-1">
+        <div className="px-2 pt-2 pb-1">
           <div className="relative">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground/60" strokeWidth={1.5} />
             <input
@@ -377,13 +377,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar"
-              className="w-full pl-7 pr-9 py-1.5 text-[11px] rounded-md bg-muted/20 border border-border/20 focus:border-primary/40 focus:bg-background outline-none transition-all placeholder:text-muted-foreground/50"
+              className="w-full pl-7 pr-2 py-1.5 text-[11px] rounded-md bg-muted/20 border border-border/20 focus:border-primary/40 focus:bg-background outline-none transition-all placeholder:text-muted-foreground/50"
             />
           </div>
         </div>
       )}
 
-      <nav className="flex-1 py-2 px-2.5 space-y-0.5 overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-1.5 px-1.5 space-y-0.5 overflow-y-auto scrollbar-thin">
+
         {/* Pinned */}
         {!collapsed && !q && pinnedItems.length > 0 && (
           <div className="mb-1">
