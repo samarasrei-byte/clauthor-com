@@ -257,6 +257,7 @@ const App = () => (
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                   <Route path="/comercial/funil" element={<ComercialFunil />} />
                   <Route path="/video-studio" element={<VideoStudio />} />
+                  <Route path="/video-clipper" element={<VideoClipper />} />
                 </Route>
 
                 {/* Admin */}
