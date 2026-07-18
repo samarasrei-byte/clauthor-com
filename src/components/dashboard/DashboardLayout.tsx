@@ -24,7 +24,9 @@ const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicke
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
+  const [beginner, , toggleBeginner] = useBeginnerMode();
   const navigate = useNavigate();
+
   const location = useLocation();
   // /dashboard já monta seu próprio sidebar (com estado de "sections").
   // Em todas as outras rotas do dashboard, injetamos o sidebar global.
