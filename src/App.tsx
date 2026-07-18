@@ -86,6 +86,8 @@ const ThorConcierge = lazyRetry(() => import("./pages/ThorConcierge"));
 const ThorOS = lazyRetry(() => import("./pages/ThorOS"));
 const VideoStudio = lazyRetry(() => import("./pages/VideoStudio"));
 const VideoClipper = lazyRetry(() => import("./pages/VideoClipper"));
+const VideoHub = lazyRetry(() => import("./pages/VideoHub"));
+
 const HunterDashboard = lazyRetry(() => import("./pages/HunterDashboard"));
 const HunterLinkedIn = lazyRetry(() => import("./pages/HunterLinkedIn"));
 const HunterICP = lazyRetry(() => import("./pages/HunterICP"));
@@ -258,6 +260,8 @@ const App = () => (
                   <Route path="/comercial/funil" element={<ComercialFunil />} />
                   <Route path="/video-studio" element={<VideoStudio />} />
                   <Route path="/video-clipper" element={<VideoClipper />} />
+                  <Route path="/video" element={<VideoHub />} />
+
                 </Route>
 
                 {/* Admin */}
