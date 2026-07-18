@@ -14,10 +14,11 @@ export const MODULE_UNLOCKS: Record<string, string[]> = {
 };
 
 /**
- * FASE DE TESTE: apenas admins têm acesso aos studios premium.
- * Para reativar liberação por departamento contratado, mude para `false`.
+ * Acesso a módulos premium (Video Studio, Art, Contracts, Carousel):
+ *  - Admin: acesso irrestrito.
+ *  - Usuário comum: só após contratar um departamento que libera o módulo.
  */
-const ADMIN_ONLY_TESTING = true;
+const ADMIN_ONLY_TESTING = false;
 
 export interface ModuleAccessState {
   loading: boolean;

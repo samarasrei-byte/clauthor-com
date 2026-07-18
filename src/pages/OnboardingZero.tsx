@@ -9,8 +9,9 @@ import { DEPARTMENT_PACKAGES, getDepartmentById } from "@/data/departmentPackage
 import PainCapture from "@/components/onboarding-zero/PainCapture";
 import QuickPicks, { type QuickAnswers } from "@/components/onboarding-zero/QuickPicks";
 import Recommendation from "@/components/onboarding-zero/Recommendation";
+import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/CompanyInfoStep";
 
-type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "creating";
+type Stage = "pain" | "pick0" | "pick1" | "pick2" | "reco" | "company" | "creating";
 
 const FOCUS_TO_DEPT: Record<QuickAnswers["focus"], string> = {
   vender: "comercial",
@@ -85,16 +86,28 @@ export default function OnboardingZero() {
   const chosenDeptId = picks.focus ? FOCUS_TO_DEPT[picks.focus] : "comercial";
   const chosenBenefit = picks.focus ? FOCUS_TO_BENEFIT[picks.focus] : "sua operação comercial";
 
-  const handleAccept = async () => {
+  const handleAccept = () => {
+    // Antes de criar o pending department, coletamos o DNA mínimo:
+    // nome da empresa, website e cores da marca.
+    setStage("company");
+  };
+
+  const finalizeContract = async (info: CompanyInfo | null) => {
     setStage("creating");
     const pkg = getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0];
-    // Best-effort DNA save with pain + picks.
+    // Best-effort DNA save with pain + picks + company info.
     try {
       await saveDna({
         scope: "own",
-        client_label: null,
-        source_url: null,
-        brand_colors: {},
+        client_label: info?.name ?? null,
+        source_url: info?.website || null,
+        brand_colors: info
+          ? {
+              primary: info.colors.primary,
+              secondary: info.colors.secondary,
+              accent: info.colors.accent,
+            }
+          : {},
         fonts: [],
         logo_url: null,
         favicon_url: null,
@@ -120,13 +133,16 @@ export default function OnboardingZero() {
           agent_ids: [],
           pain_point: pain || null,
           company_snapshot: {
-            name: null,
+            name: info?.name ?? null,
+            website: info?.website ?? null,
+            brand_colors: info?.colors ?? null,
             contact_name: user.user_metadata?.full_name ?? null,
             email: user.email ?? null,
           } as never,
           onboarding_snapshot: {
             pain_raw: pain,
             picks,
+            company: info,
             from: "onboarding_zero",
           } as never,
           status: "pending_payment",
@@ -173,6 +189,13 @@ export default function OnboardingZero() {
           humanBenefit={chosenBenefit}
           onAccept={handleAccept}
           onExplain={handleExplain}
+        />
+      )}
+      {stage === "company" && (
+        <CompanyInfoStep
+          departmentName={(getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0]).name}
+          onDone={(info) => finalizeContract(info)}
+          onSkip={() => finalizeContract(null)}
         />
       )}
       {stage === "creating" && (
