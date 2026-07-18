@@ -507,6 +507,8 @@ const ClientDashboard = () => {
 
     // Inbox do Agente (rota dedicada) — mostra badge de não lidas
     { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
+    // Video Studio — criação de vídeos com IA (Veo 3 / Replicate)
+    { id: "route:/video-studio", label: "Video Studio", icon: Clapperboard, group: zoneWork },
     // Traces (observabilidade) — timeline de execuções, custo, latência
     { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: zoneWork },
 
