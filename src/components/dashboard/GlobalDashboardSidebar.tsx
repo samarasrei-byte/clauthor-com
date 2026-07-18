@@ -85,5 +85,10 @@ export default function GlobalDashboardSidebar() {
     }
   };
 
-  return <DashboardSidebar items={items} activeItem={activeItem} onItemChange={handleNav} />;
+  const visibleItems = useMemo(() => (
+    beginner ? items.filter((it) => BEGINNER_ALLOWED_IDS.has(it.id)) : items
+  ), [items, beginner]);
+
+  return <DashboardSidebar items={visibleItems} activeItem={activeItem} onItemChange={handleNav} />;
 }
+
