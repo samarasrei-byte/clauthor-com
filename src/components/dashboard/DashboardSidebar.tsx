@@ -216,7 +216,10 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 item.id === "overview" ? "nav-overview" :
                 item.id === "agents" ? "nav-agents" :
                 item.id === "chat" ? "nav-chat" :
-                item.id === "insights" ? "nav-reports" : undefined
+                item.id === "insights" ? "nav-reports" :
+                item.id === "approvals" ? "nav-approvals" :
+                item.id === "route:/video-studio" ? "nav-video" :
+                item.id === "route:/video-clipper" ? "nav-clipper" : undefined
               }
               onClick={() => {
                 if (hasChildren && !collapsed) toggleGroup(item.id);
