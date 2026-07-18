@@ -195,6 +195,16 @@ export default function VideoStage({
           </div>
         </div>
       )}
+
+      {dragging && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-dashed border-primary z-20">
+          <div className="flex flex-col items-center gap-2 text-primary">
+            <UploadCloud strokeWidth={1.5} className="w-8 h-8" />
+            <div className="text-sm font-medium">Solte para usar como referência</div>
+            <div className="text-[11px] opacity-70">Imagem ou vídeo · preview instantâneo</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
