@@ -5,6 +5,8 @@ import {
   Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar,
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
+import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
+
 
 /**
  * Sidebar global usado em todas as rotas do dashboard EXCETO /dashboard.
