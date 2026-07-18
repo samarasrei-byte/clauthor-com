@@ -151,6 +151,8 @@ const Departamentos = () => {
   }, [checkoutData]);
 
   useEffect(() => {
+    // RLS na tabela department_suggestions exige sessão · evita 401 no anon
+    if (!user) return;
     const fetchSuggestions = async () => {
       const { data } = await supabase
         .from("department_suggestions")
@@ -172,7 +174,8 @@ const Departamentos = () => {
       }
     };
     fetchSuggestions();
-  }, []);
+  }, [user]);
+
 
   const handleSuggestionSubmit = async () => {
     if (!suggestionName.trim()) return;
