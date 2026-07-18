@@ -6,8 +6,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCompanyDna } from "@/hooks/useCompanyDna";
 import { trackKpi } from "@/lib/kpiTracker";
 import { DEPARTMENT_PACKAGES, getDepartmentById } from "@/data/departmentPackages";
-import PainCapture from "@/components/onboarding-zero/PainCapture";
+import PainCapture, { type PainFocus } from "@/components/onboarding-zero/PainCapture";
 import QuickPicks, { type QuickAnswers } from "@/components/onboarding-zero/QuickPicks";
+
 import Recommendation from "@/components/onboarding-zero/Recommendation";
 import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/CompanyInfoStep";
 import FunnelStepper from "@/components/funnel/FunnelStepper";
