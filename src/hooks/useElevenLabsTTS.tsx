@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface UseElevenLabsTTSOptions {
@@ -7,6 +7,15 @@ interface UseElevenLabsTTSOptions {
 }
 
 const ELEVENLABS_NATIVE_ONLY_KEY = "thor_tts_native_only";
+
+/**
+ * GLOBAL TTS LOCK · Regra obrigatória: o Thor nunca fala por cima dele mesmo.
+ * Qualquer instância do hook, ao iniciar speak(), invoca o stop da instância
+ * anterior. Isso garante uma única voz ativa em todo o app, mesmo com múltiplos
+ * componentes (ThorCore, ThorLiveGuide, ThorDailyBriefing, OmnixChat, etc.).
+ */
+let currentGlobalStop: ((notify?: boolean) => void) | null = null;
+
 
 /** Fallback to browser's native speech synthesis */
 function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: () => void): SpeechSynthesisUtterance | null {
@@ -140,15 +149,29 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     if (notify && wasPlaying) onEnd?.();
   }, [onEnd]);
 
+  // Register this instance's stop as the global stop so any other instance
+  // that starts speaking can silence us first (no overlapping voice).
+  useEffect(() => {
+    return () => {
+      if (currentGlobalStop === stop) currentGlobalStop = null;
+    };
+  }, [stop]);
+
   const speak = useCallback(async (text: string, voiceId?: string, waitForEnd = false) => {
     const cleaned = cleanTextForSpeech(text);
     if (!cleaned) return;
 
+    // GLOBAL LOCK · silence whatever Thor voice was playing anywhere else.
+    if (currentGlobalStop && currentGlobalStop !== stop) {
+      try { currentGlobalStop(false); } catch { /* noop */ }
+    }
     stop(false);
+    currentGlobalStop = stop;
 
     // Resolves when speech finishes (used by waitForEnd)
     let resolveFinished: (() => void) | null = null;
     const finishedPromise = waitForEnd ? new Promise<void>(r => { resolveFinished = r; }) : null;
+
 
     const wrappedOnEnd = () => {
       setIsSpeaking(false);

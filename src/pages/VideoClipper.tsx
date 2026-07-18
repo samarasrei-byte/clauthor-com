@@ -28,12 +28,15 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
+import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
 
 type Format = "9:16" | "1:1" | "16:9";
 type ClipStatus = "proposed" | "approved" | "rendering" | "ready" | "posted" | "skipped" | "failed";
@@ -83,6 +86,7 @@ function fmtTime(s: number): string {
 export default function VideoClipper() {
   const { user } = useAuth();
   const qc = useQueryClient();
+  const access = useModuleAccess("video");
   const [sourceUrl, setSourceUrl] = useState("");
   const [hint, setHint] = useState("");
   const [formats, setFormats] = useState<Format[]>(["9:16", "1:1", "16:9"]);
@@ -91,6 +95,24 @@ export default function VideoClipper() {
 
   const source = detectSource(sourceUrl);
   const SourceIcon = source.icon;
+
+  if (!access.loading && !access.hasAccess) {
+    return (
+      <ModulePaywall
+        module="video-clipper"
+        moduleLabel="Auto-Clipper de Vídeo"
+        moduleDescription="Transforme lives, podcasts e vídeos longos em Shorts/Reels prontos para postar — corte, legenda e publicação automáticos."
+        requiredDepartments={access.requiredDepartments}
+        benefits={[
+          "Corta os melhores momentos com IA",
+          "Gera hook, legenda e hashtags",
+          "Publica em Instagram, YouTube e TikTok",
+          "Aprovação humana antes de postar",
+        ]}
+      />
+    );
+  }
+
 
   // Live list of clips for the current job.
   const { data: clips = [] } = useQuery<ClipRow[]>({
