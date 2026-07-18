@@ -152,6 +152,12 @@ export default function HireAndOnboard() {
         </div>
       </header>
 
+      <FunnelStepper current={user ? "empresa" : "conta"} />
+      <ThorStuckHint
+        stepKey={`hire-${dept.id}`}
+        message={`Ficou em dúvida? O ${dept.name} é ativado imediatamente e você pode cancelar a qualquer momento. Preencha o nome da empresa e pague em 60 segundos.`}
+      />
+
 
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
 
