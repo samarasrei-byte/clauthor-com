@@ -44,7 +44,8 @@ export function useBeginnerMode(): [boolean, (v: boolean) => void, () => void] {
 export const BEGINNER_ALLOWED_IDS = new Set<string>([
   "tab:overview",
   "route:/dashboard/inbox",
-  "route:/video-studio",
+  "route:/video",
   "tab:agents",
   "tab:omnix",
 ]);
+
