@@ -205,7 +205,7 @@ export default function VideoClipper() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="h-full overflow-y-auto bg-background">
         {/* Hero */}
         <div className="border-b border-border/60 bg-gradient-to-b from-primary/5 via-background to-background">
           <div className="mx-auto max-w-6xl px-6 pt-10 pb-8">
