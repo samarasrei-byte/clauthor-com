@@ -555,6 +555,7 @@ const ClientDashboard = () => {
     "route:/dashboard/inbox",
     "route:/dashboard/traces",
     "route:/video-studio",
+    "route:/video-clipper",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
