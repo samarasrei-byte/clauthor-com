@@ -17,6 +17,8 @@ import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
 export default function GlobalDashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [beginner] = useBeginnerMode();
+
 
   const zoneWork = "Meu trabalho";
   const zoneTeam = "Meu time";
