@@ -142,7 +142,7 @@ function TaskCard({
           <button
             onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
             className="w-5 h-5 rounded bg-red-500/10 flex items-center justify-center hover:bg-red-500/20 transition-colors"
-            title="Delete"
+            title="Excluir"
           >
             <X className="h-2.5 w-2.5 text-red-400" />
           </button>

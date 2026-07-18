@@ -29,7 +29,7 @@ export default function GlobalDashboardSidebar() {
     // Meu trabalho
     { id: "tab:overview",             label: "Command Center",     icon: LayoutDashboard, group: zoneWork },
     {
-      id: "tab:workspace", label: "Workspace", icon: Layers3, group: zoneWork,
+      id: "tab:workspace", label: "Área de trabalho", icon: Layers3, group: zoneWork,
       children: [
         { id: "tab:productivity",     label: "Produtividade",      icon: Layers3 },
         { id: "tab:intelligence-hub", label: "Inteligência",       icon: BarChart3 },
@@ -39,7 +39,7 @@ export default function GlobalDashboardSidebar() {
     },
     { id: "route:/dashboard/inbox",   label: "Inbox do Agente",    icon: Inbox,        group: zoneWork },
     { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork },
-    { id: "route:/dashboard/traces",  label: "Traces",             icon: Activity,     group: zoneWork },
+    { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
 
     // Meu time
@@ -50,8 +50,8 @@ export default function GlobalDashboardSidebar() {
     {
       id: "tab:omnix", label: "THOR", icon: Brain, group: zoneAI,
       children: [
-        { id: "tab:omnix",       label: "Chat",     icon: Brain },
-        { id: "tab:thor-center", label: "Overview", icon: Radar },
+        { id: "tab:omnix",       label: "Conversar",  icon: Brain },
+        { id: "tab:thor-center", label: "Visão geral", icon: Radar },
       ],
     },
 
