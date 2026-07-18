@@ -38,9 +38,9 @@ export default function GlobalDashboardSidebar() {
       ],
     },
     { id: "route:/dashboard/inbox",   label: "Inbox do Agente",    icon: Inbox,        group: zoneWork },
-    { id: "route:/video-studio",      label: "Video Studio",       icon: Clapperboard, group: zoneWork },
-    { id: "route:/video-clipper",     label: "Auto-Clipper",       icon: Scissors,     group: zoneWork },
+    { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork },
     { id: "route:/dashboard/traces",  label: "Traces",             icon: Activity,     group: zoneWork },
+
 
     // Meu time
     { id: "tab:agents",               label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
