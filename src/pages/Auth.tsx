@@ -15,6 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { loadDiagnosis, PAIN_TO_RECOMMENDATION, PAIN_TO_DEPT_ID } from "@/lib/diagnosis-routing";
 import { getRegion, formatPrice } from "@/lib/pricing";
+import FunnelStepper from "@/components/funnel/FunnelStepper";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { writeFunnel } from "@/lib/funnelState";
 
 export interface HireIntent {
   type: "agent" | "department" | "squad";
@@ -172,8 +175,26 @@ const AuthPage = () => {
     { icon: Users, text: t("auth.trust_companies", { defaultValue: "Empresas confiam" }) },
   ];
 
+  const showFunnel = !!hireIntent && wantsSignup;
+  useEffect(() => {
+    if (showFunnel && hireIntent) {
+      writeFunnel({
+        step: "conta",
+        departmentId: hireIntent.departmentId,
+        departmentLabel: hireIntent.label,
+      });
+    }
+  }, [showFunnel, hireIntent]);
+
   return (
     <div className="min-h-dvh w-full flex flex-col lg:flex-row -mt-16 pt-16 lg:pt-0 relative bg-background">
+      {showFunnel && <FunnelStepper current="conta" className="lg:hidden" />}
+      {showFunnel && (
+        <ThorStuckHint
+          stepKey="auth-signup"
+          message="Precisa apenas de nome, e-mail e senha. Depois disso é só ativar o departamento no painel."
+        />
+      )}
       {/* ================= LEFT · Immersive Showcase (desktop) ================= */}
       <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-8 xl:p-14 overflow-hidden bg-[#050505] text-white min-h-dvh">
         {/* Animated aurora orbs */}
