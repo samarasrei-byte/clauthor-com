@@ -48,6 +48,16 @@ export default function PendingDepartmentCard() {
     return () => { cancelled = true; };
   }, [user]);
 
+  useEffect(() => {
+    if (pending && !dismissed) {
+      writeFunnel({
+        step: "pagar",
+        departmentId: pending.department_id,
+        departmentLabel: pending.department_name,
+      });
+    }
+  }, [pending, dismissed]);
+
   if (!user || !pending || dismissed) return null;
 
   const pkg = DEPARTMENT_PACKAGES.find((p) => p.id === pending.department_id);
