@@ -1,4 +1,6 @@
-import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap } from "lucide-react";
+import { useState } from "react";
+import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap, UploadCloud, ImagePlus } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
@@ -75,23 +77,80 @@ interface Props {
   gen: Gen | null;
   onFocusComposer?: () => void;
   onPickTemplate?: (t: StageTemplate) => void;
+  onDropFile?: (file: File) => void;
+  droppedPreviewUrl?: string | null;
+  dropUploading?: boolean;
 }
 
 /**
  * Palco central. Empty state agora carrega 6 templates prontos que pré-preenchem
  * o prompt final — remove a fricção do "e agora, o que eu escrevo?".
+ *
+ * Também aceita drag-and-drop de imagem direto no palco: preview instantâneo
+ * via object URL enquanto o upload real acontece em background.
  */
-export default function VideoStage({ gen, onFocusComposer, onPickTemplate }: Props) {
+export default function VideoStage({
+  gen,
+  onFocusComposer,
+  onPickTemplate,
+  onDropFile,
+  droppedPreviewUrl,
+  dropUploading,
+}: Props) {
+  const [dragging, setDragging] = useState(false);
   const handleCopy = async () => {
     if (!gen?.output_url) return;
     await navigator.clipboard.writeText(gen.output_url);
     toast.success("Link copiado.");
   };
 
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragging(false);
+    if (!onDropFile) return;
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      toast.error("Solte uma imagem ou vídeo.");
+      return;
+    }
+    onDropFile(file);
+  };
+
   return (
-    <div className="rounded-2xl overflow-hidden border border-border/60 bg-card/40 backdrop-blur shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+    <div
+      className={cn(
+        "rounded-2xl overflow-hidden border bg-card/40 backdrop-blur shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all relative",
+        dragging ? "border-primary ring-4 ring-primary/20" : "border-border/60",
+      )}
+      onDragOver={(e) => {
+        if (!onDropFile) return;
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={() => setDragging(false)}
+      onDrop={handleDrop}
+    >
       <div className="relative aspect-video bg-gradient-to-br from-neutral-950 to-neutral-900">
-        {!gen ? (
+        {droppedPreviewUrl ? (
+          <div className="absolute inset-0">
+            <img
+              src={droppedPreviewUrl}
+              alt="Preview do anexo"
+              className="w-full h-full object-contain bg-black"
+            />
+            {dropUploading && (
+              <div className="absolute top-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-full bg-black/70 text-white text-[10px] uppercase tracking-widest">
+                <Loader2 strokeWidth={1.5} className="w-3 h-3 animate-spin" />
+                Enviando referência…
+              </div>
+            )}
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/90 text-primary-foreground text-[10px] uppercase tracking-widest">
+              <ImagePlus strokeWidth={1.8} className="w-3 h-3" />
+              Referência
+            </div>
+          </div>
+        ) : !gen ? (
           <EmptyStage onGenerate={onFocusComposer} onPickTemplate={onPickTemplate} />
         ) : gen.status === "completed" && gen.output_url ? (
           <video
@@ -133,6 +192,16 @@ export default function VideoStage({ gen, onFocusComposer, onPickTemplate }: Pro
                 <Download strokeWidth={1.5} className="w-3.5 h-3.5" /> Baixar
               </Button>
             </a>
+          </div>
+        </div>
+      )}
+
+      {dragging && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-dashed border-primary z-20">
+          <div className="flex flex-col items-center gap-2 text-primary">
+            <UploadCloud strokeWidth={1.5} className="w-8 h-8" />
+            <div className="text-sm font-medium">Solte para usar como referência</div>
+            <div className="text-[11px] opacity-70">Imagem ou vídeo · preview instantâneo</div>
           </div>
         </div>
       )}

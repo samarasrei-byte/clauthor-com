@@ -1,7 +1,9 @@
-import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check } from "lucide-react";
+import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 type Provider = "veo3" | "replicate" | "lovable";
@@ -87,36 +89,74 @@ export default function StageActions({
   return (
     <div className="space-y-3">
       {/* Provider pills */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[10px] uppercase tracking-widest text-muted-foreground mr-1">Motor</span>
-        {providers.map((p) => {
-          const Icon = p.icon;
-          const active = provider === p.id;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => p.available && onProviderChange(p.id)}
-              disabled={!p.available}
-              className={cn(
-                "group relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
-                active && p.available
-                  ? "border-primary bg-primary/10 text-foreground"
-                  : "border-border bg-background/40 text-muted-foreground hover:text-foreground hover:border-muted-foreground/50",
-                !p.available && "opacity-50 cursor-not-allowed",
-              )}
-              title={p.available ? `${p.quality} · ETA ${p.eta}` : "Indisponível no seu plano"}
-            >
-              <Icon strokeWidth={1.5} className="w-3.5 h-3.5" />
-              <span>{p.label}</span>
-              <span className="text-[10px] font-mono text-muted-foreground">
-                {p.available ? p.eta : "🔒"}
-              </span>
-              {!p.available && <Lock strokeWidth={1.5} className="w-3 h-3 ml-0.5" />}
-            </button>
-          );
-        })}
-      </div>
+      <TooltipProvider delayDuration={150}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground mr-1">Motor</span>
+          {providers.map((p) => {
+            const Icon = p.icon;
+            const active = provider === p.id;
+            const pill = (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => p.available && onProviderChange(p.id)}
+                aria-disabled={!p.available}
+                className={cn(
+                  "group relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
+                  active && p.available
+                    ? "border-primary bg-primary/10 text-foreground"
+                    : "border-border bg-background/40 text-muted-foreground hover:text-foreground hover:border-muted-foreground/50",
+                  !p.available && "opacity-70 cursor-help",
+                )}
+              >
+                <Icon strokeWidth={1.5} className="w-3.5 h-3.5" />
+                <span>{p.label}</span>
+                <span className="text-[10px] font-mono text-muted-foreground">{p.eta}</span>
+                {!p.available && <Lock strokeWidth={1.8} className="w-3 h-3 ml-0.5" />}
+              </button>
+            );
+
+            if (p.available) {
+              return (
+                <Tooltip key={p.id}>
+                  <TooltipTrigger asChild>{pill}</TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-[11px]">
+                    {p.quality} · ETA {p.eta}
+                  </TooltipContent>
+                </Tooltip>
+              );
+            }
+
+            return (
+              <Tooltip key={p.id}>
+                <TooltipTrigger asChild>{pill}</TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-[240px] p-3">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <Sparkle className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-[11px] font-semibold">
+                      {p.id === "lovable" ? "Chegando em breve" : "Recurso do plano superior"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-2">
+                    {p.id === "lovable"
+                      ? "O motor Clauthor AI está em treinamento. Fique de olho — usuários pagos ganham acesso antecipado."
+                      : `Destrave ${p.label} (${p.quality.toLowerCase()}, ETA ${p.eta}) e mais duração por vídeo com um plano superior.`}
+                  </p>
+                  {p.id !== "lovable" && (
+                    <Link
+                      to="/pricing"
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+                    >
+                      Ver planos <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </div>
+      </TooltipProvider>
+
 
       {/* Prompt preview card */}
       <div className="rounded-2xl border border-border/60 bg-card/40 backdrop-blur p-4">
