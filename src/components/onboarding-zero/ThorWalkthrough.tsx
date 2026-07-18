@@ -61,7 +61,7 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
   useEffect(() => {
     if (dismissed || isLoading || profile?.walkthrough_completed) return;
     if (idx >= BUBBLES.length) return;
-    const t = setTimeout(() => setIdx((p) => p + 1), 6000);
+    const t = setTimeout(() => setIdx((p) => p + 1), 7500);
     return () => clearTimeout(t);
   }, [idx, dismissed, isLoading, profile?.walkthrough_completed]);
 
