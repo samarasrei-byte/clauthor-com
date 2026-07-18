@@ -304,6 +304,72 @@ export default function VideoStudio() {
     toast.success(`Template "${t.label}" carregado — revise e gere.`);
   }
 
+  async function handleDropFile(file: File) {
+    // Instant preview via object URL — user sees the frame while upload happens.
+    const localUrl = URL.createObjectURL(file);
+    setDropPreview(localUrl);
+    setDropUploading(true);
+    try {
+      const media = await uploadFile(file);
+      if (media) {
+        copilot.setAttachment(media);
+        toast.success("Referência anexada ao Thor.");
+      } else {
+        setDropPreview(null);
+      }
+    } finally {
+      setDropUploading(false);
+      // Revoke object URL after a short delay so the img has already rendered
+      setTimeout(() => URL.revokeObjectURL(localUrl), 5000);
+    }
+  }
+
+  function focusCopilotChat() {
+    const el = copilotChatRef.current?.querySelector<HTMLTextAreaElement>("textarea");
+    el?.focus();
+  }
+
+  // Keyboard shortcuts: G (generate), L (library), /, ⇧R (reset), 1/2 provider.
+  // ⌘K is handled inside VideoCommandPalette.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const inField =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+      if (paletteOpen) return;
+      // "/" always focuses chat, even in inputs unless already inside one
+      if (e.key === "/" && !inField) {
+        e.preventDefault();
+        focusCopilotChat();
+        return;
+      }
+      if (inField) return;
+      if (e.key.toLowerCase() === "g" && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        if (copilot.finalPrompt && quota?.can_generate && !submitting) handleGenerate();
+        else toast.info("Termine o prompt com o Thor antes de gerar (G).");
+      } else if (e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        setLibraryOpen((v) => !v);
+      } else if (e.key === "R" && e.shiftKey) {
+        e.preventDefault();
+        copilot.reset();
+      } else if (e.key === "1") {
+        if (providerAvailable("veo3")) setProvider("veo3");
+      } else if (e.key === "2") {
+        if (providerAvailable("replicate")) setProvider("replicate");
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paletteOpen, copilot.finalPrompt, quota?.can_generate, submitting]);
+
+
+
 
 
   async function handleRefreshPoll() {
