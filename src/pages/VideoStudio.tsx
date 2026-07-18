@@ -539,6 +539,87 @@ export default function VideoStudio() {
         </div>
       </div>
 
+      {/* ─── Footer control bar (Kling AI / Sidense style) ─── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/50 bg-background/95 backdrop-blur-xl">
+        <div className="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          {/* Esquerda: plano + cota */}
+          <div className="flex items-center gap-3 min-w-0">
+            {quota ? (
+              <>
+                <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-medium">
+                  {quota.plan}
+                </Badge>
+                <div className="hidden sm:flex items-center gap-1.5 text-xs">
+                  <span className="text-muted-foreground">Vídeos este mês</span>
+                  <span className="font-semibold text-foreground tabular-nums">{quota.used}</span>
+                  <span className="text-muted-foreground opacity-60">/ {quota.monthly_limit}</span>
+                </div>
+                {quota.remaining <= 2 && quota.remaining > 0 && (
+                  <span className="hidden md:inline text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    Restam {quota.remaining}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-muted-foreground">Carregando plano…</span>
+            )}
+          </div>
+
+          {/* Centro: formato + duração inline */}
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Formato</span>
+              <Select value={aspect} onValueChange={setAspect}>
+                <SelectTrigger className="h-8 w-[86px] text-xs"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="16:9">16:9 · Horizontal</SelectItem>
+                  <SelectItem value="9:16">9:16 · Reels</SelectItem>
+                  <SelectItem value="1:1">1:1 · Quadrado</SelectItem>
+                  <SelectItem value="4:3">4:3 · Clássico</SelectItem>
+                  <SelectItem value="21:9">21:9 · Cinema</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="hidden md:flex items-center gap-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Duração</span>
+              <Select value={String(duration)} onValueChange={(v) => setDuration(parseInt(v, 10))}>
+                <SelectTrigger className="h-8 w-[92px] text-xs"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5 segundos</SelectItem>
+                  <SelectItem value="10" disabled={!!quota && quota.max_duration_s < 10}>
+                    10s {quota && quota.max_duration_s < 10 && "· pro"}
+                  </SelectItem>
+                  <SelectItem value="15" disabled={!!quota && quota.max_duration_s < 15}>
+                    15s {quota && quota.max_duration_s < 15 && "· pro"}
+                  </SelectItem>
+                  <SelectItem value="30" disabled={!!quota && quota.max_duration_s < 30}>
+                    30s {quota && quota.max_duration_s < 30 && "· pro"}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {quota && quota.max_duration_s < 30 && (
+              <button
+                type="button"
+                onClick={() => navigate("/pricing")}
+                className="hidden lg:inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+              >
+                Destrave até 30s <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+
+          {/* Direita: atalhos */}
+          <div className="hidden xl:flex items-center gap-x-3 text-[10px] text-muted-foreground">
+            <Shortcut k="⌘K" label="Comandos" />
+            <Shortcut k="G" label="Gerar" />
+            <Shortcut k="L" label="Biblioteca" />
+            <Shortcut k="/" label="Chat" />
+            <Shortcut k="1/2" label="Motor" />
+          </div>
+        </div>
+      </div>
+
       <VideoCommandPalette
         open={paletteOpen}
         onOpenChange={setPaletteOpen}
