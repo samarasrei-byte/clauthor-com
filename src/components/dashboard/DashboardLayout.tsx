@@ -7,7 +7,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
@@ -27,6 +27,19 @@ const DashboardLayout = () => {
   // /dashboard já monta seu próprio sidebar (com estado de "sections").
   // Em todas as outras rotas do dashboard, injetamos o sidebar global.
   const showGlobalSidebar = location.pathname !== "/dashboard";
+
+  // Track sidebar collapsed state so the main content padding follows the width
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    try { return localStorage.getItem("sb:collapsed") === "1"; } catch { return false; }
+  });
+  useEffect(() => {
+    const onChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { collapsed?: boolean } | undefined;
+      if (typeof detail?.collapsed === "boolean") setSidebarCollapsed(detail.collapsed);
+    };
+    window.addEventListener("sb:collapsed-change", onChange as EventListener);
+    return () => window.removeEventListener("sb:collapsed-change", onChange as EventListener);
+  }, []);
 
   const { alertLevel, showUpgradePrompt, dismissUpgradePrompt } = useTokenMonitor();
   const { t } = useTranslation();
@@ -123,10 +136,24 @@ const DashboardLayout = () => {
               </div>
             </div>
           )}
-          <div className={showGlobalSidebar ? "h-full lg:pl-[228px]" : "h-full"}>
-            <Outlet />
+          <div
+            className={showGlobalSidebar ? "h-full transition-[padding] duration-200 ease-out" : "h-full"}
+            style={showGlobalSidebar ? { paddingLeft: undefined } : undefined}
+          >
+            <div
+              className={showGlobalSidebar ? "h-full lg:transition-[padding] lg:duration-200" : "h-full"}
+              style={showGlobalSidebar ? { paddingLeft: `var(--sb-safe, 0px)` } : undefined}
+            >
+              <Outlet />
+            </div>
           </div>
         </div>
+        {/* CSS variable driven by sidebar collapsed state (only applied ≥ lg) */}
+        <style>{`
+          @media (min-width: 1024px) {
+            :root { --sb-safe: ${sidebarCollapsed ? "68px" : "228px"}; }
+          }
+        `}</style>
 
 
         <FloatingDock />
