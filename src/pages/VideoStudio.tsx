@@ -657,57 +657,5 @@ function Shortcut({ k, label }: { k: string; label: string }) {
       <span>{label}</span>
     </span>
   );
-}
 
 
-        <div className="max-w-[1600px] mx-auto p-6">
-          {/* Grid principal 3 colunas: Copiloto | Palco | Inspector */}
-          <div className="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)_360px] gap-5">
-            {/* Coluna esquerda: Copiloto Thor */}
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24 }}>
-              <ThorVideoCopilot
-                messages={copilot.messages}
-                step={copilot.step}
-                attachment={copilot.attachment}
-                onAttachmentChange={copilot.setAttachment}
-                thinking={copilot.thinking}
-                finalPrompt={copilot.finalPrompt}
-                onFinalPromptChange={copilot.setFinalPrompt}
-                onSend={copilot.sendUserMessage}
-                onReset={copilot.reset}
-                onGenerate={handleGenerate}
-                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate}
-                submitting={submitting}
-              />
-            </motion.div>
-
-            {/* Coluna central: Palco + ações + biblioteca */}
-            <div className="space-y-4 min-w-0">
-              <VideoStage
-                gen={activeGen}
-                onFocusComposer={() => copilot.reset()}
-                onPickTemplate={handlePickTemplate}
-              />
-              <StageActions
-                provider={provider}
-                onProviderChange={setProvider}
-                providerAvailable={providerAvailable}
-                finalPrompt={copilot.finalPrompt}
-                onFinalPromptChange={copilot.setFinalPrompt}
-                onGenerate={handleGenerate}
-                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
-                submitting={submitting}
-                quotaRemaining={quota?.remaining}
-              />
-              <LibraryStrip generations={generations} activeId={activeId} onSelect={setActiveId} />
-            </div>
-
-
-            {/* Coluna direita: Inspector */}
-            <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
