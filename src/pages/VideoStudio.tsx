@@ -448,9 +448,41 @@ export default function VideoStudio() {
                   </div>
                 </>
               )}
+              {/* Command palette trigger */}
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 text-[11px]"
+                      onClick={() => setPaletteOpen(true)}
+                      aria-label="Abrir paleta de comandos"
+                    >
+                      <CommandIcon strokeWidth={1.5} className="w-3.5 h-3.5" />
+                      <span className="hidden md:inline">Comandos</span>
+                      <kbd className="hidden md:inline-flex h-4 px-1 items-center rounded bg-muted text-[9px] font-mono text-muted-foreground">
+                        ⌘K
+                      </kbd>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-[11px]">
+                    Paleta de comandos · ⌘K
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              {/* Library sheet trigger */}
+              <VideoLibrarySheet
+                generations={generations}
+                activeId={activeId}
+                onSelect={setActiveId}
+                open={libraryOpen}
+                onOpenChange={setLibraryOpen}
+              />
 
               {/* Advanced settings popover */}
-              <Popover>
+              <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-[11px]">
                     <Settings2 strokeWidth={1.5} className="w-3.5 h-3.5" />
@@ -492,18 +524,34 @@ export default function VideoStudio() {
                         <SelectContent>
                           <SelectItem value="5">5s</SelectItem>
                           <SelectItem value="10" disabled={!!quota && quota.max_duration_s < 10}>
-                            10s {quota && quota.max_duration_s < 10 && "🔒"}
+                            10s {quota && quota.max_duration_s < 10 && "· plano superior"}
                           </SelectItem>
                           <SelectItem value="15" disabled={!!quota && quota.max_duration_s < 15}>
-                            15s {quota && quota.max_duration_s < 15 && "🔒"}
+                            15s {quota && quota.max_duration_s < 15 && "· plano superior"}
                           </SelectItem>
                           <SelectItem value="30" disabled={!!quota && quota.max_duration_s < 30}>
-                            30s {quota && quota.max_duration_s < 30 && "🔒"}
+                            30s {quota && quota.max_duration_s < 30 && "· plano superior"}
                           </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
+
+                  {quota && quota.max_duration_s < 30 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSettingsOpen(false);
+                        navigate("/pricing");
+                      }}
+                      className="w-full flex items-center justify-between text-[11px] rounded-lg border border-primary/30 bg-primary/[0.04] px-3 py-2 hover:bg-primary/10 transition"
+                    >
+                      <span className="text-foreground">
+                        Precisa de mais duração? <span className="text-muted-foreground">Destrave até 30s</span>
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-primary" />
+                    </button>
+                  )}
                 </PopoverContent>
               </Popover>
 
@@ -513,6 +561,104 @@ export default function VideoStudio() {
             </div>
           </div>
         </div>
+
+        <div className="max-w-[1600px] mx-auto p-6">
+          {/* Grid principal 3 colunas: Copiloto | Palco | Inspector */}
+          <div className="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)_360px] gap-5">
+            {/* Coluna esquerda: Copiloto Thor */}
+            <motion.div
+              ref={copilotChatRef}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.24 }}
+            >
+              <ThorVideoCopilot
+                messages={copilot.messages}
+                step={copilot.step}
+                attachment={copilot.attachment}
+                onAttachmentChange={copilot.setAttachment}
+                thinking={copilot.thinking}
+                finalPrompt={copilot.finalPrompt}
+                onFinalPromptChange={copilot.setFinalPrompt}
+                onSend={copilot.sendUserMessage}
+                onReset={copilot.reset}
+                onGenerate={handleGenerate}
+                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate}
+                submitting={submitting}
+              />
+            </motion.div>
+
+            {/* Coluna central: Palco + ações */}
+            <div className="space-y-4 min-w-0">
+              <VideoStage
+                gen={activeGen}
+                onFocusComposer={() => copilot.reset()}
+                onPickTemplate={handlePickTemplate}
+                onDropFile={handleDropFile}
+                droppedPreviewUrl={
+                  dropPreview ??
+                  (copilot.attachment?.kind === "image" ? copilot.attachment.signedUrl : null)
+                }
+                dropUploading={dropUploading}
+              />
+              <StageActions
+                provider={provider}
+                onProviderChange={setProvider}
+                providerAvailable={providerAvailable}
+                finalPrompt={copilot.finalPrompt}
+                onFinalPromptChange={copilot.setFinalPrompt}
+                onGenerate={handleGenerate}
+                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
+                submitting={submitting}
+                quotaRemaining={quota?.remaining}
+              />
+
+              {/* Keyboard shortcuts hint */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground px-1">
+                <Shortcut k="⌘K" label="Comandos" />
+                <Shortcut k="G" label="Gerar" />
+                <Shortcut k="L" label="Biblioteca" />
+                <Shortcut k="/" label="Chat" />
+                <Shortcut k="⇧R" label="Recomeçar" />
+                <Shortcut k="1/2" label="Motor" />
+              </div>
+            </div>
+
+
+            {/* Coluna direita: Inspector */}
+            <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
+          </div>
+        </div>
+      </div>
+
+      <VideoCommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        onGenerate={handleGenerate}
+        onReset={copilot.reset}
+        onToggleLibrary={() => setLibraryOpen((v) => !v)}
+        onFocusChat={focusCopilotChat}
+        onSetProvider={setProvider}
+        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenPricing={() => navigate("/pricing")}
+        providerAvailable={providerAvailable}
+        canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
+      />
+    </>
+  );
+}
+
+function Shortcut({ k, label }: { k: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      <kbd className="h-4 px-1 inline-flex items-center rounded bg-muted font-mono text-[9px] text-foreground/70">
+        {k}
+      </kbd>
+      <span>{label}</span>
+    </span>
+  );
+}
+
 
         <div className="max-w-[1600px] mx-auto p-6">
           {/* Grid principal 3 colunas: Copiloto | Palco | Inspector */}
