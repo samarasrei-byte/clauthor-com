@@ -418,10 +418,10 @@ export default function VideoStudio() {
 
       <CopilotTour />
 
-      <div className="h-full overflow-y-auto bg-background">
-        {/* Sticky header estilo Notion */}
+      <div className="h-full overflow-y-auto bg-background pb-24">
+        {/* Header minimalista estilo Kling AI */}
         <div className="sticky top-0 z-30 backdrop-blur-xl bg-background/80 border-b border-border/40">
-          <div className="max-w-[1600px] mx-auto px-6 py-3.5 flex items-center justify-between">
+          <div className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-foreground/[0.04] flex items-center justify-center">
                 <Clapperboard strokeWidth={1.5} className="w-4 h-4 text-foreground" />
@@ -431,24 +431,12 @@ export default function VideoStudio() {
                   Video Studio
                 </h1>
                 <p className="text-[11px] text-muted-foreground mt-1">
-                  Direção cinematográfica guiada por Thor
+                  Descreva sua ideia. O Thor cuida do resto.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5">
-              {quota && (
-                <>
-                  <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-medium">
-                    {quota.plan}
-                  </Badge>
-                  <div className="text-xs text-muted-foreground hidden sm:block">
-                    <span className="font-medium text-foreground">{quota.used}</span>
-                    <span className="opacity-60"> / {quota.monthly_limit}</span>
-                  </div>
-                </>
-              )}
-              {/* Command palette trigger */}
+            <div className="flex items-center gap-2">
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -457,22 +445,16 @@ export default function VideoStudio() {
                       size="sm"
                       className="h-8 gap-1.5 text-[11px]"
                       onClick={() => setPaletteOpen(true)}
-                      aria-label="Abrir paleta de comandos"
                     >
                       <CommandIcon strokeWidth={1.5} className="w-3.5 h-3.5" />
                       <span className="hidden md:inline">Comandos</span>
-                      <kbd className="hidden md:inline-flex h-4 px-1 items-center rounded bg-muted text-[9px] font-mono text-muted-foreground">
-                        ⌘K
-                      </kbd>
+                      <kbd className="hidden md:inline-flex h-4 px-1 items-center rounded bg-muted text-[9px] font-mono text-muted-foreground">⌘K</kbd>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-[11px]">
-                    Paleta de comandos · ⌘K
-                  </TooltipContent>
+                  <TooltipContent side="bottom" className="text-[11px]">Paleta de comandos · ⌘K</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
 
-              {/* Library sheet trigger */}
               <VideoLibrarySheet
                 generations={generations}
                 activeId={activeId}
@@ -481,81 +463,7 @@ export default function VideoStudio() {
                 onOpenChange={setLibraryOpen}
               />
 
-              {/* Advanced settings popover */}
-              <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-[11px]">
-                    <Settings2 strokeWidth={1.5} className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Configurações</span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-80 p-4 space-y-4">
-                  <div className="text-[11px] text-muted-foreground -mb-1">
-                    Formato do vídeo — o motor é escolhido no palco.
-                  </div>
-
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1.5">
-                        Aspect
-                      </div>
-                      <Select value={aspect} onValueChange={setAspect}>
-                        <SelectTrigger className="h-8 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="16:9">16:9</SelectItem>
-                          <SelectItem value="9:16">9:16</SelectItem>
-                          <SelectItem value="1:1">1:1</SelectItem>
-                          <SelectItem value="4:3">4:3</SelectItem>
-                          <SelectItem value="21:9">21:9</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1.5">
-                        Duração
-                      </div>
-                      <Select value={String(duration)} onValueChange={(v) => setDuration(parseInt(v, 10))}>
-                        <SelectTrigger className="h-8 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="5">5s</SelectItem>
-                          <SelectItem value="10" disabled={!!quota && quota.max_duration_s < 10}>
-                            10s {quota && quota.max_duration_s < 10 && "· plano superior"}
-                          </SelectItem>
-                          <SelectItem value="15" disabled={!!quota && quota.max_duration_s < 15}>
-                            15s {quota && quota.max_duration_s < 15 && "· plano superior"}
-                          </SelectItem>
-                          <SelectItem value="30" disabled={!!quota && quota.max_duration_s < 30}>
-                            30s {quota && quota.max_duration_s < 30 && "· plano superior"}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {quota && quota.max_duration_s < 30 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSettingsOpen(false);
-                        navigate("/pricing");
-                      }}
-                      className="w-full flex items-center justify-between text-[11px] rounded-lg border border-primary/30 bg-primary/[0.04] px-3 py-2 hover:bg-primary/10 transition"
-                    >
-                      <span className="text-foreground">
-                        Precisa de mais duração? <span className="text-muted-foreground">Destrave até 30s</span>
-                      </span>
-                      <ArrowRight className="w-3 h-3 text-primary" />
-                    </button>
-                  )}
-                </PopoverContent>
-              </Popover>
-
-              <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0">
+              <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0" aria-label="Atualizar">
                 <RefreshCw strokeWidth={1.5} className="w-4 h-4" />
               </Button>
             </div>
