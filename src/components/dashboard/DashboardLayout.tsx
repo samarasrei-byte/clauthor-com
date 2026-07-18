@@ -1,4 +1,4 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
+import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import { lazy, Suspense } from "react";
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
@@ -17,9 +18,16 @@ import { useTranslation } from "react-i18next";
 const AssistantHierarchy = lazy(() => import("@/components/AssistantHierarchy"));
 const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicker"));
 
+
+
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  // /dashboard já monta seu próprio sidebar (com estado de "sections").
+  // Em todas as outras rotas do dashboard, injetamos o sidebar global.
+  const showGlobalSidebar = location.pathname !== "/dashboard";
+
   const { alertLevel, showUpgradePrompt, dismissUpgradePrompt } = useTokenMonitor();
   const { t } = useTranslation();
 
@@ -107,9 +115,19 @@ const DashboardLayout = () => {
         </header>
 
         {/* Below header: sidebar + scrollable content */}
-        <div className="flex-1 overflow-hidden">
-          <Outlet />
+        <div className="flex-1 overflow-hidden relative">
+          {showGlobalSidebar && (
+            <div className="hidden lg:block fixed left-2 top-[68px] bottom-2 z-30 pointer-events-none">
+              <div className="h-full pointer-events-auto">
+                <GlobalDashboardSidebar />
+              </div>
+            </div>
+          )}
+          <div className={showGlobalSidebar ? "h-full lg:pl-[228px]" : "h-full"}>
+            <Outlet />
+          </div>
         </div>
+
 
         <FloatingDock />
 
