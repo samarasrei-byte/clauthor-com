@@ -104,14 +104,6 @@ const CreateAgentPage = () => {
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
 
-  // Pre-fill from query params (from Concierge fallback)
-  useEffect(() => {
-    const prefilledObjective = searchParams.get("objetivo");
-    if (prefilledObjective) {
-      setObjective(prefilledObjective);
-      setShowTemplateSuggestions(true);
-    }
-  }, [searchParams]);
   const [sector, setSector] = useState("");
   const [instructions, setInstructions] = useState("");
   const [tone, setTone] = useState("");
@@ -126,6 +118,33 @@ const CreateAgentPage = () => {
   const [endTime, setEndTime] = useState("22:00");
   const [selectedDays, setSelectedDays] = useState<string[]>(["Seg", "Ter", "Qua", "Qui", "Sex"]);
   const [is24h, setIs24h] = useState(false);
+
+  // Pre-fill from query params (Concierge fallback or /onboarding/setor)
+  useEffect(() => {
+    const prefilledObjective = searchParams.get("objetivo");
+    if (prefilledObjective) {
+      setObjective(prefilledObjective);
+      setShowTemplateSuggestions(true);
+    }
+    const presetName = searchParams.get("name");
+    if (presetName) setName(presetName);
+    const presetSector = searchParams.get("sector");
+    if (presetSector) setSector(presetSector);
+    const presetTone = searchParams.get("tone");
+    if (presetTone) setTone(presetTone);
+    const presetInstructions = searchParams.get("instructions");
+    if (presetInstructions) setInstructions(presetInstructions);
+    const csv = (k: string) =>
+      (searchParams.get(k) || "").split(",").map((s) => s.trim()).filter(Boolean);
+    const intg = csv("integrations");
+    if (intg.length) setSelectedIntegrations(intg);
+    const chn = csv("channels");
+    if (chn.length) setSelectedChannels(chn);
+    const acts = csv("actions");
+    if (acts.length) setSelectedActions(acts);
+    if (searchParams.get("preset")) setMode("guided");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const toggleItem = (item: string, list: string[], setList: (v: string[]) => void) => {
     setList(list.includes(item) ? list.filter(i => i !== item) : [...list, item]);

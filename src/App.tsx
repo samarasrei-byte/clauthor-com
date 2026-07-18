@@ -52,6 +52,7 @@ const Waitlist = lazyRetry(() => import("./pages/Waitlist"));
 const Community = lazyRetry(() => import("./pages/Community"));
 const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
 const CreateWorkforce = lazyRetry(() => import("./pages/CreateWorkforce"));
+const OnboardingSector = lazyRetry(() => import("./pages/OnboardingSector"));
 const Integrations = lazyRetry(() => import("./pages/Integrations"));
 const MCPServer = lazyRetry(() => import("./pages/MCPServer"));
 const SettingsConnections = lazyRetry(() => import("./pages/SettingsConnections"));
@@ -162,6 +163,7 @@ const App = () => (
                 <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
                 <Route path="/welcome" element={<Welcome />} />
+                <Route path="/onboarding/setor" element={<OnboardingSector />} />
                 <Route path="/setup/:type/:ref" element={<ProtectedRoute><CustomerSetup /></ProtectedRoute>} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
