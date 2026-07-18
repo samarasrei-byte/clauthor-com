@@ -115,9 +115,19 @@ const DashboardLayout = () => {
         </header>
 
         {/* Below header: sidebar + scrollable content */}
-        <div className="flex-1 overflow-hidden">
-          <Outlet />
+        <div className="flex-1 overflow-hidden relative">
+          {showGlobalSidebar && (
+            <div className="hidden lg:block fixed left-2 top-[68px] bottom-2 z-30 pointer-events-none">
+              <div className="h-full pointer-events-auto">
+                <GlobalDashboardSidebar />
+              </div>
+            </div>
+          )}
+          <div className={showGlobalSidebar ? "h-full lg:pl-[228px]" : "h-full"}>
+            <Outlet />
+          </div>
         </div>
+
 
         <FloatingDock />
 
