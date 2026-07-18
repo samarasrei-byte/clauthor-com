@@ -72,15 +72,28 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
 
   return (
     <div className="fixed inset-0 z-[9998] flex items-center justify-center p-6">
-      {/* Backdrop with heavy blur so the dashboard fades behind */}
+      {/* Backdrop: heavy blur intro, spotlight (lighter blur) when highlight is set */}
       <button
         type="button"
         aria-label="Pular apresentação"
         onClick={complete}
-        className="absolute inset-0 bg-background/60 backdrop-blur-xl cursor-default"
+        className={`absolute inset-0 cursor-default transition-all duration-500 ${
+          current?.highlight
+            ? "bg-background/40 backdrop-blur-md"
+            : "bg-background/60 backdrop-blur-xl"
+        }`}
       />
 
-      <div className="relative z-10 w-full max-w-lg text-center">
+      {/* Spotlight ring around the highlighted target */}
+      {current?.highlight && (
+        <SpotlightRing target={current.highlight} />
+      )}
+
+      <div
+        className={`relative z-10 w-full max-w-lg text-center transition-transform duration-500 ${
+          current?.highlight ? "translate-y-24 sm:translate-y-16" : ""
+        }`}
+      >
         {/* Thor orb */}
         <motion.div
           initial={{ scale: 0.85, opacity: 0 }}
@@ -102,15 +115,18 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-8 leading-tight">
-                Pronto pra <span className="text-primary">ativar seu time?</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-4 leading-tight">
+                Pronto? <span className="text-primary">Vamos começar.</span>
               </h2>
+              <p className="text-sm text-muted-foreground mb-8">
+                Sugestão: abra a Central de Aprovações — seu primeiro rascunho já pode estar lá.
+              </p>
               <button
                 type="button"
                 onClick={complete}
                 className="inline-flex items-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 transition-all"
               >
-                Ativar agora <ArrowRight className="w-5 h-5" />
+                Explorar meu painel <ArrowRight className="w-5 h-5" />
               </button>
             </motion.div>
           ) : (
