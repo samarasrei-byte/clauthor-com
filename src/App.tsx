@@ -260,6 +260,8 @@ const App = () => (
                   <Route path="/comercial/funil" element={<ComercialFunil />} />
                   <Route path="/video-studio" element={<VideoStudio />} />
                   <Route path="/video-clipper" element={<VideoClipper />} />
+                  <Route path="/video" element={<VideoHub />} />
+
                 </Route>
 
                 {/* Admin */}
