@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle2, Loader2, Diamond, Shield } from "lucide-react";
@@ -15,6 +15,9 @@ import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import HelpTooltip from "@/components/HelpTooltip";
 import { friendlyCheckoutError } from "@/lib/checkout-errors";
+import FunnelStepper from "@/components/funnel/FunnelStepper";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { writeFunnel } from "@/lib/funnelState";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
@@ -26,6 +29,17 @@ export default function HireAndOnboard() {
   const [industry, setIndustry] = useState("");
   const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (dept) {
+      writeFunnel({
+        step: user ? "empresa" : "squad",
+        departmentId: dept.id,
+        departmentLabel: dept.name,
+        entry: "squad",
+      });
+    }
+  }, [dept, user]);
 
   if (!dept) return <Navigate to="/departamentos" replace />;
   const Icon = dept.icon;
@@ -126,7 +140,7 @@ export default function HireAndOnboard() {
       <SEO title={`Contratar ${dept.name} · Clauthor`} description={`Ative o ${dept.name} e comece agora.`} />
 
       {/* Header minimalista de checkout · sem Navbar global */}
-      <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md sticky top-0 z-30">
+      <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link to={`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Voltar
@@ -137,6 +151,12 @@ export default function HireAndOnboard() {
           </div>
         </div>
       </header>
+
+      <FunnelStepper current={user ? "empresa" : "conta"} />
+      <ThorStuckHint
+        stepKey={`hire-${dept.id}`}
+        message={`Ficou em dúvida? O ${dept.name} é ativado imediatamente e você pode cancelar a qualquer momento. Preencha o nome da empresa e pague em 60 segundos.`}
+      />
 
 
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">

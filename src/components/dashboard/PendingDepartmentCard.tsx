@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import CheckoutSummaryDialog, { type CheckoutSummaryData } from "./CheckoutSummaryDialog";
 import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
+import ThorStuckHint from "@/components/funnel/ThorStuckHint";
+import { clearFunnel, writeFunnel } from "@/lib/funnelState";
 
 interface PendingRow {
   id: string;
@@ -46,6 +48,16 @@ export default function PendingDepartmentCard() {
     return () => { cancelled = true; };
   }, [user]);
 
+  useEffect(() => {
+    if (pending && !dismissed) {
+      writeFunnel({
+        step: "pagar",
+        departmentId: pending.department_id,
+        departmentLabel: pending.department_name,
+      });
+    }
+  }, [pending, dismissed]);
+
   if (!user || !pending || dismissed) return null;
 
   const pkg = DEPARTMENT_PACKAGES.find((p) => p.id === pending.department_id);
@@ -83,10 +95,15 @@ export default function PendingDepartmentCard() {
     handleInlineApproval(subscriptionId, checkout, {
       pending_department_row_id: pending.id,
     });
+    clearFunnel();
   };
 
   return (
     <>
+      <ThorStuckHint
+        stepKey={`pending-${pending.id}`}
+        message={`Falta só o pagamento pra ativar ${pending.department_name}. Clique em 'Ativar agora' — PayPal em 1 clique e cancela quando quiser.`}
+      />
       <motion.section
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
