@@ -109,6 +109,17 @@ export default function VideoStudio() {
   const [steps, setSteps] = useState<Step[]>([]);
 
   const copilot = useVideoCopilot();
+  const { upload: uploadFile } = useVideoUpload();
+
+  // UI state — library sheet, command palette, drop preview
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [dropPreview, setDropPreview] = useState<string | null>(null);
+  const [dropUploading, setDropUploading] = useState(false);
+  const copilotChatRef = useRef<HTMLDivElement | null>(null);
+
+
 
   // ?prompt= param pre-fills the final prompt (from Marketing agent link, etc)
   useEffect(() => {
