@@ -5,6 +5,8 @@ import {
   Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar,
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
+import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
+
 
 /**
  * Sidebar global usado em todas as rotas do dashboard EXCETO /dashboard.
@@ -15,6 +17,8 @@ import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
 export default function GlobalDashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [beginner] = useBeginnerMode();
+
 
   const zoneWork = "Meu trabalho";
   const zoneTeam = "Meu time";
@@ -81,5 +85,10 @@ export default function GlobalDashboardSidebar() {
     }
   };
 
-  return <DashboardSidebar items={items} activeItem={activeItem} onItemChange={handleNav} />;
+  const visibleItems = useMemo(() => (
+    beginner ? items.filter((it) => BEGINNER_ALLOWED_IDS.has(it.id)) : items
+  ), [items, beginner]);
+
+  return <DashboardSidebar items={visibleItems} activeItem={activeItem} onItemChange={handleNav} />;
 }
+

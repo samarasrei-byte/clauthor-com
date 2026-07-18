@@ -1,5 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, GraduationCap, Sparkles } from "lucide-react";
+import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,7 +24,9 @@ const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicke
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
+  const [beginner, , toggleBeginner] = useBeginnerMode();
   const navigate = useNavigate();
+
   const location = useLocation();
   // /dashboard já monta seu próprio sidebar (com estado de "sections").
   // Em todas as outras rotas do dashboard, injetamos o sidebar global.
@@ -113,8 +117,19 @@ const DashboardLayout = () => {
                 </Button>
               </Link>
             )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleBeginner}
+              title={beginner ? "Modo Iniciante ativo — clique para ver menu completo" : "Modo Avançado — clique para simplificar"}
+              className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
+            >
+              {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
+              <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
+            </Button>
             <ThemeToggle />
             <LanguageSelector />
+
             <Button
               variant="ghost"
               size="sm"
