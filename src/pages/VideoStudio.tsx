@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -9,6 +9,8 @@ import {
   Settings2,
   Sparkles,
   Zap,
+  Command as CommandIcon,
+  ArrowRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -28,15 +30,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 
 import VideoStage, { type StageTemplate } from "@/components/video-studio/VideoStage";
 import VideoInspector from "@/components/video-studio/VideoInspector";
-import LibraryStrip from "@/components/video-studio/LibraryStrip";
+import VideoLibrarySheet from "@/components/video-studio/VideoLibrarySheet";
+import VideoCommandPalette from "@/components/video-studio/VideoCommandPalette";
 import ThorVideoCopilot from "@/components/video-studio/ThorVideoCopilot";
 import CopilotTour from "@/components/video-studio/CopilotTour";
 import StageActions from "@/components/video-studio/StageActions";
 import { useVideoCopilot } from "@/hooks/useVideoCopilot";
+import { useVideoUpload } from "@/hooks/useVideoUpload";
 
 
 type Provider = "veo3" | "replicate" | "lovable";
