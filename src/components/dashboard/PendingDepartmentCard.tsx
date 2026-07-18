@@ -95,10 +95,15 @@ export default function PendingDepartmentCard() {
     handleInlineApproval(subscriptionId, checkout, {
       pending_department_row_id: pending.id,
     });
+    clearFunnel();
   };
 
   return (
     <>
+      <ThorStuckHint
+        stepKey={`pending-${pending.id}`}
+        message={`Falta só o pagamento pra ativar ${pending.department_name}. Clique em 'Ativar agora' — PayPal em 1 clique e cancela quando quiser.`}
+      />
       <motion.section
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
