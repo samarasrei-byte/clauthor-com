@@ -60,6 +60,23 @@ export default function Recommendation({ deptId, humanBenefit, onAccept, onExpla
       </motion.p>
       <p className="text-sm text-muted-foreground mt-1">Cancela quando quiser.</p>
 
+      {/* Micro prova social · reduz ansiedade antes do próximo passo */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.55 }}
+        className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground"
+      >
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          Beta fechado · vagas limitadas
+        </span>
+        <span className="hidden sm:inline text-muted-foreground/40">·</span>
+        <span>Sem cartão pra testar</span>
+        <span className="hidden sm:inline text-muted-foreground/40">·</span>
+        <span>Aprovação em 1 clique</span>
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
