@@ -39,6 +39,9 @@ const DashboardLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
     try { return localStorage.getItem("sb:collapsed") === "1"; } catch { return false; }
   });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  // Close mobile drawer on route change
+  useEffect(() => { setMobileNavOpen(false); }, [location.pathname]);
   useEffect(() => {
     const onChange = (e: Event) => {
       const detail = (e as CustomEvent).detail as { collapsed?: boolean } | undefined;
