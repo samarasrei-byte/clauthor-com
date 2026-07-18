@@ -1,6 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, GraduationCap, Sparkles } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, GraduationCap, Sparkles, Menu } from "lucide-react";
 import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,9 @@ const DashboardLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
     try { return localStorage.getItem("sb:collapsed") === "1"; } catch { return false; }
   });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  // Close mobile drawer on route change
+  useEffect(() => { setMobileNavOpen(false); }, [location.pathname]);
   useEffect(() => {
     const onChange = (e: Event) => {
       const detail = (e as CustomEvent).detail as { collapsed?: boolean } | undefined;
@@ -97,9 +101,33 @@ const DashboardLayout = () => {
 
         {/* Fixed top bar */}
         <header className="h-14 bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
-          <Link to="/" className="flex items-center group">
-            <ClauthorLogo size="md" />
-          </Link>
+          <div className="flex items-center gap-2">
+            {showGlobalSidebar && (
+              <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="lg:hidden h-8 w-8 text-muted-foreground hover:text-foreground"
+                    aria-label="Abrir menu"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="p-0 w-[260px] bg-background/95 backdrop-blur-xl border-r">
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Menu de navegação</SheetTitle>
+                  </SheetHeader>
+                  <div className="h-full pt-3" onClick={() => setMobileNavOpen(false)}>
+                    <GlobalDashboardSidebar />
+                  </div>
+                </SheetContent>
+              </Sheet>
+            )}
+            <Link to="/" className="flex items-center group">
+              <ClauthorLogo size="md" />
+            </Link>
+          </div>
 
           <div className="flex items-center gap-2">
             <Link to="/">
