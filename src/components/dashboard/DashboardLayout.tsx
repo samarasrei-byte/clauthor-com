@@ -1,4 +1,4 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
+import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import { lazy, Suspense } from "react";
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
@@ -16,6 +17,8 @@ import { useTranslation } from "react-i18next";
 // Single-channel: AssistantHierarchy decides which (if any) modal to show.
 const AssistantHierarchy = lazy(() => import("@/components/AssistantHierarchy"));
 const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicker"));
+
+
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
