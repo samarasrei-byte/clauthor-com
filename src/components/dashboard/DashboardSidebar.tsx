@@ -346,7 +346,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     <motion.aside
       data-tour="sidebar"
       initial={false}
-      animate={{ width: collapsed ? 56 : 260 }}
+      animate={{ width: collapsed ? 52 : 212 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
       className={cn(
         "h-full flex flex-col shrink-0 relative [&>*:not(.sb-toggle)]:min-w-0",
