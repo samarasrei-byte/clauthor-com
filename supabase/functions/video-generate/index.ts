@@ -254,7 +254,13 @@ async function dispatchProvider(
     if (gen.input_image_url) {
       const imgRes = await fetch(gen.input_image_url);
       const imgBuf = new Uint8Array(await imgRes.arrayBuffer());
-      const b64 = btoa(String.fromCharCode(...imgBuf));
+      // Chunked base64 encoding — spread operator estoura o stack em imagens grandes.
+      let binary = "";
+      const CHUNK = 0x8000;
+      for (let i = 0; i < imgBuf.length; i += CHUNK) {
+        binary += String.fromCharCode(...imgBuf.subarray(i, i + CHUNK));
+      }
+      const b64 = btoa(binary);
       instances[0].image = { bytesBase64Encoded: b64, mimeType: imgRes.headers.get("content-type") ?? "image/png" };
     }
     const res = await fetch(url, {
