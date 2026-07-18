@@ -14,6 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 
 import Footer from "@/components/Footer";
+import FunnelResumeBanner from "@/components/funnel/FunnelResumeBanner";
 import { SQUADS } from "@/data/squads";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import PanelMockup from "@/components/landing/PanelMockup";
@@ -177,6 +178,7 @@ const HomePage = () => {
 
   return (
     <div className="light relative overflow-x-hidden bg-background text-foreground">
+      <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
         className="dark relative bg-[#050505] text-white overflow-hidden isolate"
