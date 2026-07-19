@@ -505,13 +505,13 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
-    // Inbox do Agente (rota dedicada) — mostra badge de não lidas
-    { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
-    // Video Studio — criação de vídeos com IA (Veo 3 / Replicate)
-    { id: "route:/video-studio", label: "Video Studio", icon: Clapperboard, group: zoneWork },
-    { id: "route:/video-clipper", label: "Auto-Clipper", icon: Scissors, group: zoneWork },
-    // Traces (observabilidade) — timeline de execuções, custo, latência
-    { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: zoneWork },
+    // ─── Estúdio & Ferramentas (grupo separado, evita duplicar "Meu trabalho") ───
+    { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: "Estúdio & Ferramentas" },
+    { id: "route:/video-studio", label: "Video Studio", icon: Clapperboard, group: "Estúdio & Ferramentas" },
+    { id: "route:/video-clipper", label: "Auto-Clipper", icon: Scissors, group: "Estúdio & Ferramentas" },
+    { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: "Estúdio & Ferramentas" },
+
+
 
     // ─── IA & Voz: THOR unificado (Chat + Overview) ───
     // "Overview" (não "Central") evita colisão de nome com "Central de Aprovações"

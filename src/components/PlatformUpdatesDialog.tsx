@@ -101,26 +101,18 @@ export default function PlatformUpdatesDialog() {
         </div>
 
         <DialogHeader className="px-6 pt-6 pb-2">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center border border-primary/20">
-                <Diamond className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <DialogTitle className="font-display text-lg">O que há de novo no Clauthor</DialogTitle>
-                <DialogDescription className="text-[11px] text-muted-foreground">
-                  Atualização {CURRENT_VERSION} • Segurança e transparência primeiro
-                </DialogDescription>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center border border-primary/20">
+              <Diamond className="h-5 w-5 text-primary" />
             </div>
-            <button
-              onClick={handleClose}
-              aria-label="Fechar"
-              className="p-1.5 rounded-md hover:bg-muted/40 text-muted-foreground transition-colors"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div>
+              <DialogTitle className="font-display text-lg">O que há de novo no Clauthor</DialogTitle>
+              <DialogDescription className="text-[11px] text-muted-foreground">
+                Atualização {CURRENT_VERSION} • Segurança e transparência primeiro
+              </DialogDescription>
+            </div>
           </div>
+
         </DialogHeader>
 
         <div className="px-6 pb-6 space-y-5 max-h-[70vh] overflow-y-auto">
