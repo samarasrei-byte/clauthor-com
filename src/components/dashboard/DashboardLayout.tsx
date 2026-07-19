@@ -227,7 +227,7 @@ const DashboardLayout = () => {
         {/* CSS variable driven by sidebar collapsed state (only applied ≥ lg) */}
         <style>{`
           @media (min-width: 1024px) {
-            :root { --sb-safe: ${sidebarCollapsed ? "68px" : "228px"}; }
+            :root { --sb-safe: ${sidebarCollapsed ? "80px" : "260px"}; }
           }
         `}</style>
 
