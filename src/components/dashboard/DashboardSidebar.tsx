@@ -194,7 +194,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             collapsed ? "px-2 py-2 justify-center" : "px-3 py-2",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
-              : "text-foreground/75 hover:text-foreground hover:bg-card/60 border border-transparent"
+              : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
           <div className="relative shrink-0">
@@ -292,7 +292,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                         "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium transition-all",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
-                          : "text-foreground/70 hover:text-foreground hover:bg-card/60"
+                          : "text-foreground/75 hover:text-foreground hover:bg-card/60"
                       )}
                     >
                       <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />

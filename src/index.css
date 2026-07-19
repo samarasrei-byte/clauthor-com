@@ -294,7 +294,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss03';
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     line-height: 1.6;
@@ -916,3 +916,24 @@ body.presentation-mode {
 body.presentation-mode:hover {
   cursor: auto;
 }
+
+/* ============================================================
+   Design system polish · Audit 2026 (Fonts, Icons, Numerics)
+   ============================================================ */
+
+/* Tabular numerals — apply to KPIs, prices, timestamps, counters.
+   Prevents numbers from "dancing" as they update. */
+.tabular,
+.tabular-nums,
+[data-tabular] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+}
+
+/* Icon size scale — enforces the single system used across the app. */
+.icon-xs { width: 12px; height: 12px; }
+.icon-sm { width: 14px; height: 14px; }
+.icon    { width: 16px; height: 16px; }
+.icon-md { width: 18px; height: 18px; }
+.icon-lg { width: 20px; height: 20px; }
+.icon-xl { width: 24px; height: 24px; }
