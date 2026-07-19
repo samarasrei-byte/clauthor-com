@@ -1041,6 +1041,7 @@ const BrainGraphHolo = ({ filteredIds }: { filteredIds: Set<string> }) => (
               style={{ transformOrigin: `${n.x}px ${n.y}px` }} />
             <circle cx={n.x} cy={n.y} r={active ? 26 : 18} fill="url(#brainNodeGlow)" opacity={active ? 0.85 : 0.4} />
             <motion.circle cx={n.x} cy={n.y} r={active ? 9 : 6} fill={n.color}
+              initial={{ r: active ? 9 : 6 }}
               animate={{ r: active ? [9, 11, 9] : [6, 7, 6] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
             <circle cx={n.x - 2} cy={n.y - 2} r={2} fill="white" opacity={0.85} />
