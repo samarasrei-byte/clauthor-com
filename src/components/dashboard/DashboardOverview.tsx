@@ -138,6 +138,8 @@ const DashboardOverview = ({
 
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
 
+                <AgentHealthAlerts />
+
                 <CompanyBoardAlert onSetup={onTeach} />
 
                 <ThorDailyBriefing
