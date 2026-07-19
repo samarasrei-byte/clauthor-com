@@ -29,20 +29,27 @@ export function AgentActivityFeed({ agentId }: { agentId: string }) {
 
   if (isLoading) {
     return (
-      <div className="py-6 text-center text-muted-foreground text-sm">
-        {t("common.loading", { defaultValue: "Carregando..." })}
+      <div className="space-y-2">
+        {[...Array(3)].map((_, i) => (
+          <Skeleton key={i} className="h-14 w-full" />
+        ))}
       </div>
     );
   }
 
   if (!metrics || metrics.recentActions.length === 0) {
     return (
-      <div className="py-8 text-center">
-        <Clock className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
-        <p className="text-sm text-muted-foreground">
-          {t("agents.no_activity_yet", { defaultValue: "Nenhuma atividade registrada ainda." })}
-        </p>
-      </div>
+      <EmptyState
+        icon={Sparkles}
+        title="Este agente ainda não trabalhou"
+        description="Assim que ele receber a primeira tarefa, você vê cada ação — chamada de LLM, envio de e-mail, busca — em tempo real."
+        action={{
+          label: "Dar uma tarefa agora",
+          href: "/dashboard?tab=agents",
+        }}
+        hint="Toda ação vira um trace replayable — bom para auditar e treinar melhor."
+        size="sm"
+      />
     );
   }
 
