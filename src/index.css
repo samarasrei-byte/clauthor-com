@@ -301,6 +301,52 @@
 }
 
 @layer utilities {
+  /* Severity pill utilities · use with <div className="severity severity-warning"> */
+  .severity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: var(--text-caption);
+    font-weight: 500;
+    border: 1px solid transparent;
+    line-height: 1.2;
+  }
+  .severity-info    { background: hsl(var(--severity-info-bg));     border-color: hsl(var(--severity-info-border));     color: hsl(var(--severity-info)); }
+  .severity-success { background: hsl(var(--severity-success-bg));  border-color: hsl(var(--severity-success-border));  color: hsl(var(--severity-success)); }
+  .severity-warning { background: hsl(var(--severity-warning-bg));  border-color: hsl(var(--severity-warning-border));  color: hsl(var(--severity-warning)); }
+  .severity-danger  { background: hsl(var(--severity-danger-bg));   border-color: hsl(var(--severity-danger-border));   color: hsl(var(--severity-danger)); }
+  .severity-critical{ background: hsl(var(--severity-critical-bg)); border-color: hsl(var(--severity-critical-border)); color: hsl(var(--severity-critical)); }
+
+  /* Shimmer skeleton · replaces pulse */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background: hsl(var(--muted));
+    border-radius: 0.5rem;
+  }
+  .skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--foreground) / 0.06) 50%,
+      transparent 100%
+    );
+    animation: shimmer 1.6s var(--ease-quart-out) infinite;
+  }
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer::after { animation: none; }
+  }
+
+
   /* Glass Effects */
   .glass {
     background: var(--glass-bg);
