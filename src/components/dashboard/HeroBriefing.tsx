@@ -224,23 +224,53 @@ function StatCell({
   label,
   value,
   sub,
+  spark,
+  sparkColor,
+  delta,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: number | string;
   sub: string;
+  spark?: number[];
+  sparkColor?: string;
+  delta?: number;
 }) {
   const display = typeof value === "number" ? value.toLocaleString("pt-BR") : value;
+  const deltaColor =
+    delta == null
+      ? "text-muted-foreground/60"
+      : delta > 0
+      ? "text-emerald-400"
+      : delta < 0
+      ? "text-destructive"
+      : "text-muted-foreground/60";
+  const DeltaIcon = delta == null ? Minus : delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
-        <Icon className="h-3 w-3" />
-        {label}
+      <div className="flex items-center justify-between gap-1.5 text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
+        <span className="flex items-center gap-1.5">
+          <Icon className="h-3 w-3" />
+          {label}
+        </span>
+        {spark && spark.length >= 2 && (
+          <MiniSparkline data={spark} color={sparkColor || "hsl(var(--primary))"} width={48} height={16} />
+        )}
       </div>
       <div className="font-display text-2xl sm:text-3xl font-semibold tabular-nums leading-none">{display}</div>
-      <div className="text-[10px] text-muted-foreground/60">{sub}</div>
+      <div className="flex items-center gap-1.5">
+        <span className="text-[10px] text-muted-foreground/60">{sub}</span>
+        {delta != null && (
+          <span className={`inline-flex items-center gap-0.5 text-[10px] tabular-nums ${deltaColor}`}>
+            <DeltaIcon className="h-2.5 w-2.5" />
+            {delta > 0 ? "+" : ""}
+            {delta}%
+          </span>
+        )}
+      </div>
     </div>
   );
 }
+
 
 export default HeroBriefing;
