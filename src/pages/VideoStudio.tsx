@@ -1,4 +1,6 @@
+import { useDenseMode } from "@/hooks/useDenseMode";
 import { useEffect, useMemo, useRef, useState } from "react";
+
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
