@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Inbox, Clapperboard, Scissors, Activity, Brain,
-  Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar,
+  Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar, Building2,
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
 import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
@@ -42,9 +42,10 @@ export default function GlobalDashboardSidebar() {
     { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
 
-    // Meu time
-    { id: "tab:agents",               label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
+    // Meu time — hierarquia: Agentes (individual) → Squads (times) → Departamentos (unidade cobrada)
+    { id: "tab:agents",                label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
     { id: "tab:squads",                label: "Squads",             icon: Layers3,      group: zoneTeam },
+    { id: "route:/departamentos",      label: "Departamentos",      icon: Building2,    group: zoneTeam },
 
     // IA & Voz
     {
