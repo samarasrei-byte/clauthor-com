@@ -281,6 +281,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           r={coreR * 0.15}
           fill="hsl(var(--primary))"
           filter="url(#orb-bloom)"
+          initial={{ r: coreR * 0.15, opacity: 0.1 }}
           animate={{
             r: isSpeaking
               ? [coreR * 0.2, coreR * 0.4, coreR * 0.15, coreR * 0.35, coreR * 0.2]
