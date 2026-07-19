@@ -97,6 +97,7 @@ const HunterAtivar = lazyRetry(() => import("./pages/HunterAtivar"));
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
 const HunterInbox = lazyRetry(() => import("./pages/HunterInbox"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
+const AgentMetricsDetail = lazyRetry(() => import("./pages/AgentMetricsDetail"));
 const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
 const AdvocaciaOnboarding = lazyRetry(() => import("./pages/AdvocaciaOnboarding"));
 const AdvocaciaAudit = lazyRetry(() => import("./pages/AdvocaciaAudit"));
@@ -235,6 +236,7 @@ const App = () => (
 
 
                   <Route path="/agents" element={<Agents />} />
+                  <Route path="/agents/:agentId/metrics" element={<ProtectedRoute><AgentMetricsDetail /></ProtectedRoute>} />
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />

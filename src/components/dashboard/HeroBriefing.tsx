@@ -13,8 +13,9 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Bot, Zap, Coins, Activity, Diamond, Target } from "lucide-react";
+import { ArrowRight, Bot, Zap, Coins, Activity, Diamond, Target, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -122,6 +123,25 @@ const HeroBriefing = ({
     };
   }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate, recommendation]);
 
+  // Sparkline + delta % vs same-length previous window (last 7 days each bucket = ~24h).
+  const execSpark = useMemo(() => {
+    const buckets = new Array(7).fill(0);
+    const now = Date.now();
+    for (const l of recentLogs) {
+      if (!l.created_at) continue;
+      const ageH = (now - new Date(l.created_at).getTime()) / 36e5;
+      const bucket = Math.floor(ageH / 24);
+      if (bucket >= 0 && bucket < 7) buckets[bucket] += 1;
+    }
+    // series goes oldest→newest for sparkline
+    const series = [...buckets].reverse();
+    const last24 = buckets[0];
+    const prev24 = buckets[1];
+    const deltaPct =
+      prev24 > 0 ? Math.round(((last24 - prev24) / prev24) * 100) : last24 > 0 ? 100 : 0;
+    return { series, last24, deltaPct };
+  }, [recentLogs]);
+
   // Uma linha de contexto humana, sem "LIVE" mentiroso.
   const statusLine = useMemo(() => {
     if (agentsCount === 0) {
@@ -171,9 +191,22 @@ const HeroBriefing = ({
         </div>
 
         {/* Coluna direita: 3 KPIs enxutos */}
-        <dl className="grid grid-cols-3 gap-4 sm:gap-6 lg:min-w-[340px]">
-          <StatCell icon={Bot} label="agentes" value={activeAgents} sub={agentsCount ? `de ${agentsCount}` : "contratados"} />
-          <StatCell icon={Zap} label="ações 24h" value={recentLogs.length} sub="registradas" />
+        <dl className="grid grid-cols-3 gap-4 sm:gap-6 lg:min-w-[380px]">
+          <StatCell
+            icon={Bot}
+            label="agentes"
+            value={activeAgents}
+            sub={agentsCount ? `de ${agentsCount}` : "contratados"}
+          />
+          <StatCell
+            icon={Zap}
+            label="ações 24h"
+            value={execSpark.last24}
+            sub="registradas"
+            spark={execSpark.series}
+            sparkColor="#22d3ee"
+            delta={execSpark.deltaPct}
+          />
           <StatCell
             icon={Coins}
             label="créditos"
@@ -191,23 +224,53 @@ function StatCell({
   label,
   value,
   sub,
+  spark,
+  sparkColor,
+  delta,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: number | string;
   sub: string;
+  spark?: number[];
+  sparkColor?: string;
+  delta?: number;
 }) {
   const display = typeof value === "number" ? value.toLocaleString("pt-BR") : value;
+  const deltaColor =
+    delta == null
+      ? "text-muted-foreground/60"
+      : delta > 0
+      ? "text-emerald-400"
+      : delta < 0
+      ? "text-destructive"
+      : "text-muted-foreground/60";
+  const DeltaIcon = delta == null ? Minus : delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
-        <Icon className="h-3 w-3" />
-        {label}
+      <div className="flex items-center justify-between gap-1.5 text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
+        <span className="flex items-center gap-1.5">
+          <Icon className="h-3 w-3" />
+          {label}
+        </span>
+        {spark && spark.length >= 2 && (
+          <MiniSparkline data={spark} color={sparkColor || "hsl(var(--primary))"} width={48} height={16} />
+        )}
       </div>
       <div className="font-display text-2xl sm:text-3xl font-semibold tabular-nums leading-none">{display}</div>
-      <div className="text-[10px] text-muted-foreground/60">{sub}</div>
+      <div className="flex items-center gap-1.5">
+        <span className="text-[10px] text-muted-foreground/60">{sub}</span>
+        {delta != null && (
+          <span className={`inline-flex items-center gap-0.5 text-[10px] tabular-nums ${deltaColor}`}>
+            <DeltaIcon className="h-2.5 w-2.5" />
+            {delta > 0 ? "+" : ""}
+            {delta}%
+          </span>
+        )}
+      </div>
     </div>
   );
 }
+
 
 export default HeroBriefing;

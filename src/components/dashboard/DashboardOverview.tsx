@@ -14,6 +14,7 @@ import MonthlyROICard from "@/components/dashboard/MonthlyROICard";
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
 const ExecutionHealthBanner = lazy(() => import("./ExecutionHealthBanner"));
+const AgentHealthAlerts = lazy(() => import("./AgentHealthAlerts"));
 const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
 // QuickIntegrations removido: era subset duplicado do MyIntegrationsPanel
 const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
@@ -136,6 +137,8 @@ const DashboardOverview = ({
                 </div>
 
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
+
+                <AgentHealthAlerts />
 
                 <CompanyBoardAlert onSetup={onTeach} />
 
