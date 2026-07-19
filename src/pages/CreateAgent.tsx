@@ -315,6 +315,10 @@ const CreateAgentPage = () => {
           </CardContent>
         </Card>
 
+        {/* Company briefing — espelha onboarding corporativo */}
+        <AgentCompanyBriefing value={briefing} onChange={setBriefing} />
+
+
         {/* Thor consultor, analisa contexto antes de escolher caminho */}
         <ThorConsultantPanel
           intendedScale="agent"
