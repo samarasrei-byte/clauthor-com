@@ -289,10 +289,10 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       key={child.id}
                       onClick={() => onItemChange(child.id)}
                       className={cn(
-                        "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] transition-all",
+                        "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium transition-all",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-card/60"
+                          : "text-foreground/70 hover:text-foreground hover:bg-card/60"
                       )}
                     >
                       <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
