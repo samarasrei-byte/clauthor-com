@@ -86,6 +86,18 @@ export default function OnboardingZero() {
     trackKpi("thor_onboarding_started", { source: "onboarding" });
   }, []);
 
+  // FIX #1 · Quando o `user` hidrata DEPOIS do primeiro render (retorno de OAuth),
+  // reavaliamos o stage: se havia draft de reco/company, pulamos direto pro passo empresa.
+  // Sem isso o usuário volta e vê Recommendation de novo, entrando em loop mental.
+  useEffect(() => {
+    if (!user) return;
+    const current = readDraft();
+    if (!current) return;
+    if ((current.stage === "reco" || current.stage === "company") && stage !== "company" && stage !== "creating") {
+      setStage("company");
+    }
+  }, [user, stage]);
+
   // Persiste rascunho a cada mudança relevante.
   useEffect(() => {
     if (stage === "creating") return;
@@ -148,10 +160,21 @@ export default function OnboardingZero() {
     }
     setStage("creating");
     const pkg = getDepartmentById(chosenDeptId) ?? DEPARTMENT_PACKAGES[0];
+
+    // FIX #4 · fallback de nome quando o usuário pula o site.
+    // Sem isso, o snapshot fica {name: null} e o PendingDepartmentCard exibe título vazio.
+    const emailPrefix = user.email?.split("@")[0]?.trim() || null;
+    const metadataName = (user.user_metadata?.full_name as string | undefined)?.trim() || null;
+    const resolvedName =
+      info?.name?.trim() ||
+      metadataName ||
+      (emailPrefix ? emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1) : null) ||
+      "Minha empresa";
+
     try {
       await saveDna({
         scope: "own",
-        client_label: info?.name ?? null,
+        client_label: resolvedName,
         source_url: info?.website || null,
         brand_colors: info
           ? { primary: info.colors.primary, secondary: info.colors.secondary, accent: info.colors.accent }
@@ -165,39 +188,73 @@ export default function OnboardingZero() {
       });
     } catch { /* non-blocking */ }
 
+    // FIX #5 · idempotência: reusar `pending_dept_id` já criado nesta sessão OU
+    // já existente no banco pro mesmo (user, dept, pending_payment). Evita cards duplicados
+    // no dashboard quando o usuário dá refresh acidental em stage="creating".
     let pendingId: string | null = null;
     try {
-      const { data } = await supabase
-        .from("contracted_departments")
-        .insert({
-          user_id: user.id,
-          department_id: pkg.id,
-          department_name: pkg.name,
-          department_icon: null,
-          monthly_price_cents: Math.round(pkg.priceMonthly * 100),
-          currency: "BRL",
-          agent_count: pkg.agentSlugs.length,
-          agent_ids: [],
-          pain_point: pain || null,
-          company_snapshot: {
-            name: info?.name ?? null,
-            website: info?.website ?? null,
-            brand_colors: info?.colors ?? null,
-            contact_name: user.user_metadata?.full_name ?? null,
-            email: user.email ?? null,
-          } as never,
-          onboarding_snapshot: {
-            pain_raw: pain,
-            picks,
-            company: info,
-            from: "onboarding_zero",
-          } as never,
-          status: "pending_payment",
-        })
-        .select("id")
-        .maybeSingle();
-      pendingId = data?.id ?? null;
+      const cachedId = sessionStorage.getItem(`clauthor:pending:${pkg.id}`);
+      if (cachedId) {
+        const { data: existing } = await supabase
+          .from("contracted_departments")
+          .select("id, status")
+          .eq("id", cachedId)
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (existing && existing.status === "pending_payment") {
+          pendingId = existing.id;
+        }
+      }
+      if (!pendingId) {
+        const { data: dup } = await supabase
+          .from("contracted_departments")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("department_id", pkg.id)
+          .eq("status", "pending_payment")
+          .maybeSingle();
+        if (dup?.id) pendingId = dup.id;
+      }
     } catch { /* non-blocking */ }
+
+    if (!pendingId) {
+      try {
+        const { data } = await supabase
+          .from("contracted_departments")
+          .insert({
+            user_id: user.id,
+            department_id: pkg.id,
+            department_name: pkg.name,
+            department_icon: null,
+            monthly_price_cents: Math.round(pkg.priceMonthly * 100),
+            currency: "BRL",
+            agent_count: pkg.agentSlugs.length,
+            agent_ids: [],
+            pain_point: pain || null,
+            company_snapshot: {
+              name: resolvedName,
+              website: info?.website ?? null,
+              brand_colors: info?.colors ?? null,
+              contact_name: metadataName,
+              email: user.email ?? null,
+            } as never,
+            onboarding_snapshot: {
+              pain_raw: pain,
+              picks,
+              company: info,
+              resolved_name: resolvedName,
+              from: "onboarding_zero",
+            } as never,
+            status: "pending_payment",
+          })
+          .select("id")
+          .maybeSingle();
+        pendingId = data?.id ?? null;
+        if (pendingId) {
+          try { sessionStorage.setItem(`clauthor:pending:${pkg.id}`, pendingId); } catch { /* ignore */ }
+        }
+      } catch { /* non-blocking */ }
+    }
 
     trackKpi("thor_onboarding_completed", {
       source: "onboarding",
