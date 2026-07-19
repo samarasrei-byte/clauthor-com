@@ -5,12 +5,14 @@
  * each clip before render + auto-post to connected social networks.
  */
 
+import { useDenseMode } from "@/hooks/useDenseMode";
 import { useState } from "react";
+
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-import { useDenseMode } from "@/hooks/useDenseMode";
+
   Link2,
   Sparkles,
   Loader2,
