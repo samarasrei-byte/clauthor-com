@@ -11,10 +11,14 @@ const VideoClipper = lazy(() => import("./VideoClipper"));
  * Video Hub — unifica Video Studio (geração) + Auto-Clipper (cortes) em abas.
  * Query param `?tab=studio|clipper` controla a aba ativa.
  */
+import { useDenseMode } from "@/hooks/useDenseMode";
+
 export default function VideoHub() {
+  useDenseMode();
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const tab = useMemo(() => (params.get("tab") === "clipper" ? "clipper" : "studio"), [params]);
+
 
   const setTab = (v: string) => {
     const next = new URLSearchParams(params);

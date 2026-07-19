@@ -92,11 +92,15 @@ const PROVIDER_META: Record<
   lovable: { label: "Clauthor AI", sub: "Em breve", Icon: Clapperboard, comingSoon: true },
 };
 
+import { useDenseMode } from "@/hooks/useDenseMode";
+
 export default function VideoStudio() {
+  useDenseMode();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const access = useModuleAccess("video");
+
 
   const [provider, setProvider] = useState<Provider>("veo3");
   const [aspect, setAspect] = useState("16:9");

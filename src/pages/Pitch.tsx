@@ -171,9 +171,13 @@ const moatIcons = [Brain, Layers, Network, Timer, Shield, Globe];
 
 /* ══════════════════════════════════════════════════════════ */
 
+import { useDenseMode } from "@/hooks/useDenseMode";
+
 const Pitch = () => {
+  useDenseMode();
   const [lang, setLang] = useState<PitchLang>("en");
   const l = translations[lang];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);

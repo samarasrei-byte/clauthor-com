@@ -83,10 +83,14 @@ function fmtTime(s: number): string {
   return `${m}:${String(sec).padStart(2, "0")}`;
 }
 
+import { useDenseMode } from "@/hooks/useDenseMode";
+
 export default function VideoClipper() {
+  useDenseMode();
   const { user } = useAuth();
   const qc = useQueryClient();
   const access = useModuleAccess("video");
+
   const [sourceUrl, setSourceUrl] = useState("");
   const [hint, setHint] = useState("");
   const [formats, setFormats] = useState<Format[]>(["9:16", "1:1", "16:9"]);
