@@ -194,7 +194,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             collapsed ? "px-2 py-2 justify-center" : "px-3 py-2",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
-              : "text-foreground/75 hover:text-foreground hover:bg-card/60 border border-transparent"
+              : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
           <div className="relative shrink-0">
