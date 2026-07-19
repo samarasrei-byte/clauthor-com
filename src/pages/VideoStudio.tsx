@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import {
+import { useDenseMode } from "@/hooks/useDenseMode";
   Loader2,
   RefreshCw,
   Clapperboard,
@@ -93,6 +94,7 @@ const PROVIDER_META: Record<
 };
 
 export default function VideoStudio() {
+  useDenseMode();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
@@ -118,8 +120,6 @@ export default function VideoStudio() {
   const [dropPreview, setDropPreview] = useState<string | null>(null);
   const [dropUploading, setDropUploading] = useState(false);
   const copilotChatRef = useRef<HTMLDivElement | null>(null);
-
-
 
   // ?prompt= param pre-fills the final prompt (from Marketing agent link, etc)
   useEffect(() => {
@@ -324,7 +324,6 @@ export default function VideoStudio() {
     }
   }
 
-
   function focusCopilotChat() {
     const el = copilotChatRef.current?.querySelector<HTMLTextAreaElement>("textarea");
     el?.focus();
@@ -368,10 +367,6 @@ export default function VideoStudio() {
     return () => window.removeEventListener("keydown", handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paletteOpen, copilot.finalPrompt, quota?.can_generate, submitting]);
-
-
-
-
 
   async function handleRefreshPoll() {
     await supabase.functions.invoke("video-poll", { body: {} });
@@ -523,7 +518,6 @@ export default function VideoStudio() {
               />
             </div>
 
-
             {/* Coluna direita: Inspector */}
             <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
           </div>
@@ -638,6 +632,3 @@ function Shortcut({ k, label }: { k: string; label: string }) {
     </span>
   );
 }
-
-
-

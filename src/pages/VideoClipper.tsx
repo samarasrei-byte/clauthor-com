@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+import { useDenseMode } from "@/hooks/useDenseMode";
   Link2,
   Sparkles,
   Loader2,
@@ -84,9 +85,11 @@ function fmtTime(s: number): string {
 }
 
 export default function VideoClipper() {
+  useDenseMode();
   const { user } = useAuth();
   const qc = useQueryClient();
   const access = useModuleAccess("video");
+
   const [sourceUrl, setSourceUrl] = useState("");
   const [hint, setHint] = useState("");
   const [formats, setFormats] = useState<Format[]>(["9:16", "1:1", "16:9"]);
@@ -112,7 +115,6 @@ export default function VideoClipper() {
       />
     );
   }
-
 
   // Live list of clips for the current job.
   const { data: clips = [] } = useQuery<ClipRow[]>({

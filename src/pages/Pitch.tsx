@@ -5,6 +5,7 @@ import { WORKFORCE, TOTAL_WORKFORCE_AGENTS, TOTAL_SQUADS, TOTAL_DEPARTMENTS } fr
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import translations, { type PitchLang } from "@/data/pitchTranslations";
+import { useDenseMode } from "@/hooks/useDenseMode";
 
 const WA_NUMBER = "5511985214895";
 
@@ -172,8 +173,10 @@ const moatIcons = [Brain, Layers, Network, Timer, Shield, Globe];
 /* ══════════════════════════════════════════════════════════ */
 
 const Pitch = () => {
+  useDenseMode();
   const [lang, setLang] = useState<PitchLang>("en");
   const l = translations[lang];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
