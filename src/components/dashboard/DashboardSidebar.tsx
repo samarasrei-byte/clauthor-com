@@ -10,6 +10,7 @@ import {
   X,
   GraduationCap,
   Sparkles,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBeginnerMode } from "@/hooks/useBeginnerMode";
@@ -28,6 +29,8 @@ export interface SidebarItem {
   group?: string;
   children?: SidebarChild[];
   colorClass?: string;
+  /** Se true, exibe cadeado sobre o ícone (acesso bloqueado / paywall). */
+  locked?: boolean;
 }
 
 interface DashboardSidebarProps {
@@ -203,6 +206,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             />
             {numericBadge && (
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-500 ring-2 ring-background animate-pulse" />
+            )}
+            {item.locked && (
+              <span
+                className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-background flex items-center justify-center ring-1 ring-border/60"
+                aria-label="Requer contratação"
+              >
+                <Lock className="h-2 w-2 text-amber-500" strokeWidth={2.5} />
+              </span>
             )}
           </div>
 
@@ -386,38 +397,40 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         <div className="p-3 border-t border-border/40">
           <div
             role="tablist"
-            aria-label="Nível de acesso"
+            aria-label="Nível de interface"
             className="p-1 bg-background/60 rounded-xl flex items-center relative"
           >
             <button
               role="tab"
               aria-selected={beginner}
               onClick={() => { if (!beginner) toggleBeginner(); }}
+              title="Menu simplificado — só o essencial para começar"
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all",
                 beginner ? "bg-card text-foreground shadow-sm ring-1 ring-border/60" : "text-muted-foreground hover:text-foreground"
               )}
             >
               <GraduationCap className="h-3.5 w-3.5" strokeWidth={1.75} />
-              Iniciante
+              Simples
             </button>
             <button
               role="tab"
               aria-selected={!beginner}
               onClick={() => { if (beginner) toggleBeginner(); }}
+              title="Todas as ferramentas visíveis"
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all",
                 !beginner ? "bg-card text-foreground shadow-sm ring-1 ring-border/60" : "text-muted-foreground hover:text-foreground"
               )}
             >
               <Sparkles className="h-3.5 w-3.5" strokeWidth={1.75} />
-              Avançado
+              Completo
             </button>
           </div>
           <p className="mt-2 px-1 text-[10px] leading-tight text-muted-foreground/70">
             {beginner
-              ? "Menu simplificado — só o essencial."
-              : "Todas as ferramentas visíveis."}
+              ? "Apenas o essencial para você começar."
+              : "Acesso a todas as ferramentas do painel."}
           </p>
         </div>
       )}
@@ -425,7 +438,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         <div className="p-2 border-t border-border/40 flex justify-center">
           <button
             onClick={toggleBeginner}
-            title={beginner ? "Modo Iniciante" : "Modo Avançado"}
+            title={beginner ? "Modo Simples ativo — clique para ver tudo" : "Modo Completo ativo — clique para simplificar"}
             className="p-2 rounded-lg hover:bg-card/60 text-muted-foreground hover:text-foreground transition-colors"
           >
             {beginner ? <GraduationCap className="h-4 w-4 text-primary" /> : <Sparkles className="h-4 w-4" />}
