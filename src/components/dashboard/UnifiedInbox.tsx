@@ -15,6 +15,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
+import { notify, toastWithUndo } from "@/lib/notify";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email";
 
