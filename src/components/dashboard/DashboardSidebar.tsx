@@ -10,6 +10,7 @@ import {
   X,
   GraduationCap,
   Sparkles,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBeginnerMode } from "@/hooks/useBeginnerMode";
@@ -28,6 +29,8 @@ export interface SidebarItem {
   group?: string;
   children?: SidebarChild[];
   colorClass?: string;
+  /** Se true, exibe cadeado sobre o ícone (acesso bloqueado / paywall). */
+  locked?: boolean;
 }
 
 interface DashboardSidebarProps {
