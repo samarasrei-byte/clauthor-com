@@ -236,6 +236,7 @@ const App = () => (
 
 
                   <Route path="/agents" element={<Agents />} />
+                  <Route path="/agents/:agentId/metrics" element={<ProtectedRoute><AgentMetricsDetail /></ProtectedRoute>} />
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
