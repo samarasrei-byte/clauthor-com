@@ -33,6 +33,7 @@ const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 const FirstDeliveryCard = lazy(() => import("./FirstDeliveryCard"));
 const AmbientSignalsPanel = lazy(() => import("./AmbientSignalsPanel"));
 const PendingDepartmentCard = lazy(() => import("./PendingDepartmentCard"));
+const DepartmentsCatalogPanel = lazy(() => import("./DepartmentsCatalogPanel"));
 
 
 interface Props {
