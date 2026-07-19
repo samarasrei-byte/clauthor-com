@@ -47,7 +47,7 @@ export default function GlobalDashboardSidebar() {
 
     // Meu time — hierarquia: Agentes (individual) → Squads (times) → Departamentos (unidade cobrada)
     { id: "tab:agents",                label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
-    { id: "tab:squads",                label: "Squads",             icon: Layers3,      group: zoneTeam },
+    { id: "tab:squads",                label: "Squads",             icon: UsersRound,   group: zoneTeam },
     { id: "route:/departamentos",      label: "Departamentos",      icon: Building2,    group: zoneTeam },
 
     // IA & Voz
