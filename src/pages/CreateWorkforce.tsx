@@ -47,6 +47,8 @@ export default function CreateWorkforce() {
   const [reachable, setReachable] = useState(0);
   const [aiThinking, setAiThinking] = useState(false);
   const [deploying, setDeploying] = useState(false);
+  const [briefing, setBriefing] = useState<AgentBriefing>(emptyBriefing);
+  const { dna } = useCompanyDna();
 
   const advance = () => {
     // Auto-fill name when leaving step 2 (Função e cargo) if user didn't type one
