@@ -67,15 +67,21 @@ export default function GlobalDashboardSidebar() {
   ]), []);
 
   const activeItem = useMemo(() => {
-    const match = items.find((it) => {
-      if (it.id.startsWith("route:")) {
-        const path = it.id.replace(/^route:/, "").split("?")[0];
-        return location.pathname === path;
-      }
-      return false;
+    // Rotas dedicadas: match por pathname.
+    const routeMatch = items.find((it) => {
+      if (!it.id.startsWith("route:")) return false;
+      const path = it.id.replace(/^route:/, "").split("?")[0];
+      return location.pathname === path;
     });
-    return match?.id ?? "";
-  }, [items, location.pathname]);
+    if (routeMatch) return routeMatch.id;
+    // No /dashboard, refletir o ?tab= atual (default overview).
+    if (location.pathname === "/dashboard") {
+      const params = new URLSearchParams(location.search);
+      const tab = params.get("tab") || "overview";
+      return `tab:${tab}`;
+    }
+    return "";
+  }, [items, location.pathname, location.search]);
 
   const handleNav = (id: string) => {
     if (id.startsWith("route:")) {

@@ -32,9 +32,9 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  // /dashboard já monta seu próprio sidebar (com estado de "sections").
-  // Em todas as outras rotas do dashboard, injetamos o sidebar global.
-  const showGlobalSidebar = location.pathname !== "/dashboard";
+  // Sidebar global agora renderiza em TODAS as rotas do dashboard (inclusive /dashboard),
+  // para que o menu não pareça "mudar" ao navegar entre Inbox, Video Studio, Traces etc.
+  const showGlobalSidebar = true;
 
   // Track sidebar collapsed state so the main content padding follows the width
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
