@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
 import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
 
 
 /**
@@ -18,6 +19,8 @@ export default function GlobalDashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [beginner] = useBeginnerMode();
+  const videoAccess = useModuleAccess("video");
+  const videoLocked = !videoAccess.loading && !videoAccess.hasAccess;
 
 
   const zoneWork = "Meu trabalho";
@@ -38,7 +41,7 @@ export default function GlobalDashboardSidebar() {
       ],
     },
     { id: "route:/dashboard/inbox",   label: "Inbox do Agente",    icon: Inbox,        group: zoneWork },
-    { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork },
+    { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork, locked: videoLocked, badge: videoLocked ? "Premium" : undefined },
     { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
 
@@ -64,7 +67,7 @@ export default function GlobalDashboardSidebar() {
         { id: "tab:system",       label: "Operações & Config", icon: Settings },
       ],
     },
-  ]), []);
+  ]), [videoLocked]);
 
   const activeItem = useMemo(() => {
     // Rotas dedicadas: match por pathname.
