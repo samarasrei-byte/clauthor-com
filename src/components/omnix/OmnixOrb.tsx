@@ -205,7 +205,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
                   r={p.size}
                   fill="hsl(var(--primary))"
                   filter="url(#orb-bloom)"
-                  initial={{ cx, cy, opacity: 0 }}
+                  initial={{ cx, cy, r: p.size, opacity: 0 }}
                   animate={{
                     cx: [cx, cx + driftX * 0.5, cx - driftX * 0.3, cx + driftX, cx],
                     cy: [cy, cy - driftY * 0.5, cy + driftY * 0.3, cy - driftY, cy],
