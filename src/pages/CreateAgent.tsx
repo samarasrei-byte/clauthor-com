@@ -226,16 +226,32 @@ const CreateAgentPage = () => {
       const matches = matchTemplates(expressPrompt);
       const best = matches[0];
       const derivedName = best?.name || expressPrompt.split(/[\.\n]/)[0].slice(0, 60) || "Novo Agente";
+      const dnaSummary = dna
+        ? [
+            dna.client_label && `Empresa: ${dna.client_label}`,
+            dna.source_url && `Site: ${dna.source_url}`,
+            dna.industry && `Indústria: ${dna.industry}`,
+            dna.core_business && `Core business: ${dna.core_business}`,
+          ].filter(Boolean).join("\n")
+        : undefined;
+      const briefingBlock = briefingToInstructions(briefing, dnaSummary);
+      const baseInstructions = `Você é ${derivedName}. Missão: ${expressPrompt.trim()}. Aja de forma proativa, clara e alinhada ao objetivo.`;
+      const composed = [briefingBlock, baseInstructions].filter(Boolean).join("\n\n");
+
+      const kb: any[] = [{ type: "config", content: { exec_limit: 500, timeout_seconds: 30, audit_level: "Detalhado", schedule: { mode: "24/7" } } }];
+      if (dna) kb.push({ type: "company_dna", content: { id: dna.id, source_url: dna.source_url, core_business: dna.core_business, industry: dna.industry } });
+      if (briefingBlock) kb.push({ type: "briefing", content: briefing });
+
       const { error } = await supabase.from("agents").insert({
         user_id: user.id,
         name: derivedName,
         objective: expressPrompt.trim(),
         description: `${projectName ? `Projeto: ${projectName} · ` : ""}${best ? `Setor: ${best.sector}. Tom: ${best.tone}.` : "Criado via Express."}`,
-        instructions: `Você é ${derivedName}. Missão: ${expressPrompt.trim()}. Aja de forma proativa, clara e alinhada ao objetivo.`,
+        instructions: composed,
         status: "active",
         tier: "basic",
         monthly_price: 0,
-        knowledge_base: [{ type: "config", content: { exec_limit: 500, timeout_seconds: 30, audit_level: "Detalhado", schedule: { mode: "24/7" } } }],
+        knowledge_base: kb,
       });
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
