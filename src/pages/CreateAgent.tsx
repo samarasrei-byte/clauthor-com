@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ThorConsultantPanel from "@/components/thor/ThorConsultantPanel";
+import AgentCompanyBriefing, { emptyBriefing, briefingToInstructions, type AgentBriefing } from "@/components/agents/AgentCompanyBriefing";
+import { useCompanyDna } from "@/hooks/useCompanyDna";
 
 const sectorOptions = ["Atendimento", "Vendas", "Marketing", "Financeiro", "RH", "Jurídico", "TI", "Outro"];
 const toneOptions = ["Formal", "Amigável", "Técnico", "Casual", "Corporativo"];
