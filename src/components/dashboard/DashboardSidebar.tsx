@@ -207,6 +207,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             {numericBadge && (
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-500 ring-2 ring-background animate-pulse" />
             )}
+            {item.locked && (
+              <span
+                className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-background flex items-center justify-center ring-1 ring-border/60"
+                aria-label="Requer contratação"
+              >
+                <Lock className="h-2 w-2 text-amber-500" strokeWidth={2.5} />
+              </span>
+            )}
           </div>
 
           <AnimatePresence>
