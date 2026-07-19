@@ -15,6 +15,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
+import { notify, toastWithUndo } from "@/lib/notify";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email";
 
@@ -211,10 +212,30 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
                 </div>
                 <button
                   onClick={async () => {
-                    for (const n of notifications) {
-                      await supabase.from("notifications").update({ is_read: true }).eq("id", n.id);
+                    const snapshot = notifications.map(n => n.id);
+                    // Optimistic: hide immediately from cache
+                    queryClient.setQueryData(["inbox-notifications"], []);
+                    try {
+                      await supabase
+                        .from("notifications")
+                        .update({ is_read: true })
+                        .in("id", snapshot);
+                      toastWithUndo({
+                        message: `${snapshot.length} alertas marcados como lidos`,
+                        onUndo: async () => {
+                          await supabase
+                            .from("notifications")
+                            .update({ is_read: false })
+                            .in("id", snapshot);
+                          queryClient.invalidateQueries({ queryKey: ["inbox-notifications"] });
+                        },
+                      });
+                    } catch (err) {
+                      queryClient.invalidateQueries({ queryKey: ["inbox-notifications"] });
+                      notify.danger("Falha ao marcar como lido", {
+                        description: err instanceof Error ? err.message : undefined,
+                      });
                     }
-                    queryClient.invalidateQueries({ queryKey: ["inbox-notifications"] });
                   }}
                   className="text-[9px] text-primary/70 hover:text-primary hover:underline transition-colors"
                 >
