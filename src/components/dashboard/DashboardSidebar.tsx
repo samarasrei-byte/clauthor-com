@@ -353,10 +353,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
       className={cn(
         "h-full flex flex-col shrink-0 relative [&>*:not(.sb-toggle)]:min-w-0",
-        // Notion-style floating panel: glass, rounded, elevated, page shows behind
-        "bg-background/70 dark:bg-background/60 backdrop-blur-2xl",
-        "border border-border/20 rounded-2xl shadow-2xl shadow-black/10",
-        collapsed ? "hover:bg-background/80" : ""
+        // Trello/Linear-style: flat panel, subtle right border, no floating shadow
+        "bg-muted/30 dark:bg-background/40",
+        "border-r border-border/40"
       )}
       style={{ overflow: "visible" }}
     >
