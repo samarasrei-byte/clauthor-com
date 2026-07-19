@@ -130,47 +130,94 @@ const DashboardLayout = () => {
             </Link>
           </div>
 
+          <TooltipProvider delayDuration={200}>
           <div className="flex items-center gap-2">
-            <Link to="/">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
-                <Home className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/video-studio" title="Video Studio">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
-                <Clapperboard className="h-4 w-4" />
-              </Button>
-            </Link>
-            {isAdmin && (
-              <Link to="/admin">
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
-                  <Shield className="h-4 w-4" />
-                </Button>
-              </Link>
-            )}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleBeginner}
-              title={beginner ? "Modo Iniciante ativo — clique para ver menu completo" : "Modo Avançado — clique para simplificar"}
-              className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
-            >
-              {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
-              <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
-            </Button>
-            <ThemeToggle />
-            <LanguageSelector />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/" aria-label="Ir para a home">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                    <Home className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Home</TooltipContent>
+            </Tooltip>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSignOut}
-              className="text-muted-foreground hover:text-foreground gap-1.5 text-xs"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t("nav.logout")}</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/video-studio" aria-label="Abrir Video Studio">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                    <Clapperboard className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Video Studio — gere e edite vídeos</TooltipContent>
+            </Tooltip>
+
+            {isAdmin && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/admin" aria-label="Área administrativa">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                      <Shield className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Admin</TooltipContent>
+              </Tooltip>
+            )}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleBeginner}
+                  aria-label={beginner ? "Desativar modo iniciante" : "Ativar modo iniciante"}
+                  className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
+                >
+                  {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-[220px] text-center">
+                {beginner
+                  ? "Modo Iniciante: menu simplificado com só o essencial. Clique para ver tudo."
+                  : "Modo Avançado: todas as ferramentas visíveis. Clique para simplificar."}
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div><ThemeToggle /></div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Alternar tema claro / escuro</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div><LanguageSelector /></div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Idioma da interface</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleSignOut}
+                  aria-label="Sair da conta"
+                  className="text-muted-foreground hover:text-foreground gap-1.5 text-xs"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{t("nav.logout")}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Sair da conta</TooltipContent>
+            </Tooltip>
           </div>
+          </TooltipProvider>
         </header>
 
         {/* Below header: sidebar + scrollable content */}
