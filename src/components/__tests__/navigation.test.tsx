@@ -38,29 +38,27 @@ describe("Navbar", () => {
     expect(toggle).toHaveAttribute("aria-controls", "mobile-nav-menu");
   });
 
-  it("dropdown Soluções lista as rotas primárias e omite as movidas ao footer", async () => {
+  it("dropdown 'Mais' lista Enterprise + Developers e omite rotas legadas", async () => {
     renderWithProviders(<Navbar />);
     const trigger = screen
       .getAllByRole("button")
-      .find((b) => /soluç|solution/i.test(b.textContent ?? ""))!;
+      .find((b) => /mais|more/i.test(b.textContent ?? ""))!;
     expect(trigger).toHaveAttribute("aria-haspopup", "menu");
     fireEvent.click(trigger);
     const menu = await screen.findByRole("menu");
     const scope = within(menu);
-    expect(scope.getByRole("link", { name: /marketplace/i })).toHaveAttribute("href", "/marketplace");
     expect(scope.getByRole("link", { name: /enterprise/i })).toHaveAttribute("href", "/enterprise");
+    expect(scope.getByRole("link", { name: /developers/i })).toHaveAttribute("href", "/developers");
+    expect(scope.queryByRole("link", { name: /marketplace/i })).toBeNull();
     expect(scope.queryByRole("link", { name: /art director/i })).toBeNull();
-    expect(scope.queryByRole("link", { name: /api docs/i })).toBeNull();
   });
 });
 
 describe("Footer", () => {
-  it("contém os links secundários movidos do navbar", () => {
+  it("contém os links canônicos de navegação secundária", () => {
     renderWithProviders(<Footer />);
-    expect(screen.getByRole("link", { name: /art director/i })).toHaveAttribute("href", "/art-director");
-    expect(screen.getByRole("link", { name: /api docs/i })).toHaveAttribute("href", "/api-docs");
-    expect(
-      screen.getByRole("link", { name: /community|comunidade/i }),
-    ).toHaveAttribute("href", "/community");
+    expect(screen.getByRole("link", { name: /enterprise/i })).toHaveAttribute("href", "/enterprise");
+    expect(screen.getByRole("link", { name: /developers/i })).toHaveAttribute("href", "/developers");
+    expect(screen.getByRole("link", { name: /pricing|preços/i })).toHaveAttribute("href", "/pricing");
   });
 });
