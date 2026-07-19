@@ -372,15 +372,23 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       {/* Search */}
       {!collapsed && (
         <div className="px-2 pt-2 pb-1">
-          <div className="relative">
+          <div className="relative group">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground/60" strokeWidth={1.5} />
             <input
               ref={searchRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar"
-              className="w-full pl-7 pr-2 py-1.5 text-[11px] rounded-md bg-muted/20 border border-border/20 focus:border-primary/40 focus:bg-background outline-none transition-all placeholder:text-muted-foreground/50"
+              onFocus={() => {
+                // Abre o Command Center global para busca cross-app
+                try { window.dispatchEvent(new CustomEvent("open-command-bar")); } catch { /* noop */ }
+              }}
+              placeholder="Buscar em tudo…"
+              aria-label="Abrir busca global (⌘K)"
+              className="w-full pl-7 pr-10 py-1.5 text-[11px] rounded-md bg-muted/20 border border-border/20 focus:border-primary/40 focus:bg-background outline-none transition-all placeholder:text-muted-foreground/50"
             />
+            <kbd className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-border/30 bg-background/60 text-[9px] font-mono text-muted-foreground/60">
+              ⌘K
+            </kbd>
           </div>
         </div>
       )}
