@@ -37,13 +37,13 @@ export type IntelligenceTab =
   | "neural-network"
   | "reports";
 
-// Legacy → nova tab + sub-view. War Room / IA Live viraram "Execuções".
-// "Resultados" migrou de Analytics para Logs.
+// Legacy → nova tab. Rede Neural agora é tab própria (usabilidade: usuário
+// vê e clica sem precisar entrar dentro de "Ao Vivo").
 const LEGACY_MAP: Record<string, { tab: string; view?: string }> = {
   live: { tab: "live", view: "executions" },
   "war-room": { tab: "live", view: "executions" },
   "ai-live": { tab: "live", view: "executions" },
-  "neural-network": { tab: "live", view: "neural" },
+  "neural-network": { tab: "neural" },
   analytics: { tab: "analytics" },
   reports: { tab: "analytics" },
   results: { tab: "logs", view: "results" },
@@ -76,9 +76,11 @@ const IntelligenceHub = ({
     legacy.view === "results" ? "results" : "events"
   );
 
+  // Ordem canônica pedida: Ao Vivo → Analytics → Rede Neural → Qualidade IA → Logs
   const tabs = [
     { id: "live", label: "Ao Vivo", icon: Eye },
     { id: "analytics", label: t("dashboard.analytics", { defaultValue: "Analytics" }), icon: BarChart3 },
+    { id: "neural", label: "Rede Neural", icon: Orbit },
     { id: "ai-quality", label: t("dashboard.ai_quality", { defaultValue: "Qualidade IA" }), icon: Star },
     { id: "logs", label: t("dashboard.logs", { defaultValue: "Logs" }), icon: Activity },
   ];
@@ -96,16 +98,14 @@ const IntelligenceHub = ({
         </TabsList>
 
         <TabsContent value="live" className="mt-4 space-y-4">
-          <SubNav
-            value={liveView}
-            onValueChange={(v) => v && setLiveView(v as "executions" | "neural")}
-            items={[
-              { value: "executions", icon: Zap, label: "Execuções" },
-              { value: "neural", icon: Orbit, label: "Rede Neural" },
-            ]}
-          />
           <Suspense fallback={<SectionLoader />}>
-            {liveView === "executions" ? <LiveExecutionPanel /> : <AgentNeuralNetwork />}
+            <LiveExecutionPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="neural" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <AgentNeuralNetwork />
           </Suspense>
         </TabsContent>
 
