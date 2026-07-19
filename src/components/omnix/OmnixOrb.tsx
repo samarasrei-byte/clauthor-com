@@ -257,6 +257,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           cy={center}
           r={coreR}
           fill="url(#orb-core-grad)"
+          initial={{ r: coreR }}
           animate={{
             r: isSpeaking
               ? [coreR, coreR * 1.18, coreR * 0.9, coreR * 1.12, coreR]
