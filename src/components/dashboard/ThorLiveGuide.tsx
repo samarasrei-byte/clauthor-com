@@ -310,6 +310,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         <motion.circle
           cx={CENTER} cy={CENTER} r={3}
           fill="hsl(var(--primary))"
+          initial={{ r: 3, opacity: 0.3 }}
           animate={{
             r: isSpeaking ? [4, 8, 3, 7, 4] : isListening ? [3, 5, 3] : [2, 3, 2],
             opacity: [0.3, 0.8 * intensity, 0.3],
