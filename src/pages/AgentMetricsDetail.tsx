@@ -18,6 +18,7 @@ import { formatDistanceToNow, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import { useAgentHealth } from "@/hooks/useAgentHealth";
+import { EmptyState } from "@/components/ui/empty-state";
 
 
 const STATUS_COLORS: Record<string, string> = {
