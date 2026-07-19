@@ -174,7 +174,7 @@ const HeroBriefing = ({
           </div>
 
           <div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold leading-tight">
+            <h1 className="dash-hero-title font-display text-2xl sm:text-3xl font-bold leading-tight">
               {greeting}, {firstName}.
             </h1>
             <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{statusLine}</p>
