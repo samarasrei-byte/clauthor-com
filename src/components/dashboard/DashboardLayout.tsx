@@ -28,7 +28,6 @@ const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicke
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
-  const [beginner, , toggleBeginner] = useBeginnerMode();
   const navigate = useNavigate();
 
   const location = useLocation();
