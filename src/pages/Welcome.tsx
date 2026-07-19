@@ -3,8 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
+import { supabase } from "@/integrations/supabase/client";
 import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
 import OnboardingZero from "@/pages/OnboardingZero";
+
 
 interface HomeReco {
   kind: "departamento" | "squad" | "agente";
