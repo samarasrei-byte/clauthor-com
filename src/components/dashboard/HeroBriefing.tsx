@@ -13,8 +13,9 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Bot, Zap, Coins, Activity, Diamond, Target } from "lucide-react";
+import { ArrowRight, Bot, Zap, Coins, Activity, Diamond, Target, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
