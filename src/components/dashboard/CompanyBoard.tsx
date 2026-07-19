@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
+import { notify, toastWithUndo } from "@/lib/notify";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -61,11 +61,11 @@ const CompanyBoard = () => {
       content: newItem.content.trim(),
     });
     if (!error) {
-      toast.success("Informação adicionada ao board!");
+      notify.success("Informação adicionada ao board");
       setAdding(false);
       setNewItem({ category: "geral", title: "", content: "" });
       loadItems();
-    } else toast.error("Erro ao salvar.");
+    } else notify.danger("Erro ao salvar");
   };
 
   const saveEdit = async (id: string) => {
@@ -73,18 +73,43 @@ const CompanyBoard = () => {
       .update({ title: editItem.title, content: editItem.content })
       .eq("id", id);
     if (!error) {
-      toast.success("Atualizado!");
+      notify.success("Atualizado");
       setEditing(null);
       loadItems();
+    } else {
+      notify.danger("Não foi possível atualizar");
     }
   };
 
   const deleteItem = async (id: string) => {
+    const removed = items.find(i => i.id === id);
+    if (!removed) return;
+    // Optimistic remove
+    setItems(prev => prev.filter(i => i.id !== id));
     const { error } = await supabase.from("company_board").delete().eq("id", id);
-    if (!error) {
-      toast.success("Removido!");
-      loadItems();
+    if (error) {
+      setItems(prev => [removed, ...prev]);
+      notify.danger("Falha ao remover", { description: error.message });
+      return;
     }
+    toastWithUndo({
+      message: "Item removido do board",
+      description: removed.title,
+      onUndo: async () => {
+        const { error: undoErr } = await supabase.from("company_board").insert({
+          id: removed.id,
+          user_id: user!.id,
+          category: removed.category,
+          title: removed.title,
+          content: removed.content,
+        });
+        if (undoErr) {
+          notify.danger("Não foi possível restaurar");
+          return;
+        }
+        loadItems();
+      },
+    });
   };
 
   const filtered = filterCat ? items.filter(i => i.category === filterCat) : items;
