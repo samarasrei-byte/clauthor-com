@@ -172,9 +172,22 @@ const HeroBriefing = ({
         </div>
 
         {/* Coluna direita: 3 KPIs enxutos */}
-        <dl className="grid grid-cols-3 gap-4 sm:gap-6 lg:min-w-[340px]">
-          <StatCell icon={Bot} label="agentes" value={activeAgents} sub={agentsCount ? `de ${agentsCount}` : "contratados"} />
-          <StatCell icon={Zap} label="ações 24h" value={recentLogs.length} sub="registradas" />
+        <dl className="grid grid-cols-3 gap-4 sm:gap-6 lg:min-w-[380px]">
+          <StatCell
+            icon={Bot}
+            label="agentes"
+            value={activeAgents}
+            sub={agentsCount ? `de ${agentsCount}` : "contratados"}
+          />
+          <StatCell
+            icon={Zap}
+            label="ações 24h"
+            value={execSpark.last24}
+            sub="registradas"
+            spark={execSpark.series}
+            sparkColor="#22d3ee"
+            delta={execSpark.deltaPct}
+          />
           <StatCell
             icon={Coins}
             label="créditos"
