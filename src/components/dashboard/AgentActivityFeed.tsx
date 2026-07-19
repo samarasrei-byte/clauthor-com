@@ -1,6 +1,8 @@
 import { useAgentActivity, type ActivityLog } from "@/hooks/useAgentActivity";
-import { Clock, Zap, FileText, Mail, Search, BarChart3 } from "lucide-react";
+import { Clock, Zap, FileText, Mail, Search, BarChart3, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ACTION_ICONS: Record<string, any> = {
   chat: Zap,
