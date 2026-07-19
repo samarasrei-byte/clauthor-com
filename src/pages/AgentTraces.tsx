@@ -231,22 +231,26 @@ export default function AgentTraces() {
 
         {/* Empty state */}
         {!isLoading && runs.length === 0 && (
-          <Card className="p-12 text-center">
-            <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-              <Activity className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-display font-semibold text-lg mb-2">
-              Nenhuma execução registrada ainda
-            </h3>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto mb-4">
-              Assim que seus agentes começarem a executar tarefas, você verá aqui a linha do
-              tempo completa: cada chamada de LLM, uso de ferramenta, latência, custo e score
-              de qualidade.
-            </p>
-            <Button variant="outline" onClick={() => (window.location.href = "/dashboard")}>
-              Voltar ao Dashboard
-            </Button>
-          </Card>
+          <EmptyState
+            icon={Activity}
+            title="Nenhuma execução registrada ainda"
+            description="Assim que seus agentes começarem a executar tarefas, você verá aqui a linha do tempo completa: cada chamada de LLM, uso de ferramenta, latência, custo e score de qualidade."
+            action={{
+              label: "Executar meu primeiro agente",
+              href: "/dashboard?tab=agents",
+            }}
+            secondaryAction={{
+              label: "Voltar ao dashboard",
+              href: "/dashboard",
+            }}
+            hint={
+              <>
+                Cada execução vira um <strong>trace</strong> replayable — como um flight recorder para IA. Use para
+                depurar prompts, comparar modelos e entender custo real.
+              </>
+            }
+            size="lg"
+          />
         )}
 
         {isLoading && (
