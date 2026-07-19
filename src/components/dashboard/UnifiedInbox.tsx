@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
@@ -234,12 +235,18 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
                   <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                 </div>
               ) : filteredThreads.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <InboxIcon className="h-8 w-8 text-muted-foreground/20 mb-3" />
-                  <p className="text-[11px] text-muted-foreground/60">Nenhuma conversa encontrada</p>
-                  <p className="text-[10px] text-muted-foreground/40 mt-1">
-                    Inicie um chat com um agente para começar
-                  </p>
+                <div className="p-3">
+                  <EmptyState
+                    icon={InboxIcon}
+                    title="Nenhuma conversa ainda"
+                    description="Suas conversas com agentes aparecem aqui — WhatsApp, e-mail e chat interno num só lugar."
+                    action={{
+                      label: "Falar com um agente",
+                      href: "/dashboard?tab=agents",
+                    }}
+                    hint="Dica: envie um WhatsApp para o número do departamento contratado — a conversa aparece aqui em segundos."
+                    size="sm"
+                  />
                 </div>
               ) : (
                 filteredThreads.map((thread, i) => {
