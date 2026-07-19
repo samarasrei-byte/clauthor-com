@@ -12,6 +12,7 @@ import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import PrimaryCTA from "./PrimaryCTA";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
