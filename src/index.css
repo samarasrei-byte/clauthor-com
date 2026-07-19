@@ -223,6 +223,8 @@
     --severity-critical-border: 340 78% 44% / 0.3;
   }
 }
+
+@layer base {
   * {
     @apply border-border;
   }
