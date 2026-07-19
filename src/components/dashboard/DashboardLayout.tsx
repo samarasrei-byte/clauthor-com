@@ -51,6 +51,13 @@ const DashboardLayout = () => {
     return () => window.removeEventListener("sb:collapsed-change", onChange as EventListener);
   }, []);
 
+  // Densidade tipográfica do painel — escala global via rem (Notion/Salesforce tier).
+  useEffect(() => {
+    document.documentElement.classList.add("dash-dense");
+    return () => document.documentElement.classList.remove("dash-dense");
+  }, []);
+
+
   const { alertLevel, showUpgradePrompt, dismissUpgradePrompt } = useTokenMonitor();
   const { t } = useTranslation();
 
