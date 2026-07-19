@@ -86,6 +86,18 @@ export default function OnboardingZero() {
     trackKpi("thor_onboarding_started", { source: "onboarding" });
   }, []);
 
+  // FIX #1 · Quando o `user` hidrata DEPOIS do primeiro render (retorno de OAuth),
+  // reavaliamos o stage: se havia draft de reco/company, pulamos direto pro passo empresa.
+  // Sem isso o usuário volta e vê Recommendation de novo, entrando em loop mental.
+  useEffect(() => {
+    if (!user) return;
+    const current = readDraft();
+    if (!current) return;
+    if ((current.stage === "reco" || current.stage === "company") && stage !== "company" && stage !== "creating") {
+      setStage("company");
+    }
+  }, [user, stage]);
+
   // Persiste rascunho a cada mudança relevante.
   useEffect(() => {
     if (stage === "creating") return;
