@@ -11,6 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import PrimaryCTA from "./PrimaryCTA";
+import RouteTransition from "./RouteTransition";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -237,7 +238,7 @@ const DashboardLayout = () => {
               className={showGlobalSidebar ? "h-full lg:transition-[padding] lg:duration-200" : "h-full"}
               style={showGlobalSidebar ? { paddingLeft: `var(--sb-safe, 0px)` } : undefined}
             >
-              <Outlet />
+              <RouteTransition />
             </div>
           </div>
         </div>
