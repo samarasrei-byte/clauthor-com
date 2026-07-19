@@ -174,7 +174,8 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       <div key={item.id + (opts.compactRow ? ":c" : "")}>
         {opts.showGroupHeader && !collapsed && (
           <div className="px-3 pt-4 pb-1.5 first:pt-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/55">
+
               {item.group}
             </span>
           </div>
