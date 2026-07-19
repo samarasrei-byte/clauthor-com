@@ -134,7 +134,7 @@ const AgentMetricsDetail = () => {
   const agentAlerts = health?.alerts.filter((a) => a.agentId === agentId) ?? [];
 
   return (
-    <DashboardLayout>
+    <>
       <SEO
         title={`${agent?.name ?? "Agente"} · Métricas`}
         description="Desempenho detalhado do agente: execuções, tokens, latência, sucesso/falha e logs."
