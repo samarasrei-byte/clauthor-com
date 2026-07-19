@@ -26,6 +26,8 @@ import {
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
 import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
+import AgentCompanyBriefing, { emptyBriefing, briefingToInstructions, type AgentBriefing } from "@/components/agents/AgentCompanyBriefing";
+import { useCompanyDna } from "@/hooks/useCompanyDna";
 
 const STEPS = [
   { id: 1, label: "Objetivo de negócio", hint: "O que você quer alcançar" },
@@ -45,6 +47,8 @@ export default function CreateWorkforce() {
   const [reachable, setReachable] = useState(0);
   const [aiThinking, setAiThinking] = useState(false);
   const [deploying, setDeploying] = useState(false);
+  const [briefing, setBriefing] = useState<AgentBriefing>(emptyBriefing);
+  const { dna } = useCompanyDna();
 
   const advance = () => {
     // Auto-fill name when leaving step 2 (Função e cargo) if user didn't type one
@@ -129,13 +133,20 @@ export default function CreateWorkforce() {
     if (!user) { toast({ title: "Entre para implantar" }); return; }
     setDeploying(true);
     try {
+      const briefingBlock = briefingToInstructions(briefing, dna?.core_business || undefined);
+      const enrichedBlueprint = {
+        ...(state as any),
+        company_dna: dna ? { id: dna.id, source_url: dna.source_url, industry: dna.industry, core_business: dna.core_business, brand_colors: dna.brand_colors, logo_url: dna.logo_url } : null,
+        briefing,
+        briefing_prompt: briefingBlock || null,
+      };
       const { error } = await supabase.from("workforce_blueprints").insert({
         user_id: user.id,
         name: state.name || "Sem nome",
         scale: state.scale,
         objective: state.objective,
         status: "deployed",
-        blueprint: state as any,
+        blueprint: enrichedBlueprint,
       });
       if (error) throw error;
       toast({ title: "Força de trabalho implantada", description: "Você já pode comandá-la pelo dashboard." });
@@ -230,6 +241,8 @@ export default function CreateWorkforce() {
                       }}
                     />
                     <StepObjective state={state} dispatch={dispatch} />
+                    <AgentCompanyBriefing value={briefing} onChange={setBriefing} />
+
                   </div>
                 )}
                 {state.step === 1 && <StepScale state={state} dispatch={dispatch} />}
