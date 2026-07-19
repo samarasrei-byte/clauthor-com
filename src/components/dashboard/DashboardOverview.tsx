@@ -112,6 +112,9 @@ const DashboardOverview = ({
             {/* Momento "uau" pós-signup · destaca o primeiro entregável aprovado (7 dias). */}
             <FirstDeliveryCard onOpenApprovals={() => onSetActiveSection("approvals")} />
 
+            {/* Catálogo de departamentos · visível direto sem sair do painel */}
+            <DepartmentsCatalogPanel />
+
             {/* Guia de configuração da conta (progressive disclosure) */}
             <NextStepsCard />
 
