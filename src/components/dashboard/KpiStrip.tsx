@@ -73,7 +73,7 @@ const KpiStrip = ({ items, cols = 4, className }: KpiStripProps) => {
               {Icon && <Icon className={cn("h-3.5 w-3.5 shrink-0", ACCENT_ICON[accent])} />}
             </div>
             <div className="flex items-end gap-1">
-              <span className="font-display text-2xl font-bold tracking-tight text-foreground">
+              <span className="font-display text-2xl font-bold tracking-tight text-foreground tabular-nums">
                 {item.value}
               </span>
               {item.max != null && (
