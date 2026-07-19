@@ -35,6 +35,8 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const mode = params.get("mode"); // "full" apenas
+  const force = params.get("force") === "1"; // permite refazer explicitamente
+  const [gateChecked, setGateChecked] = useState(false);
   const [homeReco] = useState<HomeReco | null>(() => {
     if (typeof window === "undefined") return null;
     try {
@@ -52,13 +54,35 @@ export default function Welcome() {
     if (mode === "full" && !isLoading && !user) navigate("/auth?redirect=/welcome%3Fmode%3Dfull", { replace: true });
   }, [mode, isLoading, user, navigate]);
 
-  if (isLoading) {
+  // Gate: se o usuário já concluiu o onboarding, não mostrar de novo.
+  // Redireciona para /dashboard, a menos que ?force=1 esteja presente.
+  useEffect(() => {
+    if (isLoading || !user || force) { if (!isLoading) setGateChecked(true); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_completed, onboarded_at")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      if (data?.onboarding_completed || data?.onboarded_at) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        setGateChecked(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isLoading, user, force, navigate]);
+
+  if (isLoading || (user && !force && !gateChecked)) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-background">
         <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
+
 
   const handleSkip = () => {
     try { sessionStorage.setItem("onboarding-skipped-session", "1"); } catch { /* ignore */ }
