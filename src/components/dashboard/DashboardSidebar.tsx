@@ -224,7 +224,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 className={cn(
-                  "text-[13px] truncate flex-1 text-left tracking-[-0.005em]",
+                  "text-[13.5px] truncate flex-1 text-left tracking-[-0.005em] leading-[1.35]",
                   isActive ? "font-semibold" : "font-medium"
                 )}
               >
