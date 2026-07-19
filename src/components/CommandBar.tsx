@@ -58,8 +58,13 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
         setOpen((o) => !o);
       }
     };
+    const openHandler = () => setOpen(true);
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    window.addEventListener("open-command-bar", openHandler);
+    return () => {
+      document.removeEventListener("keydown", down);
+      window.removeEventListener("open-command-bar", openHandler);
+    };
   }, []);
 
   const handleSelect = useCallback((value: string) => {
