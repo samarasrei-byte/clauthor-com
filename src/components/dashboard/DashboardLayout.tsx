@@ -109,7 +109,7 @@ const DashboardLayout = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="lg:hidden h-8 w-8 text-muted-foreground hover:text-foreground"
+                    className="lg:hidden h-11 w-11 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground"
                     aria-label="Abrir menu"
                   >
                     <Menu className="h-5 w-5" />
@@ -135,7 +135,7 @@ const DashboardLayout = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link to="/" aria-label="Ir para a home">
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-10 w-10 sm:h-8 sm:w-8">
                     <Home className="h-4 w-4" />
                   </Button>
                 </Link>
@@ -146,7 +146,7 @@ const DashboardLayout = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link to="/video-studio" aria-label="Abrir Video Studio">
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-10 w-10 sm:h-8 sm:w-8">
                     <Clapperboard className="h-4 w-4" />
                   </Button>
                 </Link>
@@ -158,7 +158,7 @@ const DashboardLayout = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link to="/admin" aria-label="Área administrativa">
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-10 w-10 sm:h-8 sm:w-8">
                       <Shield className="h-4 w-4" />
                     </Button>
                   </Link>
