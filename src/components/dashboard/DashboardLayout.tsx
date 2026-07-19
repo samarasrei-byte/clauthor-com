@@ -168,25 +168,7 @@ const DashboardLayout = () => {
               </Tooltip>
             )}
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleBeginner}
-                  aria-label={beginner ? "Desativar modo iniciante" : "Ativar modo iniciante"}
-                  className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
-                >
-                  {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
-                  <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-[220px] text-center">
-                {beginner
-                  ? "Modo Iniciante: menu simplificado com só o essencial. Clique para ver tudo."
-                  : "Modo Avançado: todas as ferramentas visíveis. Clique para simplificar."}
-              </TooltipContent>
-            </Tooltip>
+            {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar — evita duplicidade */}
 
             <Tooltip>
               <TooltipTrigger asChild>
