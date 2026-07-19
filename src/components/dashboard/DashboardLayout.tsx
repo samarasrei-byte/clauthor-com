@@ -1,6 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, GraduationCap, Sparkles, Menu } from "lucide-react";
-import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 
 import ClauthorLogo from "@/components/ClauthorLogo";
@@ -29,7 +28,6 @@ const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicke
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
-  const [beginner, , toggleBeginner] = useBeginnerMode();
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -168,25 +166,7 @@ const DashboardLayout = () => {
               </Tooltip>
             )}
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleBeginner}
-                  aria-label={beginner ? "Desativar modo iniciante" : "Ativar modo iniciante"}
-                  className="text-muted-foreground hover:text-foreground gap-1.5 text-xs h-8 px-2"
-                >
-                  {beginner ? <GraduationCap className="h-3.5 w-3.5 text-primary" /> : <Sparkles className="h-3.5 w-3.5" />}
-                  <span className="hidden md:inline">{beginner ? "Iniciante" : "Avançado"}</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-[220px] text-center">
-                {beginner
-                  ? "Modo Iniciante: menu simplificado com só o essencial. Clique para ver tudo."
-                  : "Modo Avançado: todas as ferramentas visíveis. Clique para simplificar."}
-              </TooltipContent>
-            </Tooltip>
+            {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar — evita duplicidade */}
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -245,7 +225,7 @@ const DashboardLayout = () => {
         {/* CSS variable driven by sidebar collapsed state (only applied ≥ lg) */}
         <style>{`
           @media (min-width: 1024px) {
-            :root { --sb-safe: ${sidebarCollapsed ? "68px" : "228px"}; }
+            :root { --sb-safe: ${sidebarCollapsed ? "80px" : "260px"}; }
           }
         `}</style>
 
