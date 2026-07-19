@@ -98,16 +98,14 @@ const IntelligenceHub = ({
         </TabsList>
 
         <TabsContent value="live" className="mt-4 space-y-4">
-          <SubNav
-            value={liveView}
-            onValueChange={(v) => v && setLiveView(v as "executions" | "neural")}
-            items={[
-              { value: "executions", icon: Zap, label: "Execuções" },
-              { value: "neural", icon: Orbit, label: "Rede Neural" },
-            ]}
-          />
           <Suspense fallback={<SectionLoader />}>
-            {liveView === "executions" ? <LiveExecutionPanel /> : <AgentNeuralNetwork />}
+            <LiveExecutionPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="neural" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <AgentNeuralNetwork />
           </Suspense>
         </TabsContent>
 
