@@ -1,4 +1,5 @@
 import { type ComponentProps, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { type LucideIcon } from "lucide-react";
@@ -39,6 +40,7 @@ export function EmptyState({
   className,
   ...rest
 }: EmptyStateProps) {
+  const reduce = useReducedMotion();
   const sizes = {
     sm: "py-8 px-4 gap-2",
     md: "py-14 px-6 gap-3",
@@ -56,21 +58,39 @@ export function EmptyState({
       {...rest}
     >
       {illustration ?? (Icon && (
-        <div
-          className={cn(
-            "flex items-center justify-center rounded-2xl",
-            "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent",
-            "border border-primary/15 mb-2",
-            size === "sm" ? "w-11 h-11" : size === "lg" ? "w-16 h-16" : "w-14 h-14",
+        <div className="relative mb-2">
+          {!reduce && (
+            <>
+              <motion.span
+                aria-hidden
+                className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl"
+                animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.9, 1.05, 0.9] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.span
+                aria-hidden
+                className="absolute -inset-2 rounded-3xl border border-primary/20"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+              />
+            </>
           )}
-        >
-          <Icon
+          <div
             className={cn(
-              "text-primary",
-              size === "sm" ? "w-5 h-5" : size === "lg" ? "w-8 h-8" : "w-6 h-6",
+              "relative flex items-center justify-center rounded-2xl",
+              "bg-gradient-to-br from-primary/15 via-primary/5 to-transparent",
+              "border border-primary/20 shadow-[0_6px_24px_-12px_hsl(var(--primary)/0.5)]",
+              size === "sm" ? "w-11 h-11" : size === "lg" ? "w-16 h-16" : "w-14 h-14",
             )}
-            strokeWidth={1.6}
-          />
+          >
+            <Icon
+              className={cn(
+                "text-primary",
+                size === "sm" ? "w-5 h-5" : size === "lg" ? "w-8 h-8" : "w-6 h-6",
+              )}
+              strokeWidth={1.6}
+            />
+          </div>
         </div>
       ))}
 
