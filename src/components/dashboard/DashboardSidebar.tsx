@@ -174,7 +174,8 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       <div key={item.id + (opts.compactRow ? ":c" : "")}>
         {opts.showGroupHeader && !collapsed && (
           <div className="px-3 pt-4 pb-1.5 first:pt-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/55">
+
               {item.group}
             </span>
           </div>
@@ -193,14 +194,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             collapsed ? "px-2 py-2 justify-center" : "px-3 py-2",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/60 border border-transparent"
+              : "text-foreground/75 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
           <div className="relative shrink-0">
             <item.icon
               className={cn(
                 "h-[18px] w-[18px] transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                isActive ? "text-primary" : "text-foreground/70 group-hover:text-primary"
               )}
               strokeWidth={1.75}
             />
@@ -224,7 +225,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 className={cn(
-                  "text-[13px] truncate flex-1 text-left tracking-[-0.005em]",
+                  "text-[13.5px] truncate flex-1 text-left tracking-[-0.005em] leading-[1.35]",
                   isActive ? "font-semibold" : "font-medium"
                 )}
               >
@@ -288,10 +289,10 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       key={child.id}
                       onClick={() => onItemChange(child.id)}
                       className={cn(
-                        "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] transition-all",
+                        "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium transition-all",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-card/60"
+                          : "text-foreground/70 hover:text-foreground hover:bg-card/60"
                       )}
                     >
                       <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
