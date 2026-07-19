@@ -34,14 +34,19 @@ interface AgentDNAProfile {
 // Generate DNA visualization from REAL performance data
 const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
   const segments = useMemo(() => {
-    // Each segment represents a real trait
+    // Coerção defensiva: métricas podem chegar undefined/NaN em agentes novos,
+    // o que produzia `r="undefined"` no SVG e um flood de erros no console.
+    const clamp = (n: unknown): number => {
+      const v = typeof n === "number" && Number.isFinite(n) ? n : 0;
+      return Math.max(0, Math.min(100, v));
+    };
     return [
-      { label: "Reliability", value: profile.reliabilityScore, hue: 142, type: "core" as const },
-      { label: "Speed", value: profile.speedScore, hue: 200, type: "skill" as const },
-      { label: "Efficiency", value: profile.efficiencyScore, hue: 270, type: "memory" as const },
-      { label: "Success", value: profile.successRate, hue: 160, type: "core" as const },
-      { label: "Volume", value: Math.min(100, profile.totalExecutions / 2), hue: 30, type: "network" as const },
-      { label: "Stability", value: 100 - profile.errorRate, hue: 340, type: "skill" as const },
+      { label: "Reliability", value: clamp(profile.reliabilityScore), hue: 142, type: "core" as const },
+      { label: "Speed", value: clamp(profile.speedScore), hue: 200, type: "skill" as const },
+      { label: "Efficiency", value: clamp(profile.efficiencyScore), hue: 270, type: "memory" as const },
+      { label: "Success", value: clamp(profile.successRate), hue: 160, type: "core" as const },
+      { label: "Volume", value: clamp(Math.min(100, (profile.totalExecutions ?? 0) / 2)), hue: 30, type: "network" as const },
+      { label: "Stability", value: clamp(100 - (profile.errorRate ?? 0)), hue: 340, type: "skill" as const },
     ];
   }, [profile]);
 
@@ -103,6 +108,7 @@ const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
           fill={`hsla(var(--primary), ${profile.overallScore / 500})`}
           stroke="hsla(var(--primary), 0.4)"
           strokeWidth={1.5}
+          initial={{ r: 14 }}
           animate={{ r: [14, 16, 14] }}
           transition={{ duration: 2 + (100 - profile.overallScore) / 30, repeat: Infinity }}
         />

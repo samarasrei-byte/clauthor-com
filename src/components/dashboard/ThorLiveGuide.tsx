@@ -140,6 +140,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         <motion.circle
           cx={CENTER} cy={CENTER} r={65}
           fill="url(#neural-glow)"
+          initial={{ r: 60, opacity: 0.3 }}
           animate={{
             r: isSpeaking ? [60, 72, 60] : isListening ? [58, 64, 58] : [55, 58, 55],
             opacity: isSpeaking ? [0.6, 1, 0.6] : [0.3, 0.5, 0.3],
@@ -152,6 +153,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
           cx={CENTER} cy={CENTER} r={8}
           fill="hsl(var(--primary))"
           filter="url(#neural-bloom-lg)"
+          initial={{ r: 8, opacity: 0.06 }}
           animate={{
             r: isSpeaking ? [12, 22, 14, 20, 12] : isListening ? [10, 15, 10] : [8, 10, 8],
             opacity: [0.06, 0.15 * intensity, 0.06],
@@ -308,6 +310,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         <motion.circle
           cx={CENTER} cy={CENTER} r={3}
           fill="hsl(var(--primary))"
+          initial={{ r: 3, opacity: 0.3 }}
           animate={{
             r: isSpeaking ? [4, 8, 3, 7, 4] : isListening ? [3, 5, 3] : [2, 3, 2],
             opacity: [0.3, 0.8 * intensity, 0.3],

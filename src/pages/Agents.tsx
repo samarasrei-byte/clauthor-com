@@ -49,11 +49,19 @@ const AgentsPage = () => {
       if (isAdmin) {
         const { WORKFORCE: WF } = await import("@/data/workforceArchitecture");
         const allAgents: any[] = [];
-        WF.forEach((dept) => {
-          dept.squads.forEach((squad) => {
-            squad.agents.forEach((agent) => {
+        const seen = new Set<string>();
+        WF.forEach((dept: any) => {
+          dept.squads.forEach((squad: any) => {
+            squad.agents.forEach((agent: any) => {
+              // Same slug pode aparecer em múltiplas squads/depts — qualificamos
+              // pelo caminho (dept/squad) e removemos duplicatas por segurança.
+              const deptKey = dept.slug ?? dept.id ?? dept.name;
+              const squadKey = squad.slug ?? squad.id ?? squad.name;
+              const id = `admin-${deptKey}-${squadKey}-${agent.slug}`;
+              if (seen.has(id)) return;
+              seen.add(id);
               allAgents.push({
-                id: `admin-${agent.slug}`,
+                id,
                 slug: agent.slug,
                 name: agent.name,
                 description: agent.responsibilities?.join(", ") || null,

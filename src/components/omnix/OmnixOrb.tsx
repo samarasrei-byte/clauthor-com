@@ -104,6 +104,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           cy={center}
           r={size * 0.42}
           fill="url(#orb-nebula)"
+          initial={{ r: size * 0.38, opacity: 0.4 }}
           animate={{
             r: isActive ? [size * 0.38, size * 0.45, size * 0.38] : [size * 0.34, size * 0.4, size * 0.34],
             opacity: isActive ? [0.5, 1, 0.5] : [0.4, 0.65, 0.4],
@@ -204,7 +205,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
                   r={p.size}
                   fill="hsl(var(--primary))"
                   filter="url(#orb-bloom)"
-                  initial={{ cx, cy, opacity: 0 }}
+                  initial={{ cx, cy, r: p.size, opacity: 0 }}
                   animate={{
                     cx: [cx, cx + driftX * 0.5, cx - driftX * 0.3, cx + driftX, cx],
                     cy: [cy, cy - driftY * 0.5, cy + driftY * 0.3, cy - driftY, cy],
@@ -232,6 +233,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           r={coreR + 5}
           fill="hsl(var(--primary))"
           filter="url(#orb-bloom-lg)"
+          initial={{ r: coreR + 5, opacity: 0.06 }}
           animate={{
             r: isSpeaking
               ? [coreR + 5, coreR + 25, coreR + 8, coreR + 20, coreR + 5]
@@ -255,6 +257,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           cy={center}
           r={coreR}
           fill="url(#orb-core-grad)"
+          initial={{ r: coreR }}
           animate={{
             r: isSpeaking
               ? [coreR, coreR * 1.18, coreR * 0.9, coreR * 1.12, coreR]
@@ -278,6 +281,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           r={coreR * 0.15}
           fill="hsl(var(--primary))"
           filter="url(#orb-bloom)"
+          initial={{ r: coreR * 0.15, opacity: 0.1 }}
           animate={{
             r: isSpeaking
               ? [coreR * 0.2, coreR * 0.4, coreR * 0.15, coreR * 0.35, coreR * 0.2]
