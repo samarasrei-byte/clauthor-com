@@ -201,7 +201,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             <item.icon
               className={cn(
                 "h-[18px] w-[18px] transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                isActive ? "text-primary" : "text-foreground/70 group-hover:text-primary"
               )}
               strokeWidth={1.75}
             />
