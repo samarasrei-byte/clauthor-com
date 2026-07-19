@@ -241,6 +241,8 @@ export default function CreateWorkforce() {
                       }}
                     />
                     <StepObjective state={state} dispatch={dispatch} />
+                    <AgentCompanyBriefing value={briefing} onChange={setBriefing} />
+
                   </div>
                 )}
                 {state.step === 1 && <StepScale state={state} dispatch={dispatch} />}
