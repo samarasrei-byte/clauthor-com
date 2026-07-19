@@ -505,13 +505,12 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
-    // ─── Estúdio & Ferramentas (não confundir com "Meu trabalho") ───
-    const zoneStudio = "Estúdio & Ferramentas";
-    // Inbox do Agente (rota dedicada) — mostra badge de não lidas
+    // ─── Estúdio & Ferramentas (grupo separado, evita duplicar "Meu trabalho") ───
     { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: "Estúdio & Ferramentas" },
     { id: "route:/video-studio", label: "Video Studio", icon: Clapperboard, group: "Estúdio & Ferramentas" },
     { id: "route:/video-clipper", label: "Auto-Clipper", icon: Scissors, group: "Estúdio & Ferramentas" },
     { id: "route:/dashboard/traces", label: "Traces", icon: Activity, group: "Estúdio & Ferramentas" },
+
 
 
     // ─── IA & Voz: THOR unificado (Chat + Overview) ───
