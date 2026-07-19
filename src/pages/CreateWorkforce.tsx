@@ -26,6 +26,8 @@ import {
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
 import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
+import AgentCompanyBriefing, { emptyBriefing, briefingToInstructions, type AgentBriefing } from "@/components/agents/AgentCompanyBriefing";
+import { useCompanyDna } from "@/hooks/useCompanyDna";
 
 const STEPS = [
   { id: 1, label: "Objetivo de negócio", hint: "O que você quer alcançar" },
