@@ -123,6 +123,25 @@ const HeroBriefing = ({
     };
   }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate, recommendation]);
 
+  // Sparkline + delta % vs same-length previous window (last 7 days each bucket = ~24h).
+  const execSpark = useMemo(() => {
+    const buckets = new Array(7).fill(0);
+    const now = Date.now();
+    for (const l of recentLogs) {
+      if (!l.created_at) continue;
+      const ageH = (now - new Date(l.created_at).getTime()) / 36e5;
+      const bucket = Math.floor(ageH / 24);
+      if (bucket >= 0 && bucket < 7) buckets[bucket] += 1;
+    }
+    // series goes oldest→newest for sparkline
+    const series = [...buckets].reverse();
+    const last24 = buckets[0];
+    const prev24 = buckets[1];
+    const deltaPct =
+      prev24 > 0 ? Math.round(((last24 - prev24) / prev24) * 100) : last24 > 0 ? 100 : 0;
+    return { series, last24, deltaPct };
+  }, [recentLogs]);
+
   // Uma linha de contexto humana, sem "LIVE" mentiroso.
   const statusLine = useMemo(() => {
     if (agentsCount === 0) {
