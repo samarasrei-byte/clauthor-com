@@ -347,7 +347,7 @@ const AgentMetricsDetail = () => {
           )}
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 
