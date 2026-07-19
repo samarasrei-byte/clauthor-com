@@ -170,18 +170,24 @@ const CompanyBoard = () => {
 
       {/* Items grid */}
       {loading ? (
-        <div className="text-center py-12 text-muted-foreground">Carregando...</div>
-      ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-12 text-center">
-          <Building2 className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-          <h3 className="font-display font-semibold mb-2">Nenhuma informação cadastrada</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Adicione dados da sua empresa para que os agentes possam analisar e tomar decisões informadas.
-          </p>
-          <Button variant="outline" onClick={() => setAdding(true)} className="gap-1.5">
-            <Plus className="h-4 w-4" /> Começar
-          </Button>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-32 rounded-2xl" />
+          ))}
         </div>
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          icon={Building2}
+          title="Ensine a IA sobre a sua empresa"
+          description="Adicione dados de finanças, equipe, metas e produtos. Os agentes usam esse contexto pra tomar decisões alinhadas ao seu negócio."
+          action={{
+            label: "Adicionar primeira informação",
+            icon: Plus,
+            onClick: () => setAdding(true),
+          }}
+          hint="Comece pelo básico: nome fantasia, principal produto/serviço e meta do trimestre. Você refina depois."
+          size="lg"
+        />
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {filtered.map((item, i) => {
