@@ -104,6 +104,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           cy={center}
           r={size * 0.42}
           fill="url(#orb-nebula)"
+          initial={{ r: size * 0.38, opacity: 0.4 }}
           animate={{
             r: isActive ? [size * 0.38, size * 0.45, size * 0.38] : [size * 0.34, size * 0.4, size * 0.34],
             opacity: isActive ? [0.5, 1, 0.5] : [0.4, 0.65, 0.4],
