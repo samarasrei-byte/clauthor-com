@@ -314,15 +314,16 @@ export default function VideoStudio() {
       if (media) {
         copilot.setAttachment(media);
         toast.success("Referência anexada ao Thor.");
-      } else {
-        setDropPreview(null);
       }
     } finally {
       setDropUploading(false);
-      // Revoke object URL after a short delay so the img has already rendered
-      setTimeout(() => URL.revokeObjectURL(localUrl), 5000);
+      // Swap preview to the persistent URL (or clear) BEFORE revoking the blob,
+      // so no <img> ever holds a revoked blob: URL → prevents ERR_FILE_NOT_FOUND.
+      setDropPreview(null);
+      URL.revokeObjectURL(localUrl);
     }
   }
+
 
   function focusCopilotChat() {
     const el = copilotChatRef.current?.querySelector<HTMLTextAreaElement>("textarea");
