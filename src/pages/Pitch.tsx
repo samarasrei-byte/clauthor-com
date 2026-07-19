@@ -5,6 +5,7 @@ import { WORKFORCE, TOTAL_WORKFORCE_AGENTS, TOTAL_SQUADS, TOTAL_DEPARTMENTS } fr
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import translations, { type PitchLang } from "@/data/pitchTranslations";
+import { useDenseMode } from "@/hooks/useDenseMode";
 
 const WA_NUMBER = "5511985214895";
 
@@ -170,8 +171,6 @@ const capIcons = [Headphones, Receipt, Code, Scale, Megaphone, DollarSign, Brain
 const moatIcons = [Brain, Layers, Network, Timer, Shield, Globe];
 
 /* ══════════════════════════════════════════════════════════ */
-
-import { useDenseMode } from "@/hooks/useDenseMode";
 
 const Pitch = () => {
   useDenseMode();

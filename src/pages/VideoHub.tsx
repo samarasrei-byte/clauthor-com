@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Clapperboard, Scissors, Loader2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useDenseMode } from "@/hooks/useDenseMode";
 
 const VideoStudio = lazy(() => import("./VideoStudio"));
 const VideoClipper = lazy(() => import("./VideoClipper"));
@@ -11,14 +12,12 @@ const VideoClipper = lazy(() => import("./VideoClipper"));
  * Video Hub — unifica Video Studio (geração) + Auto-Clipper (cortes) em abas.
  * Query param `?tab=studio|clipper` controla a aba ativa.
  */
-import { useDenseMode } from "@/hooks/useDenseMode";
 
 export default function VideoHub() {
   useDenseMode();
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const tab = useMemo(() => (params.get("tab") === "clipper" ? "clipper" : "studio"), [params]);
-
 
   const setTab = (v: string) => {
     const next = new URLSearchParams(params);
