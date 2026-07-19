@@ -133,13 +133,20 @@ export default function CreateWorkforce() {
     if (!user) { toast({ title: "Entre para implantar" }); return; }
     setDeploying(true);
     try {
+      const briefingBlock = briefingToInstructions(briefing, dna?.core_business || undefined);
+      const enrichedBlueprint = {
+        ...(state as any),
+        company_dna: dna ? { id: dna.id, source_url: dna.source_url, industry: dna.industry, core_business: dna.core_business, brand_colors: dna.brand_colors, logo_url: dna.logo_url } : null,
+        briefing,
+        briefing_prompt: briefingBlock || null,
+      };
       const { error } = await supabase.from("workforce_blueprints").insert({
         user_id: user.id,
         name: state.name || "Sem nome",
         scale: state.scale,
         objective: state.objective,
         status: "deployed",
-        blueprint: state as any,
+        blueprint: enrichedBlueprint,
       });
       if (error) throw error;
       toast({ title: "Força de trabalho implantada", description: "Você já pode comandá-la pelo dashboard." });
