@@ -18,7 +18,7 @@ import { formatDistanceToNow, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import { useAgentHealth } from "@/hooks/useAgentHealth";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
+
 
 const STATUS_COLORS: Record<string, string> = {
   success: "text-emerald-400 bg-emerald-500/10",
