@@ -734,14 +734,10 @@ const ClientDashboard = () => {
 
 
       <div className="relative h-full">
-        {/* Sidebar FLUTUANTE (Notion/Trello style) · página inteira renderiza atrás */}
-        <div className="hidden lg:block fixed left-2 top-[68px] bottom-2 z-30 pointer-events-none">
-          <div className="h-full pointer-events-auto">
-            <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
-          </div>
-        </div>
+        {/* Sidebar global agora vem do DashboardLayout — não duplicamos aqui. */}
 
-        <div className="w-full h-full min-w-0 overflow-hidden lg:pl-[228px]">
+        <div className="w-full h-full min-w-0 overflow-hidden">
+
 
 
           {/* THOR - stays mounted */}
