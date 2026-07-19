@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Inbox, Clapperboard, Scissors, Activity, Brain,
-  Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar, Building2,
+  Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar, Building2, UsersRound,
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
 import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
