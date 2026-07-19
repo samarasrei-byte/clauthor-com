@@ -263,6 +263,12 @@ const App = () => (
                   <Route path="/video-studio" element={<VideoStudio />} />
                   <Route path="/video-clipper" element={<VideoClipper />} />
                   <Route path="/video" element={<VideoHub />} />
+                  {/* Top-level aliases → evitam 404 se colados/tipados direto */}
+                  <Route path="/video-hub" element={<Navigate to="/video" replace />} />
+                  <Route path="/traces" element={<Navigate to="/dashboard/traces" replace />} />
+                  <Route path="/ai-voice" element={<Navigate to="/dashboard?tab=omnix" replace />} />
+                  <Route path="/settings" element={<Navigate to="/settings/connections" replace />} />
+
 
                 </Route>
 
