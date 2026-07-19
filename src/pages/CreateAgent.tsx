@@ -120,6 +120,9 @@ const CreateAgentPage = () => {
   const [endTime, setEndTime] = useState("22:00");
   const [selectedDays, setSelectedDays] = useState<string[]>(["Seg", "Ter", "Qua", "Qui", "Sex"]);
   const [is24h, setIs24h] = useState(false);
+  const [briefing, setBriefing] = useState<AgentBriefing>(emptyBriefing);
+  const { dna } = useCompanyDna();
+
 
   // Pre-fill from query params (Concierge fallback or /onboarding/setor)
   useEffect(() => {
