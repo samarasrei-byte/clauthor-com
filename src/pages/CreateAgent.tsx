@@ -172,16 +172,31 @@ const CreateAgentPage = () => {
           : { mode: "scheduled", start: startTime, end: endTime, days: selectedDays },
       };
 
+      const dnaSummary = dna
+        ? [
+            dna.client_label && `Empresa: ${dna.client_label}`,
+            dna.source_url && `Site: ${dna.source_url}`,
+            dna.industry && `Indústria: ${dna.industry}`,
+            dna.core_business && `Core business: ${dna.core_business}`,
+            dna.pain_points?.length && `Dores conhecidas: ${dna.pain_points.join(", ")}`,
+          ].filter(Boolean).join("\n")
+        : undefined;
+      const briefingBlock = briefingToInstructions(briefing, dnaSummary);
+
       const kbEntries: any[] = [];
       if (knowledgeBase) kbEntries.push({ type: "text", content: knowledgeBase });
       kbEntries.push({ type: "config", content: agentConfig });
+      if (dna) kbEntries.push({ type: "company_dna", content: { id: dna.id, brand_colors: dna.brand_colors, logo_url: dna.logo_url, source_url: dna.source_url, core_business: dna.core_business, industry: dna.industry } });
+      if (briefingBlock) kbEntries.push({ type: "briefing", content: briefing });
+
+      const composedInstructions = [briefingBlock, instructions].filter(Boolean).join("\n\n") || null;
 
       const { error } = await supabase.from("agents").insert({
         user_id: user.id,
         name: name.trim(),
         objective: objective || null,
         description: `${projectName ? `Projeto: ${projectName} · ` : ""}${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
-        instructions: instructions || null,
+        instructions: composedInstructions,
         channels: selectedChannels.length > 0 ? selectedChannels : null,
         integrations: selectedIntegrations.length > 0 ? selectedIntegrations : null,
         actions: selectedActions.length > 0 ? selectedActions : null,
