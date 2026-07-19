@@ -485,7 +485,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         exit={{ y: 24, opacity: 0 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
         onClick={() => setIsExpanded(true)}
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 group flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-background/70 backdrop-blur-xl border border-border/30 shadow-[0_4px_24px_hsl(0_0%_0%/0.18)] hover:border-primary/40 transition-colors"
+        className="fixed bottom-24 right-4 sm:bottom-28 sm:right-6 z-50 group flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-background/70 backdrop-blur-xl border border-border/30 shadow-[0_4px_24px_hsl(0_0%_0%/0.18)] hover:border-primary/40 transition-colors"
       >
         <span className="relative flex h-2 w-2 shrink-0">
           <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
