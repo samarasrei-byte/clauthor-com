@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ThorConsultantPanel from "@/components/thor/ThorConsultantPanel";
+import AgentCompanyBriefing, { emptyBriefing, briefingToInstructions, type AgentBriefing } from "@/components/agents/AgentCompanyBriefing";
+import { useCompanyDna } from "@/hooks/useCompanyDna";
 
 const sectorOptions = ["Atendimento", "Vendas", "Marketing", "Financeiro", "RH", "Jurídico", "TI", "Outro"];
 const toneOptions = ["Formal", "Amigável", "Técnico", "Casual", "Corporativo"];
@@ -118,6 +120,9 @@ const CreateAgentPage = () => {
   const [endTime, setEndTime] = useState("22:00");
   const [selectedDays, setSelectedDays] = useState<string[]>(["Seg", "Ter", "Qua", "Qui", "Sex"]);
   const [is24h, setIs24h] = useState(false);
+  const [briefing, setBriefing] = useState<AgentBriefing>(emptyBriefing);
+  const { dna } = useCompanyDna();
+
 
   // Pre-fill from query params (Concierge fallback or /onboarding/setor)
   useEffect(() => {
@@ -167,16 +172,31 @@ const CreateAgentPage = () => {
           : { mode: "scheduled", start: startTime, end: endTime, days: selectedDays },
       };
 
+      const dnaSummary = dna
+        ? [
+            dna.client_label && `Empresa: ${dna.client_label}`,
+            dna.source_url && `Site: ${dna.source_url}`,
+            dna.industry && `Indústria: ${dna.industry}`,
+            dna.core_business && `Core business: ${dna.core_business}`,
+            dna.pain_points?.length && `Dores conhecidas: ${dna.pain_points.join(", ")}`,
+          ].filter(Boolean).join("\n")
+        : undefined;
+      const briefingBlock = briefingToInstructions(briefing, dnaSummary);
+
       const kbEntries: any[] = [];
       if (knowledgeBase) kbEntries.push({ type: "text", content: knowledgeBase });
       kbEntries.push({ type: "config", content: agentConfig });
+      if (dna) kbEntries.push({ type: "company_dna", content: { id: dna.id, brand_colors: dna.brand_colors, logo_url: dna.logo_url, source_url: dna.source_url, core_business: dna.core_business, industry: dna.industry } });
+      if (briefingBlock) kbEntries.push({ type: "briefing", content: briefing });
+
+      const composedInstructions = [briefingBlock, instructions].filter(Boolean).join("\n\n") || null;
 
       const { error } = await supabase.from("agents").insert({
         user_id: user.id,
         name: name.trim(),
         objective: objective || null,
         description: `${projectName ? `Projeto: ${projectName} · ` : ""}${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
-        instructions: instructions || null,
+        instructions: composedInstructions,
         channels: selectedChannels.length > 0 ? selectedChannels : null,
         integrations: selectedIntegrations.length > 0 ? selectedIntegrations : null,
         actions: selectedActions.length > 0 ? selectedActions : null,
@@ -206,16 +226,32 @@ const CreateAgentPage = () => {
       const matches = matchTemplates(expressPrompt);
       const best = matches[0];
       const derivedName = best?.name || expressPrompt.split(/[\.\n]/)[0].slice(0, 60) || "Novo Agente";
+      const dnaSummary = dna
+        ? [
+            dna.client_label && `Empresa: ${dna.client_label}`,
+            dna.source_url && `Site: ${dna.source_url}`,
+            dna.industry && `Indústria: ${dna.industry}`,
+            dna.core_business && `Core business: ${dna.core_business}`,
+          ].filter(Boolean).join("\n")
+        : undefined;
+      const briefingBlock = briefingToInstructions(briefing, dnaSummary);
+      const baseInstructions = `Você é ${derivedName}. Missão: ${expressPrompt.trim()}. Aja de forma proativa, clara e alinhada ao objetivo.`;
+      const composed = [briefingBlock, baseInstructions].filter(Boolean).join("\n\n");
+
+      const kb: any[] = [{ type: "config", content: { exec_limit: 500, timeout_seconds: 30, audit_level: "Detalhado", schedule: { mode: "24/7" } } }];
+      if (dna) kb.push({ type: "company_dna", content: { id: dna.id, source_url: dna.source_url, core_business: dna.core_business, industry: dna.industry } });
+      if (briefingBlock) kb.push({ type: "briefing", content: briefing });
+
       const { error } = await supabase.from("agents").insert({
         user_id: user.id,
         name: derivedName,
         objective: expressPrompt.trim(),
         description: `${projectName ? `Projeto: ${projectName} · ` : ""}${best ? `Setor: ${best.sector}. Tom: ${best.tone}.` : "Criado via Express."}`,
-        instructions: `Você é ${derivedName}. Missão: ${expressPrompt.trim()}. Aja de forma proativa, clara e alinhada ao objetivo.`,
+        instructions: composed,
         status: "active",
         tier: "basic",
         monthly_price: 0,
-        knowledge_base: [{ type: "config", content: { exec_limit: 500, timeout_seconds: 30, audit_level: "Detalhado", schedule: { mode: "24/7" } } }],
+        knowledge_base: kb,
       });
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
@@ -278,6 +314,10 @@ const CreateAgentPage = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Company briefing — espelha onboarding corporativo */}
+        <AgentCompanyBriefing value={briefing} onChange={setBriefing} />
+
 
         {/* Thor consultor, analisa contexto antes de escolher caminho */}
         <ThorConsultantPanel
