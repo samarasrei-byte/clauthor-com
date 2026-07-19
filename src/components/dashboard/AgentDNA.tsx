@@ -108,6 +108,7 @@ const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
           fill={`hsla(var(--primary), ${profile.overallScore / 500})`}
           stroke="hsla(var(--primary), 0.4)"
           strokeWidth={1.5}
+          initial={{ r: 14 }}
           animate={{ r: [14, 16, 14] }}
           transition={{ duration: 2 + (100 - profile.overallScore) / 30, repeat: Infinity }}
         />
