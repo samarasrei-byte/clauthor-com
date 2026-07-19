@@ -319,8 +319,19 @@ const AgentMetricsDetail = () => {
             </Link>
           </div>
           {logs.length === 0 ? (
-            <div className="p-8 text-center text-xs text-muted-foreground">
-              Nenhuma execução registrada nos últimos 30 dias.
+            <div className="p-4">
+              <EmptyState
+                icon={Activity}
+                title="Sem execuções nos últimos 30 dias"
+                description="Este agente ainda não foi acionado — ou está esperando aprovação de uma tarefa. Delegue algo agora e acompanhe o replay em tempo real."
+                action={{
+                  label: "Executar tarefa",
+                  icon: PlayCircle,
+                  href: "/dashboard?tab=agents",
+                }}
+                secondaryAction={{ label: "Ver todos os traces", href: "/dashboard/traces" }}
+                size="sm"
+              />
             </div>
           ) : (
             <ul className="divide-y divide-border/40 max-h-[420px] overflow-y-auto">
