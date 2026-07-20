@@ -159,7 +159,7 @@ const DepartmentCard = ({
               variant="red"
               onClick={() => {
                 onHire(department);
-                navigate(`/contratar/${department.id}`);
+                navigate(inDashboard ? `/dashboard/contratar/${department.id}` : `/contratar/${department.id}`);
               }}
               aria-label={`Contratar ${department.name}`}
               className="flex-1"
