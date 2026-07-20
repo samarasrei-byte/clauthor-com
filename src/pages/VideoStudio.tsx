@@ -14,7 +14,10 @@ import {
   Zap,
   Command as CommandIcon,
   ArrowRight,
+  MessageSquare,
+  Info as InfoIcon,
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleAccess } from "@/hooks/useModuleAccess";
