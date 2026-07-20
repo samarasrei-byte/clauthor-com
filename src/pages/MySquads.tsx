@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { UsersRound, Plus, ArrowRight, Wand, Loader2 } from "lucide-react";
+import { UsersRound, Plus, ArrowRight, Wand, Loader2, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,37 +23,56 @@ type ContractedDept = {
   status: string;
 };
 
+type CustomSquad = {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  squad_agents: { agents: { id: string; name: string; tier: string | null } | null }[];
+};
+
 const MySquads = () => {
   const { user } = useAuth();
   const [contracted, setContracted] = useState<ContractedDept[] | null>(null);
+  const [customSquads, setCustomSquads] = useState<CustomSquad[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) { setContracted([]); setLoading(false); return; }
     let cancelled = false;
     (async () => {
-      const { data } = await supabase
-        .from("contracted_departments")
-        .select("id, department_id, department_name, status")
-        .eq("user_id", user.id)
-        .eq("status", "active");
+      const [{ data: contractedData }, { data: tenantRow }] = await Promise.all([
+        supabase
+          .from("contracted_departments")
+          .select("id, department_id, department_name, status")
+          .eq("user_id", user.id)
+          .eq("status", "active"),
+        supabase.from("tenant_members").select("tenant_id").eq("user_id", user.id).maybeSingle(),
+      ]);
+      let squadsData: CustomSquad[] = [];
+      if (tenantRow?.tenant_id) {
+        const { data } = await supabase
+          .from("squads")
+          .select("id, name, description, created_at, squad_agents(agents(id, name, tier))")
+          .eq("tenant_id", tenantRow.tenant_id)
+          .order("created_at", { ascending: false });
+        squadsData = (data ?? []) as any;
+      }
       if (cancelled) return;
-      setContracted((data ?? []) as ContractedDept[]);
+      setContracted((contractedData ?? []) as ContractedDept[]);
+      setCustomSquads(squadsData);
       setLoading(false);
     })();
     return () => { cancelled = true; };
   }, [user]);
 
   const activeSquads = useMemo(() => {
-    // Squads considerados ativos = squads cujo slug bate com algum department_id
-    // ou que compartilham o mesmo domínio (heurística leve; se sistema ganhar
-    // uma tabela `contracted_squads`, plugar aqui).
     if (!contracted || contracted.length === 0) return [] as typeof SQUADS;
     const depIds = new Set(contracted.map((c) => c.department_id));
     return SQUADS.filter((s) => depIds.has(s.slug));
   }, [contracted]);
 
-  const isEmpty = !loading && activeSquads.length === 0;
+  const isEmpty = !loading && activeSquads.length === 0 && customSquads.length === 0;
 
   return (
     <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 py-6 md:py-8">
