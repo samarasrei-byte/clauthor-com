@@ -281,7 +281,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="ml-5 pl-3 border-l border-border/30 space-y-0.5 py-1">
+              <div className="ml-5 pl-3 border-l border-border/30 space-y-0.5 py-0.5">
                 {item.children!.map(child => {
                   const ChildIcon = child.icon || Bot;
                   const isChildActive = activeItem === child.id;
@@ -290,18 +290,19 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       key={child.id}
                       onClick={() => onItemChange(child.id)}
                       className={cn(
-                        "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium transition-all",
+                        "w-full flex items-center gap-2 px-2 py-1 rounded-lg text-[11.5px] font-medium transition-all",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
                           : "text-foreground/75 hover:text-foreground hover:bg-card/60"
                       )}
                     >
-                      <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
+                      <ChildIcon className="h-3 w-3 shrink-0" strokeWidth={1.75} />
                       <span className="truncate">{child.label}</span>
                     </button>
                   );
                 })}
               </div>
+
             </motion.div>
           )}
         </AnimatePresence>
