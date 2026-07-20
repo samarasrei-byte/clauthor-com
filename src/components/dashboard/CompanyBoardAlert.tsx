@@ -32,16 +32,16 @@ export default function CompanyBoardAlert({ onSetup }: CompanyBoardAlertProps) {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/5 via-amber-500/10 to-primary/5 p-4"
+      className="relative overflow-hidden rounded-xl border border-warning/30 bg-gradient-to-r from-warning/5 via-warning/10 to-primary/5 p-4"
     >
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
-          <Building2 className="h-5 w-5 text-amber-500" />
+        <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center shrink-0">
+          <Building2 className="h-5 w-5 text-warning" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-sm">Seus agentes não conhecem sua empresa</h3>
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+            <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Sem informações da empresa, os agentes respondem de forma genérica. 

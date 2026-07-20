@@ -187,7 +187,7 @@ export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Prop
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-xl flex flex-col items-center"
           >
-            <p className="text-xs uppercase tracking-widest text-emerald-500 font-medium mb-4 inline-flex items-center gap-1.5">
+            <p className="text-xs uppercase tracking-widest text-success font-medium mb-4 inline-flex items-center gap-1.5">
               <Check className="w-3.5 h-3.5" /> DNA detectado
             </p>
 

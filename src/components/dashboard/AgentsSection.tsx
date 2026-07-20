@@ -93,7 +93,7 @@ function AgentActivityMetricsInline({ agentId, agentName, onOpenChat, isActive }
           {t("agents.today", { defaultValue: "Hoje" })}: <span className="text-foreground font-medium">{metrics.todayCount}</span>
         </span>
         <span className="flex items-center gap-1 text-muted-foreground">
-          <TrendingUp className="w-3 h-3 text-emerald-500" />
+          <TrendingUp className="w-3 h-3 text-success" />
           {t("agents.week", { defaultValue: "Semana" })}: <span className="text-foreground font-medium">{metrics.weekCount}</span>
         </span>
       </div>
@@ -108,7 +108,7 @@ function AgentActivityMetricsInline({ agentId, agentName, onOpenChat, isActive }
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p className="text-[10px] text-emerald-500 font-medium flex items-center gap-1 cursor-help">
+              <p className="text-[10px] text-success font-medium flex items-center gap-1 cursor-help">
                 💰 {t("agents.estimated_savings", { defaultValue: "Economia estimada" })}: R$ {roi.toLocaleString("pt-BR")}
                 <Info className="w-3 h-3 text-muted-foreground" />
               </p>

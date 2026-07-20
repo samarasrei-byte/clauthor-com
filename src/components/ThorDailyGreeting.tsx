@@ -321,17 +321,17 @@ export default function ThorDailyGreeting() {
       : usageLevel === "low"
         ? {
             label: "Atenção",
-            dot: "bg-amber-400",
-            ring: "ring-amber-400/40",
-            text: "text-amber-400",
-            chip: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+            dot: "bg-warning",
+            ring: "ring-warning/40",
+            text: "text-warning",
+            chip: "bg-warning/10 text-warning border-warning/20",
           }
         : {
             label: "Saudável",
-            dot: "bg-emerald-400",
-            ring: "ring-emerald-400/40",
-            text: "text-emerald-400",
-            chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+            dot: "bg-success",
+            ring: "ring-success/40",
+            text: "text-success",
+            chip: "bg-success/10 text-success border-success/20",
           };
 
   const greeting = greetingByHour();
@@ -489,7 +489,7 @@ export default function ThorDailyGreeting() {
                   forecastDays <= 3
                     ? "text-destructive"
                     : forecastDays <= 7
-                      ? "text-amber-500"
+                      ? "text-warning"
                       : "text-muted-foreground"
                 }`}
               >
@@ -638,7 +638,7 @@ function MiniStat({
 }) {
   const toneMap = {
     muted: "border-border/30 bg-card/40 text-foreground",
-    emerald: "border-emerald-500/20 bg-emerald-500/5 text-emerald-500",
+    emerald: "border-success/20 bg-success/5 text-success",
     destructive: "border-destructive/20 bg-destructive/5 text-destructive",
     primary: "border-primary/20 bg-primary/5 text-primary",
   } as const;
@@ -651,7 +651,7 @@ function MiniStat({
         : Minus;
   const deltaColor =
     delta?.direction === "up"
-      ? "text-emerald-500"
+      ? "text-success"
       : delta?.direction === "down"
         ? "text-destructive"
         : "text-muted-foreground";
