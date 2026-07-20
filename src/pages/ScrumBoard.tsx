@@ -22,17 +22,17 @@ import { WORKFORCE } from "@/data/workforceArchitecture";
 // ── Column config ──
 const COLUMNS = [
   { id: "backlog", label: "Backlog", icon: Circle, color: "text-muted-foreground", bg: "bg-muted/20" },
-  { id: "open", label: "A Fazer", icon: Target, color: "text-blue-400", bg: "bg-blue-500/5" },
-  { id: "in_progress", label: "Em Progresso", icon: Flame, color: "text-amber-400", bg: "bg-amber-500/5" },
+  { id: "open", label: "A Fazer", icon: Target, color: "text-info", bg: "bg-info/5" },
+  { id: "in_progress", label: "Em Progresso", icon: Flame, color: "text-warning", bg: "bg-warning/5" },
   { id: "review", label: "Revisão", icon: AlertTriangle, color: "text-purple-400", bg: "bg-purple-500/5" },
-  { id: "done", label: "Concluído", icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/5" },
+  { id: "done", label: "Concluído", icon: CheckCircle2, color: "text-success", bg: "bg-success/5" },
 ];
 
 const PRIORITIES = [
-  { value: "critical", label: "Crítico", color: "bg-red-500", icon: Zap },
+  { value: "critical", label: "Crítico", color: "bg-destructive", icon: Zap },
   { value: "high", label: "Alta", color: "bg-orange-500", icon: AlertTriangle },
-  { value: "medium", label: "Média", color: "bg-amber-500", icon: ArrowRight },
-  { value: "low", label: "Baixa", color: "bg-blue-500", icon: Circle },
+  { value: "medium", label: "Média", color: "bg-warning", icon: ArrowRight },
+  { value: "low", label: "Baixa", color: "bg-info", icon: Circle },
 ];
 
 interface TaskRow {
@@ -80,7 +80,7 @@ function TaskCard({
       className={cn(
         "group bg-background/60 backdrop-blur-sm border border-border/10 rounded-lg p-3 cursor-pointer",
         "hover:border-primary/20 transition-all duration-200",
-        isOverdue && "border-red-500/30 bg-red-500/5"
+        isOverdue && "border-destructive/30 bg-destructive/5"
       )}
     >
       {/* Priority + Category */}
@@ -121,7 +121,7 @@ function TaskCard({
             </div>
           )}
           {task.due_date && (
-            <div className={cn("flex items-center gap-1 text-[9px]", isOverdue ? "text-red-400" : "text-muted-foreground")}>
+            <div className={cn("flex items-center gap-1 text-[9px]", isOverdue ? "text-destructive" : "text-muted-foreground")}>
               <Calendar className="h-2.5 w-2.5" />
               {new Date(task.due_date).toLocaleDateString("en", { month: "short", day: "numeric" })}
             </div>
@@ -141,10 +141,10 @@ function TaskCard({
           )}
           <button
             onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-            className="w-5 h-5 rounded bg-red-500/10 flex items-center justify-center hover:bg-red-500/20 transition-colors"
+            className="w-5 h-5 rounded bg-destructive/10 flex items-center justify-center hover:bg-destructive/20 transition-colors"
             title="Excluir"
           >
-            <X className="h-2.5 w-2.5 text-red-400" />
+            <X className="h-2.5 w-2.5 text-destructive" />
           </button>
         </div>
       </div>
@@ -280,19 +280,19 @@ function BurndownMini({ tasks }: { tasks: TaskRow[] }) {
       </div>
       <div className="h-8 w-px bg-border/10" />
       <div className="text-center">
-        <span className="text-lg font-bold text-amber-400">{inProgressTasks}</span>
+        <span className="text-lg font-bold text-warning">{inProgressTasks}</span>
         <p className="text-[9px] text-muted-foreground">Active</p>
       </div>
       <div className="h-8 w-px bg-border/10" />
       <div className="text-center">
-        <span className="text-lg font-bold text-emerald-400">{doneTasks}</span>
+        <span className="text-lg font-bold text-success">{doneTasks}</span>
         <p className="text-[9px] text-muted-foreground">Done</p>
       </div>
       <div className="h-8 w-px bg-border/10" />
       <div className="flex items-center gap-2">
         <div className="w-20 h-1.5 bg-muted/30 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-primary to-emerald-500 rounded-full transition-all duration-500"
+            className="h-full bg-gradient-to-r from-primary to-success rounded-full transition-all duration-500"
             style={{ width: `${pct}%` }}
           />
         </div>
