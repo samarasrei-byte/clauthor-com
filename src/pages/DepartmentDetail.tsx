@@ -160,22 +160,22 @@ export default function DepartmentDetail() {
 
 
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 md:p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
           <div>
             <div className="text-sm text-white/50">Pronto para contratar?</div>
             <div className="text-2xl font-semibold text-white mt-1">
               {formatBRL(dept.priceMonthly)}<span className="text-sm text-white/40"> / mês</span>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 justify-end">
-            <Button variant="outline" onClick={handleAdd} className="gap-2">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:justify-end w-full sm:w-auto">
+            <Button variant="outline" onClick={handleAdd} className="gap-2 w-full sm:w-auto">
               {inCart ? (
                 <><Check className="w-4 h-4" /> No carrinho</>
               ) : (
                 <><Plus className="w-4 h-4" /> Adicionar ao carrinho</>
               )}
             </Button>
-            <PremiumCTAButton variant="red" onClick={handleBuyNow}>
+            <PremiumCTAButton variant="red" onClick={handleBuyNow} className="w-full sm:w-auto">
               Ir para checkout <ArrowRight className="w-4 h-4 ml-2" />
             </PremiumCTAButton>
           </div>
