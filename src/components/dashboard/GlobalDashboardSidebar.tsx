@@ -50,8 +50,8 @@ export default function GlobalDashboardSidebar() {
     { id: "route:/meus-squads",             label: "Meus Squads",        icon: UsersRound,   group: zoneTeam },
     { id: "route:/meus-departamentos",      label: "Meus Departamentos", icon: Building2,    group: zoneTeam },
     ...(beginner ? [] : [
-      { id: "route:/squads",                label: "Catálogo de Squads", icon: UsersRound,   group: zoneTeam } as SidebarItem,
-      { id: "route:/departamentos",         label: "Catálogo",           icon: Building2,    group: zoneTeam } as SidebarItem,
+      { id: "route:/dashboard/squads",        label: "Catálogo de Squads", icon: UsersRound,   group: zoneTeam } as SidebarItem,
+      { id: "route:/dashboard/departamentos", label: "Catálogo",           icon: Building2,    group: zoneTeam } as SidebarItem,
     ]),
 
 

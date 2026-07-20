@@ -202,10 +202,7 @@ const App = () => (
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/departamentos/:slug" element={<DepartmentDetail />} />
-                  <Route path="/contratar/:slug" element={<ProtectedRoute><HireAndOnboard /></ProtectedRoute>} />
-                  <Route path="/checkout" element={<Checkout />} />
                   <Route path="/preview-dashboard" element={<PreviewDashboard />} />
-                  <Route path="/departamento-ativo/:slug" element={<ProtectedRoute><DepartmentActivated /></ProtectedRoute>} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
@@ -236,6 +233,16 @@ const App = () => (
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
                   <Route path="/meus-departamentos" element={<MyDepartments />} />
                   <Route path="/meus-squads" element={<MySquads />} />
+
+                  {/* Squads / Departamentos — versões embutidas no painel para manter sidebar/header
+                      durante contratação, checkout e ativação (mantém contexto do usuário). */}
+                  <Route path="/dashboard/departamentos" element={<Departamentos />} />
+                  <Route path="/dashboard/departamentos/:slug" element={<DepartmentDetail />} />
+                  <Route path="/dashboard/squads" element={<SquadsPage />} />
+                  <Route path="/dashboard/squads/:slug" element={<SquadDetail />} />
+                  <Route path="/contratar/:slug" element={<HireAndOnboard />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/departamento-ativo/:slug" element={<DepartmentActivated />} />
 
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
