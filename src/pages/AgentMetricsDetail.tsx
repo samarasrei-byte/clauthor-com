@@ -134,6 +134,36 @@ const AgentMetricsDetail = () => {
   const sparkline = chartData.map((d) => d.exec);
   const agentAlerts = health?.alerts.filter((a) => a.agentId === agentId) ?? [];
 
+  const initialLoading = agentQ.isLoading || logsQ.isLoading || tokensQ.isLoading;
+
+  if (initialLoading && !agent) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-20 rounded-md bg-muted/40 animate-pulse" />
+          <div className="h-10 w-10 rounded-xl bg-muted/40 animate-pulse" />
+          <div className="flex-1 space-y-2">
+            <div className="h-6 w-1/3 rounded bg-muted/40 animate-pulse" />
+            <div className="h-3 w-1/4 rounded bg-muted/30 animate-pulse" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-24 rounded-2xl bg-muted/40 border border-border/40 animate-pulse"
+              style={{ animationDelay: `${i * 70}ms` }}
+            />
+          ))}
+        </div>
+        <div className="grid lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3 h-56 rounded-2xl bg-muted/30 border border-border/40 animate-pulse" />
+          <div className="lg:col-span-2 h-56 rounded-2xl bg-muted/30 border border-border/40 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <SEO
