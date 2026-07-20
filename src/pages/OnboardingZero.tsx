@@ -14,6 +14,7 @@ import CompanyInfoStep, { type CompanyInfo } from "@/components/onboarding-zero/
 import FunnelStepper from "@/components/funnel/FunnelStepper";
 import ThorStuckHint from "@/components/funnel/ThorStuckHint";
 import { writeFunnel, type FunnelStep } from "@/lib/funnelState";
+import { markOnboardingComplete, readOnboardingStatus } from "@/lib/onboarding/state";
 
 type Stage = "pain" | "pick0" | "reco" | "company" | "creating";
 
