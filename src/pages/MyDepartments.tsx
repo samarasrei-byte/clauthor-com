@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { DEPARTMENT_PACKAGES, formatBRL, findDepartmentPackage } from "@/data/departmentPackages";
+import { DEPARTMENT_PACKAGES, formatBRL, getDepartmentById } from "@/data/departmentPackages";
 import SEO from "@/components/SEO";
 
 type ContractedDept = {
