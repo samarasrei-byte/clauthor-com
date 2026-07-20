@@ -107,7 +107,7 @@ const HunterLinkedIn = () => {
       {/* Ambient gradient background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute top-20 -right-40 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-3xl" />
+        <div className="absolute top-20 -right-40 w-[500px] h-[500px] rounded-full bg-info/5 blur-3xl" />
       </div>
 
       <div className="relative p-4 md:p-8 max-w-4xl mx-auto space-y-8">
@@ -133,22 +133,22 @@ const HunterLinkedIn = () => {
         {isConnected ? (
           <div className="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl shadow-sm overflow-hidden animate-fade-in">
             {/* Connected header */}
-            <div className="relative p-6 md:p-8 border-b border-border/60 bg-gradient-to-br from-emerald-500/[0.04] to-transparent">
+            <div className="relative p-6 md:p-8 border-b border-border/60 bg-gradient-to-br from-success/[0.04] to-transparent">
               <div className="flex items-start gap-4">
                 <div className="relative">
-                  <Avatar className="h-16 w-16 ring-2 ring-emerald-500/30 ring-offset-2 ring-offset-background">
+                  <Avatar className="h-16 w-16 ring-2 ring-success/30 ring-offset-2 ring-offset-background">
                     <AvatarImage src={session.profile_avatar_url} />
                     <AvatarFallback className="text-lg font-medium">
                       {(session.profile_name || "L").charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
+                  <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-success border-2 border-background flex items-center justify-center">
                     <CheckCircle2 className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-600 dark:text-emerald-400">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-success">
                       Conectado
                     </span>
                     <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
@@ -177,7 +177,7 @@ const HunterLinkedIn = () => {
             {/* Stats grid */}
             <div className="grid grid-cols-3 divide-x divide-border/60">
               {[
-                { label: "Status", value: "Ativo", accent: "text-emerald-600 dark:text-emerald-400" },
+                { label: "Status", value: "Ativo", accent: "text-success" },
                 { label: "Permissões", value: "4 escopos", accent: "text-foreground" },
                 { label: "Próximo passo", value: "ICP", accent: "text-primary" },
               ].map((s) => (
@@ -209,9 +209,9 @@ const HunterLinkedIn = () => {
                   <div className="w-12 h-12 rounded-xl bg-[#0A66C2]/10 border border-[#0A66C2]/20 flex items-center justify-center">
                     <Linkedin className="w-6 h-6 text-[#0A66C2]" />
                   </div>
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                    <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-400">OAuth 2.0</span>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 border border-success/20">
+                    <Lock className="w-3 h-3 text-success" />
+                    <span className="text-[10px] font-medium text-success">OAuth 2.0</span>
                   </div>
                 </div>
 
@@ -231,7 +231,7 @@ const HunterLinkedIn = () => {
                     "Conformidade total com termos de uso",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-xs text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -269,25 +269,25 @@ const HunterLinkedIn = () => {
                   icon: Shield,
                   title: "Seguro por design",
                   desc: "Não pedimos cookies li_at nem instalamos extensões. Apenas o fluxo oficial.",
-                  color: "text-emerald-500",
-                  bg: "bg-emerald-500/5",
-                  border: "border-emerald-500/20",
+                  color: "text-success",
+                  bg: "bg-success/5",
+                  border: "border-success/20",
                 },
                 {
                   icon: Zap,
                   title: "Setup em 30 segundos",
                   desc: "Um clique, autorize no LinkedIn, e o Hunter está pronto para prospectar.",
-                  color: "text-amber-500",
-                  bg: "bg-amber-500/5",
-                  border: "border-amber-500/20",
+                  color: "text-warning",
+                  bg: "bg-warning/5",
+                  border: "border-warning/20",
                 },
                 {
                   icon: Lock,
                   title: "Você no controle",
                   desc: "Desconecte quando quiser. Tokens são apagados imediatamente.",
-                  color: "text-blue-500",
-                  bg: "bg-blue-500/5",
-                  border: "border-blue-500/20",
+                  color: "text-info",
+                  bg: "bg-info/5",
+                  border: "border-info/20",
                 },
               ].map((b) => {
                 const Icon = b.icon;

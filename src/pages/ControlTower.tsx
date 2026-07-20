@@ -22,9 +22,9 @@ import { cn } from "@/lib/utils";
 
 // ─── Agent Status Mapping ───
 const STATUS_MAP: Record<string, { label: string; color: string; icon: typeof Play }> = {
-  active: { label: "Executando", color: "text-emerald-400", icon: Play },
+  active: { label: "Executando", color: "text-success", icon: Play },
   draft: { label: "Aguardando", color: "text-muted-foreground", icon: Pause },
-  paused: { label: "Pausado", color: "text-amber-400", icon: Pause },
+  paused: { label: "Pausado", color: "text-warning", icon: Pause },
 };
 
 // ─── Agent Vision Card ───
@@ -51,7 +51,7 @@ const AgentVisionCard = ({ agent, logs, onClick }: { agent: any; logs: any[]; on
           <div>
             <h3 className="text-sm font-semibold truncate max-w-[140px]">{agent.name}</h3>
             <div className="flex items-center gap-1.5">
-              <span className={cn("w-1.5 h-1.5 rounded-full", agent.status === "active" ? "bg-emerald-500 animate-pulse" : "bg-muted-foreground/40")} />
+              <span className={cn("w-1.5 h-1.5 rounded-full", agent.status === "active" ? "bg-success animate-pulse" : "bg-muted-foreground/40")} />
               <span className={cn("text-[10px]", status.color)}>{status.label}</span>
             </div>
           </div>
@@ -69,7 +69,7 @@ const AgentVisionCard = ({ agent, logs, onClick }: { agent: any; logs: any[]; on
           </div>
           <div className="flex items-center gap-1.5">
             {lastLog.status === "success" ? (
-              <CheckCircle className="h-3 w-3 text-emerald-400" />
+              <CheckCircle className="h-3 w-3 text-success" />
             ) : (
               <AlertTriangle className="h-3 w-3 text-destructive" />
             )}
@@ -152,7 +152,7 @@ const AgentDetailPanel = ({ agent, logs, onClose }: { agent: any; logs: any[]; o
               )}
             >
               <div className="relative">
-                <div className={cn("w-2 h-2 rounded-full", log.status === "success" ? "bg-emerald-500" : "bg-destructive")} />
+                <div className={cn("w-2 h-2 rounded-full", log.status === "success" ? "bg-success" : "bg-destructive")} />
                 {i < agentLogs.length - 1 && <div className="absolute top-3 left-[3px] w-px h-4 bg-border/30" />}
               </div>
               <span className="flex-1 truncate text-muted-foreground">{log.action}</span>
@@ -196,7 +196,7 @@ const CommandTerminal = ({ onSend }: { onSend: (cmd: string) => void }) => {
     <div className="space-y-4">
       {/* Terminal Output */}
       <div className="rounded-2xl border border-border/40 bg-black/40 backdrop-blur-sm p-4 font-mono text-xs min-h-[200px] max-h-[350px] overflow-y-auto">
-        <div className="text-emerald-400/70 mb-2">{">"} ClAuthor AI Terminal v2.0</div>
+        <div className="text-success/70 mb-2">{">"} ClAuthor AI Terminal v2.0</div>
         <div className="text-muted-foreground/50 mb-3">{">"} Digite um comando em linguagem natural...</div>
         {history.map((h, i) => (
           <div key={i} className="mb-3">
@@ -284,19 +284,19 @@ const CredentialVault = ({ credentials }: { credentials: any[] }) => {
             className={cn(
               "flex items-center gap-3 p-3 rounded-xl border transition-colors",
               int.connected
-                ? "border-emerald-500/20 bg-emerald-500/5"
+                ? "border-success/20 bg-success/5"
                 : "border-border/30 bg-card/30 opacity-60"
             )}
           >
             <span className="text-lg">{int.icon}</span>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium truncate">{int.name}</p>
-              <p className={cn("text-[10px]", int.connected ? "text-emerald-400" : "text-muted-foreground")}>
+              <p className={cn("text-[10px]", int.connected ? "text-success" : "text-muted-foreground")}>
                 {int.connected ? "Conectado" : "Disponível"}
               </p>
             </div>
             {int.connected ? (
-              <Unlock className="h-3.5 w-3.5 text-emerald-400" />
+              <Unlock className="h-3.5 w-3.5 text-success" />
             ) : (
               <Lock className="h-3.5 w-3.5 text-muted-foreground/40" />
             )}
@@ -314,7 +314,7 @@ const CredentialVault = ({ credentials }: { credentials: any[] }) => {
           <div className="space-y-1">
             {credentials.slice(0, 8).map((cred: any) => (
               <div key={cred.id} className="flex items-center gap-2 text-[10px] py-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success" />
                 <span className="text-muted-foreground">{cred.integration_name}</span>
                 <span className="text-muted-foreground/50">•</span>
                 <span className="font-mono text-muted-foreground/70 truncate">{cred.credential_key}</span>
@@ -404,11 +404,11 @@ const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           {[
             { label: "Agentes Ativos", value: activeAgents, icon: Bot, accent: "text-primary" },
-            { label: "Execuções Hoje", value: todayLogs.length, icon: Zap, accent: "text-amber-400" },
-            { label: "Sucesso Hoje", value: `${successToday}/${todayLogs.length}`, icon: CheckCircle, accent: "text-emerald-400" },
-            { label: "Tarefas Ativas", value: runningTasks, icon: Activity, accent: "text-blue-400" },
+            { label: "Execuções Hoje", value: todayLogs.length, icon: Zap, accent: "text-warning" },
+            { label: "Sucesso Hoje", value: `${successToday}/${todayLogs.length}`, icon: CheckCircle, accent: "text-success" },
+            { label: "Tarefas Ativas", value: runningTasks, icon: Activity, accent: "text-info" },
             { label: "Horas Salvas", value: `${estimatedHoursSaved}h`, icon: Clock, accent: "text-purple-400" },
-            { label: "Health Score", value: `${health.data?.healthScore ?? 100}%`, icon: TrendingUp, accent: health.data?.isHealthy ? "text-emerald-400" : "text-destructive" },
+            { label: "Health Score", value: `${health.data?.healthScore ?? 100}%`, icon: TrendingUp, accent: health.data?.isHealthy ? "text-success" : "text-destructive" },
           ].map(m => (
             <div key={m.label} className="rounded-xl border border-border/30 bg-card/50 backdrop-blur-sm p-3 text-center">
               <m.icon className={cn("h-4 w-4 mx-auto mb-1", m.accent)} />
@@ -549,12 +549,12 @@ const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => 
             <Card className="border-border/30 bg-card/50">
               <CardContent className="pt-5 space-y-3">
                 <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+                  <AlertTriangle className="h-3.5 w-3.5 text-warning" />
                   Alertas Recentes
                 </h3>
                 {(health.data?.failureAlerts?.length ?? 0) === 0 ? (
                   <div className="text-center py-4">
-                    <CheckCircle className="h-6 w-6 text-emerald-400/30 mx-auto mb-1" />
+                    <CheckCircle className="h-6 w-6 text-success/30 mx-auto mb-1" />
                     <p className="text-[10px] text-muted-foreground">Nenhum alerta</p>
                   </div>
                 ) : (
@@ -593,7 +593,7 @@ const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => 
                   )}>
                     <div className={cn(
                       "w-2 h-2 rounded-full shrink-0",
-                      log.status === "success" ? "bg-emerald-500" : "bg-destructive"
+                      log.status === "success" ? "bg-success" : "bg-destructive"
                     )} />
                     <span className="font-mono text-[10px] text-muted-foreground/60 shrink-0">
                       {new Date(log.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
@@ -604,7 +604,7 @@ const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => 
                     )}
                     <Badge variant="outline" className={cn(
                       "text-[9px] px-1.5",
-                      log.status === "success" ? "text-emerald-400 border-emerald-500/20" : "text-destructive border-destructive/20"
+                      log.status === "success" ? "text-success border-success/20" : "text-destructive border-destructive/20"
                     )}>
                       {log.status}
                     </Badge>

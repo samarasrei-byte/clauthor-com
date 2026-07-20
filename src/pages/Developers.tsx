@@ -41,8 +41,8 @@ const SCRIPT: StreamLine[] = [
 const AGENT_COLOR: Record<string, string> = {
   cyan: "text-cyan-400",
   violet: "text-violet-400",
-  amber: "text-amber-400",
-  emerald: "text-emerald-400",
+  amber: "text-warning",
+  emerald: "text-success",
   rose: "text-rose-400",
 };
 
@@ -77,12 +77,12 @@ function OrchestrationTerminal() {
     <div className="rounded-xl border border-white/[0.08] bg-[#0a0a0f] shadow-2xl shadow-primary/10 overflow-hidden">
       {/* chrome */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-[#07070c]">
-        <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
-        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-destructive/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-warning/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-success/70" />
         <span className="ml-3 text-[11px] text-foreground/40 font-mono">~/clauthor · orchestrator.stream</span>
-        <span className="ml-auto flex items-center gap-1.5 text-[10px] text-emerald-400/70 font-mono">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="ml-auto flex items-center gap-1.5 text-[10px] text-success/70 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
           LIVE
         </span>
       </div>
@@ -107,15 +107,15 @@ function OrchestrationTerminal() {
               )}
               {line.t === "ok" && (
                 <>
-                  <span className="shrink-0 text-emerald-400">✓</span>
+                  <span className="shrink-0 text-success">✓</span>
                   <span className="text-foreground/80">{line.text}</span>
                   {line.meta && <span className="ml-auto text-[11px] text-foreground/40">{line.meta}</span>}
                 </>
               )}
               {line.t === "warn" && (
                 <>
-                  <span className="shrink-0 text-amber-400">⚠</span>
-                  <span className="text-amber-200/80">{line.text}</span>
+                  <span className="shrink-0 text-warning">⚠</span>
+                  <span className="text-warning/80">{line.text}</span>
                 </>
               )}
               {line.t === "done" && (
@@ -163,7 +163,7 @@ function BenchTable() {
       {BENCH_ROWS.map((r) => (
         <div key={r.metric} className="grid grid-cols-[1.4fr_1fr_1fr] items-center px-5 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] transition-colors">
           <span className="text-sm text-foreground/80">{r.metric}</span>
-          <span className="text-sm font-mono text-emerald-400 font-semibold">{r.clauthor}</span>
+          <span className="text-sm font-mono text-success font-semibold">{r.clauthor}</span>
           <span className="text-sm font-mono text-foreground/50">{r.cc}</span>
         </div>
       ))}
@@ -279,7 +279,7 @@ function CodeTabs() {
           className="ml-auto px-4 py-3 text-[11px] font-mono text-foreground/40 hover:text-primary transition-colors flex items-center gap-1.5"
           aria-label="Copiar snippet"
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? "copiado" : "copy"}
         </button>
       </div>
@@ -316,7 +316,7 @@ function LiveMetrics() {
         <div key={m.label} className="bg-[#0a0a0f] p-4">
           <div className="text-[10px] uppercase tracking-widest text-foreground/40 font-mono mb-2">{m.label}</div>
           <div className="text-xl font-bold font-mono text-foreground tabular-nums">{m.value}</div>
-          <div className="text-[10px] text-emerald-400/70 font-mono mt-1">{m.sub}</div>
+          <div className="text-[10px] text-success/70 font-mono mt-1">{m.sub}</div>
         </div>
       ))}
     </div>
@@ -375,7 +375,7 @@ export default function Developers() {
                 <span className="text-primary">for engineers who ship.</span>
               </h1>
               <p className="text-lg text-foreground/60 leading-relaxed max-w-xl mb-8 font-mono">
-                20 departamentos como MCP tools. Replay determinístico. Postgres RLS. p50 <span className="text-emerald-400">412ms</span>. Custo médio por outcome: <span className="text-emerald-400">$0.09</span>.
+                20 departamentos como MCP tools. Replay determinístico. Postgres RLS. p50 <span className="text-success">412ms</span>. Custo médio por outcome: <span className="text-success">$0.09</span>.
               </p>
               <div className="flex flex-wrap items-center gap-3 mb-8">
                 <Button asChild size="lg" className="font-mono text-sm">
@@ -390,9 +390,9 @@ export default function Developers() {
                 </Button>
               </div>
               <div className="flex flex-wrap gap-4 text-[11px] font-mono text-foreground/40 uppercase tracking-widest">
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-400" /> 99.98% uptime</span>
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-400" /> SOC2 · LGPD</span>
-                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-emerald-400" /> MCP spec 2025-06</span>
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-success" /> 99.98% uptime</span>
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-success" /> SOC2 · LGPD</span>
+                <span className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-success" /> MCP spec 2025-06</span>
               </div>
             </div>
             <OrchestrationTerminal />
@@ -403,7 +403,7 @@ export default function Developers() {
         <section className="border-b border-white/[0.05]">
           <div className="max-w-[1240px] mx-auto px-6 py-10">
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/50">status · production</span>
             </div>
             <LiveMetrics />
@@ -442,15 +442,15 @@ export default function Developers() {
             <CodeTabs />
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-[12px] font-mono">
               <div className="rounded-lg border border-white/[0.06] bg-[#0a0a0f] p-4">
-                <div className="text-emerald-400 mb-1">→ POST /v1/runs</div>
+                <div className="text-success mb-1">→ POST /v1/runs</div>
                 <div className="text-foreground/50">cria run, retorna stream SSE ou run_id</div>
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-[#0a0a0f] p-4">
-                <div className="text-emerald-400 mb-1">→ GET /v1/runs/:id/trace</div>
+                <div className="text-success mb-1">→ GET /v1/runs/:id/trace</div>
                 <div className="text-foreground/50">timeline completa de tool calls e agent outputs</div>
               </div>
               <div className="rounded-lg border border-white/[0.06] bg-[#0a0a0f] p-4">
-                <div className="text-emerald-400 mb-1">→ POST /v1/runs/:id/replay</div>
+                <div className="text-success mb-1">→ POST /v1/runs/:id/replay</div>
                 <div className="text-foreground/50">re-executa com mesma seed. output byte-idêntico.</div>
               </div>
             </div>
@@ -509,10 +509,10 @@ export default function Developers() {
                 Clauthor implementa o MCP Streamable HTTP (spec 2025-06-18). Toda função do produto vira uma tool disponível no seu editor. Sem plugin, sem extensão, sem gambiarra.
               </p>
               <ul className="space-y-2 text-sm font-mono text-foreground/70">
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> 20 departamentos como namespaces (clauthor.growth, clauthor.sales, ...)</li>
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> OAuth 2.1 nativo (Supabase Auth como authorization server)</li>
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> RLS aplicado por token · o agente só vê o que o usuário pode ver</li>
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> Dynamic client registration (DCR) · zero config manual</li>
+                <li className="flex gap-2"><span className="text-success">→</span> 20 departamentos como namespaces (clauthor.growth, clauthor.sales, ...)</li>
+                <li className="flex gap-2"><span className="text-success">→</span> OAuth 2.1 nativo (Supabase Auth como authorization server)</li>
+                <li className="flex gap-2"><span className="text-success">→</span> RLS aplicado por token · o agente só vê o que o usuário pode ver</li>
+                <li className="flex gap-2"><span className="text-success">→</span> Dynamic client registration (DCR) · zero config manual</li>
               </ul>
             </div>
             <div className="rounded-xl border border-white/[0.08] bg-[#0a0a0f] p-6 font-mono text-[12px] leading-7">

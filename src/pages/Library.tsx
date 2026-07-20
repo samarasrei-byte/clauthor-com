@@ -36,20 +36,20 @@ import AgentCardExpanded from "@/components/library/AgentCardExpanded";
 // Department colors
 const DEPT_COLORS: Record<string, { gradient: string; border: string; text: string; bg: string }> = {
   marketing: { gradient: "from-rose-500/20 to-rose-500/5", border: "border-rose-500/30", text: "text-rose-400", bg: "bg-rose-500/10" },
-  growth: { gradient: "from-emerald-500/20 to-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", bg: "bg-emerald-500/10" },
+  growth: { gradient: "from-success/20 to-success/5", border: "border-success/30", text: "text-success", bg: "bg-success/10" },
   product: { gradient: "from-violet-500/20 to-violet-500/5", border: "border-violet-500/30", text: "text-violet-400", bg: "bg-violet-500/10" },
-  sales: { gradient: "from-blue-500/20 to-blue-500/5", border: "border-blue-500/30", text: "text-blue-400", bg: "bg-blue-500/10" },
-  customer_success: { gradient: "from-amber-500/20 to-amber-500/5", border: "border-amber-500/30", text: "text-amber-400", bg: "bg-amber-500/10" },
+  sales: { gradient: "from-info/20 to-info/5", border: "border-info/30", text: "text-info", bg: "bg-info/10" },
+  customer_success: { gradient: "from-warning/20 to-warning/5", border: "border-warning/30", text: "text-warning", bg: "bg-warning/10" },
   finance: { gradient: "from-cyan-500/20 to-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", bg: "bg-cyan-500/10" },
   operations: { gradient: "from-orange-500/20 to-orange-500/5", border: "border-orange-500/30", text: "text-orange-400", bg: "bg-orange-500/10" },
-  security: { gradient: "from-red-500/20 to-red-500/5", border: "border-red-500/30", text: "text-red-400", bg: "bg-red-500/10" },
+  security: { gradient: "from-destructive/20 to-destructive/5", border: "border-destructive/30", text: "text-destructive", bg: "bg-destructive/10" },
   engineering: { gradient: "from-cyan-500/20 to-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", bg: "bg-cyan-500/10" },
   data_analytics: { gradient: "from-indigo-500/20 to-indigo-500/5", border: "border-indigo-500/30", text: "text-indigo-400", bg: "bg-indigo-500/10" },
   communications: { gradient: "from-pink-500/20 to-pink-500/5", border: "border-pink-500/30", text: "text-pink-400", bg: "bg-pink-500/10" },
-  talent: { gradient: "from-amber-500/20 to-amber-500/5", border: "border-amber-500/30", text: "text-amber-400", bg: "bg-amber-500/10" },
+  talent: { gradient: "from-warning/20 to-warning/5", border: "border-warning/30", text: "text-warning", bg: "bg-warning/10" },
   innovation: { gradient: "from-violet-500/20 to-violet-500/5", border: "border-violet-500/30", text: "text-violet-400", bg: "bg-violet-500/10" },
   it_infrastructure: { gradient: "from-slate-500/20 to-slate-500/5", border: "border-slate-500/30", text: "text-slate-400", bg: "bg-slate-500/10" },
-  strategy: { gradient: "from-emerald-500/20 to-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", bg: "bg-emerald-500/10" },
+  strategy: { gradient: "from-success/20 to-success/5", border: "border-success/30", text: "text-success", bg: "bg-success/10" },
   legal: { gradient: "from-slate-500/20 to-slate-500/5", border: "border-slate-500/30", text: "text-slate-400", bg: "bg-slate-500/10" },
 };
 
@@ -409,7 +409,7 @@ const LibraryPage = () => {
                   {/* Squad outcomes */}
                   <div className="flex flex-wrap gap-2 pl-2">
                     {squad.outcomes.map((outcome, oIdx) => (
-                      <span key={oIdx} className="text-[9px] px-2.5 py-1 rounded-full bg-emerald-500/5 ring-1 ring-emerald-500/15 text-emerald-400 font-medium flex items-center gap-1.5">
+                      <span key={oIdx} className="text-[9px] px-2.5 py-1 rounded-full bg-success/5 ring-1 ring-success/15 text-success font-medium flex items-center gap-1.5">
                         <TrendingUp className="h-2.5 w-2.5" />
                         {outcome}
                       </span>
