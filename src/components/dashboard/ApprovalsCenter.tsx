@@ -691,7 +691,11 @@ const ApprovalsCenter = () => {
                     placeholder={`Ex: ${selected.delivery_type === "video" ? "Cortar os 2s finais e legendar." : selected.delivery_type === "contract" ? "Revisar cláusula 3 antes de assinar." : "Deixar o título mais direto."}`}
                     className="resize-none text-sm"
                   />
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-between gap-2">
+                    <Button size="sm" variant="ghost" className="gap-1.5 h-8 text-[11px]"
+                      onClick={() => setFilesPickerOpen(true)}>
+                      <FolderOpen className="h-3 w-3" /> Anexar da biblioteca
+                    </Button>
                     <Button size="sm" variant="outline" className="gap-1.5"
                       disabled={!quickNote.trim() || addQuickNote.isPending}
                       onClick={() => addQuickNote.mutate({ approval: selected, body: quickNote.trim() })}>
