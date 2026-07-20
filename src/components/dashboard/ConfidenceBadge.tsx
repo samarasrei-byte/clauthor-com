@@ -46,16 +46,16 @@ function band(score: number) {
     return {
       label: "Alta",
       icon: ShieldCheck,
-      chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/25",
-      dot: "bg-emerald-500",
+      chip: "bg-success/10 text-success border-success/25",
+      dot: "bg-success",
       advice: "Agente está seguro. Pode aprovar direto, histórico similar teve alta taxa de sucesso.",
     };
   if (score >= 70)
     return {
       label: "Média",
       icon: ShieldQuestion,
-      chip: "bg-amber-500/10 text-amber-500 border-amber-500/25",
-      dot: "bg-amber-500",
+      chip: "bg-warning/10 text-warning border-warning/25",
+      dot: "bg-warning",
       advice: "Revise dados/números antes de aprovar. O agente sinalizou incerteza em alguns pontos.",
     };
   return {

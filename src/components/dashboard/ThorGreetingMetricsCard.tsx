@@ -84,7 +84,7 @@ export default function ThorGreetingMetricsCard() {
             highlight
           />
           <Stat
-            icon={<TrendingUp className="h-3.5 w-3.5 text-emerald-500" />}
+            icon={<TrendingUp className="h-3.5 w-3.5 text-success" />}
             label="CTR"
             value={pct(stats.clicks, stats.nonAdminImpr)}
             hint="clique / impressão (clientes)"

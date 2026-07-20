@@ -66,7 +66,7 @@ export default function ThorTokenAlert({ onOpenThor, onBuyCredits, className }: 
   const tone = critical
     ? { border: "border-destructive/50", bg: "from-destructive/15 via-background to-background", icon: "text-destructive", chip: "bg-destructive/15 text-destructive border-destructive/30" }
     : high
-      ? { border: "border-amber-500/50", bg: "from-amber-500/10 via-background to-background", icon: "text-amber-500", chip: "bg-amber-500/15 text-amber-500 border-amber-500/30" }
+      ? { border: "border-warning/50", bg: "from-warning/10 via-background to-background", icon: "text-warning", chip: "bg-warning/15 text-warning border-warning/30" }
       : { border: "border-primary/40", bg: "from-primary/10 via-background to-background", icon: "text-primary", chip: "bg-primary/15 text-primary border-primary/30" };
 
   const headline = critical

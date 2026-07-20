@@ -24,9 +24,9 @@ interface AgentsListProps {
 }
 
 const tierColors: Record<string, string> = {
-  basic: "bg-emerald-500/15 text-emerald-400",
+  basic: "bg-success/15 text-success",
   intermediate: "bg-cyan-500/15 text-cyan-400",
-  advanced: "bg-emerald-500/15 text-emerald-400",
+  advanced: "bg-success/15 text-success",
   enterprise: "bg-primary/15 text-primary",
 };
 
@@ -73,7 +73,7 @@ function AgentCardMetrics({ agent, onSelectAgent }: { agent: Agent; onSelectAgen
           {t("agents.today", { defaultValue: "Hoje" })}: <span className="text-foreground font-medium">{metrics.todayCount}</span>
         </span>
         <span className="flex items-center gap-1 text-muted-foreground">
-          <TrendingUp className="w-3 h-3 text-emerald-500" />
+          <TrendingUp className="w-3 h-3 text-success" />
           {t("agents.week", { defaultValue: "Semana" })}: <span className="text-foreground font-medium">{metrics.weekCount}</span>
         </span>
       </div>
@@ -90,7 +90,7 @@ function AgentCardMetrics({ agent, onSelectAgent }: { agent: Agent; onSelectAgen
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p className="text-[10px] text-emerald-500 font-medium flex items-center gap-1 cursor-help">
+              <p className="text-[10px] text-success font-medium flex items-center gap-1 cursor-help">
                 💰 {t("agents.estimated_savings", { defaultValue: "Economia estimada" })}: R$ {roi.toLocaleString("pt-BR")}
                 <Info className="w-3 h-3 text-muted-foreground" />
               </p>
@@ -127,8 +127,8 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
 
   const statusColors: Record<string, string> = {
     draft: "bg-muted text-muted-foreground",
-    active: "bg-emerald-500/20 text-emerald-500",
-    paused: "bg-yellow-500/20 text-yellow-400",
+    active: "bg-success/20 text-success",
+    paused: "bg-warning/20 text-warning",
     archived: "bg-destructive/20 text-destructive",
   };
 
@@ -190,7 +190,7 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${agent.status === "active" ? "bg-emerald-500 animate-pulse" : "bg-muted"}`} />
+                    <div className={`w-2 h-2 rounded-full ${agent.status === "active" ? "bg-success animate-pulse" : "bg-muted"}`} />
                     <div>
                       <p className="font-medium text-sm">{agent.name}</p>
                       <div className="flex gap-2 mt-1">

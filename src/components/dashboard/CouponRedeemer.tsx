@@ -86,7 +86,7 @@ export function CouponRedeemer() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-1.5 mt-2 text-xs text-emerald-400"
+              className="flex items-center gap-1.5 mt-2 text-xs text-success"
             >
               <CheckCircle className="h-3.5 w-3.5" />
               Cupom aplicado com sucesso!

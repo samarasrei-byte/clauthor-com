@@ -264,7 +264,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
               {contractedSuggestions.length > 0 && (
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                    <CheckCircle2 className="h-3 w-3 text-success" />
                     Seus agentes contratados
                   </p>
                   {contractedSuggestions.map((s, i) => {
@@ -278,15 +278,15 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.04 }}
                         onClick={() => onSelectAgent(s.slug)}
-                        className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-500/5 border border-emerald-500/10 hover:border-emerald-500/20 transition-all group text-left"
+                        className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-success/5 border border-success/10 hover:border-success/20 transition-all group text-left"
                       >
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                          <Icon className="h-4 w-4 text-emerald-400" />
+                        <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center shrink-0">
+                          <Icon className="h-4 w-4 text-success" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium truncate capitalize">{s.slug.replace(/_/g, " ")}</span>
-                            <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 border-emerald-500/30 text-emerald-500 shrink-0">
+                            <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 border-success/30 text-success shrink-0">
                               Ativo
                             </Badge>
                           </div>
@@ -294,7 +294,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
                             {dept?.label || "Agente especializado"} · {s.reason}
                           </span>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-emerald-400 transition-colors shrink-0" />
+                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-success transition-colors shrink-0" />
                       </motion.button>
                     );
                   })}

@@ -284,7 +284,7 @@ const AuthPage = () => {
               transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
               className="absolute inset-12 rounded-full border border-white/20"
             >
-              <span className="absolute -bottom-1 left-1/3 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_#34d399]" />
+              <span className="absolute -bottom-1 left-1/3 h-2 w-2 rounded-full bg-success shadow-[0_0_14px_#34d399]" />
             </motion.div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center shadow-[0_0_60px_hsl(var(--primary)/0.6)]">
@@ -303,8 +303,8 @@ const AuthPage = () => {
         <div className="relative z-10 flex items-center justify-between gap-6 text-xs">
           <div className="flex items-center gap-2 text-white/70">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
             </span>
             Rede neural ativa · 24/7
           </div>
@@ -328,7 +328,7 @@ const AuthPage = () => {
             {isAdvocaciaContext ? <Scale className="h-7 w-7 text-primary" /> : <Bot className="h-7 w-7 text-primary" />}
           </motion.div>
           {isAdvocaciaContext && (
-            <Badge className="mb-3 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/15 gap-1.5">
+            <Badge className="mb-3 bg-success/15 text-success border border-success/30 hover:bg-success/15 gap-1.5">
               <CheckCircle2 className="h-3 w-3" />
               Squad Jurídico Ativo
             </Badge>

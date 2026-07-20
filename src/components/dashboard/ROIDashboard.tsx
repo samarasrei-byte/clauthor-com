@@ -79,7 +79,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
 
   const formatTrend = (val: number) => {
     if (val === 0) return { text: "-", icon: Minus, color: "text-muted-foreground" };
-    if (val > 0) return { text: `+${val}%`, icon: ArrowUpRight, color: "text-emerald-400" };
+    if (val > 0) return { text: `+${val}%`, icon: ArrowUpRight, color: "text-success" };
     return { text: `${val}%`, icon: ArrowDownRight, color: "text-destructive" };
   };
 
@@ -94,8 +94,8 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       value: `${metrics.hoursWorked}h`,
       sub: t("roi.hours_sub", { defaultValue: "vs. equipe humana" }),
       trend: hoursTrend,
-      color: "text-blue-400",
-      bg: "from-blue-500/10 to-blue-500/5",
+      color: "text-info",
+      bg: "from-info/10 to-info/5",
     },
     {
       icon: DollarSign,
@@ -103,8 +103,8 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       value: `R$ ${metrics.netSavings.toLocaleString("pt-BR")}`,
       sub: t("roi.savings_sub", { defaultValue: "este mês" }),
       trend: savTrend,
-      color: "text-emerald-400",
-      bg: "from-emerald-500/10 to-emerald-500/5",
+      color: "text-success",
+      bg: "from-success/10 to-success/5",
     },
     {
       icon: TrendingUp,
@@ -121,8 +121,8 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       value: `${Math.max(1, Math.round(agents.length * 0.8))}`,
       sub: t("roi.equivalent_sub", { defaultValue: "funcionários substituídos" }),
       trend: null,
-      color: "text-amber-400",
-      bg: "from-amber-500/10 to-amber-500/5",
+      color: "text-warning",
+      bg: "from-warning/10 to-warning/5",
     },
   ];
 
@@ -185,7 +185,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
           <span className="text-muted-foreground">
             {t("roi.comparison", { defaultValue: "Custo Humano vs IA" })}
           </span>
-          <span className="font-bold text-emerald-400">
+          <span className="font-bold text-success">
             {metrics.roi}% {t("roi.cheaper", { defaultValue: "mais barato" })}
           </span>
         </div>
@@ -195,7 +195,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
             style={{ width: `${Math.min(100, (metrics.humanEquivalentCost / Math.max(1, metrics.humanEquivalentCost)) * 100)}%` }}
           />
           <div
-            className="bg-emerald-500/60 rounded-full transition-all"
+            className="bg-success/60 rounded-full transition-all"
             style={{ width: `${Math.min(100, (metrics.agentCost / Math.max(1, metrics.humanEquivalentCost)) * 100)}%` }}
           />
         </div>

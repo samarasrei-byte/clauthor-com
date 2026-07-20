@@ -81,7 +81,7 @@ const ConsolidatedMetrics = ({
       sparkColor: "#22d3ee",
       // Inline health indicator
       badge: `${successRate}%`,
-      badgeColor: successRate >= 90 ? "text-emerald-400 bg-emerald-500/10" : successRate >= 70 ? "text-amber-400 bg-amber-500/10" : "text-destructive bg-destructive/10",
+      badgeColor: successRate >= 90 ? "text-success bg-success/10" : successRate >= 70 ? "text-warning bg-warning/10" : "text-destructive bg-destructive/10",
     },
     {
       icon: DollarSign,
@@ -90,7 +90,7 @@ const ConsolidatedMetrics = ({
       prefix: currencyPrefix,
       suffix: "*",
       spark: [2000, 4000, 5000, 6000, 7000, estimatedSavings || 0],
-      color: "text-emerald-400",
+      color: "text-success",
       sparkColor: "#10b981",
       tooltip: t("dashboard.savings_tooltip", { defaultValue: "Estimativa baseada na média de economia por agente ativo" }),
     },
@@ -102,13 +102,13 @@ const ConsolidatedMetrics = ({
       <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-emerald-500/10 bg-emerald-500/[0.03]"
+        className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-success/10 bg-success/[0.03]"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+        <span className="w-2 h-2 rounded-full bg-success animate-pulse shrink-0" />
         <span className="text-xs text-muted-foreground flex-1">
           {t("dashboard.agents_active_count", { count: activeAgents })} · {t("dashboard.success_pct", { pct: successRate })}
         </span>
-        <Badge className="bg-emerald-500/10 text-emerald-400 border-0 text-[9px]">ONLINE</Badge>
+        <Badge className="bg-success/10 text-success border-0 text-[9px]">ONLINE</Badge>
       </motion.div>
 
       {/* Hero KPIs - 3 cards with embedded health */}

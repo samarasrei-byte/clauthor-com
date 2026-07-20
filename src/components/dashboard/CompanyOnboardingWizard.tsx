@@ -246,7 +246,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold">Escanear meu site</h3>
-                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">RECOMENDADO</span>
+                          <span className="px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-bold">RECOMENDADO</span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
                           Cole a URL do seu site e a IA extrai nome, serviços, preços, contato - tudo automaticamente.
@@ -284,8 +284,8 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
                   onClick={() => setScanMethod("paste")}>
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center shrink-0">
-                        <ClipboardPaste className="h-6 w-6 text-amber-500" />
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/5 flex items-center justify-center shrink-0">
+                        <ClipboardPaste className="h-6 w-6 text-warning" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold">Colar texto ou documento</h3>
@@ -467,7 +467,7 @@ function StepHeader({ icon: Icon, title, subtitle, extracted }: { icon: any; tit
         <div className="flex items-center gap-2">
           <h2 className="font-semibold">{title}</h2>
           {extracted && (
-            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-bold flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded-full bg-success/10 text-success text-[9px] font-bold flex items-center gap-1">
               <Zap className="h-2.5 w-2.5" /> Preenchido por IA
             </span>
           )}

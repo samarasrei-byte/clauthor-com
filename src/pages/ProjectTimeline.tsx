@@ -176,8 +176,8 @@ const TimelineCard = ({ step, index }: { step: TimelineStep; index: number }) =>
   const [isOpen, setIsOpen] = useState(step.status === "current");
 
   const statusColor = {
-    done: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
-    current: "text-amber-400 border-amber-500/30 bg-amber-500/10",
+    done: "text-success border-success/30 bg-success/10",
+    current: "text-warning border-warning/30 bg-warning/10",
     pending: "text-muted-foreground border-border/20 bg-muted/10",
   };
 
@@ -188,8 +188,8 @@ const TimelineCard = ({ step, index }: { step: TimelineStep; index: number }) =>
   };
 
   const dotColor = {
-    done: "bg-emerald-500 shadow-[0_0_12px_hsl(142_71%_45%/0.5)]",
-    current: "bg-amber-500 shadow-[0_0_12px_hsl(38_92%_50%/0.5)] animate-pulse",
+    done: "bg-success shadow-[0_0_12px_hsl(142_71%_45%/0.5)]",
+    current: "bg-warning shadow-[0_0_12px_hsl(38_92%_50%/0.5)] animate-pulse",
     pending: "bg-muted-foreground/30",
   };
 
@@ -204,7 +204,7 @@ const TimelineCard = ({ step, index }: { step: TimelineStep; index: number }) =>
       {index < TIMELINE_STEPS.length - 1 && (
         <div className={cn(
           "absolute left-[18px] md:left-[30px] top-8 bottom-0 w-px",
-          step.status === "done" ? "bg-emerald-500/30" : "bg-border/20"
+          step.status === "done" ? "bg-success/30" : "bg-border/20"
         )} />
       )}
 
@@ -221,9 +221,9 @@ const TimelineCard = ({ step, index }: { step: TimelineStep; index: number }) =>
           "group cursor-pointer rounded-2xl border p-5 transition-all duration-300",
           "hover:shadow-[0_8px_40px_hsl(0_0%_0%/0.3)]",
           step.status === "current"
-            ? "border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent"
+            ? "border-warning/20 bg-gradient-to-br from-warning/5 to-transparent"
             : step.status === "done"
-            ? "border-emerald-500/10 bg-card/60 hover:border-emerald-500/20"
+            ? "border-success/10 bg-card/60 hover:border-success/20"
             : "border-border/10 bg-card/30 opacity-70 hover:opacity-100"
         )}
         style={{
@@ -340,7 +340,7 @@ const ProjectTimeline = () => {
             className="mb-8"
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-[10px] px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+              <span className="text-[10px] px-2 py-1 rounded-full bg-success/10 text-success border border-success/20 font-mono">
                 ● EM CONSTRUÇÃO
               </span>
             </div>
@@ -425,9 +425,9 @@ const ProjectTimeline = () => {
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium whitespace-nowrap border shrink-0 transition-all",
                   step.status === "done"
-                    ? "border-emerald-500/20 text-emerald-400 bg-emerald-500/5"
+                    ? "border-success/20 text-success bg-success/5"
                     : step.status === "current"
-                    ? "border-amber-500/20 text-amber-400 bg-amber-500/5"
+                    ? "border-warning/20 text-warning bg-warning/5"
                     : "border-border/10 text-muted-foreground bg-muted/5"
                 )}
               >

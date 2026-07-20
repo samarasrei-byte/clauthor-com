@@ -55,7 +55,7 @@ interface Props {
 const NEED_META = {
   agent:      { icon: Bot,        label: "Agente Individual",     color: "#a78bfa", gradient: "from-violet-500/30 to-fuchsia-500/10" },
   squad:      { icon: Users,      label: "Squad Coordenado",      color: "#f43f5e", gradient: "from-rose-500/30 to-orange-500/10" },
-  department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
+  department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-info/10" },
 } as const;
 
 const STEP_ORDER: Step[] = ["welcome", "department", "input", "describe", "analyzing", "done"];
@@ -513,7 +513,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
             <div className="leading-tight">
               <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/50">CLAUTHOR · NEURAL LINK</p>
               <p className="text-xs font-mono text-white/70 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                 thor.core :: online
               </p>
             </div>
@@ -538,7 +538,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 space-y-3.5 max-h-[70vh] overflow-hidden relative">
                 <div className="flex items-center justify-between">
                   <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/50">Transmissão</p>
-                  <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+                  <Radio className="w-3 h-3 text-success animate-pulse" />
                 </div>
                 <div className="space-y-3">
                   {narrative.slice(0, currentIdx + 1).map((n, ni) =>
@@ -635,7 +635,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             <p className="font-semibold text-white leading-tight">{dept.name}</p>
                             <p className="text-xs text-white/55 mt-1.5 leading-relaxed">{dept.painPoint}</p>
                             <div className="mt-4 pt-3 border-t border-white/5 space-y-1.5">
-                              <p className="text-[10px] font-mono text-emerald-300/80 uppercase tracking-widest">
+                              <p className="text-[10px] font-mono text-success/80 uppercase tracking-widest">
                                 {dept.outcome}
                               </p>
                               <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
@@ -741,13 +741,13 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             <Globe className="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2" />
                             {isValidUrl && (
                               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-4 top-1/2 -translate-y-1/2">
-                                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                                <CheckCircle2 className="w-5 h-5 text-success" />
                               </motion.div>
                             )}
                           </div>
                           <p className={cn(
                             "text-[11px] font-mono",
-                            isValidUrl ? "text-emerald-300/80" : "text-white/40"
+                            isValidUrl ? "text-success/80" : "text-white/40"
                           )}>
                             {url.trim().length === 0
                               ? "> pode colar com ou sem www. Eu normalizo o endereço."
@@ -908,7 +908,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             color: needMeta.color,
                           }}
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                           Match · {Math.round((result.confidence ?? 0.85) * 100)}% de confiança
                         </motion.span>
                         <motion.h2
@@ -1003,14 +1003,14 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             transition={{ delay: 0.55 }}
                             className="relative group"
                           >
-                            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur opacity-60 group-hover:opacity-100 transition duration-700" />
-                            <div className="relative bg-[#0A0A0A] border border-emerald-500/30 rounded-2xl p-5 md:p-6 flex items-center justify-between gap-4">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-success/25 to-cyan-500/25 blur opacity-60 group-hover:opacity-100 transition duration-700" />
+                            <div className="relative bg-[#0A0A0A] border border-success/30 rounded-2xl p-5 md:p-6 flex items-center justify-between gap-4">
                               <div className="min-w-0">
-                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Resultado esperado em 30 dias</p>
+                                <p className="text-[10px] font-mono text-success uppercase tracking-widest mb-1">Resultado esperado em 30 dias</p>
                                 <p className="text-base md:text-lg font-bold text-white leading-snug">{result.expected_outcome}</p>
                               </div>
                               <div className="text-right shrink-0">
-                                <span className="block text-2xl md:text-3xl font-black text-emerald-400 tracking-tighter leading-none">
+                                <span className="block text-2xl md:text-3xl font-black text-success tracking-tighter leading-none">
                                   {Math.round((result.confidence ?? 0.85) * 100)}%
                                 </span>
                                 <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Confiança</p>
@@ -1121,12 +1121,12 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", damping: 12 }}
-                      className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center shadow-[0_0_100px_rgba(52,211,153,0.5)]"
+                      className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-success to-cyan-400 flex items-center justify-center shadow-[0_0_100px_rgba(52,211,153,0.5)]"
                     >
                       <CheckCircle2 className="w-12 h-12 text-black" />
                     </motion.div>
                     <div className="space-y-2">
-                      <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-300">Neural link estabelecido</p>
+                      <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-success">Neural link estabelecido</p>
                       <h2 className="font-display text-3xl md:text-4xl font-bold">Vaga fixada.</h2>
                       <p className="text-white/70 font-mono text-sm">Redirecionando para o dashboard…</p>
                     </div>

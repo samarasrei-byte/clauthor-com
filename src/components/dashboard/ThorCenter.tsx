@@ -332,7 +332,7 @@ export default function ThorCenter({ onNavigate }: Props) {
           onClick={() => onNavigate?.("approvals")}
         />
         <QuickAction
-          icon={<Bell className="h-4 w-4 text-amber-500" />}
+          icon={<Bell className="h-4 w-4 text-warning" />}
           label="Alertas de tokens"
           value={tokenAlerts.length}
           periodValue={periodCounts.tokenAlerts}
@@ -398,7 +398,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                           <span>·</span>
                           <span>{relativeDate(ev.when)}</span>
                           {ev.kind === "touchpoint" && ev.ctaTaken && (
-                            <Badge variant="outline" className="text-[10px] gap-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-500">
+                            <Badge variant="outline" className="text-[10px] gap-1 border-success/30 bg-success/10 text-success">
                               <CheckCircle2 className="h-3 w-3" /> agiu
                             </Badge>
                           )}
@@ -434,7 +434,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                   className={cn(
                     "text-[10px] uppercase tracking-widest px-2 py-1 rounded-md border transition-colors",
                     onlyStale
-                      ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      ? "border-warning/50 bg-warning/10 text-warning"
                       : "border-border/50 text-muted-foreground hover:bg-muted/40",
                   )}
                   title={onlyStale ? "Mostrar todas" : "Mostrar só as paradas (>48h)"}
@@ -455,7 +455,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                     key={a.id}
                     className={cn(
                       "w-full rounded-lg border p-2.5 hover:bg-muted/40 transition-colors group",
-                      stale ? "border-amber-500/40 bg-amber-500/5" : "border-border/50 bg-background/40",
+                      stale ? "border-warning/40 bg-warning/5" : "border-border/50 bg-background/40",
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -467,7 +467,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <p className="text-sm font-medium truncate">{a.title || "Aprovação pendente"}</p>
                           {stale && (
-                            <Badge variant="outline" className="text-[9px] px-1 py-0 border-amber-500/40 text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                            <Badge variant="outline" className="text-[9px] px-1 py-0 border-warning/40 text-warning uppercase tracking-wider">
                               parada
                             </Badge>
                           )}
@@ -512,11 +512,11 @@ export default function ThorCenter({ onNavigate }: Props) {
                       key={s.id}
                       className={cn(
                         "rounded-lg border p-2.5",
-                        s.severity === "critical" ? "border-destructive/40 bg-destructive/5" : "border-amber-500/30 bg-amber-500/5",
+                        s.severity === "critical" ? "border-destructive/40 bg-destructive/5" : "border-warning/30 bg-warning/5",
                       )}
                     >
                       <div className="flex items-start gap-2">
-                        <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
+                        <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-warning")} />
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium">{s.title}</p>
                           <p className="text-[11px] text-muted-foreground">{relativeDate(s.created_at)}</p>

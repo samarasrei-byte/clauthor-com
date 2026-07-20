@@ -44,7 +44,7 @@ const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; s
               <ul className="space-y-2 text-left">
                 {data.agent.responsibilities.map((r, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> {r}
+                    <Check className="h-3.5 w-3.5 text-success shrink-0" /> {r}
                   </li>
                 ))}
               </ul>

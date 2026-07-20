@@ -126,14 +126,14 @@ const NextStepsCard = () => {
               className={cn(
                 "text-left p-3.5 rounded-xl border transition-all group",
                 s.done
-                  ? "border-emerald-500/30 bg-emerald-500/5"
+                  ? "border-success/30 bg-success/5"
                   : "border-border bg-background/50 hover:border-primary/40 hover:bg-primary/[0.03]"
               )}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center",
-                  s.done ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" : "bg-primary/10 text-primary"
+                  s.done ? "bg-success/15 text-success" : "bg-primary/10 text-primary"
                 )}>
                   {s.done ? <CheckCircle2 className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
                 </div>
@@ -142,7 +142,7 @@ const NextStepsCard = () => {
               <p className="text-sm font-semibold leading-tight">{s.title}</p>
               <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{s.desc}</p>
               {!s.done && <p className="text-[11px] text-primary mt-2 font-medium">{s.cta} →</p>}
-              {s.done && <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">Concluído</p>}
+              {s.done && <p className="text-[11px] text-success mt-2 font-medium">Concluído</p>}
             </button>
           );
         })}

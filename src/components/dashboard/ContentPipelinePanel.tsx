@@ -100,11 +100,11 @@ const ContentPipelinePanel = () => {
             <div className="flex items-start gap-3">
               <div className={`p-1.5 rounded-lg shrink-0 ${
                 task.status === "completed" || task.status === "done"
-                  ? "bg-emerald-500/10"
+                  ? "bg-success/10"
                   : "bg-primary/10"
               }`}>
                 {task.status === "completed" || task.status === "done"
-                  ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                  ? <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                   : <Clock className="h-3.5 w-3.5 text-primary" />
                 }
               </div>
@@ -145,9 +145,9 @@ const ContentPipelinePanel = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
           { label: "Instagram Hoje", value: todayInstagram, icon: Instagram, color: "text-pink-500" },
-          { label: "YouTube Hoje", value: todayYoutube, icon: Youtube, color: "text-red-500" },
+          { label: "YouTube Hoje", value: todayYoutube, icon: Youtube, color: "text-destructive" },
           { label: "Total Instagram", value: instagramContent.length, icon: Instagram, color: "text-pink-500/70" },
-          { label: "Total YouTube", value: youtubeContent.length, icon: Youtube, color: "text-red-500/70" },
+          { label: "Total YouTube", value: youtubeContent.length, icon: Youtube, color: "text-destructive/70" },
         ].map((card, i) => (
           <motion.div
             key={card.label}
@@ -179,7 +179,7 @@ const ContentPipelinePanel = () => {
         </Button>
         <Button
           variant="outline"
-          className="gap-2 border-red-500/20 text-red-500 hover:bg-red-500/10"
+          className="gap-2 border-destructive/20 text-destructive hover:bg-destructive/10"
           onClick={() => requestContent("youtube")}
           disabled={generating !== null}
         >

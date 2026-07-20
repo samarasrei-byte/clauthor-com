@@ -7,7 +7,7 @@ const features: Record<string, { title: string; icon: typeof Rocket; desc: strin
     title: "Mission Control Live",
     icon: Rocket,
     desc: "Command Center que executa tarefas em tempo real e mostra resultados via streaming. Acompanhe cada passo dos seus agentes enquanto trabalham.",
-    color: "from-orange-500/20 to-red-500/10",
+    color: "from-orange-500/20 to-destructive/10",
   },
   "agent-memory": {
     title: "Agent Memory Graph",
@@ -19,19 +19,19 @@ const features: Record<string, { title: string; icon: typeof Rocket; desc: strin
     title: "Autonomous Goals",
     icon: Target,
     desc: "Defina OKRs e metas estratégicas. Seus agentes trabalham autonomamente para atingi-los, reportando progresso em tempo real.",
-    color: "from-emerald-500/20 to-teal-500/10",
+    color: "from-success/20 to-teal-500/10",
   },
   "voice-first": {
     title: "Voice-First Meeting",
     icon: Mic,
     desc: "Reuniões por voz real com Text-to-Speech dos agentes. Converse naturalmente com sua equipe de IA como em uma call.",
-    color: "from-blue-500/20 to-cyan-500/10",
+    color: "from-info/20 to-cyan-500/10",
   },
   "marketplace-p2p": {
     title: "Marketplace P2P",
     icon: Store,
     desc: "Empresas publicam agentes treinados para outros usarem. Monetize seus agentes e descubra especialistas criados pela comunidade.",
-    color: "from-amber-500/20 to-yellow-500/10",
+    color: "from-warning/20 to-warning/10",
   },
 };
 

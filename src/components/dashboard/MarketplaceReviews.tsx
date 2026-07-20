@@ -37,8 +37,8 @@ const StarRating = ({ rating, size = "sm", interactive = false, onChange }: { ra
         key={s}
         className={cn(
           size === "sm" ? "h-3 w-3" : "h-4 w-4",
-          s <= rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30",
-          interactive && "cursor-pointer hover:text-amber-400 transition-colors"
+          s <= rating ? "fill-warning text-warning" : "text-muted-foreground/30",
+          interactive && "cursor-pointer hover:text-warning transition-colors"
         )}
         onClick={() => interactive && onChange?.(s)}
       />
@@ -78,14 +78,14 @@ const MarketplaceReviews = ({ agentSlug, agentName, compact }: MarketplaceReview
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <Award className="h-4 w-4 text-amber-400" />
+            <Award className="h-4 w-4 text-warning" />
             <span className="font-display text-sm font-bold">
               {t("reviews.title", { defaultValue: "Avaliações" })}
             </span>
           </div>
-          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
-            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-            <span className="text-xs font-bold text-amber-400">{avgRating}</span>
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-warning/10 border border-warning/20">
+            <Star className="h-3 w-3 fill-warning text-warning" />
+            <span className="text-xs font-bold text-warning">{avgRating}</span>
             <span className="text-[10px] text-muted-foreground">({reviews.length})</span>
           </div>
         </div>

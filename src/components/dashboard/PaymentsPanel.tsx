@@ -37,12 +37,12 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
       description: "International payments via PayPal",
       icon: Globe,
       status: "active",
-      color: "from-blue-500/20 to-indigo-500/10",
-      borderColor: "border-blue-500/30",
-      iconBg: "bg-blue-500/10",
-      iconColor: "text-blue-400",
+      color: "from-info/20 to-indigo-500/10",
+      borderColor: "border-info/30",
+      iconBg: "bg-info/10",
+      iconColor: "text-info",
       badge: "Active",
-      badgeClass: "bg-blue-500/10 text-blue-400",
+      badgeClass: "bg-info/10 text-info",
       volume: "$" + (totalRevenue / 100).toLocaleString("en-US"),
       share: 100,
       features: ["Global checkout", "Multi-currency", "Buyer protection"],
@@ -50,9 +50,9 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
   ];
 
   const quickStats = [
-    { label: "Total Volume", value: `$${(totalRevenue / 100).toLocaleString("en-US")}`, icon: Banknote, color: "text-emerald-400" },
+    { label: "Total Volume", value: `$${(totalRevenue / 100).toLocaleString("en-US")}`, icon: Banknote, color: "text-success" },
     { label: "Active Subscriptions", value: subscriptionCount.toString(), icon: Coins, color: "text-cyan-400" },
-    { label: "Avg. Fee", value: "1.2%", icon: ArrowUpRight, color: "text-amber-400" },
+    { label: "Avg. Fee", value: "1.2%", icon: ArrowUpRight, color: "text-warning" },
     { label: "Security", value: "PCI-DSS", icon: Shield, color: "text-violet-400" },
   ];
 
@@ -67,7 +67,7 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
             <p className="text-xs text-muted-foreground mt-1">Manage all payment gateways and methods</p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-emerald-500/20 text-emerald-400 text-[10px]">
+            <Badge variant="outline" className="border-success/20 text-success text-[10px]">
               <Lock className="h-3 w-3 mr-1" /> Secure Environment
             </Badge>
           </div>

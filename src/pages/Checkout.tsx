@@ -211,8 +211,8 @@ export default function Checkout() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-70 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
                 </span>
                 <div className="text-xs uppercase tracking-wider text-white/50">
                   Seu time já está esquentando
@@ -247,10 +247,10 @@ export default function Checkout() {
             <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
               <div className="text-xs uppercase tracking-wider text-white/40 mb-3">Incluso</div>
               <ul className="space-y-2 text-sm text-white/80">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Todos os agentes ativados imediatamente após pagamento</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Onboarding único aplicado a todos os departamentos</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Painel de aprovações e Second Brain em tempo real</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Cancele quando quiser, sem multa</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Todos os agentes ativados imediatamente após pagamento</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Onboarding único aplicado a todos os departamentos</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Painel de aprovações e Second Brain em tempo real</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Cancele quando quiser, sem multa</li>
               </ul>
             </Card>
 

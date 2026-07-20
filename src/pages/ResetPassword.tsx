@@ -71,7 +71,7 @@ const ResetPassword = () => {
     return (
       <div className="min-h-dvh flex items-center justify-center px-4">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-4">
-          <CheckCircle className="h-16 w-16 text-emerald-400 mx-auto" />
+          <CheckCircle className="h-16 w-16 text-success mx-auto" />
           <h1 className="font-display text-2xl font-bold">{t("auth.password_updated", { defaultValue: "Senha atualizada!" })}</h1>
           <p className="text-muted-foreground">{t("auth.redirecting", { defaultValue: "Redirecionando..." })}</p>
         </motion.div>

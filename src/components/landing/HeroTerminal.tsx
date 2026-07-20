@@ -156,7 +156,7 @@ const HeroTerminal = () => {
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full bg-primary/30" />
                 <div className="w-3 h-3 rounded-full bg-orange-500/30" />
-                <div className="w-3 h-3 rounded-full bg-green-500/30" />
+                <div className="w-3 h-3 rounded-full bg-success/30" />
               </div>
               <div className="text-[11px] font-mono text-muted-foreground/70">
                 agente-comercial-01.clauthor.ai
@@ -186,7 +186,7 @@ const HeroTerminal = () => {
                   )}
                   {item.kind === "ok" && (
                     <div className="flex gap-3">
-                      <span className="text-green-500">✓</span>
+                      <span className="text-success">✓</span>
                       <span className="text-slate-300">{item.text}</span>
                     </div>
                   )}

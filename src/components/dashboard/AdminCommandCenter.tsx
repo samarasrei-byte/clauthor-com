@@ -410,9 +410,9 @@ const AdminCommandCenter = ({
               </CardHeader>
               <CardContent className="space-y-2 px-4 pb-3">
                 {[
-                  { label: "MRR", value: new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(totalRevenue / 100), color: "border-l-emerald-500" },
+                  { label: "MRR", value: new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(totalRevenue / 100), color: "border-l-success" },
                   { label: "ARR", value: new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format((totalRevenue * 12) / 100), color: "border-l-cyan-500" },
-                  { label: "ARPU", value: `R$ ${usersCount > 0 ? ((totalRevenue / usersCount) / 100).toFixed(2) : "0"}`, color: "border-l-amber-500" },
+                  { label: "ARPU", value: `R$ ${usersCount > 0 ? ((totalRevenue / usersCount) / 100).toFixed(2) : "0"}`, color: "border-l-warning" },
                   { label: "LTV 12m", value: `R$ ${usersCount > 0 ? (((totalRevenue / usersCount) * 12) / 100).toFixed(0) : "0"}`, color: "border-l-violet-500" },
                 ].map((stat) => (
                   <div key={stat.label} className={`border-l-2 ${stat.color} pl-3 py-1`}>

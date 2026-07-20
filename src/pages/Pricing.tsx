@@ -151,7 +151,7 @@ const Pricing = () => {
                     <span className="text-xs text-muted-foreground line-through">
                       Equipe CLT: {fp(dept.cltCost)}/mês
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                    <span className="text-[10px] font-bold text-success px-1.5 py-0.5 rounded bg-success/10 border border-success/20">
                       -{Math.round((1 - dept.clauthorCost / dept.cltCost) * 100)}%
                     </span>
                   </div>
@@ -392,7 +392,7 @@ const Pricing = () => {
                 <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-xl p-6 text-center glass-hover relative">
                   {pack.discount && (
                     <div className="absolute -top-2 right-3">
-                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">{pack.discount}</span>
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-success/10 text-success border border-success/20">{pack.discount}</span>
                     </div>
                   )}
                   <Coins className="h-6 w-6 text-primary/60 mx-auto mb-3" />

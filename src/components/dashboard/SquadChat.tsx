@@ -51,12 +51,12 @@ function agentColor(name: string): string {
   for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
   const colors = [
     "from-violet-500 to-purple-600",
-    "from-blue-500 to-cyan-600",
-    "from-emerald-500 to-teal-600",
-    "from-amber-500 to-orange-600",
+    "from-info to-cyan-600",
+    "from-success to-teal-600",
+    "from-warning to-orange-600",
     "from-rose-500 to-pink-600",
-    "from-indigo-500 to-blue-600",
-    "from-lime-500 to-green-600",
+    "from-indigo-500 to-info",
+    "from-lime-500 to-success",
     "from-fuchsia-500 to-purple-600",
   ];
   return colors[Math.abs(hash) % colors.length];

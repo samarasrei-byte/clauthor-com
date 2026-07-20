@@ -20,14 +20,14 @@ const SEVERITY_CLASS = {
     pill: "bg-destructive/10 text-destructive",
   },
   warning: {
-    ring: "border-amber-500/25 bg-amber-500/5",
-    icon: "text-amber-400",
-    pill: "bg-amber-500/10 text-amber-400",
+    ring: "border-warning/25 bg-warning/5",
+    icon: "text-warning",
+    pill: "bg-warning/10 text-warning",
   },
   info: {
-    ring: "border-blue-500/20 bg-blue-500/5",
-    icon: "text-blue-400",
-    pill: "bg-blue-500/10 text-blue-400",
+    ring: "border-info/20 bg-info/5",
+    icon: "text-info",
+    pill: "bg-info/10 text-info",
   },
 } as const;
 
@@ -49,8 +49,8 @@ const AgentHealthAlerts = () => {
     >
       <header className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center">
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+          <div className="w-7 h-7 rounded-lg bg-warning/10 flex items-center justify-center">
+            <AlertTriangle className="h-3.5 w-3.5 text-warning" />
           </div>
           <div>
             <h3 className="text-sm font-semibold">Alertas de saúde dos agentes</h3>

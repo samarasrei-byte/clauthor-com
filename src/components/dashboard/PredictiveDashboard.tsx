@@ -23,17 +23,17 @@ interface Prediction {
 }
 
 const severityColors = {
-  info: "border-blue-500/20 bg-blue-500/5",
-  warning: "border-amber-500/20 bg-amber-500/5",
-  critical: "border-red-500/20 bg-red-500/5",
-  positive: "border-emerald-500/20 bg-emerald-500/5",
+  info: "border-info/20 bg-info/5",
+  warning: "border-warning/20 bg-warning/5",
+  critical: "border-destructive/20 bg-destructive/5",
+  positive: "border-success/20 bg-success/5",
 };
 
 const severityBadge = {
-  info: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  warning: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-  critical: "bg-red-500/10 text-red-400 border-red-500/30",
-  positive: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  info: "bg-info/10 text-info border-info/30",
+  warning: "bg-warning/10 text-warning border-warning/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
+  positive: "bg-success/10 text-success border-success/30",
 };
 
 // ── Statistical helpers ──
@@ -458,8 +458,8 @@ const PredictiveDashboard = () => {
     return Math.max(10, Math.min(100, score));
   }, [predictions]);
 
-  const scoreColor = healthScore >= 80 ? "text-emerald-400" : healthScore >= 50 ? "text-amber-400" : "text-red-400";
-  const scoreBg = healthScore >= 80 ? "from-emerald-500/20 to-emerald-500/5" : healthScore >= 50 ? "from-amber-500/20 to-amber-500/5" : "from-red-500/20 to-red-500/5";
+  const scoreColor = healthScore >= 80 ? "text-success" : healthScore >= 50 ? "text-warning" : "text-destructive";
+  const scoreBg = healthScore >= 80 ? "from-success/20 to-success/5" : healthScore >= 50 ? "from-warning/20 to-warning/5" : "from-destructive/20 to-destructive/5";
 
   return (
     <div className="space-y-6">
@@ -546,8 +546,8 @@ const PredictiveDashboard = () => {
                       {pred.metric && (
                         <div className="flex items-center gap-2 mt-2">
                           <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-background/60 border border-border/20">
-                            {pred.metric.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-emerald-400" />}
-                            {pred.metric.trend === "down" && <TrendingDown className="h-2.5 w-2.5 text-red-400" />}
+                            {pred.metric.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-success" />}
+                            {pred.metric.trend === "down" && <TrendingDown className="h-2.5 w-2.5 text-destructive" />}
                             {pred.metric.trend === "flat" && <Activity className="h-2.5 w-2.5 text-muted-foreground" />}
                             <span className="text-[9px] font-medium">{pred.metric.label}: {pred.metric.value}</span>
                           </div>

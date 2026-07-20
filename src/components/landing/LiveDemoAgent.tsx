@@ -99,7 +99,7 @@ const LiveDemoAgent = () => {
             <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
               <Bot className="h-4 w-4 text-primary" />
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-card" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-card" />
           </div>
           <div className="flex-1 text-left">
             <p className="font-display text-xs font-bold">{t("demo_chat.agent_name")}</p>
@@ -129,12 +129,12 @@ const LiveDemoAgent = () => {
                   <Bot className="h-4 w-4 text-primary" />
                 </div>
                 <div className="absolute -bottom-0.5 -right-0.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-card" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-success border-2 border-card" />
                 </div>
               </div>
               <div>
                 <p className="font-display text-xs font-bold">{t("demo_chat.agent_name")}</p>
-                <p className="font-mono text-[9px] text-emerald-500/80 uppercase tracking-wider">{t("demo_chat.online_now")}</p>
+                <p className="font-mono text-[9px] text-success/80 uppercase tracking-wider">{t("demo_chat.online_now")}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">

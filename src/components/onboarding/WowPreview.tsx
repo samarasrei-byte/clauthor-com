@@ -23,9 +23,9 @@ export function WowPreview({ agentLabel, outputLabel, output, isStreaming, compa
     >
       <div className="flex items-center justify-between border-b border-border/60 px-5 py-3 bg-muted/40">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-red-500/70" />
-          <div className="h-2 w-2 rounded-full bg-yellow-500/70" />
-          <div className="h-2 w-2 rounded-full bg-green-500/70" />
+          <div className="h-2 w-2 rounded-full bg-destructive/70" />
+          <div className="h-2 w-2 rounded-full bg-warning/70" />
+          <div className="h-2 w-2 rounded-full bg-success/70" />
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Diamond className="h-3.5 w-3.5 text-primary" />

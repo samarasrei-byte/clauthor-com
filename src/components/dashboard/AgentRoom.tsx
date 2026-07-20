@@ -48,7 +48,7 @@ const AgentRoom = () => {
   const tierColors: Record<string, string> = {
     basic: "from-muted to-muted",
     intermediate: "from-cyan-500 to-cyan-600",
-    advanced: "from-emerald-500 to-emerald-600",
+    advanced: "from-success to-success",
     enterprise: "from-primary to-primary-glow",
   };
 
@@ -189,7 +189,7 @@ const AgentRoom = () => {
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center"
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-success border-2 border-background flex items-center justify-center"
                   >
                     <Activity className="h-2 w-2 text-white" />
                   </motion.div>

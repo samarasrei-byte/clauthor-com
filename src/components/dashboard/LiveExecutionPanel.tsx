@@ -18,7 +18,7 @@ const STEP_FILTERS: { id: StepType | "all"; label: string }[] = [
 ];
 
 const statusStyles: Record<string, string> = {
-  running: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  running: "bg-success/15 text-success border-success/30",
   completed: "bg-primary/10 text-primary border-primary/20",
   failed: "bg-destructive/10 text-destructive border-destructive/30",
   pending: "bg-muted text-muted-foreground border-border",
@@ -119,8 +119,8 @@ export default function LiveExecutionPanel() {
                     {run?.summary || run?.run_type || "Execução"}
                   </h3>
                   {isLive && (
-                    <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-emerald-400">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> ao vivo
+                    <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-success">
+                      <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" /> ao vivo
                     </span>
                   )}
                 </div>

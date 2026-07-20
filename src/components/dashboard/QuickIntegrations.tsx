@@ -25,8 +25,8 @@ const QuickIntegrations = ({ onSetupCompany }: { onSetupCompany?: () => void }) 
       id: "whatsapp",
       name: "WhatsApp",
       icon: MessageCircle,
-      color: "text-emerald-400",
-      bg: "from-emerald-500/15 to-emerald-500/5",
+      color: "text-success",
+      bg: "from-success/15 to-success/5",
       description: t("integrations.whatsapp_desc", { defaultValue: "Atendimento automático 24/7 via WhatsApp Business" }),
       status: "available",
       setupTime: "2min",
@@ -35,8 +35,8 @@ const QuickIntegrations = ({ onSetupCompany }: { onSetupCompany?: () => void }) 
       id: "gmail",
       name: "Gmail",
       icon: Mail,
-      color: "text-red-400",
-      bg: "from-red-500/15 to-red-500/5",
+      color: "text-destructive",
+      bg: "from-destructive/15 to-destructive/5",
       description: t("integrations.gmail_desc", { defaultValue: "Respostas inteligentes e triagem automática de e-mails" }),
       status: "available",
       setupTime: "1min",
@@ -96,7 +96,7 @@ const QuickIntegrations = ({ onSetupCompany }: { onSetupCompany?: () => void }) 
               className={cn(
                 "rounded-xl border p-4 transition-all group cursor-pointer",
                 isConnected
-                  ? "border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent"
+                  ? "border-success/20 bg-gradient-to-br from-success/5 to-transparent"
                   : isSoon
                   ? "border-border/10 bg-card/20 opacity-50"
                   : "border-border/20 bg-gradient-to-br hover:border-primary/30 hover:shadow-[0_0_20px_hsl(var(--primary)/0.08)]",
@@ -109,7 +109,7 @@ const QuickIntegrations = ({ onSetupCompany }: { onSetupCompany?: () => void }) 
                   <Icon className={cn("h-5 w-5", integration.color)} />
                 </div>
                 {isConnected ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <span className="text-[9px] text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">
                     ~{integration.setupTime}

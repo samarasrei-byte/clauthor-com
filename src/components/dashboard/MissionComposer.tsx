@@ -230,7 +230,7 @@ const MissionComposer = () => {
               <Clock className="h-3.5 w-3.5 text-muted-foreground" />
               <span>{(executionSummary.totalTime / 1000).toFixed(1)}s total</span>
             </div>
-            <div className="flex items-center gap-1.5 text-emerald-500">
+            <div className="flex items-center gap-1.5 text-success">
               <CheckCircle2 className="h-3.5 w-3.5" />
               <span>{executionSummary.successCount} sucesso</span>
             </div>
@@ -303,13 +303,13 @@ const MissionComposer = () => {
                   >
                     {idx > 0 && (
                       <div className="flex justify-center -mt-1 mb-1">
-                        <div className={`w-px h-4 ${node.status === "done" ? "bg-emerald-400" : node.status === "running" ? "bg-primary animate-pulse" : "bg-border/30"}`} />
+                        <div className={`w-px h-4 ${node.status === "done" ? "bg-success" : node.status === "running" ? "bg-primary animate-pulse" : "bg-border/30"}`} />
                       </div>
                     )}
 
                     <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
                       node.status === "running" ? "border-primary/40 bg-primary/5 shadow-lg shadow-primary/5" :
-                      node.status === "done" ? "border-emerald-500/30 bg-emerald-500/5" :
+                      node.status === "done" ? "border-success/30 bg-success/5" :
                       node.status === "error" ? "border-destructive/30 bg-destructive/5" :
                       "border-border/30 hover:border-border/50"
                     }`}>
@@ -318,7 +318,7 @@ const MissionComposer = () => {
                       </div>
 
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
-                        node.status === "done" ? "bg-emerald-500/20 text-emerald-400" :
+                        node.status === "done" ? "bg-success/20 text-success" :
                         node.status === "running" ? "bg-primary/20 text-primary animate-pulse" :
                         node.status === "error" ? "bg-destructive/20 text-destructive" :
                         "bg-muted/30 text-muted-foreground"
@@ -351,7 +351,7 @@ const MissionComposer = () => {
                         {/* Show result */}
                         {node.result && (
                           <div className={`text-[10px] p-2 rounded-lg mt-1 max-h-[80px] overflow-y-auto ${
-                            node.status === "done" ? "bg-emerald-500/10 text-emerald-300 dark:text-emerald-300 text-emerald-700" :
+                            node.status === "done" ? "bg-success/10 text-success text-success" :
                             "bg-destructive/10 text-destructive"
                           }`}>
                             {node.result.slice(0, 300)}{node.result.length > 300 ? "..." : ""}

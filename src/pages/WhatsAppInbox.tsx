@@ -114,7 +114,7 @@ function SetupCard({ tenantId, onConfigured }: { tenantId: string; onConfigured:
         {result && (
           <div className="mt-6 p-4 rounded-lg bg-muted space-y-3">
             <p className="text-sm font-semibold flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-500" /> Próximo passo · configurar no Meta:
+              <CheckCircle2 className="w-4 h-4 text-success" /> Próximo passo · configurar no Meta:
             </p>
             <div className="space-y-2 text-xs">
               <div>

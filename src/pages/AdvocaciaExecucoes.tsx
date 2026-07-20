@@ -49,10 +49,10 @@ const AGENT_META: Record<
   { short: string; icon: any; color: string; bg: string }
 > = {
   AGENTE_SEGURANCA: { short: "Segurança", icon: ShieldCheck, color: "text-rose-500", bg: "bg-rose-500/10" },
-  AGENTE_PROCESSUAL: { short: "Processual", icon: Scale, color: "text-blue-500", bg: "bg-blue-500/10" },
-  AGENTE_PRAZOS: { short: "Prazos", icon: Clock, color: "text-amber-500", bg: "bg-amber-500/10" },
+  AGENTE_PROCESSUAL: { short: "Processual", icon: Scale, color: "text-info", bg: "bg-info/10" },
+  AGENTE_PRAZOS: { short: "Prazos", icon: Clock, color: "text-warning", bg: "bg-warning/10" },
   AGENTE_REDATOR: { short: "Redator", icon: PenLine, color: "text-violet-500", bg: "bg-violet-500/10" },
-  AGENTE_ESTRATEGICO: { short: "Estratégico", icon: Brain, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  AGENTE_ESTRATEGICO: { short: "Estratégico", icon: Brain, color: "text-success", bg: "bg-success/10" },
   AGENTE_FINANCEIRO: { short: "Financeiro", icon: DollarSign, color: "text-teal-500" , bg: "bg-teal-500/10"},
 };
 
@@ -198,16 +198,16 @@ export default function AdvocaciaExecucoes() {
             label="Aguardando aprovação"
             value={stats?.pending ?? 0}
             icon={AlertTriangle}
-            color="text-amber-500"
-            bg="bg-amber-500/10"
+            color="text-warning"
+            bg="bg-warning/10"
             loading={isLoading}
           />
           <KPICard
             label="Tempo médio"
             value={stats ? `${(stats.avgMs / 1000).toFixed(1)}s` : "·"}
             icon={Clock}
-            color="text-emerald-500"
-            bg="bg-emerald-500/10"
+            color="text-success"
+            bg="bg-success/10"
             loading={isLoading}
           />
         </div>
@@ -302,7 +302,7 @@ function ExecutionRow({ exec }: { exec: Execution }) {
     if (exec.security_blocked && exec.approval_status === "pending") {
       return {
         statusLabel: "Aguardando aprovação",
-        statusColor: "border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/5",
+        statusColor: "border-warning/40 text-warning bg-warning/5",
         StatusIcon: AlertTriangle,
       };
     }
@@ -323,13 +323,13 @@ function ExecutionRow({ exec }: { exec: Execution }) {
     if (exec.approval_status === "approved") {
       return {
         statusLabel: "Aprovada manualmente",
-        statusColor: "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5",
+        statusColor: "border-success/30 text-success bg-success/5",
         StatusIcon: Lock,
       };
     }
     return {
       statusLabel: "Concluída",
-      statusColor: "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5",
+      statusColor: "border-success/30 text-success bg-success/5",
       StatusIcon: CheckCircle2,
     };
   }, [exec]);
@@ -355,7 +355,7 @@ function ExecutionRow({ exec }: { exec: Execution }) {
                   </Badge>
                 )}
                 {exec.results?.some((r: any) => r.output?.includes("Base Legal")) && (
-                  <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 gap-1">
+                  <Badge variant="outline" className="text-[10px] border-success/30 text-success bg-success/5 gap-1">
                     <CheckCircle2 className="w-2.5 h-2.5" />
                     Grounding Validado
                   </Badge>
@@ -445,7 +445,7 @@ function ExecutionRow({ exec }: { exec: Execution }) {
                             {(r.ms / 1000).toFixed(2)}s
                           </span>
                           {r.error && (
-                            <Badge variant="outline" className="text-[9px] border-amber-500/40 text-amber-600">
+                            <Badge variant="outline" className="text-[9px] border-warning/40 text-warning">
                               erro
                             </Badge>
                           )}

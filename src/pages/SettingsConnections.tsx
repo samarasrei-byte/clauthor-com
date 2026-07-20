@@ -172,7 +172,7 @@ const SettingsConnections = () => {
                   {/* Status dot */}
                   <div className="absolute top-3 right-3">
                     {connected ? (
-                      <div className="flex items-center gap-1 text-xs text-emerald-500 font-medium">
+                      <div className="flex items-center gap-1 text-xs text-success font-medium">
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         Conectado
                       </div>
@@ -198,7 +198,7 @@ const SettingsConnections = () => {
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-base">{c.name}</h3>
                       {isOAuth ? (
-                        <Badge variant="outline" className="text-[10px] h-5 px-1.5 border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
+                        <Badge variant="outline" className="text-[10px] h-5 px-1.5 border-success/30 text-success">
                           1-clique
                         </Badge>
                       ) : (
@@ -266,12 +266,12 @@ const SettingsConnections = () => {
                 {OAUTH_CONNECTORS.has(selected.integrationKey) ? (
                   /* OAuth flow */
                   <div className="space-y-3">
-                    <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4 text-sm">
-                      <p className="font-medium text-emerald-700 dark:text-emerald-400 mb-1 flex items-center gap-1.5">
+                    <div className="rounded-lg bg-success/10 border border-success/20 p-4 text-sm">
+                      <p className="font-medium text-success mb-1 flex items-center gap-1.5">
                         <Wand className="h-4 w-4" />
                         Conexão em 1 clique
                       </p>
-                      <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80">
+                      <p className="text-xs text-success/80 dark:text-success/80">
                         Sem chave, sem código. Clica em Autorizar, faz login no {selected.name} e volta pra cá.
                       </p>
                     </div>

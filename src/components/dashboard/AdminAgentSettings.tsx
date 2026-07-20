@@ -95,10 +95,10 @@ const AdminAgentSettings = () => {
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {[
           { label: "Total", value: stats.total, icon: Bot, color: "text-primary" },
-          { label: "Ativos", value: stats.active, icon: Power, color: "text-emerald-400" },
+          { label: "Ativos", value: stats.active, icon: Power, color: "text-success" },
           { label: "Rascunho", value: stats.draft, icon: FileText, color: "text-muted-foreground" },
-          { label: "Sem Prompt", value: stats.noPrompt, icon: AlertTriangle, color: stats.noPrompt > 0 ? "text-amber-400" : "text-emerald-400" },
-          { label: "Sem Canal", value: stats.noChannels, icon: Radio, color: stats.noChannels > 0 ? "text-amber-400" : "text-emerald-400" },
+          { label: "Sem Prompt", value: stats.noPrompt, icon: AlertTriangle, color: stats.noPrompt > 0 ? "text-warning" : "text-success" },
+          { label: "Sem Canal", value: stats.noChannels, icon: Radio, color: stats.noChannels > 0 ? "text-warning" : "text-success" },
         ].map((s) => (
           <div key={s.label} className="glass-card rounded-xl p-3 border border-white/[0.06]">
             <div className="flex items-center gap-2 mb-1">
@@ -213,27 +213,27 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
     intermediate: "bg-cyan-500/15 text-cyan-400",
-    advanced: "bg-emerald-500/15 text-emerald-400",
+    advanced: "bg-success/15 text-success",
     enterprise: "bg-primary/15 text-primary",
   };
 
   const hasIssues = !instructions || instructions.trim().length < 10 || channels.length === 0;
 
   return (
-    <motion.div layout className={`glass-card rounded-2xl border overflow-hidden ${hasIssues ? "border-amber-500/20" : "border-white/[0.06]"}`}>
+    <motion.div layout className={`glass-card rounded-2xl border overflow-hidden ${hasIssues ? "border-warning/20" : "border-white/[0.06]"}`}>
       <button onClick={onToggle} className="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${status === "active" ? "bg-emerald-500/10" : "bg-primary/10"}`}>
-            <Bot className={`h-5 w-5 ${status === "active" ? "text-emerald-400" : "text-primary"}`} />
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${status === "active" ? "bg-success/10" : "bg-primary/10"}`}>
+            <Bot className={`h-5 w-5 ${status === "active" ? "text-success" : "text-primary"}`} />
           </div>
           <div className="text-left">
             <div className="flex items-center gap-2">
               <p className="font-display font-semibold text-sm">{agent.name}</p>
-              {hasIssues && <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />}
+              {hasIssues && <AlertTriangle className="h-3.5 w-3.5 text-warning" />}
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
-              <Badge variant="secondary" className={`text-[9px] ${status === "active" ? "bg-emerald-500/20 text-emerald-500" : ""}`}>{status}</Badge>
+              <Badge variant="secondary" className={`text-[9px] ${status === "active" ? "bg-success/20 text-success" : ""}`}>{status}</Badge>
               <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                 <User className="h-2.5 w-2.5" /> {ownerName}
               </span>
@@ -280,7 +280,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
                 <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
                   Prompt / Instruções
                   {(!instructions || instructions.trim().length < 10) && (
-                    <Badge className="bg-amber-500/15 text-amber-400 text-[8px] border-0">SEM PROMPT</Badge>
+                    <Badge className="bg-warning/15 text-warning text-[8px] border-0">SEM PROMPT</Badge>
                   )}
                 </label>
                 <Textarea
@@ -296,7 +296,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
               <div>
                 <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
                   Canais
-                  {channels.length === 0 && <Badge className="bg-amber-500/15 text-amber-400 text-[8px] border-0">NENHUM</Badge>}
+                  {channels.length === 0 && <Badge className="bg-warning/15 text-warning text-[8px] border-0">NENHUM</Badge>}
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   {CHANNEL_OPTIONS.map((ch) => {

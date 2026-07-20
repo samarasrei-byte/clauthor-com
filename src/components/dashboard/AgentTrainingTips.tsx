@@ -23,8 +23,8 @@ const AgentTrainingTips = ({ onNavigate }: AgentTrainingTipsProps) => {
       description: t("training.tip1_desc", { defaultValue: "Adicione produtos, FAQ, processos e tom de voz da sua empresa. Quanto mais informação, mais inteligente o agente." }),
       action: t("training.tip1_action", { defaultValue: "Abrir Board" }),
       route: "board",
-      color: "text-blue-400",
-      bgColor: "bg-blue-500/10",
+      color: "text-info",
+      bgColor: "bg-info/10",
     },
     {
       icon: MessageSquareText,
@@ -32,8 +32,8 @@ const AgentTrainingTips = ({ onNavigate }: AgentTrainingTipsProps) => {
       description: t("training.tip2_desc", { defaultValue: "Cada agente tem um campo 'Instruções'. Defina regras, limites e comportamentos. Ex: 'Nunca dê desconto acima de 10%.'" }),
       action: t("training.tip2_action", { defaultValue: "Ver agentes" }),
       route: "agents",
-      color: "text-amber-400",
-      bgColor: "bg-amber-500/10",
+      color: "text-warning",
+      bgColor: "bg-warning/10",
     },
     {
       icon: Brain,
@@ -41,8 +41,8 @@ const AgentTrainingTips = ({ onNavigate }: AgentTrainingTipsProps) => {
       description: t("training.tip3_desc", { defaultValue: "A cada conversa, o agente salva um resumo na memória. Com o tempo, ele aprende padrões e melhora as respostas automaticamente." }),
       action: t("training.tip3_action", { defaultValue: "Abrir chat" }),
       route: "chat",
-      color: "text-emerald-400",
-      bgColor: "bg-emerald-500/10",
+      color: "text-success",
+      bgColor: "bg-success/10",
     },
   ];
 

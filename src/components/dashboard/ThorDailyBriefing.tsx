@@ -140,7 +140,7 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
   const typeColors = {
     info: "text-primary/70",
     success: "text-accent-emerald",
-    warning: "text-amber-400",
+    warning: "text-warning",
   };
 
   return (

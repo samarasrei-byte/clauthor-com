@@ -247,9 +247,9 @@ const DepartmentExplorer = () => {
 const SQUAD_EXAMPLES = [
   { dept: "Marketing", color: "text-primary", squads: ["Content Squad", "Ads Squad", "SEO Squad", "Campaign Optimization", "Analytics Squad", "Community Squad"] },
   { dept: "Comercial", color: "text-cyan-400", squads: ["SDR Outbound", "SDR Inbound", "Closers", "Canal WhatsApp", "CRM Management"] },
-  { dept: "Tecnologia", color: "text-blue-400", squads: ["Dev Full-Stack", "DevOps / SRE", "Security", "Data Engineering", "QA & Testing"] },
-  { dept: "Financeiro", color: "text-amber-400", squads: ["CFO Virtual", "BI & Analytics", "Fiscal & Compliance", "Contabilidade", "Crédito & Recuperação"] },
-  { dept: "Suporte", color: "text-emerald-400", squads: ["Atendimento N1/N2", "Call Center IA", "Onboarding", "Knowledge Base", "Omnichannel 24/7"] },
+  { dept: "Tecnologia", color: "text-info", squads: ["Dev Full-Stack", "DevOps / SRE", "Security", "Data Engineering", "QA & Testing"] },
+  { dept: "Financeiro", color: "text-warning", squads: ["CFO Virtual", "BI & Analytics", "Fiscal & Compliance", "Contabilidade", "Crédito & Recuperação"] },
+  { dept: "Suporte", color: "text-success", squads: ["Atendimento N1/N2", "Call Center IA", "Onboarding", "Knowledge Base", "Omnichannel 24/7"] },
   { dept: "Prospecção", color: "text-orange-400", squads: ["SDR LinkedIn B2B", "SDR Instagram", "Social Selling", "Eventos & Parcerias", "Pré-Qualificação"] },
   { dept: "Operações", color: "text-indigo-400", squads: ["Orquestração A2A", "Concierge Executivo", "CEO Estratégico", "Pesquisa & Análise"] },
 ];

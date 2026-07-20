@@ -23,7 +23,7 @@ interface Endpoint {
 const methodColors: Record<string, string> = {
   GET: "bg-accent-emerald/15 text-accent-emerald border-accent-emerald/30",
   POST: "bg-accent-blue/15 text-accent-blue border-accent-blue/30",
-  PATCH: "bg-yellow-500/15 text-yellow-500 border-yellow-500/30",
+  PATCH: "bg-warning/15 text-warning border-warning/30",
   DELETE: "bg-destructive/15 text-destructive border-destructive/30",
 };
 

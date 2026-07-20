@@ -72,9 +72,9 @@ function AgentDetailPanel({ description, isOpen }: { description: AgentDescripti
                 variant="outline"
                 className={`text-[10px] ${
                   description.impactLevel === "high"
-                    ? "border-emerald-500/30 text-emerald-500"
+                    ? "border-success/30 text-success"
                     : description.impactLevel === "medium"
-                    ? "border-amber-500/30 text-amber-500"
+                    ? "border-warning/30 text-warning"
                     : "border-muted-foreground/30 text-muted-foreground"
                 }`}
               >

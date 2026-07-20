@@ -72,9 +72,9 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
   const recentSignups = allProfiles.slice(0, 8);
 
   const kpis = [
-    { icon: Clock, label: "Última hora", value: signupsLastHour, color: "text-amber-400", border: "border-amber-500/20", bg: "from-amber-500/20 to-orange-500/10" },
-    { icon: CalendarDays, label: "Hoje", value: signupsToday, color: "text-cyan-400", border: "border-cyan-500/20", bg: "from-cyan-500/20 to-blue-500/10" },
-    { icon: TrendingUp, label: "7 dias", value: signupsWeek, color: "text-emerald-400", border: "border-emerald-500/20", bg: "from-emerald-500/20 to-green-500/10" },
+    { icon: Clock, label: "Última hora", value: signupsLastHour, color: "text-warning", border: "border-warning/20", bg: "from-warning/20 to-orange-500/10" },
+    { icon: CalendarDays, label: "Hoje", value: signupsToday, color: "text-cyan-400", border: "border-cyan-500/20", bg: "from-cyan-500/20 to-info/10" },
+    { icon: TrendingUp, label: "7 dias", value: signupsWeek, color: "text-success", border: "border-success/20", bg: "from-success/20 to-success/10" },
     { icon: Users, label: "30 dias", value: signupsMonth, color: "text-violet-400", border: "border-violet-500/20", bg: "from-violet-500/20 to-purple-500/10" },
   ];
 
@@ -89,8 +89,8 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
           <h2 className="font-display text-lg font-bold">Métricas de Signups</h2>
           <p className="text-[10px] text-muted-foreground">Monitoramento em tempo real de novos cadastros</p>
         </div>
-        <Badge className="ml-auto bg-emerald-500/10 text-emerald-400 border-0 text-[9px]">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse" />
+        <Badge className="ml-auto bg-success/10 text-success border-0 text-[9px]">
+          <div className="w-1.5 h-1.5 rounded-full bg-success mr-1.5 animate-pulse" />
           REALTIME
         </Badge>
       </div>
@@ -147,7 +147,7 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
           <Card className="bg-background/30 backdrop-blur-2xl border border-white/[0.06]">
             <CardHeader className="py-3 px-4">
               <CardTitle className="font-display text-xs flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-amber-400" /> Signups - Últimas 24h
+                <Clock className="h-3.5 w-3.5 text-warning" /> Signups - Últimas 24h
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-3">

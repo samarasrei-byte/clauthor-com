@@ -13,10 +13,10 @@ import AnimatedCounter from "./AnimatedCounter";
 import MiniSparkline from "./MiniSparkline";
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType; dot: string }> = {
-  active: { label: "Ativo", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20", icon: CheckCircle, dot: "bg-emerald-500" },
+  active: { label: "Ativo", color: "bg-success/15 text-success border-success/20", icon: CheckCircle, dot: "bg-success" },
   registered: { label: "Registrado", color: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20", icon: Wifi, dot: "bg-cyan-500" },
-  pending: { label: "Pendente", color: "bg-amber-500/15 text-amber-400 border-amber-500/20", icon: Clock, dot: "bg-amber-500" },
-  error: { label: "Erro", color: "bg-red-500/15 text-red-400 border-red-500/20", icon: XCircle, dot: "bg-red-500" },
+  pending: { label: "Pendente", color: "bg-warning/15 text-warning border-warning/20", icon: Clock, dot: "bg-warning" },
+  error: { label: "Erro", color: "bg-destructive/15 text-destructive border-destructive/20", icon: XCircle, dot: "bg-destructive" },
 };
 
 const OpenClawStatusPanel = () => {
@@ -62,11 +62,11 @@ const OpenClawStatusPanel = () => {
 
   const kpis = [
     { icon: Bot, label: "Agentes Registrados", value: totalRegistered, color: "text-primary", spark: [0, 5, 12, 20, 30, totalRegistered] },
-    { icon: CheckCircle, label: "Ativos no Motor", value: activeCount + registeredCount, color: "text-emerald-400", spark: [0, 3, 8, 15, 20, activeCount + registeredCount] },
+    { icon: CheckCircle, label: "Ativos no Motor", value: activeCount + registeredCount, color: "text-success", spark: [0, 3, 8, 15, 20, activeCount + registeredCount] },
     { icon: Zap, label: "Execuções OpenClaw", value: totalExecs, color: "text-cyan-400", spark: [0, 50, 200, 500, 800, totalExecs] },
-    { icon: TrendingUp, label: "Taxa de Sucesso", value: successRate, suffix: "%", color: "text-emerald-400", spark: [90, 92, 95, 96, 98, successRate] },
-    { icon: Timer, label: "Tempo Médio", value: avgTime, suffix: "ms", color: "text-amber-400", spark: [500, 400, 350, 300, 250, avgTime] },
-    { icon: AlertTriangle, label: "Em Erro", value: errorCount, color: "text-red-400", spark: [0, 1, 0, 2, 1, errorCount] },
+    { icon: TrendingUp, label: "Taxa de Sucesso", value: successRate, suffix: "%", color: "text-success", spark: [90, 92, 95, 96, 98, successRate] },
+    { icon: Timer, label: "Tempo Médio", value: avgTime, suffix: "ms", color: "text-warning", spark: [500, 400, 350, 300, 250, avgTime] },
+    { icon: AlertTriangle, label: "Em Erro", value: errorCount, color: "text-destructive", spark: [0, 1, 0, 2, 1, errorCount] },
   ];
 
   // Deduplicate: keep latest registration per agent
@@ -88,8 +88,8 @@ const OpenClawStatusPanel = () => {
         <div>
           <h2 className="font-display text-lg font-bold flex items-center gap-2">
             Motor OpenClaw
-            <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 text-[10px] font-mono">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
+            <Badge variant="outline" className="border-success/30 text-success text-[10px] font-mono">
+              <div className="w-1.5 h-1.5 rounded-full bg-success mr-1.5 animate-pulse" />
               CONECTADO
             </Badge>
           </h2>
@@ -221,11 +221,11 @@ const OpenClawStatusPanel = () => {
                         </td>
                         <td className="p-3">
                           {reg.error_message ? (
-                            <span className="text-red-400 text-xs truncate max-w-[200px] block" title={reg.error_message}>
+                            <span className="text-destructive text-xs truncate max-w-[200px] block" title={reg.error_message}>
                               {reg.error_message.slice(0, 40)}…
                             </span>
                           ) : (
-                            <span className="text-emerald-400/50 text-xs">-</span>
+                            <span className="text-success/50 text-xs">-</span>
                           )}
                         </td>
                       </motion.tr>

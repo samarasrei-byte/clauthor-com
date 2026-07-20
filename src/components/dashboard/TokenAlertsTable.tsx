@@ -73,8 +73,8 @@ function LevelBadge({ level }: { level: "ok" | "warn" | "crit" }) {
   if (level === "crit")
     return <Badge className="bg-destructive/15 text-destructive border-0">🔴 Crítico</Badge>;
   if (level === "warn")
-    return <Badge className="bg-amber-500/15 text-amber-500 border-0">🟡 Atenção</Badge>;
-  return <Badge className="bg-emerald-500/10 text-emerald-500 border-0">🟢 OK</Badge>;
+    return <Badge className="bg-warning/15 text-warning border-0">🟡 Atenção</Badge>;
+  return <Badge className="bg-success/10 text-success border-0">🟢 OK</Badge>;
 }
 
 export default function TokenAlertsTable({
@@ -175,13 +175,13 @@ export default function TokenAlertsTable({
             </Badge>
           )}
           {warnCount > 0 && (
-            <Badge className="bg-amber-500/15 text-amber-500 border-0 gap-1">
+            <Badge className="bg-warning/15 text-warning border-0 gap-1">
               <TrendingUp className="h-3 w-3" />
               {warnCount}
             </Badge>
           )}
           {!hasAlert && (
-            <Badge className="bg-emerald-500/10 text-emerald-500 border-0 gap-1">
+            <Badge className="bg-success/10 text-success border-0 gap-1">
               <ShieldCheck className="h-3 w-3" />
               Saudável
             </Badge>
@@ -214,7 +214,7 @@ export default function TokenAlertsTable({
                     r.level === "crit"
                       ? "bg-destructive/5 hover:bg-destructive/10"
                       : r.level === "warn"
-                        ? "bg-amber-500/5 hover:bg-amber-500/10"
+                        ? "bg-warning/5 hover:bg-warning/10"
                         : "hover:bg-muted/20"
                   }`}
                 >

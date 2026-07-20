@@ -33,8 +33,8 @@ interface CheckRow {
 
 function StatusIcon({ status }: { status: CheckStatus }) {
   if (status === "loading") return <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />;
-  if (status === "ok") return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
-  if (status === "warn") return <AlertTriangle className="w-4 h-4 text-amber-500" />;
+  if (status === "ok") return <CheckCircle2 className="w-4 h-4 text-success" />;
+  if (status === "warn") return <AlertTriangle className="w-4 h-4 text-warning" />;
   return <XCircle className="w-4 h-4 text-destructive" />;
 }
 
@@ -227,7 +227,7 @@ export default function AdvocaciaAudit() {
               {logs.map((l) => (
                 <li key={l.id} className="px-5 py-2.5 flex items-center gap-3">
                   <span className="text-muted-foreground shrink-0 w-44">{new Date(l.created_at).toLocaleString("pt-BR")}</span>
-                  <span className={`shrink-0 w-16 ${l.status === "success" ? "text-emerald-500" : l.status === "warning" ? "text-amber-500" : "text-destructive"}`}>{l.status}</span>
+                  <span className={`shrink-0 w-16 ${l.status === "success" ? "text-success" : l.status === "warning" ? "text-warning" : "text-destructive"}`}>{l.status}</span>
                   <span className="truncate">{l.action}</span>
                 </li>
               ))}

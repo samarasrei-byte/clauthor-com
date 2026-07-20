@@ -138,16 +138,16 @@ const APICredentialEditor = () => {
             className={cn(
               "rounded-xl border p-3 transition-all",
               status?.configured && status?.active
-                ? "border-emerald-500/20 bg-emerald-500/5"
-                : "border-amber-500/15 bg-amber-500/5"
+                ? "border-success/20 bg-success/5"
+                : "border-warning/15 bg-warning/5"
             )}
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 {status?.configured && status?.active ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
                 ) : (
-                  <AlertCircle className="h-4 w-4 text-amber-400 shrink-0" />
+                  <AlertCircle className="h-4 w-4 text-warning shrink-0" />
                 )}
                 <div>
                   <span className="text-[12px] font-semibold text-foreground">
@@ -157,8 +157,8 @@ const APICredentialEditor = () => {
                     className={cn(
                       "ml-2 text-[9px] px-1.5 py-0.5 rounded-full font-mono",
                       status?.configured && status?.active
-                        ? "bg-emerald-500/15 text-emerald-400"
-                        : "bg-amber-500/15 text-amber-400"
+                        ? "bg-success/15 text-success"
+                        : "bg-warning/15 text-warning"
                     )}
                   >
                     {status?.configured && status?.active ? "✅ Validado" : "⏳ Pendente"}
@@ -230,7 +230,7 @@ const APICredentialEditor = () => {
                       handleSave(api);
                     }}
                     disabled={isSaving}
-                    className="flex items-center gap-1.5 text-[10px] px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors font-medium disabled:opacity-50"
+                    className="flex items-center gap-1.5 text-[10px] px-3 py-1.5 rounded-lg bg-success/20 text-success hover:bg-success/30 transition-colors font-medium disabled:opacity-50"
                   >
                     {isSaving ? (
                       <Loader2 className="h-3 w-3 animate-spin" />

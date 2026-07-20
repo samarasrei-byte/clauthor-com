@@ -348,8 +348,8 @@ const layerColor = (l: AgentCard["layer"]) =>
   l === "MCP"
     ? "from-primary/20 to-primary/5 border-primary/30 text-primary"
     : l === "Comercial"
-    ? "from-emerald-500/15 to-emerald-500/5 border-emerald-500/25 text-emerald-500"
-    : "from-amber-500/15 to-amber-500/5 border-amber-500/25 text-amber-500";
+    ? "from-success/15 to-success/5 border-success/25 text-success"
+    : "from-warning/15 to-warning/5 border-warning/25 text-warning";
 
 // ============================================================
 // Floating chat com a "Advogada IA"
@@ -508,7 +508,7 @@ function ChatWidget() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold leading-tight">Advogada IA · Clauthor</p>
                   <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online · responde em segundos
+                    <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" /> Online · responde em segundos
                   </p>
                 </div>
                 <button
@@ -746,11 +746,11 @@ export default function ApresentacaoAdv() {
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/30 text-primary bg-primary/5">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" /> MCP · 7 agentes
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-500/25 text-emerald-500 bg-emerald-500/5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Comercial · 4 agentes
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-success/25 text-success bg-success/5">
+              <span className="h-1.5 w-1.5 rounded-full bg-success" /> Comercial · 4 agentes
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-amber-500/25 text-amber-500 bg-amber-500/5">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" /> Operacional · 4 agentes
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-warning/25 text-warning bg-warning/5">
+              <span className="h-1.5 w-1.5 rounded-full bg-warning" /> Operacional · 4 agentes
             </span>
           </div>
 
@@ -927,7 +927,7 @@ export default function ApresentacaoAdv() {
                   ["Encargos / 13º / FGTS / férias", "Não", "+68% sobre salário", "Não"],
                 ] as [string, any, any, any][]).map(([label, astrea, clt, clauthor], i) => {
                   const cell = (v: any) =>
-                    v === true ? <CheckCircle2 className="w-4 h-4 text-emerald-500 mx-auto" /> :
+                    v === true ? <CheckCircle2 className="w-4 h-4 text-success mx-auto" /> :
                     v === false ? <XCircle className="w-4 h-4 text-muted-foreground/40 mx-auto" /> :
                     <span className="text-xs">{v}</span>;
                   return (
@@ -980,7 +980,7 @@ export default function ApresentacaoAdv() {
                 value: "R$ 3.000",
                 period: "= 6 meses pagos",
                 bullets: ["Lead que ia esfriar por demora no atendimento", "Agente comercial responde em 30s e qualifica", "1 contrato fechado paga 6 meses do plano Start"],
-                color: "from-emerald-500/10 to-transparent border-emerald-500/30",
+                color: "from-success/10 to-transparent border-success/30",
                 highlight: false,
               },
               {
@@ -998,7 +998,7 @@ export default function ApresentacaoAdv() {
                 value: "−R$ 30.000",
                 period: "/mês em folha CLT",
                 bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês, economia de 86%"],
-                color: "from-amber-500/10 to-transparent border-amber-500/30",
+                color: "from-warning/10 to-transparent border-warning/30",
                 highlight: false,
               },
             ].map((c, i) => (
@@ -1197,7 +1197,7 @@ export default function ApresentacaoAdv() {
                   <ul className="space-y-1.5">
                     {p.benefits.map((b) => (
                       <li key={b} className="flex items-start gap-2 text-xs text-foreground/85">
-                        <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-500" />
+                        <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0 text-success" />
                         <span>{b}</span>
                       </li>
                     ))}

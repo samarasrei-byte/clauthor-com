@@ -31,8 +31,8 @@ const EVENT_CONFIG: Record<CollaborationEvent["type"], {
   analyzing: {
     icon: Brain,
     label: "Analisando",
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10 border-blue-500/20",
+    color: "text-info",
+    bgColor: "bg-info/10 border-info/20",
     pulse: true,
   },
   delegating: {
@@ -45,21 +45,21 @@ const EVENT_CONFIG: Record<CollaborationEvent["type"], {
   executing: {
     icon: Zap,
     label: "Executando",
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/10 border-amber-500/20",
+    color: "text-warning",
+    bgColor: "bg-warning/10 border-warning/20",
     pulse: true,
   },
   completed: {
     icon: CheckCircle2,
     label: "Concluído",
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10 border-emerald-500/20",
+    color: "text-success",
+    bgColor: "bg-success/10 border-success/20",
   },
   error: {
     icon: AlertCircle,
     label: "Erro",
-    color: "text-red-400",
-    bgColor: "bg-red-500/10 border-red-500/20",
+    color: "text-destructive",
+    bgColor: "bg-destructive/10 border-destructive/20",
   },
 };
 
@@ -134,7 +134,7 @@ export default function AgentCollaborationPanel({
         <div className="flex items-center gap-2">
           <div className={cn(
             "w-2 h-2 rounded-full",
-            isActive ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground/30"
+            isActive ? "bg-success animate-pulse" : "bg-muted-foreground/30"
           )} />
           <span className="text-xs font-semibold">Colaboração entre Agentes</span>
         </div>
@@ -231,7 +231,7 @@ export default function AgentCollaborationPanel({
                       <p className="text-muted-foreground mt-0.5 leading-relaxed line-clamp-2">{event.task}</p>
                     )}
                     {event.result && event.type === "completed" && (
-                      <p className="text-emerald-400/80 mt-0.5 leading-relaxed line-clamp-2">{event.result}</p>
+                      <p className="text-success/80 mt-0.5 leading-relaxed line-clamp-2">{event.result}</p>
                     )}
                   </div>
                 </motion.div>

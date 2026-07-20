@@ -42,15 +42,15 @@ export default function PaymentHistoryTable() {
   });
 
   const statusConfig: Record<string, { icon: typeof CheckCircle; class: string; label: string }> = {
-    completed: { icon: CheckCircle, class: "bg-emerald-500/10 text-emerald-400", label: "Concluído" },
-    pending: { icon: Clock, class: "bg-amber-500/10 text-amber-400", label: "Pendente" },
+    completed: { icon: CheckCircle, class: "bg-success/10 text-success", label: "Concluído" },
+    pending: { icon: Clock, class: "bg-warning/10 text-warning", label: "Pendente" },
     failed: { icon: XCircle, class: "bg-destructive/10 text-destructive", label: "Falhou" },
   };
 
   const typeConfig: Record<string, { icon: typeof Globe; class: string; label: string }> = {
-    paypal: { icon: Globe, class: "text-blue-400", label: "PayPal" },
-    test_bypass: { icon: FlaskConical, class: "text-amber-400", label: "Modo Teste" },
-    pix: { icon: Receipt, class: "text-emerald-400", label: "PIX" },
+    paypal: { icon: Globe, class: "text-info", label: "PayPal" },
+    test_bypass: { icon: FlaskConical, class: "text-warning", label: "Modo Teste" },
+    pix: { icon: Receipt, class: "text-success", label: "PIX" },
   };
 
   const formatTokens = (n: number) => {

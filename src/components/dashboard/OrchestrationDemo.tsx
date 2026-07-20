@@ -79,8 +79,8 @@ const toolIcons: Record<string, any> = {
 
 const tierColors: Record<string, string> = {
   "Orchestrator": "from-primary to-primary/60",
-  "Financial Analyst": "from-emerald-500 to-emerald-600",
-  "Sales Manager": "from-amber-500 to-amber-600",
+  "Financial Analyst": "from-success to-success",
+  "Sales Manager": "from-warning to-warning",
   "Operations Coordinator": "from-cyan-500 to-cyan-600",
 };
 
@@ -216,7 +216,7 @@ const OrchestrationDemo = () => {
                 <div className={`h-1 transition-all duration-500 ${
                   step.phase === "complete" ? "bg-gradient-to-r from-accent-emerald to-accent-emerald/30" :
                   step.phase === "executing" ? "bg-gradient-to-r from-primary to-primary/30 animate-pulse" :
-                  step.phase === "routing" ? "bg-gradient-to-r from-amber-500 to-amber-500/30" :
+                  step.phase === "routing" ? "bg-gradient-to-r from-warning to-warning/30" :
                   "bg-border/30"
                 }`} />
 
@@ -244,7 +244,7 @@ const OrchestrationDemo = () => {
                     <Badge variant="secondary" className={`text-[10px] shrink-0 ${
                       step.phase === "complete" ? "bg-accent-emerald/15 text-accent-emerald" :
                       step.phase === "executing" ? "bg-primary/15 text-primary" :
-                      step.phase === "routing" ? "bg-amber-500/15 text-amber-500" :
+                      step.phase === "routing" ? "bg-warning/15 text-warning" :
                       "bg-muted text-muted-foreground"
                     }`}>
                       {step.phase === "complete" && <><CheckCircle className="h-3 w-3 mr-1" /> Complete</>}
@@ -338,7 +338,7 @@ const OrchestrationDemo = () => {
                 <p className="text-[10px] text-muted-foreground">Actions Executed</p>
               </div>
               <div className="bg-background/50 rounded-xl p-3 text-center">
-                <p className="font-display text-2xl font-bold text-amber-500">100%</p>
+                <p className="font-display text-2xl font-bold text-warning">100%</p>
                 <p className="text-[10px] text-muted-foreground">Success Rate</p>
               </div>
             </div>

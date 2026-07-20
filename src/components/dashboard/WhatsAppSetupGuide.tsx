@@ -167,7 +167,7 @@ const WhatsAppSetupGuide = () => {
       {/* Header */}
       <div>
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
-          <Phone className="h-5 w-5 text-emerald-500" />
+          <Phone className="h-5 w-5 text-success" />
           Configurar WhatsApp Business API
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
@@ -182,13 +182,13 @@ const WhatsAppSetupGuide = () => {
             <span className="text-xs font-medium text-muted-foreground">
               {completedSteps.size} de {STEPS.length} etapas concluídas
             </span>
-            <Badge variant="secondary" className={`text-[10px] ${allDone ? "bg-emerald-500/15 text-emerald-500" : ""}`}>
+            <Badge variant="secondary" className={`text-[10px] ${allDone ? "bg-success/15 text-success" : ""}`}>
               {allDone ? "✅ Completo" : `${Math.round(progress)}%`}
             </Badge>
           </div>
           <div className="w-full h-2 bg-muted/30 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+              className="h-full bg-gradient-to-r from-success to-success rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
@@ -207,7 +207,7 @@ const WhatsAppSetupGuide = () => {
               currentStep === i
                 ? "bg-primary/10 border-primary/30 text-primary"
                 : completedSteps.has(i)
-                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                ? "bg-success/10 border-success/20 text-success"
                 : "bg-muted/10 border-border/20 text-muted-foreground hover:bg-muted/20"
             }`}
           >
@@ -395,9 +395,9 @@ const WhatsAppSetupGuide = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <Card className="bg-emerald-500/5 border-emerald-500/20">
+          <Card className="bg-success/5 border-success/20">
             <CardContent className="py-8 text-center">
-              <Wand className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
+              <Wand className="h-10 w-10 text-success mx-auto mb-3" />
               <h3 className="font-display text-lg font-bold mb-1">WhatsApp Conectado! 🎉</h3>
               <p className="text-sm text-muted-foreground">
                 Todos os seus agentes agora podem enviar e receber mensagens via WhatsApp Business.
@@ -411,8 +411,8 @@ const WhatsAppSetupGuide = () => {
       <Card className="bg-background/40 backdrop-blur-xl border border-border/20">
         <CardContent className="py-4">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-              <AlertTriangle className="h-4 w-4 text-amber-500" />
+            <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center shrink-0">
+              <AlertTriangle className="h-4 w-4 text-warning" />
             </div>
             <div>
               <p className="text-sm font-medium">Custos do WhatsApp Business API</p>

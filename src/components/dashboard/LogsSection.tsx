@@ -49,7 +49,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
   }), [recentLogs]);
 
   const getStatusIcon = (s: string) => {
-    if (s === "success") return <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />;
+    if (s === "success") return <CheckCircle className="h-3.5 w-3.5 text-success" />;
     if (s === "error") return <AlertTriangle className="h-3.5 w-3.5 text-destructive" />;
     return <Clock className="h-3.5 w-3.5 text-muted-foreground" />;
   };
@@ -60,7 +60,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
         <div>
           <h2 className="font-display font-semibold text-xl tracking-[-0.02em]">Auditoria de execuções</h2>
           <p className="text-xs text-muted-foreground mt-1">
-            {filtered.length} de {recentLogs.length} · <span className="text-emerald-400">{counts.success} sucesso</span> · <span className="text-destructive">{counts.error} erros</span>
+            {filtered.length} de {recentLogs.length} · <span className="text-success">{counts.success} sucesso</span> · <span className="text-destructive">{counts.error} erros</span>
           </p>
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
@@ -123,7 +123,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
                 <div key={log.id} className="relative p-4 pl-12 hover:bg-card/50 transition-colors">
                   <span className={cn(
                     "absolute left-[22px] top-5 h-2.5 w-2.5 rounded-full border-2 border-background",
-                    log.status === "success" ? "bg-emerald-400" : log.status === "error" ? "bg-destructive" : "bg-muted-foreground",
+                    log.status === "success" ? "bg-success" : log.status === "error" ? "bg-destructive" : "bg-muted-foreground",
                   )} />
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0 flex-1">
@@ -139,7 +139,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
                     <div className="text-right shrink-0">
                       <Badge variant="secondary" className={cn(
                         "text-[10px]",
-                        log.status === "success" ? "bg-emerald-500/10 text-emerald-400" :
+                        log.status === "success" ? "bg-success/10 text-success" :
                         log.status === "error" ? "bg-destructive/10 text-destructive" :
                         "bg-muted text-muted-foreground",
                       )}>

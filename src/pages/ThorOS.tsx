@@ -189,14 +189,14 @@ export default function ThorOS() {
                     className={cn(
                       "rounded-xl border p-3 transition-all",
                       isActive ? "border-primary/60 bg-primary/[0.04] ring-1 ring-primary/20"
-                               : isDone ? "border-emerald-500/30 bg-emerald-500/[0.03]"
+                               : isDone ? "border-success/30 bg-success/[0.03]"
                                         : "border-border/60 bg-card/30",
                     )}
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <Icon strokeWidth={1.5} className="w-4 h-4 text-foreground" />
                       {isActive && <Loader2 className="w-3 h-3 animate-spin text-primary" />}
-                      {isDone && !isActive && <CheckCircle2 className="w-3 h-3 text-emerald-500" />}
+                      {isDone && !isActive && <CheckCircle2 className="w-3 h-3 text-success" />}
                     </div>
                     <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Fase {i + 1}</div>
                     <div className="text-xs font-medium mt-0.5">{s.label}</div>
@@ -241,7 +241,7 @@ export default function ThorOS() {
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         {o.status === "ok"
-                          ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                          ? <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
                           : <XCircle className="w-4 h-4 text-destructive shrink-0" />}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 text-xs font-medium">

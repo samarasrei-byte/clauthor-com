@@ -75,8 +75,8 @@ export default function AdvocaciaOnboarding() {
   }
 
   const StatusBadge = ({ s }: { s: Status }) => {
-    if (s === "ready") return <Badge className="bg-emerald-500/10 text-emerald-500 border-0 text-xs"><CheckCircle2 className="w-3 h-3 mr-1" />Operacional</Badge>;
-    if (s === "in_progress") return <Badge className="bg-amber-500/10 text-amber-500 border-0 text-xs"><Loader2 className="w-3 h-3 mr-1 animate-spin" />Em configuração</Badge>;
+    if (s === "ready") return <Badge className="bg-success/10 text-success border-0 text-xs"><CheckCircle2 className="w-3 h-3 mr-1" />Operacional</Badge>;
+    if (s === "in_progress") return <Badge className="bg-warning/10 text-warning border-0 text-xs"><Loader2 className="w-3 h-3 mr-1 animate-spin" />Em configuração</Badge>;
     return <Badge variant="outline" className="text-xs border-border/60"><Circle className="w-3 h-3 mr-1" />Pendente</Badge>;
   };
 
@@ -106,7 +106,7 @@ export default function AdvocaciaOnboarding() {
               <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><Scale className="w-5 h-5" /></div>
               <div><h2 className="font-semibold">Dados do escritório</h2><p className="text-xs text-muted-foreground">Identidade jurídica usada pelos agentes</p></div>
             </div>
-            {steps[0].done && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+            {steps[0].done && <CheckCircle2 className="w-5 h-5 text-success" />}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div><Label className="text-xs">Nome do escritório</Label><Input value={state.office_name || ""} onChange={e => setState(s => ({ ...s, office_name: e.target.value }))} onBlur={() => save({})} placeholder="Silva & Associados" /></div>
