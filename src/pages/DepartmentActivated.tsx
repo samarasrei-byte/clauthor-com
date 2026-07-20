@@ -21,7 +21,7 @@ import SEO from "@/components/SEO";
 const TOUR_STEPS = [
   { title: "Bem-vindo ao seu novo departamento", body: "O Thor vai te guiar pelas 4 áreas onde você acompanha a operação. Leva 30 segundos." },
   { title: "Second Brain", body: "Aqui você vê agenda, notícias e tarefas em andamento · o cérebro externo do seu negócio." },
-  { title: "Aprovações", body: "Toda ação de impacto passa por você. Aprovar ou recusar em 1 clique." },
+  { title: "Aprovações", body: "Toda ação de impacto passa por você. Aprovar ou pedir ajuste em 1 clique." },
   { title: "Agentes ao vivo", body: "Veja seus agentes trabalhando e conversando em tempo real. Isso é o dia a dia do departamento." },
 ];
 
