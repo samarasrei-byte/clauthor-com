@@ -120,7 +120,7 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
               {running ? (
                 <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Simulando...</>
               ) : (
-                <><Zap className="h-4 w-4 mr-2" /> Rodar simulação</>
+                <><Zap className="h-4 w-4 mr-2" /> Executar simulação</>
               )}
             </Button>
           </div>
