@@ -15,14 +15,13 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import StepRail from "@/components/workforce/StepRail";
 import LivePreview from "@/components/workforce/LivePreview";
 import {
   builderReducer, initialBuilderState, AUTONOMY_META, SCALE_META,
   type AutonomyLevel, type WorkforceScale
 } from "@/lib/workforce/types";
 import {
-  WORKFORCE_CATALOG, WORKFORCE_CATALOG_COUNT, DEPARTMENTS,
+  WORKFORCE_CATALOG, DEPARTMENTS,
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
 import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
@@ -186,19 +185,83 @@ export default function CreateWorkforce() {
       </header>
 
       {/* 3-col layout */}
-      <div className="flex-1 grid grid-cols-[260px_1fr_320px] min-h-0">
-        {/* Step rail */}
-        <aside className="border-r border-border/30 p-4 overflow-y-auto bg-card/20">
-          <StepRail steps={STEPS} current={state.step} reachable={reachable} onGo={goto} />
-          <div className="mt-6 rounded-lg border border-primary/15 bg-primary/[0.03] p-3">
+      <div className="flex-1 grid grid-cols-[220px_1fr_320px] min-h-0">
+        {/* Left aside · progresso + catálogo */}
+        <aside className="border-r border-border/30 p-4 overflow-y-auto bg-card/20 space-y-4">
+          <div className="rounded-lg border border-border/40 bg-card/40 p-3">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Progresso</p>
+            <p className="font-mono text-xl text-foreground">
+              {state.step + 1}<span className="text-muted-foreground/60">/{STEPS.length}</span>
+            </p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">{STEPS[state.step].label}</p>
+            <div className="mt-2 h-1 w-full rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full bg-primary transition-all duration-500"
+                style={{ width: `${((state.step + 1) / STEPS.length) * 100}%` }}
+              />
+            </div>
+          </div>
+          <div className="rounded-lg border border-primary/15 bg-primary/[0.03] p-3">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Catálogo</p>
-            <p className="font-mono text-xl text-primary">{WORKFORCE_CATALOG_COUNT}+</p>
+            <p className="font-mono text-xl text-primary">+200</p>
             <p className="text-[10px] text-muted-foreground">funcionários digitais especializados</p>
           </div>
         </aside>
 
         {/* Canvas */}
         <main className="overflow-y-auto">
+          {/* Horizontal stepper */}
+          <div className="sticky top-0 z-10 border-b border-border/30 bg-background/85 backdrop-blur-xl px-8 py-4">
+            <ol className="flex items-center gap-1.5 max-w-3xl mx-auto" role="list">
+              {STEPS.map((s, i) => {
+                const done = i < state.step;
+                const active = i === state.step;
+                const canJump = i <= reachable;
+                return (
+                  <li key={s.id} className="flex items-center flex-1 last:flex-none min-w-0">
+                    <button
+                      type="button"
+                      disabled={!canJump}
+                      onClick={() => canJump && goto(i)}
+                      className={cn(
+                        "flex items-center gap-2 min-w-0 group",
+                        canJump ? "cursor-pointer" : "cursor-not-allowed opacity-40"
+                      )}
+                      aria-current={active ? "step" : undefined}
+                    >
+                      <span
+                        className={cn(
+                          "flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-medium border shrink-0 transition-colors",
+                          done && "bg-primary text-primary-foreground border-primary",
+                          active && "bg-primary/10 text-primary border-primary/50 ring-2 ring-primary/20",
+                          !done && !active && "bg-muted text-muted-foreground border-border/40"
+                        )}
+                      >
+                        {done ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
+                      </span>
+                      <span
+                        className={cn(
+                          "hidden md:inline text-[11px] truncate transition-colors",
+                          active ? "text-foreground font-medium" : done ? "text-muted-foreground" : "text-muted-foreground/60"
+                        )}
+                      >
+                        {s.label}
+                      </span>
+                    </button>
+                    {i < STEPS.length - 1 && (
+                      <span
+                        className={cn(
+                          "flex-1 mx-1.5 h-px transition-colors",
+                          i < state.step ? "bg-primary/50" : "bg-border/40"
+                        )}
+                      />
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+
           <div className="max-w-3xl mx-auto px-8 py-10">
             <AnimatePresence mode="wait">
               <motion.section
@@ -215,6 +278,7 @@ export default function CreateWorkforce() {
                   {STEPS[state.step].label}
                 </h1>
                 <p className="text-muted-foreground mb-8">{STEPS[state.step].hint}</p>
+
 
                 {state.step === 0 && (
                   <div className="space-y-6">
