@@ -370,9 +370,14 @@ const MediaGalleryPanel = () => {
 
       {/* Grid */}
       {isLoading ? (
-        <div className="text-sm text-muted-foreground py-16 text-center">
-          <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2" />
-          Carregando galeria...
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div
+              key={i}
+              className="aspect-square rounded-xl bg-muted/40 border border-border/40 animate-pulse"
+              style={{ animationDelay: `${i * 60}ms` }}
+            />
+          ))}
         </div>
       ) : filtered.length === 0 ? (
         <Card className="border-dashed border-2 bg-gradient-to-br from-muted/20 to-transparent">
