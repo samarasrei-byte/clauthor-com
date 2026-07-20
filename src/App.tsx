@@ -241,8 +241,11 @@ const App = () => (
                   <Route path="/dashboard/squads" element={<SquadsPage />} />
                   <Route path="/dashboard/squads/:slug" element={<SquadDetail />} />
                   <Route path="/contratar/:slug" element={<HireAndOnboard />} />
+                  <Route path="/dashboard/contratar/:slug" element={<HireAndOnboard />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/dashboard/checkout" element={<Checkout />} />
                   <Route path="/departamento-ativo/:slug" element={<DepartmentActivated />} />
+                  <Route path="/dashboard/departamento-ativo/:slug" element={<DepartmentActivated />} />
 
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
