@@ -41,7 +41,7 @@ export default function HireAndOnboard() {
     }
   }, [dept, user]);
 
-  if (!dept) return <Navigate to="/departamentos" replace />;
+  if (!dept) return <Navigate to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} replace />;
   const Icon = dept.icon;
 
   const activate = async () => {

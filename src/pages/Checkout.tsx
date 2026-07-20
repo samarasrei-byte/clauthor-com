@@ -127,7 +127,7 @@ export default function Checkout() {
 
       <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to="/departamentos" className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
+          <Link to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Continuar montando
           </Link>
           <ClauthorLogo className="h-5 opacity-70" />

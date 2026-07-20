@@ -27,7 +27,7 @@ const SquadDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const squad = slug ? getSquadBySlug(slug) : undefined;
 
-  if (!squad) return <Navigate to="/squads" replace />;
+  if (!squad) return <Navigate to={window.location.pathname.startsWith("/dashboard")?"/dashboard/squads":"/squads"} replace />;
   // Se o squad tem página própria (ex.: /reputacao-ia), redireciona.
   if (squad.overrideHref) return <Navigate to={squad.overrideHref} replace />;
 
@@ -52,7 +52,7 @@ const SquadDetail = () => {
         />
 
         <div className="max-w-[1100px] mx-auto">
-          <Link to="/squads" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-8 transition-colors">
+          <Link to={window.location.pathname.startsWith("/dashboard")?"/dashboard/squads":"/squads"} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-8 transition-colors">
             <ArrowLeft className="h-3.5 w-3.5" /> Todos os squads
           </Link>
 
@@ -351,7 +351,7 @@ const SquadDetail = () => {
                   Contratar {highlighted.name}
                 </Button>
               </a>
-              <Link to="/squads">
+              <Link to={window.location.pathname.startsWith("/dashboard")?"/dashboard/squads":"/squads"}>
                 <Button size="lg" variant="outline" className="gap-2 h-12 px-7 rounded-full border-border hover:bg-card font-medium">
                   Ver outros squads
                   <ArrowRight className="h-4 w-4" />

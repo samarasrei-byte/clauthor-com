@@ -255,7 +255,7 @@ export default function DepartmentActivated() {
     if (tourDone && slug) localStorage.setItem(`tour_dept_${slug}`, "1");
   }, [tourDone, slug]);
 
-  if (!dept) return <Navigate to="/departamentos" replace />;
+  if (!dept) return <Navigate to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} replace />;
   const Icon = dept.icon;
 
   return (
