@@ -101,9 +101,9 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
   }, [execLogs, selectedAgent]);
 
   const statusIcon = (status: string) => {
-    if (status === "success") return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />;
+    if (status === "success") return <CheckCircle2 className="h-3.5 w-3.5 text-success" />;
     if (status === "error" || status === "failed") return <AlertCircle className="h-3.5 w-3.5 text-destructive" />;
-    return <Clock className="h-3.5 w-3.5 text-amber-500" />;
+    return <Clock className="h-3.5 w-3.5 text-warning" />;
   };
 
   const formatDate = (date: string) => {
@@ -135,7 +135,7 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
         {[
           { label: "Entregas Hoje", value: stats.todayDeliveries, icon: Wand, color: "text-primary" },
           { label: "Total Execuções", value: stats.totalDeliveries, icon: Activity, color: "text-accent-foreground" },
-          { label: "Tasks Concluídas", value: stats.completedTasks, icon: CheckCircle2, color: "text-emerald-500" },
+          { label: "Tasks Concluídas", value: stats.completedTasks, icon: CheckCircle2, color: "text-success" },
           { label: "Taxa de Sucesso", value: `${stats.successRate}%`, icon: BarChart3, color: "text-primary" },
         ].map((card, i) => (
           <motion.div
@@ -245,9 +245,9 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
               ) : tasks.map((task: any) => (
                 <div key={task.id} className="flex items-center gap-3 p-3 rounded-xl bg-card/50 border border-border/10">
                   {task.status === "completed" || task.status === "done"
-                    ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                    ? <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                     : task.status === "in_progress"
-                    ? <Clock className="h-3.5 w-3.5 text-amber-500" />
+                    ? <Clock className="h-3.5 w-3.5 text-warning" />
                     : <AlertCircle className="h-3.5 w-3.5 text-muted-foreground" />
                   }
                   <div className="flex-1 min-w-0">

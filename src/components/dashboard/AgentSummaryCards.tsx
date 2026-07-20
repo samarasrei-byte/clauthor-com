@@ -21,10 +21,10 @@ interface AgentSummaryCardsProps {
 
 const tierColors: Record<string, string> = {
   basic: "bg-muted text-muted-foreground",
-  starter: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+  starter: "bg-success/10 text-success border-success/20",
+  intermediate: "bg-info/10 text-info border-info/20",
   advanced: "bg-primary/10 text-primary border-primary/20",
-  enterprise: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  enterprise: "bg-warning/10 text-warning border-warning/20",
 };
 
 const AgentSummaryCards = ({ agents, onChatWith }: AgentSummaryCardsProps) => {

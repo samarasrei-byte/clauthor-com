@@ -58,9 +58,9 @@ function persistDismissed(tenantId: string | null, ids: Set<string>) {
 
 const SEVERITY_STYLES: Record<Severity, { chip: string; icon: string; ring: string }> = {
   info:     { chip: "bg-sky-500/10 text-sky-500 border-sky-500/25",           icon: "text-sky-500",     ring: "border-sky-500/20" },
-  warn:     { chip: "bg-amber-500/10 text-amber-500 border-amber-500/25",     icon: "text-amber-500",   ring: "border-amber-500/20" },
+  warn:     { chip: "bg-warning/10 text-warning border-warning/25",     icon: "text-warning",   ring: "border-warning/20" },
   critical: { chip: "bg-rose-500/10 text-rose-500 border-rose-500/25",        icon: "text-rose-500",    ring: "border-rose-500/25" },
-  success:  { chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/25", icon: "text-emerald-500", ring: "border-emerald-500/20" },
+  success:  { chip: "bg-success/10 text-success border-success/25", icon: "text-success", ring: "border-success/20" },
 };
 
 const SEVERITY_ORDER: Record<Severity, number> = { critical: 0, warn: 1, success: 2, info: 3 };

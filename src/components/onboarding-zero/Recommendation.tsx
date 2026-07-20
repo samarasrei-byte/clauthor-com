@@ -70,7 +70,7 @@ export default function Recommendation({ deptId, humanBenefit, onAccept, onExpla
         className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground"
       >
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
           Beta fechado · vagas limitadas
         </span>
         <span className="hidden sm:inline text-muted-foreground/40">·</span>
