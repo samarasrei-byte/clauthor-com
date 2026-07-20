@@ -173,15 +173,15 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     return (
       <div key={item.id + (opts.compactRow ? ":c" : "")}>
         {opts.showGroupHeader && !collapsed && (
-          <div className="px-3 pt-4 pb-1.5 first:pt-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/55">
+          <div className="px-3 pt-3.5 pb-1 first:pt-1">
+            <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-foreground/55">
 
               {item.group}
             </span>
           </div>
         )}
         {opts.showGroupHeader && collapsed && (
-          <div className="w-full flex justify-center py-2"><div className="w-6 h-px bg-border/40" /></div>
+          <div className="w-full flex justify-center py-1.5"><div className="w-6 h-px bg-border/40" /></div>
         )}
 
         <button
@@ -190,8 +190,8 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             else onItemChange(item.id);
           }}
           className={cn(
-            "w-full flex items-center gap-3 rounded-xl transition-all duration-150 group relative",
-            collapsed ? "px-2 py-2 justify-center" : "px-3 py-2",
+            "w-full flex items-center gap-2.5 rounded-xl transition-all duration-150 group relative",
+            collapsed ? "px-2 py-1.5 justify-center" : "px-2.5 py-1.5",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
               : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
@@ -200,7 +200,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           <div className="relative shrink-0">
             <item.icon
               className={cn(
-                "h-[18px] w-[18px] transition-colors",
+                "h-[15px] w-[15px] transition-colors",
                 isActive ? "text-primary" : "text-foreground/70 group-hover:text-primary"
               )}
               strokeWidth={1.75}
@@ -225,7 +225,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 className={cn(
-                  "text-[13.5px] truncate flex-1 text-left tracking-[-0.005em] leading-[1.35]",
+                  "text-[12.5px] truncate flex-1 text-left tracking-[-0.005em] leading-[1.3]",
                   isActive ? "font-semibold" : "font-medium"
                 )}
               >
@@ -233,6 +233,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               </motion.span>
             )}
           </AnimatePresence>
+
 
           {!collapsed && !hasChildren && (
             <span
