@@ -147,7 +147,7 @@ const DepartmentCard = ({
               className="flex-1 gap-2 border-white/[0.08] bg-white/[0.02] text-white/80 hover:bg-white/[0.05] hover:text-white hover:border-white/[0.14]"
               onClick={() => {
                 onSeeLiveDemo(department);
-                navigate(`/departamentos/${department.id}`);
+                navigate(deptDetailPath(department.id));
               }}
               aria-label={`Ver detalhes do ${department.name}`}
             >
