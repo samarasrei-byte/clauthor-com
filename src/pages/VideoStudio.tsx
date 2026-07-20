@@ -440,6 +440,17 @@ export default function VideoStudio() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Mobile-only: open Copiloto Thor as a drawer */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="lg:hidden h-8 w-8 p-0"
+                onClick={() => setMobileCopilotOpen(true)}
+                aria-label="Abrir copiloto Thor"
+              >
+                <MessageSquare strokeWidth={1.5} className="w-4 h-4" />
+              </Button>
+
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -468,6 +479,17 @@ export default function VideoStudio() {
 
               <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0" aria-label="Atualizar">
                 <RefreshCw strokeWidth={1.5} className="w-4 h-4" />
+              </Button>
+
+              {/* Mobile-only: open Inspector as a drawer */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="lg:hidden h-8 w-8 p-0"
+                onClick={() => setMobileInspectorOpen(true)}
+                aria-label="Abrir inspetor"
+              >
+                <InfoIcon strokeWidth={1.5} className="w-4 h-4" />
               </Button>
             </div>
           </div>
