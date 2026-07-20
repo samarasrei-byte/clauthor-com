@@ -66,7 +66,7 @@ export default function DepartmentDetail() {
         agentSlugs: [...dept.agentSlugs],
       });
     }
-    navigate("/checkout");
+    navigate(checkoutHref);
   };
 
   return (
