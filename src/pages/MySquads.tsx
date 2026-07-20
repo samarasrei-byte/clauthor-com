@@ -158,7 +158,72 @@ const MySquads = () => {
         </motion.div>
       )}
 
+      {!loading && customSquads.length > 0 && (
+        <section className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              Squads criados por você
+            </h2>
+            <Button asChild size="sm" variant="ghost" className="h-7 text-[11px] gap-1">
+              <Link to="/dashboard?tab=workspace&view=squads">
+                Gerenciar <ArrowRight className="h-3 w-3" />
+              </Link>
+            </Button>
+          </div>
+          <div
+            className="grid gap-3"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
+          >
+            {customSquads.map((s, i) => {
+              const agents = s.squad_agents?.map((sa) => sa.agents).filter(Boolean) ?? [];
+              return (
+                <motion.article
+                  key={s.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-4 hover:border-primary/40 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="min-w-0">
+                      <h3 className="font-display font-semibold text-sm truncate">{s.name}</h3>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                        {s.description || `${agents.length} agente${agents.length === 1 ? "" : "s"}`}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="text-[9px] shrink-0 gap-1">
+                      <Bot className="h-2.5 w-2.5" /> {agents.length}
+                    </Badge>
+                  </div>
+                  {agents.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {agents.slice(0, 4).map((a) => (
+                        <Badge key={a!.id} variant="outline" className="text-[9px]">
+                          {a!.name}
+                        </Badge>
+                      ))}
+                      {agents.length > 4 && (
+                        <Badge variant="outline" className="text-[9px]">+{agents.length - 4}</Badge>
+                      )}
+                    </div>
+                  )}
+                  <Button asChild size="sm" variant="secondary" className="w-full text-xs h-8 gap-1">
+                    <Link to="/dashboard?tab=workspace&view=squads">
+                      Abrir no workspace <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </Button>
+                </motion.article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {!loading && activeSquads.length > 0 && (
+        <>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
+            Squads verticais ativos
+          </h2>
         <div
           className="grid gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
