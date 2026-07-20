@@ -138,7 +138,7 @@ export default function ThorTokenAlert({ onOpenThor, onBuyCredits, className }: 
                 onClick={() => { dismissTouch(true, "buy_credits"); onBuyCredits?.(); }}
                 className="gap-2"
               >
-                Comprar créditos
+                Contratar créditos
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
               <Button
