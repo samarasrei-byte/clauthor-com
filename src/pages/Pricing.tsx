@@ -186,18 +186,19 @@ const Pricing = () => {
                   </div>
                 </div>
 
-                <Link
-                  to="/auth"
-                  state={{ hireIntent: { type: "department", label: deptName, slugs: dept.agents.map((a) => a.key) } }}
+                <Button
+                  asChild
+                  className={`w-full rounded-xl h-12 font-semibold gap-2 ${dept.popular ? "glow" : ""}`}
+                  variant={dept.popular ? "default" : "outline"}
                 >
-                  <Button
-                    className={`w-full rounded-xl h-12 font-semibold gap-2 ${dept.popular ? "glow" : ""}`}
-                    variant={dept.popular ? "default" : "outline"}
+                  <Link
+                    to="/auth"
+                    state={{ hireIntent: { type: "department", label: deptName, slugs: dept.agents.map((a) => a.key) } }}
                   >
                     Contratar departamento
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </motion.div>
             );
           })}
