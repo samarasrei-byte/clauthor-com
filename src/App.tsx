@@ -234,6 +234,8 @@ const App = () => (
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
                   <Route path="/meus-departamentos" element={<MyDepartments />} />
                   <Route path="/meus-squads" element={<MySquads />} />
+                  <Route path="/dashboard/arquivos" element={<Arquivos />} />
+                  <Route path="/arquivos" element={<Navigate to="/dashboard/arquivos" replace />} />
 
                   {/* Squads / Departamentos · versões embutidas no painel para manter sidebar/header
                       durante contratação, checkout e ativação (mantém contexto do usuário). */}
