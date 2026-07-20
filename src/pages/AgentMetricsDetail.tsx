@@ -248,7 +248,7 @@ const AgentMetricsDetail = () => {
             className="lg:col-span-3 rounded-2xl p-4 border border-border/40 bg-card/60"
           >
             <div className="flex items-center gap-2 mb-3">
-              <Activity className="h-3.5 w-3.5 text-cyan-400" />
+              <Activity className="h-3.5 w-3.5 text-info" />
               <span className="text-xs font-medium">Execuções · últimos 14 dias</span>
             </div>
             <ResponsiveContainer width="100%" height={200}>
