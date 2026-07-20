@@ -266,11 +266,11 @@
      Reduces the rem base so every Tailwind text-*, p-*, gap-* class scales
      proportionally without touching hundreds of components. */
   html.dash-dense {
-    font-size: 12.5px;
+    font-size: 14px;
   }
   @media (max-width: 640px) {
     html.dash-dense {
-      font-size: 12px;
+      font-size: 13.5px;
     }
   }
   html.dash-dense body {
