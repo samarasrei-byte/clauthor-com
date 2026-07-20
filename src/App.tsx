@@ -234,6 +234,9 @@ const App = () => (
                   <Route path="/dashboard/inbox" element={<AgentInbox />} />
                   <Route path="/dashboard/traces" element={<AgentTraces />} />
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
+                  <Route path="/meus-departamentos" element={<MyDepartments />} />
+                  <Route path="/meus-squads" element={<MySquads />} />
+
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
 
