@@ -166,7 +166,7 @@ const ContractedCard = ({ item, index }: { item: ContractedDept; index: number }
 
       <div className="flex items-center gap-2 mt-3">
         <Button asChild size="sm" variant="secondary" className="flex-1 text-xs h-8 gap-1">
-          <Link to={`/departamento-ativo/${item.department_id}`}>
+          <Link to={`/dashboard/departamento-ativo/${item.department_id}`}>
             Abrir painel
             <ArrowRight className="h-3 w-3" />
           </Link>
