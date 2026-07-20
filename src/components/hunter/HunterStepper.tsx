@@ -23,7 +23,7 @@ const HunterStepper = ({ current }: { current: number }) => {
               className={cn(
                 "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors",
                 isActive && "border-primary bg-primary/10 text-foreground font-semibold",
-                isDone && "border-green-500/40 bg-green-500/5 text-green-400",
+                isDone && "border-success/40 bg-success/5 text-success",
                 !isActive && !isDone && "border-border/60 text-muted-foreground hover:border-border",
               )}
             >

@@ -147,7 +147,7 @@ function SecondBrain({ deptName }: { deptName: string }) {
                   <div className="text-sm text-white truncate">{a.title}</div>
                   <div className="text-[10px] text-white/40 uppercase tracking-wider mt-0.5">{a.type}</div>
                 </div>
-                <Button size="icon" variant="ghost" onClick={() => handleApprove(a.id)} className="h-7 w-7 text-emerald-400 hover:bg-emerald-500/10"><ThumbsUp className="w-3.5 h-3.5" /></Button>
+                <Button size="icon" variant="ghost" onClick={() => handleApprove(a.id)} className="h-7 w-7 text-success hover:bg-success/10"><ThumbsUp className="w-3.5 h-3.5" /></Button>
                 <Button size="icon" variant="ghost" onClick={() => handleApprove(a.id)} className="h-7 w-7 text-white/40 hover:bg-white/5"><ThumbsDown className="w-3.5 h-3.5" /></Button>
               </li>
             ))}
@@ -194,9 +194,9 @@ function AgentsLive({ agentSlugs }: { agentSlugs: readonly string[] }) {
   return (
     <Card className="p-5 bg-white/[0.02] border-white/10 rounded-2xl">
       <div className="flex items-center gap-2 mb-4">
-        <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
+        <Activity className="w-4 h-4 text-success animate-pulse" />
         <h3 className="font-semibold text-white">Agentes trabalhando ao vivo</h3>
-        <span className="ml-auto text-[10px] uppercase tracking-wider text-emerald-400/70 font-semibold">Live</span>
+        <span className="ml-auto text-[10px] uppercase tracking-wider text-success/70 font-semibold">Live</span>
       </div>
 
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -206,7 +206,7 @@ function AgentsLive({ agentSlugs }: { agentSlugs: readonly string[] }) {
               {a.role.slice(0, 2).toUpperCase()}
             </div>
             <div className="text-[11px] text-white/80 mt-1.5 font-medium truncate">{a.role}</div>
-            <div className="mt-1 flex items-center justify-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /><span className="text-[9px] text-white/40 uppercase tracking-wider">Ativo</span></div>
+            <div className="mt-1 flex items-center justify-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /><span className="text-[9px] text-white/40 uppercase tracking-wider">Ativo</span></div>
           </div>
         ))}
       </div>
@@ -268,11 +268,11 @@ export default function DepartmentActivated() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl border border-emerald-400/30 bg-emerald-500/10 flex items-center justify-center">
-              <Icon className="w-6 h-6 text-emerald-400" strokeWidth={1.5} />
+            <div className="w-12 h-12 rounded-xl border border-success/30 bg-success/10 flex items-center justify-center">
+              <Icon className="w-6 h-6 text-success" strokeWidth={1.5} />
             </div>
             <div>
-              <Badge className="bg-emerald-500/10 text-emerald-400 border-0 text-[10px] mb-1">
+              <Badge className="bg-success/10 text-success border-0 text-[10px] mb-1">
                 <CheckCircle2 className="w-3 h-3 mr-1" /> Ativo
               </Badge>
               <h1 className="text-2xl md:text-3xl font-display font-semibold text-white">{dept.name}</h1>

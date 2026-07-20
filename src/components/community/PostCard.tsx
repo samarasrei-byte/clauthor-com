@@ -26,7 +26,7 @@ interface PostCardProps {
 const categoryColorMap: Record<CommunityCategory, string> = {
   duvidas: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
   templates: "bg-primary/15 text-primary border-primary/20",
-  showcase: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
+  showcase: "bg-success/15 text-success border-success/20",
   anuncios: "bg-rose-500/15 text-rose-400 border-rose-500/20",
   geral: "bg-muted text-muted-foreground border-border",
 };
@@ -98,7 +98,7 @@ const PostCard = ({
           <Button
             variant="ghost"
             size="sm"
-            className={`gap-1.5 ${isLiked ? "text-red-400" : "text-muted-foreground"}`}
+            className={`gap-1.5 ${isLiked ? "text-destructive" : "text-muted-foreground"}`}
             onClick={(e) => {
               e.stopPropagation();
               onLike?.();

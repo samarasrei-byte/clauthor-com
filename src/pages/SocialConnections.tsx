@@ -504,14 +504,14 @@ const SocialConnections = () => {
                     }
                     if (p.isConnected) {
                       return (
-                        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
+                        <Badge className="bg-success/10 text-success border-success/20 hover:bg-success/10">
                           <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
                         </Badge>
                       );
                     }
                     if (p.status === "pending_credentials") {
                       return (
-                        <Badge variant="outline" className="text-amber-600 border-amber-500/30">
+                        <Badge variant="outline" className="text-warning border-warning/30">
                           <AlertTriangle className="w-3 h-3 mr-1" /> Aguardando setup
                         </Badge>
                       );
@@ -619,15 +619,15 @@ const SocialConnections = () => {
       {/* Meta test-publish result panel */}
       {metaTestResult && (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className={metaTestResult.ok ? "border-emerald-500/40" : "border-destructive/40"}>
+          <Card className={metaTestResult.ok ? "border-success/40" : "border-destructive/40"}>
             <CardContent className="p-4 sm:p-5 space-y-3">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2">
-                  <FlaskConical className={`w-4 h-4 ${metaTestResult.ok ? "text-emerald-600" : "text-destructive"}`} />
+                  <FlaskConical className={`w-4 h-4 ${metaTestResult.ok ? "text-success" : "text-destructive"}`} />
                   <h2 className="text-sm font-semibold">Resultado do teste de postagem (Meta)</h2>
                   <Badge
                     variant="outline"
-                    className={metaTestResult.ok ? "text-emerald-600 border-emerald-500/40" : "text-destructive border-destructive/40"}
+                    className={metaTestResult.ok ? "text-success border-success/40" : "text-destructive border-destructive/40"}
                   >
                     {metaTestResult.ok ? "OK" : "Falhou"}
                   </Badge>
@@ -645,7 +645,7 @@ const SocialConnections = () => {
                 <p className="text-sm text-foreground/90">{metaTestResult.detail}</p>
               )}
               {metaTestResult.hint && (
-                <p className="text-xs text-amber-600">💡 {metaTestResult.hint}</p>
+                <p className="text-xs text-warning">💡 {metaTestResult.hint}</p>
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -747,9 +747,9 @@ const SocialConnections = () => {
                             l.level === "error"
                               ? "text-destructive font-semibold"
                               : l.level === "success"
-                              ? "text-emerald-600 font-semibold"
+                              ? "text-success font-semibold"
                               : l.level === "warn"
-                              ? "text-amber-600 font-semibold"
+                              ? "text-warning font-semibold"
                               : "text-primary font-semibold"
                           }
                         >

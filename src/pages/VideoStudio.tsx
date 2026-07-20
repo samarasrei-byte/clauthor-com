@@ -615,7 +615,7 @@ export default function VideoStudio() {
                   <span className="text-muted-foreground opacity-60">/ {quota.monthly_limit}</span>
                 </div>
                 {quota.remaining <= 2 && quota.remaining > 0 && (
-                  <span className="hidden md:inline text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                  <span className="hidden md:inline text-[10px] px-2 py-0.5 rounded-full bg-warning/10 text-warning border border-warning/20">
                     Restam {quota.remaining}
                   </span>
                 )}

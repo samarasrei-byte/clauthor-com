@@ -190,7 +190,7 @@ export function AgentDemoModal({ isOpen, onClose, demoType, lang, onCTA }: Agent
                   {/* Step label */}
                   <div className="flex items-center gap-2 mb-1.5">
                     {idx < currentStep || isComplete ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
                     ) : (
                       <motion.div
                         className="w-4 h-4 rounded-full border-2 border-accent-violet/40 border-t-accent-violet shrink-0"
@@ -198,7 +198,7 @@ export function AgentDemoModal({ isOpen, onClose, demoType, lang, onCTA }: Agent
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                       />
                     )}
-                    <span className={`text-xs font-mono ${idx < currentStep || isComplete ? "text-emerald-500" : "text-accent-violet"}`}>
+                    <span className={`text-xs font-mono ${idx < currentStep || isComplete ? "text-success" : "text-accent-violet"}`}>
                       {step.label}
                     </span>
                   </div>

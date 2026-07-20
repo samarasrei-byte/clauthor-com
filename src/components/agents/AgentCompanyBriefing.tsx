@@ -149,8 +149,8 @@ export default function AgentCompanyBriefing({ value, onChange }: Props) {
             </Link>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-amber-500/40 bg-amber-500/5 p-4 flex items-start gap-3">
-            <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5" />
+          <div className="rounded-xl border border-dashed border-warning/40 bg-warning/5 p-4 flex items-start gap-3">
+            <AlertCircle className="h-4 w-4 text-warning mt-0.5" />
             <div className="text-xs">
               <p className="font-medium">DNA da empresa ainda não configurado.</p>
               <p className="text-muted-foreground mt-0.5">

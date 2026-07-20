@@ -11,8 +11,8 @@ interface ReputationBadgeProps {
 }
 
 const getReputationTier = (rating: number): { label: string; color: string; glow: string } => {
-  if (rating >= 4.9) return { label: "Elite", color: "text-amber-400", glow: "shadow-amber-400/20" };
-  if (rating >= 4.7) return { label: "Top Rated", color: "text-emerald-400", glow: "shadow-emerald-400/20" };
+  if (rating >= 4.9) return { label: "Elite", color: "text-warning", glow: "shadow-amber-400/20" };
+  if (rating >= 4.7) return { label: "Top Rated", color: "text-success", glow: "shadow-emerald-400/20" };
   if (rating >= 4.5) return { label: "Trusted", color: "text-cyan-400", glow: "shadow-cyan-400/20" };
   return { label: "Rising", color: "text-muted-foreground", glow: "" };
 };
@@ -39,7 +39,7 @@ const ReputationBadge = ({ rating, companies, savings, compact = false }: Reputa
               <Users className="h-3 w-3" />
               <span>{companies}+ empresas ativas</span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-emerald-400">
+            <div className="flex items-center gap-1.5 text-xs text-success">
               <TrendingUp className="h-3 w-3" />
               <span>Economia média: {savings}/mês</span>
             </div>
@@ -71,7 +71,7 @@ const ReputationBadge = ({ rating, companies, savings, compact = false }: Reputa
           <Users className="h-3 w-3" />
           {companies}+
         </span>
-        <span className="text-emerald-400 flex items-center gap-1">
+        <span className="text-success flex items-center gap-1">
           <Zap className="h-3 w-3" />
           {savings}
         </span>

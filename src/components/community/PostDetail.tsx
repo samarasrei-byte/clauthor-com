@@ -41,7 +41,7 @@ interface Comment {
 const categoryColorMap: Record<CommunityCategory, string> = {
   duvidas: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
   templates: "bg-primary/15 text-primary border-primary/20",
-  showcase: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
+  showcase: "bg-success/15 text-success border-success/20",
   anuncios: "bg-rose-500/15 text-rose-400 border-rose-500/20",
   geral: "bg-muted text-muted-foreground border-border",
 };
@@ -182,7 +182,7 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
             <Button
               variant="ghost"
               size="sm"
-              className={`gap-2 ${isLiked ? "text-red-400" : ""}`}
+              className={`gap-2 ${isLiked ? "text-destructive" : ""}`}
               onClick={handleLike}
             >
               <Heart className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`} />
