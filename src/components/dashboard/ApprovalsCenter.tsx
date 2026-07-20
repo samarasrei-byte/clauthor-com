@@ -265,6 +265,13 @@ const ApprovalsCenter = () => {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<any>(null);
   const [quickNote, setQuickNote] = useState("");
+  const [filesPickerOpen, setFilesPickerOpen] = useState(false);
+
+  const handleAttachFromLibrary = (picked: PickedFile) => {
+    const link = `\n[${picked.name}](${picked.signedUrl})`;
+    setQuickNote((prev) => (prev ? `${prev}${link}` : `Anexo: ${picked.name}\n${picked.signedUrl}`));
+    toast.success(`"${picked.name}" anexado à observação.`);
+  };
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
