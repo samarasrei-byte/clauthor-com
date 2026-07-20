@@ -44,6 +44,9 @@ const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
 const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
+const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
+const MySquads = lazyRetry(() => import("./pages/MySquads"));
+
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
 const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
@@ -231,6 +234,9 @@ const App = () => (
                   <Route path="/dashboard/inbox" element={<AgentInbox />} />
                   <Route path="/dashboard/traces" element={<AgentTraces />} />
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
+                  <Route path="/meus-departamentos" element={<MyDepartments />} />
+                  <Route path="/meus-squads" element={<MySquads />} />
+
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
 

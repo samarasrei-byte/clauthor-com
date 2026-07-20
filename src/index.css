@@ -266,30 +266,35 @@
      Reduces the rem base so every Tailwind text-*, p-*, gap-* class scales
      proportionally without touching hundreds of components. */
   html.dash-dense {
-    font-size: 13px;
+    font-size: 12.5px;
   }
   @media (max-width: 640px) {
     html.dash-dense {
-      font-size: 12.5px;
+      font-size: 12px;
     }
   }
   html.dash-dense body {
     line-height: 1.5;
     letter-spacing: -0.005em;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss03';
   }
-  html.dash-dense h1 { font-size: 1.45rem; line-height: 1.2; }
-  html.dash-dense h2 { font-size: 1.15rem; line-height: 1.3; }
-  html.dash-dense h3 { font-size: 1rem; line-height: 1.35; }
+  html.dash-dense h1 { font-size: 1.375rem; line-height: 1.2; letter-spacing: -0.015em; }
+  html.dash-dense h2 { font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.01em; }
+  html.dash-dense h3 { font-size: 1rem; line-height: 1.35; letter-spacing: -0.005em; }
   /* Editorial override for hero titles that need extra presence
      (Command Center briefing, Video Studio stage, Pitch cover). */
   html.dash-dense .dash-hero-title {
-    font-size: 1.75rem;
+    font-size: 1.625rem;
     line-height: 1.15;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
   @media (min-width: 640px) {
-    html.dash-dense .dash-hero-title { font-size: 2rem; }
+    html.dash-dense .dash-hero-title { font-size: 1.875rem; }
   }
+  /* KPI numbers on dashboard get tabular by default */
+  html.dash-dense .kpi-value,
+  html.dash-dense [data-kpi] { font-variant-numeric: tabular-nums; }
+
 
   body {
     @apply bg-background text-foreground antialiased;
