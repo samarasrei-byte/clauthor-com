@@ -46,6 +46,7 @@ const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
 const MySquads = lazyRetry(() => import("./pages/MySquads"));
+const Arquivos = lazyRetry(() => import("./pages/Arquivos"));
 
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
@@ -233,6 +234,8 @@ const App = () => (
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
                   <Route path="/meus-departamentos" element={<MyDepartments />} />
                   <Route path="/meus-squads" element={<MySquads />} />
+                  <Route path="/dashboard/arquivos" element={<Arquivos />} />
+                  <Route path="/arquivos" element={<Navigate to="/dashboard/arquivos" replace />} />
 
                   {/* Squads / Departamentos · versões embutidas no painel para manter sidebar/header
                       durante contratação, checkout e ativação (mantém contexto do usuário). */}
