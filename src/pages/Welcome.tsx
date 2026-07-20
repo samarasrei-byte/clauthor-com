@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import { supabase } from "@/integrations/supabase/client";
+import { markOnboardingComplete } from "@/lib/onboarding/state";
 import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
 import OnboardingZero from "@/pages/OnboardingZero";
 
@@ -84,8 +85,10 @@ export default function Welcome() {
   }
 
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
     try { sessionStorage.setItem("onboarding-skipped-session", "1"); } catch { /* ignore */ }
+    // Mesmo pulando, marcamos como concluído — evita reabrir o wizard em cada login.
+    if (user) await markOnboardingComplete(user.id, { source: "welcome_skip" });
     navigate(user ? "/dashboard" : "/", { replace: true });
   };
 
