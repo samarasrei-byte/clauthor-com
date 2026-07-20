@@ -732,6 +732,15 @@ export default function VideoStudio() {
         providerAvailable={providerAvailable}
         canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
       />
+
+      <FilesPickerSheet
+        open={filesPickerOpen}
+        onOpenChange={setFilesPickerOpen}
+        onPick={handlePickFromLibrary}
+        accept={["image"]}
+        title="Escolher imagem de referência"
+        description="Selecione uma imagem já enviada em Meus arquivos para usar como referência do vídeo."
+      />
     </>
   );
 }
