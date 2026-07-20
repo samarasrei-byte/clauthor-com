@@ -172,7 +172,7 @@ const ContractedCard = ({ item, index }: { item: ContractedDept; index: number }
           </Link>
         </Button>
         <Button asChild size="sm" variant="ghost" className="text-xs h-8 gap-1 text-muted-foreground">
-          <Link to={`/departamentos/${item.department_id}`}>
+          <Link to={`/dashboard/departamentos/${item.department_id}`}>
             <ExternalLink className="h-3 w-3" />
           </Link>
         </Button>
