@@ -11,8 +11,8 @@ interface ReputationBadgeProps {
 }
 
 const getReputationTier = (rating: number): { label: string; color: string; glow: string } => {
-  if (rating >= 4.9) return { label: "Elite", color: "text-warning", glow: "shadow-amber-400/20" };
-  if (rating >= 4.7) return { label: "Top Rated", color: "text-success", glow: "shadow-emerald-400/20" };
+  if (rating >= 4.9) return { label: "Elite", color: "text-warning", glow: "shadow-warning/20" };
+  if (rating >= 4.7) return { label: "Top Rated", color: "text-success", glow: "shadow-success/20" };
   if (rating >= 4.5) return { label: "Trusted", color: "text-cyan-400", glow: "shadow-cyan-400/20" };
   return { label: "Rising", color: "text-muted-foreground", glow: "" };
 };
