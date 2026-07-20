@@ -70,7 +70,7 @@ export default function FilesPickerSheet({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
   const [pickingId, setPickingId] = useState<string | null>(null);
-  const [preview, setPreview] = useState<{ url: string; name: string } | null>(null);
+  const [preview, setPreview] = useState<{ url: string; name: string; kind: "image" | "video" } | null>(null);
   const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   const { data: files = [], isLoading } = useQuery({
