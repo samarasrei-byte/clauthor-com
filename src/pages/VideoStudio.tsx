@@ -123,6 +123,23 @@ export default function VideoStudio() {
   // UI state · library sheet, command palette, drop preview
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [filesPickerOpen, setFilesPickerOpen] = useState(false);
+
+  const handlePickFromLibrary = (picked: PickedFile) => {
+    if (picked.file_type !== "image") {
+      toast.error("Escolha uma imagem para usar como referência.");
+      return;
+    }
+    copilot.setAttachment({
+      kind: "image",
+      storagePath: picked.bucket_path,
+      signedUrl: picked.signedUrl,
+      mime: picked.mime || "image/*",
+      size: 0,
+      filename: picked.name,
+    });
+    toast.success(`"${picked.name}" anexado como referência.`);
+  };
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [dropPreview, setDropPreview] = useState<string | null>(null);
   const [dropUploading, setDropUploading] = useState(false);
