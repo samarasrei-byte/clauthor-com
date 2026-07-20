@@ -73,7 +73,7 @@ export default function DepartmentDetail() {
     <div className="min-h-dvh bg-background text-foreground">
       <SEO title={`${dept.name} · Clauthor`} description={dept.painPoint} />
 
-      <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-8 md:space-y-10">
         <Link to={backHref} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-colors">
           <ArrowLeft className="w-4 h-4" /> Voltar aos departamentos
         </Link>
