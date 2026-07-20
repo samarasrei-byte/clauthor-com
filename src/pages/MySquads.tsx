@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { UsersRound, Plus, ArrowRight, Wand, Loader2 } from "lucide-react";
+import { UsersRound, Plus, ArrowRight, Wand, Loader2, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,37 +23,56 @@ type ContractedDept = {
   status: string;
 };
 
+type CustomSquad = {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  squad_agents: { agents: { id: string; name: string; tier: string | null } | null }[];
+};
+
 const MySquads = () => {
   const { user } = useAuth();
   const [contracted, setContracted] = useState<ContractedDept[] | null>(null);
+  const [customSquads, setCustomSquads] = useState<CustomSquad[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) { setContracted([]); setLoading(false); return; }
     let cancelled = false;
     (async () => {
-      const { data } = await supabase
-        .from("contracted_departments")
-        .select("id, department_id, department_name, status")
-        .eq("user_id", user.id)
-        .eq("status", "active");
+      const [{ data: contractedData }, { data: tenantRow }] = await Promise.all([
+        supabase
+          .from("contracted_departments")
+          .select("id, department_id, department_name, status")
+          .eq("user_id", user.id)
+          .eq("status", "active"),
+        supabase.from("tenant_members").select("tenant_id").eq("user_id", user.id).maybeSingle(),
+      ]);
+      let squadsData: CustomSquad[] = [];
+      if (tenantRow?.tenant_id) {
+        const { data } = await supabase
+          .from("squads")
+          .select("id, name, description, created_at, squad_agents(agents(id, name, tier))")
+          .eq("tenant_id", tenantRow.tenant_id)
+          .order("created_at", { ascending: false });
+        squadsData = (data ?? []) as any;
+      }
       if (cancelled) return;
-      setContracted((data ?? []) as ContractedDept[]);
+      setContracted((contractedData ?? []) as ContractedDept[]);
+      setCustomSquads(squadsData);
       setLoading(false);
     })();
     return () => { cancelled = true; };
   }, [user]);
 
   const activeSquads = useMemo(() => {
-    // Squads considerados ativos = squads cujo slug bate com algum department_id
-    // ou que compartilham o mesmo domínio (heurística leve; se sistema ganhar
-    // uma tabela `contracted_squads`, plugar aqui).
     if (!contracted || contracted.length === 0) return [] as typeof SQUADS;
     const depIds = new Set(contracted.map((c) => c.department_id));
     return SQUADS.filter((s) => depIds.has(s.slug));
   }, [contracted]);
 
-  const isEmpty = !loading && activeSquads.length === 0;
+  const isEmpty = !loading && activeSquads.length === 0 && customSquads.length === 0;
 
   return (
     <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 py-6 md:py-8">
@@ -69,9 +88,12 @@ const MySquads = () => {
           </div>
           <h1 className="dash-hero-title font-display font-semibold">Meus Squads</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {loading ? "Carregando..." : activeSquads.length > 0
-              ? `${activeSquads.length} squad${activeSquads.length === 1 ? "" : "s"} ativo${activeSquads.length === 1 ? "" : "s"}`
-              : "Ainda sem squads contratados."}
+            {loading ? "Carregando..." : (() => {
+              const total = activeSquads.length + customSquads.length;
+              return total > 0
+                ? `${total} squad${total === 1 ? "" : "s"} no seu time`
+                : "Ainda sem squads.";
+            })()}
           </p>
         </div>
 
@@ -136,7 +158,72 @@ const MySquads = () => {
         </motion.div>
       )}
 
+      {!loading && customSquads.length > 0 && (
+        <section className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              Squads criados por você
+            </h2>
+            <Button asChild size="sm" variant="ghost" className="h-7 text-[11px] gap-1">
+              <Link to="/dashboard?tab=workspace&view=squads">
+                Gerenciar <ArrowRight className="h-3 w-3" />
+              </Link>
+            </Button>
+          </div>
+          <div
+            className="grid gap-3"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
+          >
+            {customSquads.map((s, i) => {
+              const agents = s.squad_agents?.map((sa) => sa.agents).filter(Boolean) ?? [];
+              return (
+                <motion.article
+                  key={s.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-4 hover:border-primary/40 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="min-w-0">
+                      <h3 className="font-display font-semibold text-sm truncate">{s.name}</h3>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                        {s.description || `${agents.length} agente${agents.length === 1 ? "" : "s"}`}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="text-[9px] shrink-0 gap-1">
+                      <Bot className="h-2.5 w-2.5" /> {agents.length}
+                    </Badge>
+                  </div>
+                  {agents.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {agents.slice(0, 4).map((a) => (
+                        <Badge key={a!.id} variant="outline" className="text-[9px]">
+                          {a!.name}
+                        </Badge>
+                      ))}
+                      {agents.length > 4 && (
+                        <Badge variant="outline" className="text-[9px]">+{agents.length - 4}</Badge>
+                      )}
+                    </div>
+                  )}
+                  <Button asChild size="sm" variant="secondary" className="w-full text-xs h-8 gap-1">
+                    <Link to="/dashboard?tab=workspace&view=squads">
+                      Abrir no workspace <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </Button>
+                </motion.article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {!loading && activeSquads.length > 0 && (
+        <>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
+            Squads verticais ativos
+          </h2>
         <div
           className="grid gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
@@ -169,6 +256,7 @@ const MySquads = () => {
             </motion.article>
           ))}
         </div>
+        </>
       )}
     </div>
   );
