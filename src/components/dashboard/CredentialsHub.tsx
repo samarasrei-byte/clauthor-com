@@ -127,8 +127,8 @@ const CredentialsHub = () => {
   const categories = [...new Set(INTEGRATIONS.map(i => i.category))];
 
   const colorClasses: Record<string, { bg: string; border: string; glow: string }> = {
-    emerald: { bg: "bg-emerald-500/10", border: "border-emerald-500/30", glow: "shadow-[0_0_30px_hsl(160_55%_42%/0.2)]" },
-    blue: { bg: "bg-blue-500/10", border: "border-blue-500/30", glow: "shadow-[0_0_30px_hsl(220_70%_55%/0.2)]" },
+    emerald: { bg: "bg-success/10", border: "border-success/30", glow: "shadow-[0_0_30px_hsl(160_55%_42%/0.2)]" },
+    blue: { bg: "bg-info/10", border: "border-info/30", glow: "shadow-[0_0_30px_hsl(220_70%_55%/0.2)]" },
     cyan: { bg: "bg-cyan-500/10", border: "border-cyan-500/30", glow: "shadow-[0_0_30px_hsl(180_70%_50%/0.2)]" },
     violet: { bg: "bg-violet-500/10", border: "border-violet-500/30", glow: "shadow-[0_0_30px_hsl(266_100%_58%/0.2)]" },
     orange: { bg: "bg-orange-500/10", border: "border-orange-500/30", glow: "shadow-[0_0_30px_hsl(30_90%_55%/0.2)]" },
@@ -242,17 +242,17 @@ const CredentialsHub = () => {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30"
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-success/15 border border-success/30"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span className="text-[10px] font-medium text-emerald-500">Online</span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                          <span className="text-[10px] font-medium text-success">Online</span>
                         </motion.div>
                       )}
                       
                       {status === "partial" && (
-                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/15 border border-amber-500/30">
-                          <Activity className="h-3 w-3 text-amber-500" />
-                          <span className="text-[10px] font-medium text-amber-500">{completeness}%</span>
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-warning/15 border border-warning/30">
+                          <Activity className="h-3 w-3 text-warning" />
+                          <span className="text-[10px] font-medium text-warning">{completeness}%</span>
                         </div>
                       )}
                       
@@ -276,7 +276,7 @@ const CredentialsHub = () => {
                           transition={{ duration: 0.8, ease: "easeOut" }}
                           className={cn(
                             "h-full rounded-full",
-                            status === "connected" ? "bg-emerald-500" : "bg-amber-500"
+                            status === "connected" ? "bg-success" : "bg-warning"
                           )}
                         />
                       </div>
@@ -316,9 +316,9 @@ const CredentialsHub = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center"
+                className="w-20 h-20 rounded-full bg-success/15 flex items-center justify-center"
               >
-                <Check className="h-10 w-10 text-emerald-500" />
+                <Check className="h-10 w-10 text-success" />
               </motion.div>
               <h3 className="font-display text-lg font-bold">Conexão Estabelecida</h3>
               <p className="text-sm text-muted-foreground">{selectedIntegration?.label} agora está ativo</p>

@@ -35,13 +35,13 @@ const stepIcons: Record<string, any> = {
 };
 
 const stepColors: Record<string, string> = {
-  think: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  decide: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-  execute: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  think: "text-info bg-info/10 border-info/20",
+  decide: "text-warning bg-warning/10 border-warning/20",
+  execute: "text-success bg-success/10 border-success/20",
   delegate: "text-purple-400 bg-purple-500/10 border-purple-500/20",
   respond: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
   validate: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-  error: "text-red-400 bg-red-500/10 border-red-500/20",
+  error: "text-destructive bg-destructive/10 border-destructive/20",
 };
 
 /** Build replay steps from real execution_log details */
@@ -183,9 +183,9 @@ const DEMO_STEPS: ReplayStep[] = [
 ];
 
 const StatusIcon = ({ status }: { status: string }) => {
-  if (status === "success") return <CheckCircle2 className="h-3 w-3 text-emerald-400" />;
-  if (status === "warning") return <AlertTriangle className="h-3 w-3 text-amber-400" />;
-  return <AlertTriangle className="h-3 w-3 text-red-400" />;
+  if (status === "success") return <CheckCircle2 className="h-3 w-3 text-success" />;
+  if (status === "warning") return <AlertTriangle className="h-3 w-3 text-warning" />;
+  return <AlertTriangle className="h-3 w-3 text-destructive" />;
 };
 
 const AgentReplay = () => {
@@ -280,7 +280,7 @@ const AgentReplay = () => {
           </div>
           <span className="text-[10px] text-muted-foreground">{logStats.action}</span>
           <span className="text-[10px] text-muted-foreground ml-auto">{logStats.date}</span>
-          <Badge variant="outline" className={`text-[8px] ${logStats.status === "success" ? "border-emerald-500/30 text-emerald-400" : "border-red-500/30 text-red-400"}`}>
+          <Badge variant="outline" className={`text-[8px] ${logStats.status === "success" ? "border-success/30 text-success" : "border-destructive/30 text-destructive"}`}>
             {logStats.totalMs}ms
           </Badge>
         </Card>
@@ -317,7 +317,7 @@ const AgentReplay = () => {
                   }`}
                 >
                   <div className="font-medium truncate flex items-center gap-1.5">
-                    {isError ? <AlertTriangle className="h-3 w-3 text-red-400 shrink-0" /> : <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />}
+                    {isError ? <AlertTriangle className="h-3 w-3 text-destructive shrink-0" /> : <CheckCircle2 className="h-3 w-3 text-success shrink-0" />}
                     {(log.agent as any)?.name || "Agente"}
                   </div>
                   <div className="text-muted-foreground text-[10px] mt-0.5 flex items-center gap-2">
@@ -450,17 +450,17 @@ const AgentReplay = () => {
               animate={{ opacity: 1, y: 0 }}
               className={`rounded-xl p-3 flex items-center gap-3 ${
                 replaySteps[replaySteps.length - 1]?.status === "error" 
-                  ? "bg-red-500/5 border border-red-500/20" 
-                  : "bg-emerald-500/5 border border-emerald-500/20"
+                  ? "bg-destructive/5 border border-destructive/20" 
+                  : "bg-success/5 border border-success/20"
               }`}
             >
               {replaySteps[replaySteps.length - 1]?.status === "error" ? (
-                <AlertTriangle className="h-5 w-5 text-red-400 shrink-0" />
+                <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
               ) : (
-                <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="h-5 w-5 text-success shrink-0" />
               )}
               <div>
-                <p className={`text-xs font-semibold ${replaySteps[replaySteps.length - 1]?.status === "error" ? "text-red-400" : "text-emerald-400"}`}>
+                <p className={`text-xs font-semibold ${replaySteps[replaySteps.length - 1]?.status === "error" ? "text-destructive" : "text-success"}`}>
                   Replay Completo
                 </p>
                 <p className="text-[10px] text-muted-foreground">

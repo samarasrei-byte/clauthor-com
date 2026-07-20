@@ -16,12 +16,12 @@ interface TaskRequestPanelProps {
 type Mode = "simple" | "guided" | "strategic";
 
 const QUICK_TASKS = [
-  { icon: TrendingUp, label: "Gerar mais leads", color: "text-emerald-400" },
-  { icon: Megaphone, label: "Criar campanha de vendas", color: "text-blue-400" },
+  { icon: TrendingUp, label: "Gerar mais leads", color: "text-success" },
+  { icon: Megaphone, label: "Criar campanha de vendas", color: "text-info" },
   { icon: Headphones, label: "Melhorar meu atendimento", color: "text-purple-400" },
-  { icon: DollarSign, label: "Análise financeira", color: "text-amber-400" },
+  { icon: DollarSign, label: "Análise financeira", color: "text-warning" },
   { icon: Users, label: "Prospectar clientes", color: "text-cyan-400" },
-  { icon: ShoppingCart, label: "Lançar produto", color: "text-rose-400" },
+  { icon: ShoppingCart, label: "Lançar produto", color: "text-destructive" },
   { icon: FileText, label: "Criar relatório", color: "text-indigo-400" },
   { icon: Building2, label: "Organizar minha empresa", color: "text-orange-400" },
 ];
@@ -185,8 +185,8 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
               className="space-y-4"
             >
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-                  <Compass className="h-4 w-4 text-blue-400" />
+                <div className="w-9 h-9 rounded-xl bg-info/10 flex items-center justify-center shrink-0">
+                  <Compass className="h-4 w-4 text-info" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">Vamos entender melhor</p>

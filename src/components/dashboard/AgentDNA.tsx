@@ -51,11 +51,11 @@ const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
   }, [profile]);
 
   const tierGlow = {
-    basic: "from-blue-500/15 to-cyan-500/10",
-    intermediate: "from-emerald-500/15 to-teal-500/10",
+    basic: "from-info/15 to-cyan-500/10",
+    intermediate: "from-success/15 to-teal-500/10",
     advanced: "from-purple-500/15 to-pink-500/10",
-    enterprise: "from-amber-500/15 to-orange-500/10",
-  }[profile.tier] || "from-blue-500/15 to-cyan-500/10";
+    enterprise: "from-warning/15 to-orange-500/10",
+  }[profile.tier] || "from-info/15 to-cyan-500/10";
 
   return (
     <div className="relative w-full aspect-square max-w-[160px] mx-auto">
@@ -129,8 +129,8 @@ const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
 };
 
 const TrendIcon = ({ trend }: { trend: string }) => {
-  if (trend === "rising") return <TrendingUp className="h-3 w-3 text-emerald-400" />;
-  if (trend === "declining") return <TrendingDown className="h-3 w-3 text-red-400" />;
+  if (trend === "rising") return <TrendingUp className="h-3 w-3 text-success" />;
+  if (trend === "declining") return <TrendingDown className="h-3 w-3 text-destructive" />;
   return <Activity className="h-3 w-3 text-muted-foreground" />;
 };
 
@@ -297,12 +297,12 @@ const AgentDNA = () => {
                 {/* Detailed metrics - shown on hover */}
                 <div className="space-y-1.5 max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-300">
                   <div className="flex items-center gap-2">
-                    <Shield className="h-3 w-3 text-emerald-400 shrink-0" />
+                    <Shield className="h-3 w-3 text-success shrink-0" />
                     <span className="text-[9px] text-muted-foreground flex-1">Confiabilidade</span>
                     <span className="text-[9px] font-mono">{profile.reliabilityScore}%</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Zap className="h-3 w-3 text-amber-400 shrink-0" />
+                    <Zap className="h-3 w-3 text-warning shrink-0" />
                     <span className="text-[9px] text-muted-foreground flex-1">Velocidade</span>
                     <span className="text-[9px] font-mono">{profile.speedScore}%</span>
                   </div>
@@ -312,7 +312,7 @@ const AgentDNA = () => {
                     <span className="text-[9px] font-mono">{profile.efficiencyScore}%</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-3 w-3 text-blue-400 shrink-0" />
+                    <Clock className="h-3 w-3 text-info shrink-0" />
                     <span className="text-[9px] text-muted-foreground flex-1">Tempo médio</span>
                     <span className="text-[9px] font-mono">{profile.avgResponseMs > 0 ? `${(profile.avgResponseMs / 1000).toFixed(1)}s` : "-"}</span>
                   </div>
@@ -333,16 +333,16 @@ const AgentDNA = () => {
         <div className="flex flex-wrap items-center gap-4 text-[10px] text-muted-foreground">
           <span className="font-semibold text-foreground">DNA baseado em:</span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" /> Taxa de sucesso
+            <span className="w-2 h-2 rounded-full bg-success" /> Taxa de sucesso
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-blue-400" /> Velocidade
+            <span className="w-2 h-2 rounded-full bg-info" /> Velocidade
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-purple-400" /> Eficiência de tokens
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-amber-400" /> Volume de uso
+            <span className="w-2 h-2 rounded-full bg-warning" /> Volume de uso
           </span>
           <span className="ml-auto font-mono">Tamanho dos nós = performance real</span>
         </div>

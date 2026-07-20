@@ -75,10 +75,10 @@ const DELIVERY_LABEL: Record<DeliveryType, string> = {
 };
 
 const STATUS_META: Record<Status, { label: string; chip: string; dot: string; icon: React.ElementType }> = {
-  pending:     { label: "Aguardando", chip: "bg-amber-500/10 text-amber-500 border-amber-500/20",   dot: "bg-amber-500",   icon: Clock },
-  in_revision: { label: "Em Ajuste",  chip: "bg-sky-500/10 text-sky-400 border-sky-500/20",        dot: "bg-sky-500",     icon: RefreshCw },
-  approved:    { label: "Aprovado",   chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20", dot: "bg-emerald-500", icon: CheckCircle2 },
-  rejected:    { label: "Reprovado",  chip: "bg-rose-500/10 text-rose-500 border-rose-500/20",     dot: "bg-rose-500",    icon: XCircle },
+  pending:     { label: "Aguardando", chip: "bg-warning/10 text-warning border-warning/20",   dot: "bg-warning",   icon: Clock },
+  in_revision: { label: "Em Ajuste",  chip: "bg-info/10 text-info border-info/20",        dot: "bg-info",     icon: RefreshCw },
+  approved:    { label: "Aprovado",   chip: "bg-success/10 text-success border-success/20", dot: "bg-success", icon: CheckCircle2 },
+  rejected:    { label: "Reprovado",  chip: "bg-destructive/10 text-destructive border-destructive/20",     dot: "bg-destructive",    icon: XCircle },
 };
 
 function timeAgo(iso: string) {
@@ -483,7 +483,7 @@ const ApprovalsCenter = () => {
       {/* ── Hero header ─────────────────────────────────────────── */}
       <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-background via-background to-primary/5 p-6">
         <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-info/10 blur-3xl pointer-events-none" />
         <div className="relative flex items-start justify-between gap-6 flex-wrap">
           <div className="space-y-2 max-w-2xl">
             <Badge variant="outline" className="gap-1.5 border-primary/30 bg-primary/5 text-primary">
@@ -494,7 +494,7 @@ const ApprovalsCenter = () => {
               Cada entrega gerada pelos seus agentes passa por aqui. Aprove em um clique, peça ajustes em linguagem natural · o agente reescreve sozinho.
             </p>
             {isDemoMode && (
-              <div className="inline-flex items-center gap-1.5 text-[11px] text-amber-500 mt-1">
+              <div className="inline-flex items-center gap-1.5 text-[11px] text-warning mt-1">
                 <Wand className="h-3 w-3" />
                 Modo demonstração · exemplos prontos para você sentir o fluxo.
               </div>
@@ -724,7 +724,7 @@ const ApprovalsCenter = () => {
                     {showComments.map((c) => (
                       <div key={c.id} className={cn(
                         "p-3 rounded-lg text-xs border",
-                        c.is_rejection_reason ? "bg-rose-500/5 border-rose-500/20" : "bg-muted/40 border-border/40"
+                        c.is_rejection_reason ? "bg-destructive/5 border-destructive/20" : "bg-muted/40 border-border/40"
                       )}>
                         <div className="flex items-center gap-2 mb-1.5">
                           {c.is_rejection_reason && <Badge variant="destructive" className="text-[9px]">Motivo</Badge>}
@@ -816,10 +816,10 @@ const Section = ({ icon: Icon, title, children }: { icon: React.ElementType; tit
 );
 
 const ACCENTS = {
-  emerald: "text-emerald-500 bg-emerald-500/10",
-  amber:   "text-amber-500 bg-amber-500/10",
+  emerald: "text-success bg-success/10",
+  amber:   "text-warning bg-warning/10",
   primary: "text-primary bg-primary/10",
-  sky:     "text-sky-500 bg-sky-500/10",
+  sky:     "text-info bg-info/10",
 } as const;
 
 const MetricCard = ({ icon: Icon, label, value, accent }: { icon: React.ElementType; label: string; value: string | number; accent?: keyof typeof ACCENTS }) => (
@@ -923,13 +923,13 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
   if (delivery_type === "contract") {
     return (
       <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
-        <div className="bg-gradient-to-br from-amber-500/10 via-card to-card px-5 py-4 border-b border-border/40 flex items-center gap-3">
-          <FileSignature className="h-5 w-5 text-amber-500" />
+        <div className="bg-gradient-to-br from-warning/10 via-card to-card px-5 py-4 border-b border-border/40 flex items-center gap-3">
+          <FileSignature className="h-5 w-5 text-warning" />
           <div className="flex-1">
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato · análise antes da assinatura</div>
             <div className="text-sm font-semibold">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
           </div>
-          {content?.signature_required && <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30">Assinatura</Badge>}
+          {content?.signature_required && <Badge className="bg-warning/15 text-warning border-warning/30">Assinatura</Badge>}
         </div>
         <div className="p-5 space-y-3 text-sm">
           <div className="grid grid-cols-2 gap-3">
@@ -947,7 +947,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
                   }} />
               ) : (
                 <div key={i} className="flex gap-2 p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs leading-relaxed">
-                  <FileCheck2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" /> {c}
+                  <FileCheck2 className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" /> {c}
                 </div>
               )
             ))}
@@ -1008,7 +1008,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
     return (
       <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
         <div className="bg-muted/30 px-5 py-4 border-b border-border/40 flex items-center gap-3">
-          <FileText className="h-5 w-5 text-sky-500" />
+          <FileText className="h-5 w-5 text-info" />
           {editing ? (
             <Input value={content?.doc_title || ""} onChange={(e) => patch({ doc_title: e.target.value })} />
           ) : (
@@ -1033,7 +1033,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
   if (delivery_type === "stories") {
     return (
       <div className="space-y-3">
-        <div className="mx-auto aspect-[9/16] max-w-[260px] rounded-2xl border border-border/60 bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 relative overflow-hidden shadow-xl">
+        <div className="mx-auto aspect-[9/16] max-w-[260px] rounded-2xl border border-border/60 bg-gradient-to-br from-fuchsia-600 via-rose-500 to-warning relative overflow-hidden shadow-xl">
           <div className="absolute inset-x-3 top-3 flex gap-1">
             {[0,1,2].map(i => <div key={i} className="h-0.5 flex-1 rounded-full bg-white/70" />)}
           </div>
@@ -1113,7 +1113,7 @@ const InstagramMockup = ({ caption, hook, cta, stats, slides = [] }: InstagramMo
     <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-lg max-w-md mx-auto">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-amber-400 p-[2px]">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-destructive via-fuchsia-500 to-warning p-[2px]">
             <div className="h-full w-full rounded-full bg-card flex items-center justify-center text-[10px] font-bold">CL</div>
           </div>
           <div>
@@ -1300,7 +1300,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   if (delivery_type === "email") {
     return (
-      <div className="aspect-[16/10] bg-gradient-to-br from-sky-500/10 via-background to-primary/10 p-4 flex flex-col justify-center border-b border-border/40">
+      <div className="aspect-[16/10] bg-gradient-to-br from-info/10 via-background to-primary/10 p-4 flex flex-col justify-center border-b border-border/40">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Assunto</div>
         <div className="text-sm font-semibold line-clamp-2">{content?.subject || "·"}</div>
         {content?.preheader && <div className="text-[11px] text-muted-foreground mt-1 line-clamp-1">{content.preheader}</div>}
@@ -1310,7 +1310,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   if (delivery_type === "creative") {
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-amber-500 via-rose-500 to-fuchsia-600 flex items-center justify-center p-4 overflow-hidden">
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-warning via-rose-500 to-fuchsia-600 flex items-center justify-center p-4 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.3),transparent_60%)]" />
         <div className="relative text-center text-white text-base font-bold leading-snug line-clamp-3">
           {content?.headline || approval.title}
@@ -1321,8 +1321,8 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   if (delivery_type === "contract") {
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-amber-500/15 via-background to-background p-4 border-b border-border/40">
-        <FileSignature className="h-5 w-5 text-amber-500 mb-2" />
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-warning/15 via-background to-background p-4 border-b border-border/40">
+        <FileSignature className="h-5 w-5 text-warning mb-2" />
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato · assinatura</div>
         <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
         <div className="text-[11px] text-muted-foreground mt-1">{content?.contract_value}</div>
@@ -1343,8 +1343,8 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   if (delivery_type === "document") {
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-sky-500/15 via-background to-background p-4 border-b border-border/40">
-        <FileText className="h-5 w-5 text-sky-500 mb-2" />
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-info/15 via-background to-background p-4 border-b border-border/40">
+        <FileText className="h-5 w-5 text-info mb-2" />
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Documento</div>
         <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.doc_title}</div>
         <div className="text-[11px] text-muted-foreground mt-1">{(content?.sections || []).length} seções</div>
@@ -1354,7 +1354,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   if (delivery_type === "stories") {
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 flex items-center justify-center overflow-hidden">
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-fuchsia-600 via-rose-500 to-warning flex items-center justify-center overflow-hidden">
         <Film className="absolute top-3 right-3 h-4 w-4 text-white/80" />
         <div className="text-center text-white space-y-1 px-4">
           <div className="text-[10px] uppercase tracking-[0.25em] opacity-80">Stories • 9:16</div>

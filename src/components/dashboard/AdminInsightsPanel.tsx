@@ -119,7 +119,7 @@ function generateInsights(
       description: `${atRisk.map(u => u.name).slice(0, 3).join(", ")}${atRisk.length > 3 ? ` e mais ${atRisk.length - 3}` : ""} apresentam sinais de abandono. Considere ação proativa.`,
       impact: "high",
       icon: AlertTriangle,
-      color: "text-red-400 bg-red-500/10 border-red-500/20",
+      color: "text-destructive bg-destructive/10 border-destructive/20",
     });
   }
 
@@ -133,7 +133,7 @@ function generateInsights(
       description: "Envie uma campanha de reativação ou acione o Concierge automaticamente.",
       impact: "medium",
       icon: Snowflake,
-      color: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+      color: "text-info bg-info/10 border-info/20",
     });
   }
 
@@ -148,7 +148,7 @@ function generateInsights(
       description: "Usuários no plano gratuito que já usaram 50%+ dos créditos. Alta probabilidade de conversão.",
       impact: "high",
       icon: TrendingUp,
-      color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+      color: "text-success bg-success/10 border-success/20",
     });
   }
 
@@ -162,7 +162,7 @@ function generateInsights(
       description: `Com ${topAgent.total_executions} execuções, este agente lidera a plataforma. Considere destacá-lo no marketplace.`,
       impact: "low",
       icon: Flame,
-      color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      color: "text-warning bg-warning/10 border-warning/20",
     });
   }
 
@@ -175,7 +175,7 @@ function generateInsights(
       description: "Nenhuma assinatura ativa ainda. Considere oferecer planos trial para converter usuários da waitlist.",
       impact: "high",
       icon: DollarSign,
-      color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      color: "text-warning bg-warning/10 border-warning/20",
     });
   }
 
@@ -339,16 +339,16 @@ Dados da plataforma CLAUTHOR:
   };
 
   const riskColors = {
-    low: "text-emerald-400 bg-emerald-500/10",
-    medium: "text-amber-400 bg-amber-500/10",
+    low: "text-success bg-success/10",
+    medium: "text-warning bg-warning/10",
     high: "text-orange-400 bg-orange-500/10",
-    critical: "text-red-400 bg-red-500/10",
+    critical: "text-destructive bg-destructive/10",
   };
 
   const healthColors = {
-    healthy: "text-emerald-400 bg-emerald-500/10",
-    at_risk: "text-amber-400 bg-amber-500/10",
-    churning: "text-red-400 bg-red-500/10",
+    healthy: "text-success bg-success/10",
+    at_risk: "text-warning bg-warning/10",
+    churning: "text-destructive bg-destructive/10",
   };
 
   const healthLabels = {
@@ -442,9 +442,9 @@ Dados da plataforma CLAUTHOR:
           <CardHeader className="py-3 px-4">
             <div className="flex items-center justify-between">
               <CardTitle className="font-display text-xs flex items-center gap-2">
-                <TrendingDown className="h-3.5 w-3.5 text-red-400" /> Previsão de Churn
+                <TrendingDown className="h-3.5 w-3.5 text-destructive" /> Previsão de Churn
               </CardTitle>
-              <Badge variant="outline" className="text-[9px] border-red-500/20 text-red-400">
+              <Badge variant="outline" className="text-[9px] border-destructive/20 text-destructive">
                 {userRisks.filter(u => u.riskLevel === "critical" || u.riskLevel === "high").length} em risco
               </Badge>
             </div>
@@ -540,10 +540,10 @@ Dados da plataforma CLAUTHOR:
         <CardContent className="px-4 pb-3">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {[
-              { label: "Usuários Ativos (7d)", value: userRisks.filter(u => u.daysSinceLastAction <= 7).length, total: userRisks.length, color: "text-emerald-400", icon: Activity },
-              { label: "Em Risco de Churn", value: userRisks.filter(u => u.riskLevel === "critical" || u.riskLevel === "high").length, total: userRisks.length, color: "text-red-400", icon: TrendingDown },
-              { label: "Prontos p/ Upgrade", value: allCredits.filter(c => c.plan_type === "free" && c.used_credits > c.total_credits * 0.5).length, total: allCredits.filter(c => c.plan_type === "free").length, color: "text-amber-400", icon: TrendingUp },
-              { label: "Agentes Dormentes", value: allAgents.filter(a => a.total_executions === 0).length, total: allAgents.length, color: "text-blue-400", icon: Snowflake },
+              { label: "Usuários Ativos (7d)", value: userRisks.filter(u => u.daysSinceLastAction <= 7).length, total: userRisks.length, color: "text-success", icon: Activity },
+              { label: "Em Risco de Churn", value: userRisks.filter(u => u.riskLevel === "critical" || u.riskLevel === "high").length, total: userRisks.length, color: "text-destructive", icon: TrendingDown },
+              { label: "Prontos p/ Upgrade", value: allCredits.filter(c => c.plan_type === "free" && c.used_credits > c.total_credits * 0.5).length, total: allCredits.filter(c => c.plan_type === "free").length, color: "text-warning", icon: TrendingUp },
+              { label: "Agentes Dormentes", value: allAgents.filter(a => a.total_executions === 0).length, total: allAgents.length, color: "text-info", icon: Snowflake },
               { label: "Taxa de Ativação", value: userRisks.filter(u => u.agentCount > 0).length, total: userRisks.length, color: "text-violet-400", icon: Target },
             ].map((metric) => (
               <div key={metric.label} className="p-3 rounded-xl bg-accent/20 text-center">

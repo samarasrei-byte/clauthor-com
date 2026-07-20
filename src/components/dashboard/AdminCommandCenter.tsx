@@ -131,20 +131,20 @@ const AdminCommandCenter = ({
   };
 
   const kpiCards = [
-    { icon: Users, label: "Usuários", value: usersCount, spark: [1, 3, 5, 8, 12, usersCount], gradient: "from-cyan-500/20 to-blue-500/10", ic: "text-cyan-400", bc: "border-cyan-500/20" },
-    { icon: Bot, label: "Agentes Ativos", value: activeAgents, spark: [0, 1, 2, 3, 4, activeAgents], gradient: "from-primary/20 to-rose-500/10", ic: "text-primary", bc: "border-primary/20" },
-    { icon: DollarSign, label: "MRR", value: totalRevenue / 100, prefix: "R$ ", spark: [0, 100, 300, 500, 700, totalRevenue / 100], gradient: "from-emerald-500/20 to-green-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
-    { icon: Coins, label: "Tokens", value: totalTokensUsed, spark: [0, 1000, 3000, 5000, 8000, totalTokensUsed], gradient: "from-amber-500/20 to-orange-500/10", ic: "text-amber-400", bc: "border-amber-500/20" },
+    { icon: Users, label: "Usuários", value: usersCount, spark: [1, 3, 5, 8, 12, usersCount], gradient: "from-cyan-500/20 to-info/10", ic: "text-cyan-400", bc: "border-cyan-500/20" },
+    { icon: Bot, label: "Agentes Ativos", value: activeAgents, spark: [0, 1, 2, 3, 4, activeAgents], gradient: "from-primary/20 to-destructive/10", ic: "text-primary", bc: "border-primary/20" },
+    { icon: DollarSign, label: "MRR", value: totalRevenue / 100, prefix: "R$ ", spark: [0, 100, 300, 500, 700, totalRevenue / 100], gradient: "from-success/20 to-success/10", ic: "text-success", bc: "border-success/20" },
+    { icon: Coins, label: "Tokens", value: totalTokensUsed, spark: [0, 1000, 3000, 5000, 8000, totalTokensUsed], gradient: "from-warning/20 to-orange-500/10", ic: "text-warning", bc: "border-warning/20" },
     { icon: Zap, label: "Execuções", value: totalExecutions, spark: [0, 10, 30, 50, 70, totalExecutions], gradient: "from-violet-500/20 to-purple-500/10", ic: "text-violet-400", bc: "border-violet-500/20" },
-    { icon: CheckCircle, label: "Sucesso", value: successRate, suffix: "%", spark: [90, 92, 94, 96, 97, successRate], gradient: "from-emerald-500/20 to-teal-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
-    { icon: ListOrdered, label: "Waitlist", value: waitingCount, spark: [0, 2, 5, 8, 10, waitingCount], gradient: "from-blue-500/20 to-indigo-500/10", ic: "text-blue-400", bc: "border-blue-500/20" },
-    { icon: Eye, label: "Pendentes", value: pendingCount, spark: [0, 1, 2, 1, 3, pendingCount], gradient: "from-rose-500/20 to-red-500/10", ic: "text-rose-400", bc: "border-rose-500/20" },
+    { icon: CheckCircle, label: "Sucesso", value: successRate, suffix: "%", spark: [90, 92, 94, 96, 97, successRate], gradient: "from-success/20 to-teal-500/10", ic: "text-success", bc: "border-success/20" },
+    { icon: ListOrdered, label: "Waitlist", value: waitingCount, spark: [0, 2, 5, 8, 10, waitingCount], gradient: "from-info/20 to-indigo-500/10", ic: "text-info", bc: "border-info/20" },
+    { icon: Eye, label: "Pendentes", value: pendingCount, spark: [0, 1, 2, 1, 3, pendingCount], gradient: "from-destructive/20 to-destructive/10", ic: "text-destructive", bc: "border-destructive/20" },
   ];
 
   const departments = [
-    { id: "war-room", label: "Cyber Security", icon: ShieldCheck, color: "text-red-400", bg: "bg-red-500/10", status: "🟢 Operacional", desc: "CISO + 6 agentes online" },
-    { id: "insights", label: "Financeiro", icon: Wallet, color: "text-emerald-400", bg: "bg-emerald-500/10", status: "🟢 Operacional", desc: "CFO Digital ativo" },
-    { id: "agents", label: "Growth", icon: Rocket, color: "text-blue-400", bg: "bg-blue-500/10", status: "🟢 Operacional", desc: "CGO Digital ativo" },
+    { id: "war-room", label: "Cyber Security", icon: ShieldCheck, color: "text-destructive", bg: "bg-destructive/10", status: "🟢 Operacional", desc: "CISO + 6 agentes online" },
+    { id: "insights", label: "Financeiro", icon: Wallet, color: "text-success", bg: "bg-success/10", status: "🟢 Operacional", desc: "CFO Digital ativo" },
+    { id: "agents", label: "Growth", icon: Rocket, color: "text-info", bg: "bg-info/10", status: "🟢 Operacional", desc: "CGO Digital ativo" },
     { id: "logs", label: "Operações", icon: Cpu, color: "text-violet-400", bg: "bg-violet-500/10", status: "🟢 Operacional", desc: "COO Digital ativo" },
   ];
 
@@ -169,10 +169,10 @@ const AdminCommandCenter = ({
       >
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-            <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-75" />
+            <div className="w-2.5 h-2.5 rounded-full bg-success" />
+            <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-success animate-ping opacity-75" />
           </div>
-          <span className="text-xs font-medium text-emerald-400">ORQUESTRADOR ATIVO</span>
+          <span className="text-xs font-medium text-success">ORQUESTRADOR ATIVO</span>
           <Badge className="bg-primary/10 text-primary text-[9px] border-0">4 DEPARTAMENTOS</Badge>
         </div>
         <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
@@ -232,7 +232,7 @@ const AdminCommandCenter = ({
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px]">{dept.status}</span>
-              <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
+              <Radio className="h-3 w-3 text-success animate-pulse" />
             </div>
           </motion.button>
         ))}
@@ -246,9 +246,9 @@ const AdminCommandCenter = ({
             {/* Chat Header */}
             <div className="p-4 border-b border-white/[0.06] flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-amber-500/10 flex items-center justify-center relative">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-warning/10 flex items-center justify-center relative">
                   <Brain className="h-5 w-5 text-primary" />
-                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background" />
+                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-background" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -269,7 +269,7 @@ const AdminCommandCenter = ({
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-amber-500/10 flex items-center justify-center mb-3">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-warning/10 flex items-center justify-center mb-3">
                     <Brain className="h-7 w-7 text-primary" />
                   </div>
                   <h4 className="font-display font-bold text-sm mb-1">Orquestrador Clauthor</h4>
@@ -349,9 +349,9 @@ const AdminCommandCenter = ({
               <CardHeader className="py-3 px-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="font-display text-xs flex items-center gap-2">
-                    <TrendingUp className="h-3.5 w-3.5 text-emerald-400" /> Receita
+                    <TrendingUp className="h-3.5 w-3.5 text-success" /> Receita
                   </CardTitle>
-                  <Badge variant="outline" className="text-[9px] border-emerald-500/20 text-emerald-400">+23%</Badge>
+                  <Badge variant="outline" className="text-[9px] border-success/20 text-success">+23%</Badge>
                 </div>
               </CardHeader>
               <CardContent className="px-4 pb-3">
@@ -405,7 +405,7 @@ const AdminCommandCenter = ({
             <Card className="bg-background/30 backdrop-blur-2xl border border-white/[0.06]">
               <CardHeader className="py-3 px-4">
                 <CardTitle className="font-display text-xs flex items-center gap-2">
-                  <DollarSign className="h-3.5 w-3.5 text-emerald-400" /> Financeiro
+                  <DollarSign className="h-3.5 w-3.5 text-success" /> Financeiro
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 px-4 pb-3">
@@ -436,11 +436,11 @@ const AdminCommandCenter = ({
             <CardHeader className="py-3 px-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="font-display text-xs flex items-center gap-2">
-                  <Activity className="h-3.5 w-3.5 text-amber-400" /> Atividade
+                  <Activity className="h-3.5 w-3.5 text-warning" /> Atividade
                 </CardTitle>
                 <div className="relative">
-                  <div className="w-2 h-2 rounded-full bg-amber-400" />
-                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                  <div className="w-2 h-2 rounded-full bg-warning" />
+                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-warning animate-ping" />
                 </div>
               </div>
             </CardHeader>
@@ -449,12 +449,12 @@ const AdminCommandCenter = ({
                 <p className="text-[10px] text-muted-foreground text-center py-4">Sem atividade</p>
               ) : recentLogs.map((log: any) => (
                 <div key={log.id} className="flex items-center gap-2 p-2 rounded-xl bg-accent/20">
-                  <div className={`w-1.5 h-6 rounded-full ${log.status === "success" ? "bg-emerald-500" : "bg-red-500"}`} />
+                  <div className={`w-1.5 h-6 rounded-full ${log.status === "success" ? "bg-success" : "bg-destructive"}`} />
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-medium truncate">{log.agent?.name || log.action}</p>
                     <p className="text-[9px] text-muted-foreground">{new Date(log.created_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}</p>
                   </div>
-                  <Badge variant="secondary" className={`text-[8px] ${log.status === "success" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>{log.status}</Badge>
+                  <Badge variant="secondary" className={`text-[8px] ${log.status === "success" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>{log.status}</Badge>
                 </div>
               ))}
               <button onClick={() => onTabChange("logs")} className="w-full text-[9px] text-muted-foreground hover:text-foreground text-center pt-1">Ver todos →</button>
@@ -496,16 +496,16 @@ const AdminCommandCenter = ({
             <CardContent className="space-y-1.5 px-4 pb-3">
               {[
                 { name: "Clauthor AI Gateway", status: "online", icon: Brain, color: "text-primary" },
-                { name: "Database (PostgreSQL)", status: "online", icon: Database, color: "text-emerald-400" },
+                { name: "Database (PostgreSQL)", status: "online", icon: Database, color: "text-success" },
                 { name: "Edge Functions", status: "online", icon: Cpu, color: "text-cyan-400" },
-                { name: "Stripe (Pagamentos)", status: "pendente", icon: DollarSign, color: "text-amber-400" },
+                { name: "Stripe (Pagamentos)", status: "pendente", icon: DollarSign, color: "text-warning" },
                 { name: "WhatsApp API", status: "futuro", icon: MessageSquare, color: "text-muted-foreground" },
                 { name: "Marketplace", status: "online", icon: Store, color: "text-violet-400" },
               ].map((integ) => (
                 <div key={integ.name} className="flex items-center gap-2 p-2 rounded-xl bg-accent/20">
                   <integ.icon className={`h-3.5 w-3.5 ${integ.color}`} />
                   <span className="text-[10px] font-medium flex-1">{integ.name}</span>
-                  <Badge variant="secondary" className={`text-[8px] ${integ.status === "online" ? "bg-emerald-500/10 text-emerald-400" : integ.status === "pendente" ? "bg-amber-500/10 text-amber-400" : "bg-muted text-muted-foreground"}`}>
+                  <Badge variant="secondary" className={`text-[8px] ${integ.status === "online" ? "bg-success/10 text-success" : integ.status === "pendente" ? "bg-warning/10 text-warning" : "bg-muted text-muted-foreground"}`}>
                     {integ.status}
                   </Badge>
                 </div>

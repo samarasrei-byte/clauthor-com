@@ -17,12 +17,12 @@ interface AgentChatProps {
 }
 
 const TOOL_META: Record<string, { icon: any; label: string; color: string }> = {
-  send_email: { icon: Mail, label: "Email Enviado", color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
-  create_task: { icon: CheckSquare, label: "Tarefa Criada", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+  send_email: { icon: Mail, label: "Email Enviado", color: "text-info bg-info/10 border-info/20" },
+  create_task: { icon: CheckSquare, label: "Tarefa Criada", color: "text-success bg-success/10 border-success/20" },
   generate_report: { icon: BarChart3, label: "Relatório Gerado", color: "text-purple-400 bg-purple-500/10 border-purple-500/20" },
-  search_leads: { icon: Search, label: "Leads Encontrados", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+  search_leads: { icon: Search, label: "Leads Encontrados", color: "text-warning bg-warning/10 border-warning/20" },
   schedule_meeting: { icon: Calendar, label: "Reunião Agendada", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
-  analyze_data: { icon: TrendingUp, label: "Análise Concluída", color: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
+  analyze_data: { icon: TrendingUp, label: "Análise Concluída", color: "text-destructive bg-destructive/10 border-destructive/20" },
   delegate_to_agent: { icon: GitBranch, label: "Delegação A2A", color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20" },
 };
 
@@ -76,7 +76,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
                 <span className="text-xs font-bold uppercase tracking-wider text-primary">
                   {isUpgrade ? "Upgrade Necessário" : "Agente Recomendado"}
                 </span>
-                <Badge variant="secondary" className="text-[9px] px-1.5 py-0 bg-amber-500/20 text-amber-400 border-0">
+                <Badge variant="secondary" className="text-[9px] px-1.5 py-0 bg-warning/20 text-warning border-0">
                   Delegação A2A
                 </Badge>
               </div>
@@ -171,7 +171,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
           <GitBranch className="h-4 w-4" />
           <span className="text-xs font-semibold uppercase tracking-wide">Delegação Agent-to-Agent</span>
           {toolResult.success && (
-            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-emerald-500/20 text-emerald-400 border-0">
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-success/20 text-success border-0">
               ✓ Completa
             </Badge>
           )}
@@ -225,7 +225,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
                 <div key={i} className="flex items-center gap-2 bg-black/20 rounded-lg px-2 py-1 text-[10px]">
                   <SubIcon className="h-3 w-3" />
                   <span>{subMeta.label}</span>
-                  {sub.success && <span className="text-emerald-400">✓</span>}
+                  {sub.success && <span className="text-success">✓</span>}
                 </div>
               );
             })}
@@ -234,8 +234,8 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
 
         {result.priority && result.priority !== "normal" && (
           <Badge variant="secondary" className={`text-[9px] px-1.5 py-0 mt-2 border-0 ${
-            result.priority === "urgent" ? "bg-red-500/20 text-red-400" : 
-            result.priority === "high" ? "bg-amber-500/20 text-amber-400" : "bg-white/5"
+            result.priority === "urgent" ? "bg-destructive/20 text-destructive" : 
+            result.priority === "high" ? "bg-warning/20 text-warning" : "bg-white/5"
           }`}>
             Prioridade: {result.priority}
           </Badge>
@@ -255,17 +255,17 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 mt-2"
+        className="rounded-xl border border-warning/20 bg-warning/5 p-4 mt-2"
       >
         <div className="flex items-center gap-2 mb-2">
-          <ShieldCheck className="h-4 w-4 text-amber-400" />
-          <span className="text-xs font-semibold uppercase tracking-wide text-amber-400">Credenciais Necessárias</span>
+          <ShieldCheck className="h-4 w-4 text-warning" />
+          <span className="text-xs font-semibold uppercase tracking-wide text-warning">Credenciais Necessárias</span>
         </div>
         <p className="text-sm text-muted-foreground mb-3">
           Para executar esta ação, conecte sua conta do <strong className="text-foreground">{serviceName}</strong> na página de Integrações.
         </p>
         <Link to="/dashboard" onClick={() => {}} state={{ section: "integrations" }}>
-          <Button size="sm" variant="outline" className="gap-1.5 text-xs border-amber-500/20 hover:bg-amber-500/10 text-amber-400">
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs border-warning/20 hover:bg-warning/10 text-warning">
             <Plug className="h-3.5 w-3.5" />
             Conectar Integrações
             <ArrowUpRight className="h-3 w-3" />
@@ -285,7 +285,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
         <Icon className="h-4 w-4" />
         <span className="text-xs font-semibold uppercase tracking-wide">{meta.label}</span>
         {toolResult.success && (
-          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-emerald-500/20 text-emerald-400 border-0">
+          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-success/20 text-success border-0">
             ✓ Executado
           </Badge>
         )}
@@ -324,7 +324,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
                     <div className="flex items-center gap-2">
                       <span className="opacity-70">{lead.industry}</span>
                       <Badge variant="secondary" className={`text-[9px] px-1 py-0 border-0 ${
-                        lead.status === "hot" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400"
+                        lead.status === "hot" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"
                       }`}>
                         {lead.score}% • {lead.status}
                       </Badge>
@@ -454,7 +454,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
           <div>
             <h3 className="font-display font-semibold text-sm">{agentName}</h3>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               <span className="text-xs text-muted-foreground">
                 Online • Streaming {ttsEnabled ? "• 🔊 Voz" : ""}
               </span>
