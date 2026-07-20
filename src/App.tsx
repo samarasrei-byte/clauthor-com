@@ -44,6 +44,9 @@ const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
 const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
+const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
+const MySquads = lazyRetry(() => import("./pages/MySquads"));
+
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
 const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
