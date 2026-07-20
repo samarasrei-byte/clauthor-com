@@ -16,7 +16,9 @@ import {
   ArrowRight,
   MessageSquare,
   Info as InfoIcon,
+  FolderOpen,
 } from "lucide-react";
+import FilesPickerSheet, { type PickedFile } from "@/components/files/FilesPickerSheet";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
