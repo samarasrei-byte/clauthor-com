@@ -225,12 +225,13 @@ export default function FilesPickerSheet({
                           if (!thumb) return;
                           if (f.file_type === "image") setPreview({ url: thumb, name: f.name, kind: "image" });
                           else if (f.file_type === "video") setPreview({ url: thumb, name: f.name, kind: "video" });
+                          else if (f.file_type === "pdf") setPreview({ url: thumb, name: f.name, kind: "pdf" });
                         }}
-                        disabled={!((f.file_type === "image" || f.file_type === "video") && thumb)}
+                        disabled={!((f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && thumb)}
                         className={cn(
                           "h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden",
                           M.ring,
-                          (f.file_type === "image" || f.file_type === "video") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
+                          (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
                         )}
                         aria-label={thumb ? `Ver ${M.label.toLowerCase()}` : undefined}
                       >
