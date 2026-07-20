@@ -315,7 +315,7 @@ export default function ThorCenter({ onNavigate }: Props) {
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
-            Avisos, recomendações e decisões pendentes — só o que tem impacto real na sua operação.
+            Avisos, recomendações e decisões pendentes · só o que tem impacto real na sua operação.
           </p>
         </div>
       </motion.div>

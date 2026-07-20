@@ -26,7 +26,7 @@ const DEFAULTS = { primary: "#DC2626", secondary: "#0F172A", accent: "#F59E0B" }
  * O usuário digita apenas o site. O Thor (Firecrawl) extrai nome + cores + logo
  * em ~4s e mostra um preview animado. Um único botão finaliza.
  *
- * Fallback: se o scrape falhar, aceita nome manual — sem obrigar site.
+ * Fallback: se o scrape falhar, aceita nome manual · sem obrigar site.
  */
 export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Props) {
   const { scrape, scraping } = useCompanyDna();
@@ -73,7 +73,7 @@ export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Prop
   const confirm = () => {
     if (!detected) return;
     if (!detected.name.trim()) {
-      toast.error("Não consegui detectar o nome — pode me contar?");
+      toast.error("Não consegui detectar o nome · pode me contar?");
       setShowManual(true);
       return;
     }
@@ -177,7 +177,7 @@ export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Prop
               onClick={onSkip}
               className="mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Não tenho site — pular
+              Não tenho site · pular
             </button>
           </motion.div>
         ) : (
@@ -260,7 +260,7 @@ export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Prop
                 onClick={() => { setDetected(null); setShowManual(false); }}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Não é essa — corrigir
+                Não é essa · corrigir
               </button>
             </motion.div>
           </motion.div>

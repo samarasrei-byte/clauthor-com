@@ -222,7 +222,7 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
           value={isLoading ? "…" : `${metrics.hoursSaved}h`}
           hint={
             isEmpty
-              ? "—"
+              ? "·"
               : `equivalente a ~${Math.max(1, Math.round(metrics.hoursSaved / 8))} dia(s) de analista`
           }
         />
@@ -232,7 +232,7 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
           value={isLoading ? "…" : formatBRL(metrics.savings)}
           hint={
             isEmpty
-              ? "—"
+              ? "·"
               : `vs. ${formatBRL(metrics.humanEquivalent)} de equivalente humano`
           }
         />

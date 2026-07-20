@@ -19,7 +19,7 @@ export default function VideoOwnershipStep({ value, onSelect }: Props) {
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-muted-foreground">00 · DNA da empresa</p>
         <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
-          Aquele vídeo que você viu — é da sua empresa?
+          Aquele vídeo que você viu · é da sua empresa?
         </h1>
         <p className="type-body text-muted-foreground max-w-lg mx-auto">
           Em 60 segundos o Thor lê a identidade da marca (cores, tipografia, core business) e passa a criar vídeos e estratégias no seu tom.

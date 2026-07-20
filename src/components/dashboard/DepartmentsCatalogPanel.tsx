@@ -114,7 +114,7 @@ const DepartmentsCatalogPanel = () => {
         </motion.article>
       )}
 
-      {/* Grid dos demais departamentos — auto-fit para fluir em qualquer viewport */}
+      {/* Grid dos demais departamentos · auto-fit para fluir em qualquer viewport */}
       <div
         className="grid gap-2.5"
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}

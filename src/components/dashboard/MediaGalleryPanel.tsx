@@ -255,7 +255,7 @@ const MediaGalleryPanel = () => {
             </Badge>
             <h1 className="text-2xl font-semibold tracking-tight">Galeria unificada</h1>
             <p className="text-sm text-muted-foreground">
-              Todo o conteúdo gerado pelos agentes — vídeos e artes visuais no mesmo lugar. Clique para revisar, aprovar ou pedir ajustes sem sair do painel.
+              Todo o conteúdo gerado pelos agentes · vídeos e artes visuais no mesmo lugar. Clique para revisar, aprovar ou pedir ajustes sem sair do painel.
             </p>
           </div>
           <div className="flex gap-2">
@@ -532,7 +532,7 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
                 />
                 <p className="text-[10px] text-muted-foreground mt-1.5 leading-relaxed">
                   <SparklesLucide className="inline h-3 w-3 mr-0.5" />
-                  Toda decisão passa pelo agente responsável — ele revisa, ajusta se necessário e publica.
+                  Toda decisão passa pelo agente responsável · ele revisa, ajusta se necessário e publica.
                 </p>
               </div>
 

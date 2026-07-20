@@ -47,7 +47,7 @@ export default function PainCapture({ initial = "", onDone }: Props) {
 
   useEffect(() => { inputRef.current?.focus(); }, []);
 
-  // Typewriter effect para paráfrase — Thor "pensando".
+  // Typewriter effect para paráfrase · Thor "pensando".
   useEffect(() => {
     if (!analysis) { setTyped(""); return; }
     let i = 0;
@@ -98,7 +98,7 @@ export default function PainCapture({ initial = "", onDone }: Props) {
   };
 
   const rejectMatch = () => {
-    // Segue o fluxo antigo — sem foco inferido, força QuickPicks manual.
+    // Segue o fluxo antigo · sem foco inferido, força QuickPicks manual.
     onDone(text.trim());
   };
 
@@ -230,7 +230,7 @@ export default function PainCapture({ initial = "", onDone }: Props) {
                 transition={{ delay: 0.2 }}
                 className="text-base sm:text-lg text-muted-foreground text-center max-w-xl mb-8"
               >
-                Se estiver certo, posso te mostrar quem cuida disso — o time de{" "}
+                Se estiver certo, posso te mostrar quem cuida disso · o time de{" "}
                 <span className="text-foreground font-medium">{FOCUS_LABEL[analysis.focus]}</span>.
               </motion.p>
             )}

@@ -51,7 +51,7 @@ const DashboardLayout = () => {
     return () => window.removeEventListener("sb:collapsed-change", onChange as EventListener);
   }, []);
 
-  // Densidade tipográfica do painel — escala global via rem (Notion/Salesforce tier).
+  // Densidade tipográfica do painel · escala global via rem (Notion/Salesforce tier).
   useEffect(() => {
     document.documentElement.classList.add("dash-dense");
     return () => document.documentElement.classList.remove("dash-dense");
@@ -157,7 +157,7 @@ const DashboardLayout = () => {
                   </Button>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="bottom">Video Studio — gere e edite vídeos</TooltipContent>
+              <TooltipContent side="bottom">Video Studio · gere e edite vídeos</TooltipContent>
             </Tooltip>
 
             {isAdmin && (
@@ -173,7 +173,7 @@ const DashboardLayout = () => {
               </Tooltip>
             )}
 
-            {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar — evita duplicidade */}
+            {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar · evita duplicidade */}
 
             <Tooltip>
               <TooltipTrigger asChild>

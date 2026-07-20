@@ -53,7 +53,7 @@ const AgentsPage = () => {
         WF.forEach((dept: any) => {
           dept.squads.forEach((squad: any) => {
             squad.agents.forEach((agent: any) => {
-              // Same slug pode aparecer em múltiplas squads/depts — qualificamos
+              // Same slug pode aparecer em múltiplas squads/depts · qualificamos
               // pelo caminho (dept/squad) e removemos duplicatas por segurança.
               const deptKey = dept.slug ?? dept.id ?? dept.name;
               const squadKey = squad.slug ?? squad.id ?? squad.name;

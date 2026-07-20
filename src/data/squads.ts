@@ -1530,7 +1530,7 @@ export const SQUADS: Squad[] = [
     ],
     faq: [
       { q: "Substitui meu editor?", a: "Substitui o operacional (corte, exportação, thumb, upload). Editor humano fica pra episódio especial e narrativa mais complexa." },
-      { q: "Funciona pra vídeo educativo?", a: "Sim. Adaptamos pra aula, tutorial e curso — inclusive com legenda e capítulo por assunto." },
+      { q: "Funciona pra vídeo educativo?", a: "Sim. Adaptamos pra aula, tutorial e curso · inclusive com legenda e capítulo por assunto." },
       { q: "Qual formato de arquivo eu mando?", a: "Qualquer coisa: MP4, MOV, WAV, arquivo do Descript ou Riverside. O squad faz o resto." },
     ],
     seoTitle: "Podcast & YouTube IA, Squad de edição, shorts e SEO | Clauthor",

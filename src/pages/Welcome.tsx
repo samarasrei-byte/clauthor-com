@@ -87,7 +87,7 @@ export default function Welcome() {
 
   const handleSkip = async () => {
     try { sessionStorage.setItem("onboarding-skipped-session", "1"); } catch { /* ignore */ }
-    // Mesmo pulando, marcamos como concluído — evita reabrir o wizard em cada login.
+    // Mesmo pulando, marcamos como concluído · evita reabrir o wizard em cada login.
     if (user) await markOnboardingComplete(user.id, { source: "welcome_skip" });
     navigate(user ? "/dashboard" : "/", { replace: true });
   };

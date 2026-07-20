@@ -45,7 +45,7 @@ export default function GlobalDashboardSidebar() {
     { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
 
-    // Meu time — 3 pais dobráveis: Agentes / Squads / Departamentos, cada um com "Meus", "Catálogo" e "Criar/Contratar".
+    // Meu time · 3 pais dobráveis: Agentes / Squads / Departamentos, cada um com "Meus", "Catálogo" e "Criar/Contratar".
     {
       id: "tab:agents", label: "Agentes", icon: Bot, group: zoneTeam,
       children: [

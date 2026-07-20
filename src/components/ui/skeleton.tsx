@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Skeleton · shimmer premium (Linear/Vercel-like).
- * Use `variant="pulse"` só para casos legacy — o default agora é shimmer.
+ * Use `variant="pulse"` só para casos legacy · o default agora é shimmer.
  */
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "shimmer" | "pulse";

@@ -16,7 +16,7 @@ interface TourStep {
 // Tour com 4 passos: painel, departamento pendente, Thor, arquivos/aprovações.
 const TOUR_STEPS: TourStep[] = [
   { target: "nav-overview", title: "Seu painel", description: "Aqui você vê agentes, métricas e ações rápidas em um só lugar.", position: "right" },
-  { target: "pending-department", title: "Seu departamento", description: "Este é o time que o Thor montou pra você. Clique em 'Ativar' quando estiver pronto — o pagamento acontece aqui mesmo.", position: "right" },
+  { target: "pending-department", title: "Seu departamento", description: "Este é o time que o Thor montou pra você. Clique em 'Ativar' quando estiver pronto · o pagamento acontece aqui mesmo.", position: "right" },
   { target: "nav-chat", title: "Fale com o Thor", description: "A qualquer momento converse com o Thor pra ajustar o time ou pedir uma execução.", position: "right" },
   { target: "nav-approvals", title: "Aprovações e arquivos", description: "Tudo que os agentes produzem aparece aqui para você revisar e aprovar.", position: "right" },
 ];

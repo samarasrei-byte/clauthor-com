@@ -7,7 +7,7 @@
  *   - Sem jargão. Sem gráfico. Sem log-in obrigatório.
  *
  * Defaults derivam de `department_roi_config` no admin quando disponível, senão
- * caem no heurístico embutido — o cliente pode ajustar os sliders manualmente
+ * caem no heurístico embutido · o cliente pode ajustar os sliders manualmente
  * e vê o número mudar em tempo real.
  */
 
@@ -26,7 +26,7 @@ interface RoiDefaults {
   taskLabel: string;
 }
 
-// Heurística por departamento. Números redondos e defensáveis — não fingir precisão.
+// Heurística por departamento. Números redondos e defensáveis · não fingir precisão.
 const DEPT_DEFAULTS: Record<string, RoiDefaults> = {
   comercial:      { tasksPerMonth: 200, minutesPerTask: 25, hourlyRate: 60, taskLabel: "leads qualificados" },
   marketing:      { tasksPerMonth: 40,  minutesPerTask: 90, hourlyRate: 70, taskLabel: "peças de conteúdo" },
@@ -133,7 +133,7 @@ export default function RoiCalculator({ departmentId, monthlyPrice, className }:
       }
       await navigator.clipboard.writeText(link);
       setCopied(true);
-      toast.success("Link da simulação copiado", { description: "Cole em qualquer lugar — os números vão junto." });
+      toast.success("Link da simulação copiado", { description: "Cole em qualquer lugar · os números vão junto." });
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Silencia AbortError (usuário fechou o share sheet) e falhas de clipboard.
@@ -161,7 +161,7 @@ export default function RoiCalculator({ departmentId, monthlyPrice, className }:
         </Button>
       </div>
       <p className="text-sm text-white/60 max-w-2xl">
-        Ajuste os números pro seu contexto. A conta é feita em tempo real —
+        Ajuste os números pro seu contexto. A conta é feita em tempo real ·
         sem cadastro, sem pegadinha. Você vê exatamente quando o departamento se paga.
       </p>
 

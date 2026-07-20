@@ -9,7 +9,7 @@ const VideoStudio = lazy(() => import("./VideoStudio"));
 const VideoClipper = lazy(() => import("./VideoClipper"));
 
 /**
- * Video Hub — unifica Video Studio (geração) + Auto-Clipper (cortes) em abas.
+ * Video Hub · unifica Video Studio (geração) + Auto-Clipper (cortes) em abas.
  * Query param `?tab=studio|clipper` controla a aba ativa.
  */
 

@@ -84,7 +84,7 @@ export function useVideoCopilot() {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData.session?.access_token;
         if (!token) {
-          toast.error("Sessão expirada — faça login novamente.");
+          toast.error("Sessão expirada · faça login novamente.");
           setThinking(false);
           return;
         }

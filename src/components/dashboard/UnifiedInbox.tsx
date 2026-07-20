@@ -260,12 +260,12 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
                   <EmptyState
                     icon={InboxIcon}
                     title="Nenhuma conversa ainda"
-                    description="Suas conversas com agentes aparecem aqui — WhatsApp, e-mail e chat interno num só lugar."
+                    description="Suas conversas com agentes aparecem aqui · WhatsApp, e-mail e chat interno num só lugar."
                     action={{
                       label: "Falar com um agente",
                       href: "/dashboard?tab=agents",
                     }}
-                    hint="Dica: envie um WhatsApp para o número do departamento contratado — a conversa aparece aqui em segundos."
+                    hint="Dica: envie um WhatsApp para o número do departamento contratado · a conversa aparece aqui em segundos."
                     size="sm"
                   />
                 </div>

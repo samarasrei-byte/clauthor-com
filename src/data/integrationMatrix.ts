@@ -5,7 +5,7 @@
  * - oauth      🟢 1-clique (login social autorizando escopos)
  * - api_key    🟡 Cole a API key (2 min, manual)
  * - scraping   🔵 Automático via Firecrawl/scraper interno (sem input do cliente)
- * - roadmap    🔴 Em breve — mostra transparência de o que ainda falta
+ * - roadmap    🔴 Em breve · mostra transparência de o que ainda falta
  *
  * IMPORTANTE: essa matriz é a fonte da verdade exibida ANTES da compra.
  * Não prometer 1-clique aqui se o OAuth não estiver realmente implementado.
@@ -24,7 +24,7 @@ export interface IntegrationItem {
 export interface DepartmentIntegrations {
   /** id do departamento (bate com departmentPackages.ts). */
   departmentId: string;
-  /** Lista ordenada — as mais críticas primeiro. */
+  /** Lista ordenada · as mais críticas primeiro. */
   items: readonly IntegrationItem[];
 }
 
@@ -36,7 +36,7 @@ export const STATUS_META: Record<
     label: "1-clique",
     dot: "bg-emerald-400",
     tone: "text-emerald-300",
-    description: "Login com sua conta autorizando os agentes — sem colar chave.",
+    description: "Login com sua conta autorizando os agentes · sem colar chave.",
   },
   api_key: {
     label: "Cole API key",
@@ -48,13 +48,13 @@ export const STATUS_META: Record<
     label: "Automático",
     dot: "bg-sky-400",
     tone: "text-sky-300",
-    description: "Coleta pública sem login — o agente já vem sabendo ler.",
+    description: "Coleta pública sem login · o agente já vem sabendo ler.",
   },
   roadmap: {
     label: "Em breve",
     dot: "bg-white/30",
     tone: "text-white/50",
-    description: "Ainda não disponível — no roadmap dos próximos 60 dias.",
+    description: "Ainda não disponível · no roadmap dos próximos 60 dias.",
   },
 };
 
@@ -65,7 +65,7 @@ export const INTEGRATION_MATRIX: readonly DepartmentIntegrations[] = [
       { name: "Google Sheets", status: "oauth", purpose: "Ler ICP e escrever leads qualificados na sua planilha." },
       { name: "Gmail", status: "oauth", purpose: "Enviar cold emails e ler respostas dos prospects." },
       { name: "Google Calendar", status: "oauth", purpose: "Agendar reuniões automaticamente com quem responde." },
-      { name: "LinkedIn (Hunter)", status: "scraping", purpose: "Prospecção via automação white-label — sem colar cookie." },
+      { name: "LinkedIn (Hunter)", status: "scraping", purpose: "Prospecção via automação white-label · sem colar cookie." },
       { name: "WhatsApp Business", status: "api_key", purpose: "Follow-up por WhatsApp quando o lead responde." },
       { name: "HubSpot / Pipedrive", status: "roadmap", purpose: "Sync bidirecional com CRM externo." },
     ],

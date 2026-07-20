@@ -119,7 +119,7 @@ const AuthPage = () => {
         localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
       }
       // FIX #2 · preservar destino pós-auth (ex.: /welcome retomando o draft do onboarding).
-      // Só concatenamos se o redirect for same-origin (path relativo) — evita open-redirect.
+      // Só concatenamos se o redirect for same-origin (path relativo) · evita open-redirect.
       const safeRedirect = redirectParam && redirectParam.startsWith("/") ? redirectParam : "";
       const targetOrigin = safeRedirect
         ? `${window.location.origin}${safeRedirect}`

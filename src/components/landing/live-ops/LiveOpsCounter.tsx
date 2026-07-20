@@ -2,7 +2,7 @@
  * LiveOpsCounter · três indicadores auditáveis da plataforma.
  *
  * Números fixos e verificáveis (workforce catalog + status de beta).
- * Nada de contador inflado — integridade > vaidade.
+ * Nada de contador inflado · integridade > vaidade.
  */
 import { motion } from "framer-motion";
 

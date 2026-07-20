@@ -9,7 +9,7 @@ const STEPS = [
   {
     icon: MessageSquare,
     title: "Converse com o Thor",
-    body: "Explique em uma frase o que precisa. O Thor faz 3–4 perguntas objetivas — sem prompt cru.",
+    body: "Explique em uma frase o que precisa. O Thor faz 3–4 perguntas objetivas · sem prompt cru.",
   },
   {
     icon: ImageIcon,

@@ -13,7 +13,7 @@ import KpiStrip from "./KpiStrip";
 /**
  * Props consumidas de fato pelo componente. As demais métricas (executions,
  * tokens, savings, credits, subscriptions, logs) já são renderizadas em
- * <KpiStrip/> pelo pai (DashboardOverview) — não precisamos duplicar aqui.
+ * <KpiStrip/> pelo pai (DashboardOverview) · não precisamos duplicar aqui.
  * Mantemos opcionais os campos legados p/ compatibilidade com callsites
  * antigos, mas o componente só usa activeAgents + agents.
  */
@@ -21,7 +21,7 @@ interface ClientCommandCenterProps {
   activeAgents: number;
   agents?: any[];
   onNavigate?: (section: string) => void;
-  /** @deprecated — não usado; mantido só p/ retrocompat. */
+  /** @deprecated · não usado; mantido só p/ retrocompat. */
   totalExecutions?: number;
   /** @deprecated */
   totalTokensUsed?: number;

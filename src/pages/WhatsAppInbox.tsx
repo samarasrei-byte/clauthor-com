@@ -114,7 +114,7 @@ function SetupCard({ tenantId, onConfigured }: { tenantId: string; onConfigured:
         {result && (
           <div className="mt-6 p-4 rounded-lg bg-muted space-y-3">
             <p className="text-sm font-semibold flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-500" /> Próximo passo — configurar no Meta:
+              <CheckCircle2 className="w-4 h-4 text-green-500" /> Próximo passo · configurar no Meta:
             </p>
             <div className="space-y-2 text-xs">
               <div>
@@ -247,7 +247,7 @@ export default function WhatsAppInbox() {
   if (!configQuery.data) {
     return (
       <>
-        <SEO title="Conectar WhatsApp — Clauthor" description="Configure o WhatsApp Business no workspace" />
+        <SEO title="Conectar WhatsApp · Clauthor" description="Configure o WhatsApp Business no workspace" />
         <div className="p-6">
           <SetupCard tenantId={tenantId} onConfigured={() => configQuery.refetch()} />
         </div>
@@ -257,7 +257,7 @@ export default function WhatsAppInbox() {
 
   return (
     <>
-      <SEO title="WhatsApp — Clauthor" description="Caixa de entrada WhatsApp integrada com THOR" />
+      <SEO title="WhatsApp · Clauthor" description="Caixa de entrada WhatsApp integrada com THOR" />
       <div className="flex h-[calc(100vh-4rem)] border-t">
         {/* Sidebar de conversas */}
         <aside className="w-80 border-r bg-card flex flex-col">
@@ -294,7 +294,7 @@ export default function WhatsAppInbox() {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">
-                  {conv.last_message_preview ?? "—"}
+                  {conv.last_message_preview ?? "·"}
                 </p>
                 <p className="text-[10px] text-muted-foreground mt-1">
                   {format(new Date(conv.last_message_at), "dd/MM HH:mm", { locale: ptBR })}

@@ -24,7 +24,7 @@ interface Props {
 }
 
 /**
- * Interactive Thor Copilot pane — replaces the raw textarea.
+ * Interactive Thor Copilot pane · replaces the raw textarea.
  * Notion-density chat + Salesforce-style right rail with quick replies.
  */
 export default function ThorVideoCopilot({

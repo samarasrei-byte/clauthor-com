@@ -315,7 +315,7 @@ const CreateAgentPage = () => {
           </CardContent>
         </Card>
 
-        {/* Company briefing — espelha onboarding corporativo */}
+        {/* Company briefing · espelha onboarding corporativo */}
         <AgentCompanyBriefing value={briefing} onChange={setBriefing} />
 
 

@@ -92,7 +92,7 @@ const STEPS: StepDef[] = [
   },
   {
     id: "site",
-    ask: (a) => `Perfeito, ${a.company_name ?? "beleza"}. Você tem site ou landing page? Cola a URL — se não tiver, escreve "não".`,
+    ask: (a) => `Perfeito, ${a.company_name ?? "beleza"}. Você tem site ou landing page? Cola a URL · se não tiver, escreve "não".`,
     placeholder: "https://...",
     optional: true,
   },
@@ -103,7 +103,7 @@ const STEPS: StepDef[] = [
   },
   {
     id: "colors",
-    ask: () => "Qual é a cor principal da marca? Cola o hex (#RRGGBB) ou o nome — a gente aplica no painel.",
+    ask: () => "Qual é a cor principal da marca? Cola o hex (#RRGGBB) ou o nome · a gente aplica no painel.",
     placeholder: "#3B82F6 · azul · vermelho...",
     optional: true,
     parse: (raw) => {
@@ -158,11 +158,11 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     if (homeReco?.industry) memoryBits.push(`vocês atuam com **${homeReco.industry}**`);
     if (homeReco?.main_pain) memoryBits.push(`a dor principal é **${homeReco.main_pain}**`);
     const memorySentence = memoryBits.length
-      ? ` Lembro do que você me contou na home: ${memoryBits.join(", ")}. Vou só confirmar rapidinho — se algo mudou, você me corrige.`
+      ? ` Lembro do que você me contou na home: ${memoryBits.join(", ")}. Vou só confirmar rapidinho · se algo mudou, você me corrige.`
       : "";
     const greeting = recommendation
-      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu confirmar 7 coisas rápidas.`
-      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, são 7 perguntas rápidas — você pode pular qualquer uma.`;
+      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** · legal.${memorySentence} Antes de destravar seu painel, deixa eu confirmar 7 coisas rápidas.`
+      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, são 7 perguntas rápidas · você pode pular qualquer uma.`;
     // Pre-fill answers with anything we already know
     const prefill: Answers = {};
     if (homeReco?.kind) prefill.contract_kind = homeReco.kind as ContractKind;
@@ -257,9 +257,9 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
         kind === "agente" ? "**agentes individuais**" :
         "um **departamento completo**";
       const confirmMsg = dept && kind === "departamento"
-        ? `Perfeito, entendi tudo. Como você escolheu ${kindLabel}, minha recomendação é **${dept.title}** — ${dept.pitch} Faz sentido pra você?`
+        ? `Perfeito, entendi tudo. Como você escolheu ${kindLabel}, minha recomendação é **${dept.title}** · ${dept.pitch} Faz sentido pra você?`
         : kind
-          ? `Perfeito. Você escolheu ${kindLabel} — vou te levar ao painel pra escolher e ativar. Bora?`
+          ? `Perfeito. Você escolheu ${kindLabel} · vou te levar ao painel pra escolher e ativar. Bora?`
           : "Perfeito, entendi tudo. Vou te levar ao painel pra você escolher o time ideal.";
       setMessages((prev) => [
         ...prev,

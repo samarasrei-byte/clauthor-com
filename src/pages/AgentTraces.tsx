@@ -1,5 +1,5 @@
 /**
- * AgentTraces.tsx — Observabilidade de Agentes
+ * AgentTraces.tsx · Observabilidade de Agentes
  *
  * Painel que mostra runs, chamadas LLM, tool calls, latência, custo e eval score.
  * Isso separa "wrapper de LLM" de "plataforma real de agentes".
@@ -181,7 +181,7 @@ export default function AgentTraces() {
   return (
     <>
       <SEO
-        title="Agent Traces — Observabilidade | Clauthor"
+        title="Agent Traces · Observabilidade | Clauthor"
         description="Timeline completa de execuções, latência, custo e qualidade dos seus agentes."
       />
 
@@ -215,12 +215,12 @@ export default function AgentTraces() {
           <MetricCard
             icon={Clock}
             label="Latência p95"
-            value={metrics.p95 > 0 ? `${(metrics.p95 / 1000).toFixed(1)}s` : "—"}
+            value={metrics.p95 > 0 ? `${(metrics.p95 / 1000).toFixed(1)}s` : "·"}
           />
           <MetricCard
             icon={Zap}
             label="Latência média"
-            value={metrics.avgLatency > 0 ? `${(metrics.avgLatency / 1000).toFixed(1)}s` : "—"}
+            value={metrics.avgLatency > 0 ? `${(metrics.avgLatency / 1000).toFixed(1)}s` : "·"}
           />
           <MetricCard
             icon={DollarSign}
@@ -245,7 +245,7 @@ export default function AgentTraces() {
             }}
             hint={
               <>
-                Cada execução vira um <strong>trace</strong> replayable — como um flight recorder para IA. Use para
+                Cada execução vira um <strong>trace</strong> replayable · como um flight recorder para IA. Use para
                 depurar prompts, comparar modelos e entender custo real.
               </>
             }

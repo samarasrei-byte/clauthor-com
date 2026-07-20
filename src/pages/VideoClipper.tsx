@@ -1,5 +1,5 @@
 /**
- * Video Clipper — Ultra-modern auto-cutter.
+ * Video Clipper · Ultra-modern auto-cutter.
  * Paste a YouTube/Drive/direct video URL → Thor analyzes → propose 3-6 clips
  * with hook, caption, hashtags, and target formats. Human-in-the-loop approves
  * each clip before render + auto-post to connected social networks.
@@ -106,7 +106,7 @@ export default function VideoClipper() {
       <ModulePaywall
         module="video-clipper"
         moduleLabel="Auto-Clipper de Vídeo"
-        moduleDescription="Transforme lives, podcasts e vídeos longos em Shorts/Reels prontos para postar — corte, legenda e publicação automáticos."
+        moduleDescription="Transforme lives, podcasts e vídeos longos em Shorts/Reels prontos para postar · corte, legenda e publicação automáticos."
         requiredDepartments={access.requiredDepartments}
         benefits={[
           "Corta os melhores momentos com IA",
@@ -205,7 +205,7 @@ export default function VideoClipper() {
         <title>Auto-Clipper · Corte de vídeos com IA · Clauthor</title>
         <meta
           name="description"
-          content="Cole um link do YouTube ou envie um vídeo — a IA corta os melhores momentos, cria legendas, capas e publica nas redes conectadas."
+          content="Cole um link do YouTube ou envie um vídeo · a IA corta os melhores momentos, cria legendas, capas e publica nas redes conectadas."
         />
       </Helmet>
 

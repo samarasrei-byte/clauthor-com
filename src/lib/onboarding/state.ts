@@ -1,5 +1,5 @@
 /**
- * Onboarding state — single source of truth.
+ * Onboarding state · single source of truth.
  *
  * Persistência canônica em `profiles.onboarding_completed` + `onboarded_at`.
  * Todo fluxo (OnboardingZero, Welcome, ThorOnboarding, Sector) deve chamar
@@ -42,7 +42,7 @@ export async function markOnboardingComplete(
       } as never)
       .eq("user_id", userId);
   } catch {
-    /* non-blocking — o gate cliente ainda funciona via flag em sessionStorage */
+    /* non-blocking · o gate cliente ainda funciona via flag em sessionStorage */
   }
   try {
     sessionStorage.setItem("clauthor:onboarding-completed", "1");

@@ -111,7 +111,7 @@ export function useAgentHealth() {
 
         perAgent.push({ agentId, agentName: name, total, success, errors, errorRate, avgMs, lastAt });
 
-        // Consecutive failures — last 3
+        // Consecutive failures · last 3
         const last3 = entries.slice(0, 3);
         if (last3.length === 3 && last3.every((e) => e.status !== "success")) {
           alerts.push({
@@ -155,7 +155,7 @@ export function useAgentHealth() {
         }
       }
 
-      // Cost spike — tokens last 24h vs avg prev 6d
+      // Cost spike · tokens last 24h vs avg prev 6d
       const tokensByAgent = new Map<string, { last24: number; prev6d: number }>();
       for (const t of tokens) {
         if (!t.agent_id) continue;

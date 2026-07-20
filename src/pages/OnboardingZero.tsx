@@ -317,10 +317,10 @@ export default function OnboardingZero() {
   }, [funnelStep, chosenDeptId]);
 
   const hintByStage: Record<Stage, string> = {
-    pain: "Escreva com suas palavras — mesmo curto ajuda. Ex: 'Preciso vender mais' ou 'Não dou conta do atendimento'.",
+    pain: "Escreva com suas palavras · mesmo curto ajuda. Ex: 'Preciso vender mais' ou 'Não dou conta do atendimento'.",
     pick0: "Escolha o que mais dói hoje. Você pode contratar mais times depois, sem multa.",
     reco: "Sem cartão pra ver a recomendação. Você só cria conta se decidir seguir.",
-    company: "Só o nome já basta. Cores e site são opcionais — o Thor detecta se você preencher o website.",
+    company: "Só o nome já basta. Cores e site são opcionais · o Thor detecta se você preencher o website.",
     creating: "Estou montando seu painel agora…",
   };
 
