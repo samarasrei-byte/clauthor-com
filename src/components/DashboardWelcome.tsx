@@ -92,22 +92,23 @@ const DashboardWelcome = ({ userName, hasAgents, hasIntegration, hasExecution }:
               transition={{ delay: 0.1 + i * 0.08 }}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors ${
                 step.done
-                  ? "bg-emerald-500/5 border-emerald-500/20"
+                  ? "bg-success/5 border-success/20"
                   : "bg-muted/30 border-border"
               }`}
             >
               <div className={`w-7 h-7 rounded-md flex items-center justify-center ${
-                step.done ? "bg-emerald-500/15" : "bg-background border border-border"
+                step.done ? "bg-success/15" : "bg-background border border-border"
               }`}>
                 {step.done ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <step.icon className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
                 )}
               </div>
-              <span className={`text-xs ${step.done ? "text-emerald-600 dark:text-emerald-400 line-through opacity-70" : "text-foreground/80"}`}>
+              <span className={`text-xs ${step.done ? "text-success line-through opacity-70" : "text-foreground/80"}`}>
                 {i + 1}. {step.label}
               </span>
+
             </motion.div>
           ))}
         </div>
