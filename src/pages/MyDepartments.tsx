@@ -87,7 +87,7 @@ const MyDepartments = () => {
         </div>
 
         <Button asChild size="sm" className="gap-1.5 shadow-sm">
-          <Link to="/departamentos">
+          <Link to="/dashboard/departamentos">
             <Plus className="h-3.5 w-3.5" />
             Novo departamento
           </Link>
