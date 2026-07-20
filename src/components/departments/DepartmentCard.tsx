@@ -10,7 +10,7 @@
  */
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, ShieldCheck, Diamond } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
