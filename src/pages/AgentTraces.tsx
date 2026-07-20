@@ -254,10 +254,27 @@ export default function AgentTraces() {
         )}
 
         {isLoading && (
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full" />
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4">
+            <Card className="p-2 h-[calc(100vh-320px)] space-y-2">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="h-16 w-full rounded-lg"
+                  style={{ animationDelay: `${i * 70}ms` }}
+                />
+              ))}
+            </Card>
+            <Card className="p-4 h-[calc(100vh-320px)] space-y-3">
+              <Skeleton className="h-8 w-1/3" />
+              <Skeleton className="h-3 w-1/4" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="h-14 w-full rounded-lg"
+                  style={{ animationDelay: `${i * 90}ms` }}
+                />
+              ))}
+            </Card>
           </div>
         )}
 
