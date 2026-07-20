@@ -328,7 +328,7 @@ const CredentialsHub = () => {
                 <motion.div
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                  className="h-full w-1/3 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"
+                  className="h-full w-1/3 bg-gradient-to-r from-transparent via-success to-transparent"
                 />
               </div>
             </motion.div>
