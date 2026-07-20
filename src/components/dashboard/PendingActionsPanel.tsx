@@ -181,7 +181,7 @@ export function PendingActionsPanel() {
                       disabled={processingId === action.id}
                     >
                       <XCircle className="h-3 w-3 mr-1" />
-                      Rejeitar
+                      Pedir ajuste
                     </Button>
                     <Button
                       size="sm"
