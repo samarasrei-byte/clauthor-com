@@ -5,7 +5,7 @@ import {
   Coins,
   Plus,
   X,
-  Sparkles,
+  Wand,
   Activity,
   CheckCircle2,
   AlertTriangle,

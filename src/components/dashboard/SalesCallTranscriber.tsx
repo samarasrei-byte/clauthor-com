@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Phone, Upload, FileAudio, Loader2, CheckCircle2, Mic, Clock, Brain, Plus, Save } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -230,7 +230,7 @@ const SalesCallTranscriber = () => {
                         <Clock className="h-3 w-3 text-muted-foreground/50" />
                         <span className="text-[10px] text-muted-foreground">{formatDate(call.created_at)}</span>
                         <Badge variant="outline" className="text-[9px] h-4">
-                          <Sparkles className="h-2.5 w-2.5 mr-0.5" /> Na KB
+                          <Wand className="h-2.5 w-2.5 mr-0.5" /> Na KB
                         </Badge>
                       </div>
                     </div>

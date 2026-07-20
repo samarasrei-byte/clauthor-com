@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X, ChevronRight, AlertTriangle, TrendingUp, Bot, Zap, Volume2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
@@ -97,7 +97,7 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
       const topAgent = Object.entries(agentCounts).sort((a, b) => b[1] - a[1])[0];
       if (topAgent && topAgent[1] > 1) {
         lines.push({
-          icon: Sparkles,
+          icon: Wand,
           text: `Agente destaque: ${topAgent[0]} com ${topAgent[1]} execuções. Excelente performance!`,
           type: "success"
         });
@@ -158,7 +158,7 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/15 flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Wand className="h-4 w-4 text-primary" />
             </div>
             <div>
               <h3 className="font-display text-sm font-bold">Daily Briefing</h3>

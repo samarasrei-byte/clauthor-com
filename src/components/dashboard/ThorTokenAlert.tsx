@@ -9,7 +9,7 @@
  */
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, Coins, ArrowRight, X, Sparkles } from "lucide-react";
+import { AlertTriangle, Coins, ArrowRight, X, Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
@@ -122,7 +122,7 @@ export default function ThorTokenAlert({ onOpenThor, onBuyCredits, className }: 
           <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               <Badge variant="outline" className="text-[10px] font-mono uppercase tracking-widest gap-1 border-primary/40 text-primary">
-                <Sparkles className="h-3 w-3" /> Thor · alerta
+                <Wand className="h-3 w-3" /> Thor · alerta
               </Badge>
               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-widest", tone.chip)}>
                 {level.threshold}% consumido

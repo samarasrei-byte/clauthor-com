@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCredits } from "@/hooks/useCredits";
 import { useAuth } from "@/hooks/useAuth";
 import { Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle, ExternalLink, Package, Globe, FlaskConical } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -269,7 +269,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-xl border-white/10">
         <DialogHeader>
           <DialogTitle className="font-display text-xl flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Wand className="h-5 w-5 text-primary" />
             {showPayment ? t("token_upgrade.finalize_payment", { defaultValue: "Finalizar Pagamento" }) : t("token_upgrade.title", { defaultValue: "Upgrade de Tokens" })}
           </DialogTitle>
         </DialogHeader>

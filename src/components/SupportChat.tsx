@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, Loader2, Bot, User, Minimize2, Mic, MicOff, Shield, Activity, Zap, Brain, AlertTriangle, CheckCircle2, RefreshCw, Radio, Eye, Cpu } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -537,7 +537,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         </div>
                         <div className="bg-card/30 border border-border/10 rounded-xl rounded-tl-sm px-3 py-2.5">
                           <div className="flex gap-1 items-center">
-                            <Sparkles className="h-3 w-3 text-primary/40 animate-pulse" />
+                            <Wand className="h-3 w-3 text-primary/40 animate-pulse" />
                             <span className="text-[10px] text-muted-foreground/40">{t("cmd.processing")}</span>
                           </div>
                         </div>

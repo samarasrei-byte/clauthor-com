@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, Zap, X } from "lucide-react";
+import { Wand, ArrowRight, Zap, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -142,7 +142,7 @@ export default function PendingDepartmentCard() {
               )}
               <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-primary" /> {pending.agent_count} agentes
+                  <Wand className="w-3.5 h-3.5 text-primary" /> {pending.agent_count} agentes
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-primary" /> Entrega no D+1

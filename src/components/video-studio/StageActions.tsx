@@ -1,4 +1,4 @@
-import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
+import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ interface ProviderInfo {
   label: string;
   eta: string;
   quality: string;
-  icon: typeof Sparkles;
+  icon: typeof Wand;
   available: boolean;
 }
 
@@ -35,8 +35,8 @@ const PROVIDER_ETA: Record<Provider, { eta: string; quality: string }> = {
   lovable: { eta: "Em breve", quality: "Clauthor AI" },
 };
 
-const PROVIDER_ICON: Record<Provider, typeof Sparkles> = {
-  veo3: Sparkles,
+const PROVIDER_ICON: Record<Provider, typeof Wand> = {
+  veo3: Wand,
   replicate: Zap,
   lovable: Clapperboard,
 };
@@ -132,7 +132,7 @@ export default function StageActions({
                 <TooltipTrigger asChild>{pill}</TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-[240px] p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Sparkle className="w-3.5 h-3.5 text-primary" />
+                    <Wand className="w-3.5 h-3.5 text-primary" />
                     <span className="text-[11px] font-semibold">
                       {p.id === "lovable" ? "Chegando em breve" : "Recurso do plano superior"}
                     </span>
@@ -217,7 +217,7 @@ export default function StageActions({
               </>
             ) : (
               <>
-                <Sparkles strokeWidth={2} className="w-3.5 h-3.5" /> Gerar vídeo
+                <Wand strokeWidth={2} className="w-3.5 h-3.5" /> Gerar vídeo
                 <ArrowRight strokeWidth={2} className="w-3.5 h-3.5" />
               </>
             )}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lock, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Lock, Wand, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
@@ -74,7 +74,7 @@ export default function ModulePaywall({
               <Lock className="w-7 h-7 text-primary" />
             </div>
             <Badge variant="secondary" className="mx-auto">
-              <Sparkles className="w-3 h-3 mr-1" /> Módulo Premium
+              <Wand className="w-3 h-3 mr-1" /> Módulo Premium
             </Badge>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
               {moduleLabel} está bloqueado

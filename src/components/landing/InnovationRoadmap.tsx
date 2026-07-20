@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Brain, Network, TrendingUp, Mic, Workflow, Lightbulb, BarChart3, Users, Copy, Code2, ChevronRight, Zap, Lock, Rocket, Timer, ArrowRight, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -147,7 +147,7 @@ const InnovationRoadmap = () => {
             onClick={() => setIsExpanded(!isExpanded)}
             className="flex items-center gap-2 mx-auto mb-8 px-5 py-2.5 rounded-xl border border-border bg-card/30 hover:border-primary/20 transition-all duration-300 group"
           >
-            <Sparkles className="h-4 w-4 text-primary/60 group-hover:text-primary transition-colors" strokeWidth={1.5} />
+            <Wand className="h-4 w-4 text-primary/60 group-hover:text-primary transition-colors" strokeWidth={1.5} />
             <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
               {isExpanded ? t("roadmap.collapse") : t("roadmap.view_all")}
             </span>

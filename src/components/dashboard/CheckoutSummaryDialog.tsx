@@ -3,7 +3,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Users, CheckCircle2, Zap, AlertTriangle, ShieldCheck } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { formatPrice } from "@/lib/pricing";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -57,7 +57,7 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
               transition={{ type: "spring", damping: 15 }}
               className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/15 flex items-center justify-center mx-auto"
             >
-              <Sparkles className="h-6 w-6 text-primary" />
+              <Wand className="h-6 w-6 text-primary" />
             </motion.div>
             <div>
               <h2 className="font-display text-xl font-bold">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Zap, Eye, Star, TrendingUp, Loader2, CheckCircle, XCircle, Lightbulb, BookOpen, Layers, HelpCircle, Play, ArrowRight, Shield, BarChart3, Clock, Cpu, Target, type LucideIcon } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -208,7 +208,7 @@ export default function AgentCardExpanded({
                       <Loader2 className="h-3 w-3 animate-spin" />
                     ) : (
                       <>
-                        <Sparkles className="h-3 w-3" />
+                        <Wand className="h-3 w-3" />
                         Contratar
                       </>
                     )}

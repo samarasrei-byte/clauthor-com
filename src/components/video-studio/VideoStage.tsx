@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap, UploadCloud, ImagePlus } from "lucide-react";
+import { Download, Link2, Loader2, PlayCircle, XCircle, Wand, Megaphone, Rocket, Film, Store, Camera, Zap, UploadCloud, ImagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export interface StageTemplate {
   id: string;
   label: string;
   sub: string;
-  icon: typeof Sparkles;
+  icon: typeof Wand;
   prompt: string;
 }
 
@@ -254,7 +254,7 @@ function EmptyStage({
           onClick={onGenerate}
           className="mt-5 text-[11px] text-white/50 hover:text-white/80 underline underline-offset-4 transition"
         >
-          ou conversar do zero com o Thor <Sparkles strokeWidth={1.5} className="inline w-3 h-3 ml-1" />
+          ou conversar do zero com o Thor <Wand strokeWidth={1.5} className="inline w-3 h-3 ml-1" />
         </button>
       )}
     </div>

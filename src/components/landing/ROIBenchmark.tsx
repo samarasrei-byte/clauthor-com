@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { DollarSign, Users, TrendingDown, ArrowRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -155,7 +155,7 @@ const ROIBenchmark = () => {
             className="rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border border-primary/20 p-5 sm:p-6 text-center"
           >
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Wand className="h-4 w-4 text-primary" />
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80">
                 {t("home.roi_your_savings", { defaultValue: "SUA ECONOMIA MENSAL" })}
               </span>

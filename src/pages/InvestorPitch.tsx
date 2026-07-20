@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Zap, TrendingDown, Globe2, Users, Target, Rocket, ShieldCheck, LineChart, Check, X, Languages, DollarSign, TrendingUp, PieChart, Calendar, HelpCircle, Play } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useState } from "react";
 import PresentationMode from "@/components/investor/PresentationMode";
 import { Button } from "@/components/ui/button";
@@ -93,7 +93,7 @@ const unitEconomics = [
 
 const reasons = [
   { icon: TrendingDown, title: "Mercado Exponencial", desc: "Demanda global por IA que entrega resultado, não mais uma ferramenta, cresce 44% ao ano (Gartner)." },
-  { icon: Sparkles, title: "Diferencial Insuperável", desc: "225 agentes em 20 squads, memória hierárquica e outcome-based pricing, arquitetura proprietária difícil de replicar." },
+  { icon: Wand, title: "Diferencial Insuperável", desc: "225 agentes em 20 squads, memória hierárquica e outcome-based pricing, arquitetura proprietária difícil de replicar." },
   { icon: Target, title: "Timing Perfeito", desc: "Entramos antes da consolidação: zero incumbente dominante em agentes autônomos B2B em português." },
   { icon: LineChart, title: "Potencial Exponencial", desc: "Modelo projeta R$ 15M de MRR em 36 meses com unit economics SaaS top-quartile." },
   { icon: ShieldCheck, title: "Plataforma Pronta", desc: "MVP 100% funcional, multi-tenant, com auditoria criptográfica e infraestrutura para 14 idiomas." },
@@ -302,7 +302,7 @@ const InvestorPitch = () => {
         <div className="relative max-w-5xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 mb-6">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <Wand className="h-3.5 w-3.5 text-primary" />
               <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary">Pitch de 60 Segundos</span>
             </div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
@@ -441,7 +441,7 @@ const InvestorPitch = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
               { label: "Estágio", value: "MVP", delta: "Plataforma 100% funcional · pré-receita", icon: Rocket, tag: "Hoje" },
-              { label: "Agentes Operacionais", value: "225", delta: "20 squads · 20 departamentos prontos", icon: Sparkles, tag: "Hoje" },
+              { label: "Agentes Operacionais", value: "225", delta: "20 squads · 20 departamentos prontos", icon: Wand, tag: "Hoje" },
               { label: "Idiomas Suportados", value: "14", delta: "Infra i18n nativa, pronta p/ global", icon: Target, tag: "Hoje" },
               { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants alvo", icon: TrendingUp, tag: "Meta" },
               { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile (modelo)", icon: PieChart, tag: "Modelo" },
@@ -621,7 +621,7 @@ const InvestorPitch = () => {
             {[
               { icon: Languages, t: "14+ Idiomas Nativos", d: "PT, EN, ES, FR, DE, IT, JA, KO, ZH, AR, RU, TR + variantes regionais." },
               { icon: ShieldCheck, t: "Audit Trail Criptográfico", d: "SHA-256 hash chain imutável único no mercado para compliance enterprise." },
-              { icon: Sparkles, t: "Outcome-Based Pricing", d: "Cliente paga por resultado entregue, não por seat alinhamento total." },
+              { icon: Wand, t: "Outcome-Based Pricing", d: "Cliente paga por resultado entregue, não por seat alinhamento total." },
             ].map((m, i) => (
               <motion.div key={m.t} {...fadeUp} transition={{ ...fadeUp.transition, delay: i * 0.1 }} className="p-6 rounded-xl border border-border/60 bg-background">
                 <m.icon className="h-5 w-5 text-primary mb-4" />
@@ -656,7 +656,7 @@ const InvestorPitch = () => {
               ].map((item) => (
                 <li key={item.t} className="flex gap-4 p-6 rounded-xl border border-border/60 bg-background">
                   <div className="shrink-0 w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <Sparkles className="h-4 w-4 text-primary" />
+                    <Wand className="h-4 w-4 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-bold mb-1">{item.t}</h4>

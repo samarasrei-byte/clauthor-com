@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, User, Zap, CheckCircle2, ArrowRight, Minimize2, Maximize2, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
@@ -227,7 +227,7 @@ const LiveDemoAgent = () => {
                 <Link to="/library">
                   <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 group cursor-pointer hover:bg-primary/10 transition-all duration-300">
                     <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="h-3.5 w-3.5 text-primary" />
+                      <Wand className="h-3.5 w-3.5 text-primary" />
                       <span className="font-display text-xs font-bold text-primary">{t("demo_chat.impressed")}</span>
                     </div>
                     <p className="text-[11px] text-muted-foreground mb-3">

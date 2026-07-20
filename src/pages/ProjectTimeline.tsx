@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Clock, Zap, CheckCircle2, AlertTriangle, Rocket, Code2, Shield, ChevronDown, ChevronUp, ArrowLeft, Target, Bot, DollarSign, Calendar } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import APICredentialEditor from "@/components/timeline/APICredentialEditor";
@@ -106,7 +106,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
       "✅ Audio Spectrum Visualizer",
       "✅ Responsive - mobile-first",
     ],
-    icon: <Sparkles className="h-5 w-5" />,
+    icon: <Wand className="h-5 w-5" />,
     metric: "13 idiomas",
   },
   {

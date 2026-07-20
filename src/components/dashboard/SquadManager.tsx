@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Plus, Bot, Trash2, ChevronRight, Search, Layers3, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
@@ -217,7 +217,7 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2.5">
                     <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Sparkles className="h-4 w-4 text-primary" />
+                      <Wand className="h-4 w-4 text-primary" />
                     </div>
                     <div>
                       <h3 className="font-display font-bold text-sm text-foreground">{squad.name}</h3>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, ArrowRight, Zap, Brain, CheckCircle2, Users, GitBranch, Rocket } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -305,7 +305,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
               {otherSuggestions.length > 0 && (
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50 flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3 text-primary/60" />
+                    <Wand className="h-3 w-3 text-primary/60" />
                     Agentes recomendados
                   </p>
                   {otherSuggestions.map((s, i) => {

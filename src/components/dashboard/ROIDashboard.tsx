@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, DollarSign, Clock, Users, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -136,7 +136,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary" />
+          <Wand className="h-4 w-4 text-primary" />
           <h3 className="font-display text-sm font-bold">
             {t("roi.title", { defaultValue: "ROI em Tempo Real" })}
           </h3>

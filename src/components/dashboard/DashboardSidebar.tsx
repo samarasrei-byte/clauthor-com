@@ -9,7 +9,7 @@ import {
   Star,
   X,
   GraduationCap,
-  Sparkles,
+  Wand,
   Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -426,7 +426,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 !beginner ? "bg-card text-foreground shadow-sm ring-1 ring-border/60" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <Sparkles className="h-3.5 w-3.5" strokeWidth={1.75} />
+              <Wand className="h-3.5 w-3.5" strokeWidth={1.75} />
               Completo
             </button>
           </div>
@@ -444,7 +444,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             title={beginner ? "Modo Simples ativo — clique para ver tudo" : "Modo Completo ativo — clique para simplificar"}
             className="p-2 rounded-lg hover:bg-card/60 text-muted-foreground hover:text-foreground transition-colors"
           >
-            {beginner ? <GraduationCap className="h-4 w-4 text-primary" /> : <Sparkles className="h-4 w-4" />}
+            {beginner ? <GraduationCap className="h-4 w-4 text-primary" /> : <Wand className="h-4 w-4" />}
           </button>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HelpCircle, X, BookOpen, MessageCircle } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /**
@@ -31,7 +31,7 @@ const HelpButton = () => {
             {[
               { to: "/how-it-works", icon: BookOpen, label: "Como funciona", desc: "Tour rápido pela plataforma" },
               { to: "/community", icon: MessageCircle, label: "FAQ & Comunidade", desc: "Respostas e discussões" },
-              { to: "/dashboard?section=concierge", icon: Sparkles, label: "Falar com Thor", desc: "Assistente em tempo real" },
+              { to: "/dashboard?section=concierge", icon: Wand, label: "Falar com Thor", desc: "Assistente em tempo real" },
             ].map((item) => (
               <Link
                 key={item.to}

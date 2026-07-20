@@ -14,7 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 
   Link2,
-  Sparkles,
+  Wand,
   Loader2,
   Wand2,
   Scissors,
@@ -402,7 +402,7 @@ export default function VideoClipper() {
 
             <Card className="p-4 bg-primary/5 border-primary/20">
               <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <Wand className="h-4 w-4 text-primary" />
                 <span className="text-xs font-semibold">Como funciona</span>
               </div>
               <ol className="space-y-1.5 text-[11px] leading-relaxed text-muted-foreground list-decimal ml-4">

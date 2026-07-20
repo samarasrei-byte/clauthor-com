@@ -1,5 +1,5 @@
 import { Users, Building2, Briefcase, BarChart3, Star, FileText, ShoppingCart, Shield, Wrench, Megaphone, Target, Palette, Video, Globe, ClipboardList, GraduationCap, Bot, Zap, CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake, Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale, Package, Factory, Receipt, Cog, ClipboardCheck, Truck, MessageSquare, Phone, Code, Briefcase as BriefcaseIcon, HeartHandshake, DollarSign } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface DepartmentAgent {
@@ -78,7 +78,7 @@ export const departments: Department[] = [
     iconBg: "bg-primary/10",
     popular: true, tokens: "14M", actions: "18.000",
     agents: [
-      { key: "content", icon: Sparkles, role: "Copywriter / Redator Sênior", tokens: "1.5M" },
+      { key: "content", icon: Wand, role: "Copywriter / Redator Sênior", tokens: "1.5M" },
       { key: "content_creator", icon: PenTool, role: "Criador de Conteúdo (blog, ebook, roteiro)", tokens: "1.5M" },
       { key: "designer", icon: Palette, role: "Designer de Peças (posts, banners, ads)", tokens: "1.5M" },
       { key: "video_editor", icon: Video, role: "Editor de Vídeo (Reels/Shorts/YouTube)", tokens: "1.5M" },
@@ -123,7 +123,7 @@ export const departments: Department[] = [
       { key: "video_production", icon: Video, role: "Editor de Vídeo / Pós-produção", tokens: "1.5M" },
       { key: "illustrator", icon: PenTool, role: "Ilustrador Digital", tokens: "1M" },
       { key: "product_photographer", icon: Star, role: "Fotógrafo de Produto (AI)", tokens: "1M" },
-      { key: "creative_writer", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
+      { key: "creative_writer", icon: Wand, role: "Redator Criativo", tokens: "1M" },
       { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
       { key: "presentation_designer", icon: FileText, role: "Designer de Apresentações", tokens: "1M" },
       { key: "ux_researcher", icon: Lightbulb, role: "UX Researcher", tokens: "1M" },

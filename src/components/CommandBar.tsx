@@ -8,7 +8,7 @@ import {
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Terminal, Bot, LayoutDashboard, Library, CreditCard, Users, ArrowRight, Rocket, Plus, Settings, MessageSquare } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const agentQuickList = [
@@ -28,7 +28,7 @@ const getNavigationItems = (t: any) => [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Marketplace", href: "/marketplace", icon: Library },
   { name: t("nav.pricing", { defaultValue: "Preços & Planos" }), href: "/pricing", icon: CreditCard },
-  { name: t("nav.how_it_works", { defaultValue: "Como Funciona" }), href: "/how-it-works", icon: Sparkles },
+  { name: t("nav.how_it_works", { defaultValue: "Como Funciona" }), href: "/how-it-works", icon: Wand },
   { name: t("command.community", { defaultValue: "Comunidade" }), href: "/community", icon: Users },
   { name: t("command.create_agent", { defaultValue: "Criar Agente" }), href: "/create-agent", icon: Plus },
   { name: t("nav.my_agents", { defaultValue: "Meus Agentes" }), href: "/agents", icon: Bot },
@@ -220,7 +220,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
                         >
                           <div className="relative">
                             <div className="h-12 w-12 rounded-2xl border border-white/[0.06] flex items-center justify-center bg-white/[0.02]">
-                              <Sparkles className="h-5 w-5 text-muted-foreground/20" />
+                              <Wand className="h-5 w-5 text-muted-foreground/20" />
                             </div>
                             <div className="absolute -inset-2 rounded-2xl border border-white/[0.03] animate-pulse" style={{ animationDuration: "3s" }} />
                           </div>

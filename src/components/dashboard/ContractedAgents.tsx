@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Bot, MessageSquare, ShoppingCart } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -33,7 +33,7 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
       <div className="p-6 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-emerald-500" />
+            <Wand className="h-4 w-4 text-emerald-500" />
           </div>
           <div>
             <h2 className="font-display font-semibold">{t("dashboard.contracted_agents", { defaultValue: "Agentes Contratados" })}</h2>

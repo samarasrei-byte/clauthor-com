@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, MessageSquare, Settings, Bot, ArrowRight, X, Building2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
@@ -100,7 +100,7 @@ const GettingStartedGuide = ({
       <div className="flex items-center justify-between mb-4 relative">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Sparkles className="h-4.5 w-4.5 text-primary" />
+            <Wand className="h-4.5 w-4.5 text-primary" />
           </div>
           <div>
             <h3 className="text-sm font-semibold">

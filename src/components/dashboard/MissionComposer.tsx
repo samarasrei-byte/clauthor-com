@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Workflow, Plus, Play, Trash2, Bot, Zap, GripVertical, CheckCircle2, X, AlertCircle, Clock } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -208,7 +208,7 @@ const MissionComposer = () => {
           </p>
         </div>
         <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
-          <Sparkles className="h-3 w-3 mr-1" /> EXECUÇÃO REAL
+          <Wand className="h-3 w-3 mr-1" /> EXECUÇÃO REAL
         </Badge>
       </div>
 

@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Wand } from "lucide-react";
 import type { RecommendationResult } from "@/lib/onboarding-recommendation";
 
 interface Props {
@@ -26,7 +26,7 @@ export default function RecommendationStep({ result, onActivate, onExploreAll }:
       <article className="rounded-2xl border border-primary/25 bg-primary/[0.03] p-8 space-y-6">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4" />
+            <Wand className="w-4 h-4" />
           </div>
           <div className="space-y-1 flex-1">
             <p className="type-eyebrow text-primary">Recomendado para você</p>

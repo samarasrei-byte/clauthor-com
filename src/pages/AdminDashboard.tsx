@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, Bot, DollarSign, TrendingUp, ShoppingBag, CheckCircle, XCircle, Clock, BarChart3, Shield, Activity, Coins, ListOrdered, Mail, Phone, Building, Zap, LayoutDashboard, CreditCard, Store, Wallet, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Brain } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
@@ -183,7 +183,7 @@ const AdminDashboard = () => {
   const sidebarItems = [
     { id: "omnix", label: "THOR", icon: Brain, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
     { id: "overview", label: "Command Center", icon: LayoutDashboard, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
-    { id: "insights", label: t("dashboard.predictive_ai", { defaultValue: "IA Preditiva" }), icon: Sparkles, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
+    { id: "insights", label: t("dashboard.predictive_ai", { defaultValue: "IA Preditiva" }), icon: Wand, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
     { id: "war-room", label: "War Room", icon: Crown, group: t("dashboard.management", { defaultValue: "Gestão" }) },
     { id: "agent-settings", label: t("dashboard.agent_config", { defaultValue: "Config. Agentes" }), icon: Settings, group: t("dashboard.management", { defaultValue: "Gestão" }) },
     { id: "users", label: t("dashboard.users", { defaultValue: "Usuários" }), icon: Users, badge: usersCount || undefined, group: t("dashboard.management", { defaultValue: "Gestão" }) },

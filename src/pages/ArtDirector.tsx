@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Helmet } from "react-helmet-async";
 import {
   Palette,
-  Sparkles,
+  Wand,
   Loader2,
   Send,
   Wand2,
@@ -284,7 +284,7 @@ export default function ArtDirector() {
               className="w-full flex items-center justify-between px-5 py-3 hover:bg-muted/20 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <Sparkles strokeWidth={1.5} className="w-4 h-4 text-primary" />
+                <Wand strokeWidth={1.5} className="w-4 h-4 text-primary" />
                 <span className="text-sm font-medium text-foreground">
                   Diretor de Conteúdo · Artista
                 </span>
@@ -470,7 +470,7 @@ export default function ArtDirector() {
                       {genMut.isPending ? (
                         <Loader2 strokeWidth={1.5} className="w-4 h-4 animate-spin" />
                       ) : (
-                        <Sparkles strokeWidth={1.5} className="w-4 h-4" />
+                        <Wand strokeWidth={1.5} className="w-4 h-4" />
                       )}
                       Gerar imagem
                     </Button>
@@ -550,7 +550,7 @@ function ArtStage({
               Converse com o Diretor ou escreva um prompt — a imagem final aparece aqui.
             </div>
             <Button size="sm" variant="secondary" className="mt-5 gap-2" onClick={onGenerate}>
-              <Sparkles strokeWidth={1.5} className="w-4 h-4" /> Abrir composer
+              <Wand strokeWidth={1.5} className="w-4 h-4" /> Abrir composer
             </Button>
           </div>
         )}

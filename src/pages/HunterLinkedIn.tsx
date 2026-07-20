@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Linkedin, CheckCircle2, ArrowRight, Loader2, LogOut, Shield, Zap, Lock } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { toast } from "sonner";
 import HunterStepper from "@/components/hunter/HunterStepper";
 
@@ -191,7 +191,7 @@ const HunterLinkedIn = () => {
             {/* Action footer */}
             <div className="p-5 md:p-6 bg-muted/20 flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <Wand className="w-3.5 h-3.5 text-primary" />
                 Tudo certo. Vamos definir seu cliente ideal.
               </div>
               <Button onClick={() => navigate("/hunter-icp")} className="gap-2 rounded-full">

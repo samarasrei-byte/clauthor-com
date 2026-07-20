@@ -4,7 +4,7 @@ import { useActivationSteps } from "@/hooks/useActivationSteps";
 import { ActivationCard } from "@/components/activation/ActivationCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, ArrowLeft, Sparkles } from "lucide-react";
+import { Loader2, ArrowLeft, Wand } from "lucide-react";
 
 export default function ActivationStatus() {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ export default function ActivationStatus() {
           </Card>
         ) : departments.length === 0 ? (
           <Card className="p-10 text-center space-y-3">
-            <Sparkles className="h-10 w-10 mx-auto text-primary" />
+            <Wand className="h-10 w-10 mx-auto text-primary" />
             <h2 className="text-lg font-semibold">Nenhum departamento contratado ainda</h2>
             <p className="text-sm text-muted-foreground">
               Assim que você ativar um departamento, o progresso aparece aqui.

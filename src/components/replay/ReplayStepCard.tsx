@@ -7,7 +7,7 @@ import {
   GitBranch,
   Send,
   AlertTriangle,
-  Sparkle,
+  Wand,
   Cog,
   ChevronDown,
   ExternalLink,
@@ -26,7 +26,7 @@ const STEP_META: Record<
   tool_result: { icon: CheckCircle2, label: "Resultado da ferramenta", tone: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
   decision: { icon: GitBranch, label: "Decisão", tone: "text-violet-400 bg-violet-500/10 border-violet-500/20" },
   delegation: { icon: Send, label: "Delegação", tone: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
-  final_output: { icon: Sparkle, label: "Saída final", tone: "text-primary bg-primary/10 border-primary/30" },
+  final_output: { icon: Wand, label: "Saída final", tone: "text-primary bg-primary/10 border-primary/30" },
   error: { icon: AlertTriangle, label: "Erro", tone: "text-destructive bg-destructive/10 border-destructive/30" },
   system: { icon: Cog, label: "Sistema", tone: "text-muted-foreground bg-muted/30 border-border" },
 };

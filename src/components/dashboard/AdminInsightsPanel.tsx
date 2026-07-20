@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Brain, TrendingDown, TrendingUp, AlertTriangle, Zap, Users, Bot, DollarSign, Target, Eye, ArrowRight, Shield, Activity, Loader2, RefreshCcw, Flame, Snowflake, Clock, BarChart3, Lightbulb } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -371,7 +371,7 @@ Dados da plataforma CLAUTHOR:
           </div>
         </div>
         <Button onClick={requestAIAnalysis} disabled={loadingAI} className="gap-1.5" size="sm">
-          {loadingAI ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+          {loadingAI ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand className="h-3.5 w-3.5" />}
           {loadingAI ? "Analisando..." : "Análise Profunda"}
         </Button>
       </motion.div>

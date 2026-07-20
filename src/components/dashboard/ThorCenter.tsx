@@ -12,7 +12,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
 import {
-  Brain, Bell, Sparkles, ArrowRight, CheckCircle2, AlertTriangle,
+  Brain, Bell, Wand, ArrowRight, CheckCircle2, AlertTriangle,
   Coins, Radar, Inbox, ExternalLink, Clock, Check,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -36,7 +36,7 @@ interface Props {
 }
 
 const CONTEXT_LABELS: Record<string, { label: string; icon: React.ReactNode }> = {
-  first_touch_dashboard: { label: "Boas-vindas do Thor", icon: <Sparkles className="h-3.5 w-3.5" /> },
+  first_touch_dashboard: { label: "Boas-vindas do Thor", icon: <Wand className="h-3.5 w-3.5" /> },
   token_alert_80:        { label: "Alerta de tokens (80%)", icon: <Coins className="h-3.5 w-3.5" /> },
   token_alert_90:        { label: "Alerta de tokens (90%)", icon: <Coins className="h-3.5 w-3.5" /> },
   token_alert_100:       { label: "Cofre zerado", icon: <AlertTriangle className="h-3.5 w-3.5" /> },
@@ -541,7 +541,7 @@ export default function ThorCenter({ onNavigate }: Props) {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <Wand className="h-4 w-4 text-primary" />
                 Falar com o Thor
               </CardTitle>
             </CardHeader>

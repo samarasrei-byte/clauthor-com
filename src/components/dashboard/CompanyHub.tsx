@@ -1,7 +1,7 @@
 import { useState, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Building2, Users, Bot, Shield, Plug, BookOpen, ChevronRight, Crown, Plus, Loader2, BarChart3, Briefcase, Globe, FileText, Package } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -195,7 +195,7 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Wand className="h-4 w-4 text-primary" />
               <span className="text-xs font-semibold">Créditos</span>
             </div>
             <span className="text-[10px] text-muted-foreground">

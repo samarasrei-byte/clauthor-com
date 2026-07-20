@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, Send, Sparkles, Timer, CheckCircle2, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
+import { ArrowRight, Send, Wand, Timer, CheckCircle2, ShieldCheck, RotateCcw, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -136,7 +136,7 @@ const FirstOutputFlow = () => {
           {/* ── Header ─────────────────────────────────────────── */}
           <div className="text-center mb-10 space-y-3">
             <Badge variant="outline" className="gap-1.5 border-primary/30 bg-primary/5 text-primary">
-              <Sparkles className="h-3 w-3" /> Primeiro resultado em &lt; 90s
+              <Wand className="h-3 w-3" /> Primeiro resultado em &lt; 90s
             </Badge>
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
               Diga o que sua empresa precisa.
@@ -308,7 +308,7 @@ const PhaseSteps = ({ phase }: { phase: Phase }) => {
             )}
           >
             {state === "done" ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0" /> :
-             state === "active" ? <Sparkles className="h-3.5 w-3.5 shrink-0 animate-pulse" /> :
+             state === "active" ? <Wand className="h-3.5 w-3.5 shrink-0 animate-pulse" /> :
              <div className="h-3.5 w-3.5 rounded-full border-2 border-current shrink-0 opacity-50" />}
             <span className="text-[11px] font-medium truncate">{s.label}</span>
           </div>

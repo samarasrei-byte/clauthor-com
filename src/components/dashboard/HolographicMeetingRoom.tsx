@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { Bot, Play, RotateCcw, Mic, MicOff, Send, Lightbulb, Target, ListChecks, Loader2, Zap, Brain, Users, Workflow, BarChart3, Palette, ChevronRight, Volume2, MessageSquare } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ const AGENT_ROLES: Record<
 > = {
   ceo: { label: "CEO AI", color: "hsl(var(--primary))", icon: Brain, specialty: "Estratégia Geral" },
   sales: { label: "Sales AI", color: "hsl(142 76% 36%)", icon: Target, specialty: "Vendas & Prospecção" },
-  marketing: { label: "Marketing AI", color: "hsl(280 70% 50%)", icon: Sparkles, specialty: "Campanhas & Branding" },
+  marketing: { label: "Marketing AI", color: "hsl(280 70% 50%)", icon: Wand, specialty: "Campanhas & Branding" },
   analytics: { label: "Data Analyst AI", color: "hsl(200 80% 50%)", icon: BarChart3, specialty: "Análise de Dados" },
   design: { label: "Design AI", color: "hsl(330 70% 50%)", icon: Palette, specialty: "Criação Visual" },
   automation: { label: "Automation AI", color: "hsl(45 90% 50%)", icon: Workflow, specialty: "Automação" },

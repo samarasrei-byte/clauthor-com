@@ -13,7 +13,7 @@ import {
   ScrollText,
   LayoutGrid,
   Handshake,
-  Sparkles,
+  Wand,
   Wrench,
   Brain,
   CheckCircle2,
@@ -186,7 +186,7 @@ export default function AgentsLiveFeed() {
               const Icon = meta.icon;
               const StatusIcon =
                 it.step_type === "error" ? AlertTriangle :
-                it.step_type === "final_output" ? Sparkles :
+                it.step_type === "final_output" ? Wand :
                 it.step_type === "tool_result" ? CheckCircle2 : Radio;
               return (
                 <motion.button

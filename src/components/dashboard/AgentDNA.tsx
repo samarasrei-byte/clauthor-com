@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Dna, Fingerprint, Activity, Bot, TrendingUp, TrendingDown, Zap, Shield, Clock } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -307,7 +307,7 @@ const AgentDNA = () => {
                     <span className="text-[9px] font-mono">{profile.speedScore}%</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-3 w-3 text-purple-400 shrink-0" />
+                    <Wand className="h-3 w-3 text-purple-400 shrink-0" />
                     <span className="text-[9px] text-muted-foreground flex-1">Eficiência</span>
                     <span className="text-[9px] font-mono">{profile.efficiencyScore}%</span>
                   </div>

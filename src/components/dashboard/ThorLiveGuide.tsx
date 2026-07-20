@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Brain, ChevronRight, Pause, Play, X, MessageSquare, Volume2, VolumeX } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";

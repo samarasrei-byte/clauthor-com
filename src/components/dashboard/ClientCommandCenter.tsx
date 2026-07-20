@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Bot, Brain, Link as LinkIcon, Send, Activity, Database, CheckCircle2, Terminal, Cpu, ArrowRight, ShieldCheck, Zap, Workflow, MessageSquare, LineChart, Users, ChevronRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -160,7 +160,7 @@ const ClientCommandCenter = ({
         <div className="relative flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0">
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Wand className="h-4 w-4 text-primary" />
             </div>
             <div className="min-w-0">
               <div className="text-[10px] uppercase tracking-widest text-primary/80 font-medium mb-0.5">Novo · Primeiro resultado em &lt; 90s</div>
@@ -189,7 +189,7 @@ const ClientCommandCenter = ({
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           className="bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 flex items-center gap-3"
         >
-          <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+          <Wand className="h-4 w-4 text-primary animate-pulse" />
           <p className="text-xs text-muted-foreground">
             <strong className="text-primary">{t("cmd.demo_mode", { defaultValue: "Modo demonstração" })}</strong> - {t("cmd.demo_desc", { defaultValue: "Você está vendo agentes simulados. Contrate agentes reais na" })} <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">{t("cmd.library", { defaultValue: "Biblioteca" })}</button>.
           </p>
@@ -237,7 +237,7 @@ const ClientCommandCenter = ({
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-xs text-primary cursor-pointer hover:bg-primary/15 transition-colors"
                 onClick={() => handleCommand(t("cmd.suggestion_reactivate", { defaultValue: "Reativar 120 leads parados" }))}
               >
-                <Sparkles className="h-4 w-4 animate-pulse" />
+                <Wand className="h-4 w-4 animate-pulse" />
                 <span><strong className="font-semibold mr-1">{t("cmd.suggestion_label", { defaultValue: "Sugestão:" })}</strong> {t("cmd.suggestion_text", { defaultValue: "Você tem 120 leads parados. Quer reativar?" })}</span>
                 <ChevronRight className="h-4 w-4 opacity-50" />
               </div>
@@ -304,7 +304,7 @@ const ClientCommandCenter = ({
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                        <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+                        <Wand className="h-5 w-5 text-primary animate-pulse" />
                       </div>
                       <h2 className="text-3xl font-display font-bold">{t("cmd.mission_started", { defaultValue: "Missão Iniciada" })}</h2>
                     </div>

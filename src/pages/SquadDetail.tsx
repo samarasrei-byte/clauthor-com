@@ -6,7 +6,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowRight, CheckCircle2, Sparkles, Users, ArrowLeft,
+  ArrowRight, CheckCircle2, Wand, Users, ArrowLeft,
   AlertTriangle, Package, Radio, MessageCircle, ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ const SquadDetail = () => {
           <div className="grid lg:grid-cols-[1.3fr_1fr] gap-10 items-center">
             <motion.div {...fadeUp}>
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.08] px-3 py-1.5 text-xs font-medium text-primary mb-6">
-                <Sparkles className="h-3.5 w-3.5" />
+                <Wand className="h-3.5 w-3.5" />
                 {squad.hero.kicker}
               </div>
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] mb-6">
@@ -260,7 +260,7 @@ const SquadDetail = () => {
                 >
                   {tier.highlighted && (
                     <div className="inline-flex items-center gap-1 self-start rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground mb-4">
-                      <Sparkles className="h-3 w-3" /> Recomendado
+                      <Wand className="h-3 w-3" /> Recomendado
                     </div>
                   )}
                   <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">
@@ -347,7 +347,7 @@ const SquadDetail = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href="/thor" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="gap-2 h-12 px-7 rounded-full font-medium glow">
-                  <Sparkles className="h-4 w-4" />
+                  <Wand className="h-4 w-4" />
                   Contratar {highlighted.name}
                 </Button>
               </a>

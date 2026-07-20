@@ -10,7 +10,7 @@ import {
   RefreshCw,
   Clapperboard,
   Settings2,
-  Sparkles,
+  Wand,
   Zap,
   Command as CommandIcon,
   ArrowRight,
@@ -88,9 +88,9 @@ interface Step {
 
 const PROVIDER_META: Record<
   Provider,
-  { label: string; sub: string; Icon: typeof Sparkles; comingSoon?: boolean }
+  { label: string; sub: string; Icon: typeof Wand; comingSoon?: boolean }
 > = {
-  veo3: { label: "Veo 3", sub: "Google · alta qualidade", Icon: Sparkles },
+  veo3: { label: "Veo 3", sub: "Google · alta qualidade", Icon: Wand },
   replicate: { label: "Replicate", sub: "Multi-modelo · rápido", Icon: Zap },
   lovable: { label: "Clauthor AI", sub: "Em breve", Icon: Clapperboard, comingSoon: true },
 };

@@ -4,7 +4,7 @@ import {
   CalendarDays,
   Inbox,
   Newspaper,
-  Sparkles,
+  Wand,
   Plug,
   RefreshCw,
   Settings,
@@ -263,7 +263,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
   ];
   return (
     <SectionCard
-      icon={Sparkles}
+      icon={Wand}
       title="Resumo do Dia"
       description="Gerado automaticamente pela IA"
       className="border-primary/25 bg-gradient-to-br from-primary/[0.06] to-transparent"

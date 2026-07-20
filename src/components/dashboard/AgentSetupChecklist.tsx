@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Circle, ChevronRight, Shield, Database, Link2, Bot } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -190,7 +190,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
               <div className="flex items-center gap-1.5">
                 {isPureAI && (
                   <Badge variant="secondary" className="text-[8px] px-1.5 py-0 bg-primary/10 text-primary border-0">
-                    <Sparkles className="h-2.5 w-2.5 mr-0.5" />
+                    <Wand className="h-2.5 w-2.5 mr-0.5" />
                     {t("setup_checklist.pure_ai", { defaultValue: "Pure AI" })}
                   </Badge>
                 )}

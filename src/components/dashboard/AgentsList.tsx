@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Bot, Plus, ArrowRight, MessageSquare, TrendingUp, Clock, Zap, Info } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -169,7 +169,7 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
         ) : agents.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="h-8 w-8 text-primary" />
+              <Wand className="h-8 w-8 text-primary" />
             </div>
             <h3 className="font-display font-semibold mb-2">{t("agents.create_first", { defaultValue: "Crie seu primeiro agente" })}</h3>
             <p className="text-sm text-muted-foreground mb-6">

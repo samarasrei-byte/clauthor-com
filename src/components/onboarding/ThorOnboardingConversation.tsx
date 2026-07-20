@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, Send, Sparkles, Check } from "lucide-react";
+import { ArrowRight, Loader2, Send, Wand, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useCompanyDna, type BrandColors } from "@/hooks/useCompanyDna";
@@ -379,7 +379,7 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
               >
                 {m.role === "assistant" && (
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                    <Wand className="w-4 h-4 text-primary" />
                   </div>
                 )}
                 <div

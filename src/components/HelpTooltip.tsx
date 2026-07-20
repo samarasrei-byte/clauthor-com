@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { HelpCircle, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface HelpTooltipProps {
@@ -128,7 +128,7 @@ const HelpTooltip = ({
         aria-label="Ajuda"
       >
         {isFirstVisit && !hasAutoShown ? (
-          <Sparkles style={{ width: size, height: size }} className="text-primary" />
+          <Wand style={{ width: size, height: size }} className="text-primary" />
         ) : (
           <HelpCircle style={{ width: size, height: size }} />
         )}
@@ -152,7 +152,7 @@ const HelpTooltip = ({
                 {/* First visit badge */}
                 {isFirstVisit && (
                   <span className="flex items-center gap-1.5 mb-1.5">
-                    <Sparkles className="h-3 w-3 text-primary" />
+                    <Wand className="h-3 w-3 text-primary" />
                     <span className="text-[9px] font-bold uppercase tracking-widest text-primary/80">Dica</span>
                   </span>
                 )}

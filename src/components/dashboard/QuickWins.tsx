@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { MessageSquare, Users, Target, ChevronRight, Zap } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface QuickWin {
@@ -96,7 +96,7 @@ const QuickWins = ({ activeAgents, totalExecutions, recentLogs, hasCompanyData, 
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <Sparkles className="h-3.5 w-3.5 text-primary/60" />
+        <Wand className="h-3.5 w-3.5 text-primary/60" />
         <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary/60 font-bold">
           {t("dashboard.quick_wins_title", { defaultValue: "QUICK WINS" })}
         </span>

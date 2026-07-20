@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch, ArrowUpRight, ShieldCheck, Crown, Plug } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -68,7 +68,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
               {isUpgrade ? (
                 <Crown className="h-5 w-5 text-primary" />
               ) : (
-                <Sparkles className="h-5 w-5 text-accent-violet" />
+                <Wand className="h-5 w-5 text-accent-violet" />
               )}
             </div>
             <div className="flex-1 min-w-0">
@@ -147,7 +147,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
             ) : (
               <Link to="/marketplace" className="flex-1">
                 <Button size="sm" className="w-full glow rounded-xl font-semibold text-xs h-9 gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Wand className="h-3.5 w-3.5" />
                   Contratar {targetAgent}
                   <ArrowUpRight className="h-3 w-3" />
                 </Button>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Settings, Zap, CheckCircle2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 interface DashboardWelcomeProps {
   userName?: string;
@@ -62,7 +62,7 @@ const DashboardWelcome = ({ userName, hasAgents, hasIntegration, hasExecution }:
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-primary" strokeWidth={2} />
+            <Wand className="h-4 w-4 text-primary" strokeWidth={2} />
           </div>
           <p className="text-sm text-foreground">
             {userName ? (

@@ -1,5 +1,5 @@
 import { useAgentActivity, type ActivityLog } from "@/hooks/useAgentActivity";
-import { Clock, Zap, FileText, Mail, Search, BarChart3, Sparkles } from "lucide-react";
+import { Clock, Zap, FileText, Mail, Search, BarChart3, Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,7 +40,7 @@ export function AgentActivityFeed({ agentId }: { agentId: string }) {
   if (!metrics || metrics.recentActions.length === 0) {
     return (
       <EmptyState
-        icon={Sparkles}
+        icon={Wand}
         title="Este agente ainda não trabalhou"
         description="Assim que ele receber a primeira tarefa, você vê cada ação — chamada de LLM, envio de e-mail, busca — em tempo real."
         action={{

@@ -16,7 +16,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Bell, ShieldAlert, Zap, X, ArrowRight, CheckCircle2, TrendingUp, Sparkles,
+  Bell, ShieldAlert, Zap, X, ArrowRight, CheckCircle2, TrendingUp, Wand,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -70,7 +70,7 @@ function iconFor(kind: string) {
     case "approval_backlog": return Bell;
     case "low_confidence_streak": return ShieldAlert;
     case "opportunity": return TrendingUp;
-    case "celebration": return Sparkles;
+    case "celebration": return Wand;
     case "stale_agent": return Zap;
     default: return Bell;
   }

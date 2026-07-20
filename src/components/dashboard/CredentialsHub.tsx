@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Zap, Phone, Mail, Globe, Database, Webhook, Check, Plus, Loader2, Shield, Activity, Link2, Radio, Settings2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -145,7 +145,7 @@ const CredentialsHub = () => {
           className="relative text-center"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <Wand className="h-3.5 w-3.5 text-primary" />
             <span className="text-xs font-medium text-primary">Hub de Conexões</span>
           </div>
           <h1 className="font-display text-3xl font-bold gradient-text mb-2">Central de Integrações</h1>

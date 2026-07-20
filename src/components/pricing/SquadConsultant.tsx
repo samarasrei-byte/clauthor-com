@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Send, Bot, User, Loader2, ArrowRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -101,7 +101,7 @@ export default function SquadConsultant() {
           className="text-center space-y-6"
         >
           <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto">
-            <Sparkles className="h-8 w-8 text-primary" />
+            <Wand className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h3 className="font-display font-bold text-xl mb-2">
@@ -238,7 +238,7 @@ export default function SquadConsultant() {
               </p>
               <Link to="/auth" state={{ signup: true }}>
                 <Button size="sm" className="gap-1.5 rounded-xl glow text-xs h-9 px-5">
-                  <Sparkles className="h-3 w-3" />
+                  <Wand className="h-3 w-3" />
                   {t("squads.consultant_cta", { defaultValue: "Criar conta e contratar" })}
                   <ArrowRight className="h-3 w-3" />
                 </Button>

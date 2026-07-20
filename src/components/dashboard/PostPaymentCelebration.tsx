@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PartyPopper, Rocket, CheckCircle2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import FlowProgressBar from "./FlowProgressBar";
 import { useTranslation } from "react-i18next";
 
@@ -123,7 +123,7 @@ const PostPaymentCelebration = ({ agentName, isDepartment, agentCount, onComplet
                 animate={{ scale: [0, 1.3, 1] }}
                 transition={{ delay: 1 }}
               >
-                <Sparkles className="w-6 h-6 text-primary" />
+                <Wand className="w-6 h-6 text-primary" />
               </motion.div>
             </div>
 

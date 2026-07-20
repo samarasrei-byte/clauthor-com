@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, Scissors, Inbox, Users, Bot, Radar } from "lucide-react";
+import { ArrowRight, Wand, Scissors, Inbox, Users, Bot, Radar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type CTA = {
@@ -19,7 +19,7 @@ const CTA_MAP: Record<string, CTA> = {
   "/dashboard/inbox": {
     label: "Ver Video Hub",
     hint: "Aprovou? Gere o próximo",
-    icon: Sparkles,
+    icon: Wand,
     to: "/video",
   },
   "/video": {
@@ -37,7 +37,7 @@ const CTA_MAP: Record<string, CTA> = {
   "/video-clipper": {
     label: "Gerar novo vídeo",
     hint: "Veo 3 · texto → vídeo",
-    icon: Sparkles,
+    icon: Wand,
     to: "/video?tab=studio",
   },
   "/dashboard/traces": {

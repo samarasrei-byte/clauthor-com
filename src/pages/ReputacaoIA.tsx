@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Shield, Star, Zap, TrendingUp, Heart, MessageSquare, AlertTriangle,
-  BarChart3, Clock, CheckCircle2, ArrowRight, Sparkles, Users, Bell,
+  BarChart3, Clock, CheckCircle2, ArrowRight, Wand, Users, Bell,
   ThumbsUp, Instagram, Facebook, Linkedin, Globe, Search, Radar,
   Stethoscope, Scale, UtensilsCrossed, Store, Factory, Car, Hotel, Building2, ShoppingBag, Wrench,
 } from "lucide-react";
@@ -387,7 +387,7 @@ const ReputacaoIA = () => {
               { icon: Heart, title: "Análise de sentimento", desc: "Entende emoção e intenção do cliente." },
               { icon: Radar, title: "Detecção de crises", desc: "Alerta antes que o problema cresça." },
               { icon: BarChart3, title: "Relatórios inteligentes", desc: "Métricas que importam para decisão." },
-              { icon: Sparkles, title: "Insights estratégicos", desc: "IA sugere ações baseadas nos dados." },
+              { icon: Wand, title: "Insights estratégicos", desc: "IA sugere ações baseadas nos dados." },
               { icon: TrendingUp, title: "Comparativo com concorrentes", desc: "Saiba como sua marca se posiciona." },
               { icon: Search, title: "Aprendizado contínuo", desc: "Fica mais precisa a cada resposta." },
               { icon: Users, title: "Escalável para qualquer porte", desc: "De PME a grandes redes." },

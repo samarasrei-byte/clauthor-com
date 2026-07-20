@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Brain, Sparkles, Network, Workflow, Plus, Search, Cpu, Activity,
+  Brain, Wand, Network, Workflow, Plus, Search, Cpu, Activity,
   Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2,
   ChevronRight, X, Bot, Wand2, Radio, Send, RotateCcw, Trash2,
 } from "lucide-react";
@@ -462,7 +462,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
             className="flex-1"
           />
           <Button onClick={handleDelegate} className="gap-2">
-            <Sparkles className="h-4 w-4" /> Criar
+            <Wand className="h-4 w-4" /> Criar
           </Button>
         </div>
       </Card>
@@ -707,7 +707,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" /> Novo Workspace
+              <Wand className="h-4 w-4 text-primary" /> Novo Workspace
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
@@ -1186,7 +1186,7 @@ const AgentCreatorDialog = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" /> Novo Agente
+            <Wand className="h-4 w-4 text-primary" /> Novo Agente
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-3">

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Search, CheckCircle2, XCircle, Zap, PlayCircle, KeyRound, ExternalLink } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { connectors, type ConnectorData } from "@/components/integrations/connectorData";
 
 /**
@@ -109,7 +109,7 @@ const SettingsConnections = () => {
         <div className="flex items-center gap-2">
           <h1 className="font-display text-3xl font-bold">Conexões</h1>
           <Badge className="bg-primary/15 text-primary border-primary/20">
-            <Sparkles className="h-3 w-3 mr-1" />
+            <Wand className="h-3 w-3 mr-1" />
             {connectedCount} ativo{connectedCount !== 1 ? "s" : ""}
           </Badge>
         </div>
@@ -268,7 +268,7 @@ const SettingsConnections = () => {
                   <div className="space-y-3">
                     <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4 text-sm">
                       <p className="font-medium text-emerald-700 dark:text-emerald-400 mb-1 flex items-center gap-1.5">
-                        <Sparkles className="h-4 w-4" />
+                        <Wand className="h-4 w-4" />
                         Conexão em 1 clique
                       </p>
                       <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80">

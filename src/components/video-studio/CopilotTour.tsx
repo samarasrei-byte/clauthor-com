@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, MessageSquare, Image as ImageIcon, Sparkles, Wand2 } from "lucide-react";
+import { X, MessageSquare, Image as ImageIcon, Wand, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "clauthor:video-copilot-tour-v1";
@@ -17,7 +17,7 @@ const STEPS = [
     body: "Se enviar uma foto/frame, o vídeo animará a partir dela. Sem imagem, geramos do zero.",
   },
   {
-    icon: Sparkles,
+    icon: Wand,
     title: "Prompt otimizado",
     body: "O Thor devolve um prompt cinematográfico em inglês, pronto para Veo 3 / Replicate.",
   },

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, X, Loader2, User, Zap } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -69,7 +69,7 @@ const AgentLivePreview = ({ agentName, agentDesc, isOpen, onClose }: AgentLivePr
             {messages.length === 0 && !trialEnded && (
               <div className="flex flex-col items-center justify-center h-full text-center py-8">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary-glow/10 flex items-center justify-center mb-4 animate-pulse-glow">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                  <Wand className="h-8 w-8 text-primary" />
                 </div>
                 <p className="text-sm font-medium mb-1">{t("preview.test_agent")} {agentName}</p>
                 <p className="text-xs text-muted-foreground max-w-xs">{agentDesc}</p>

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FileText, CheckCircle2, Clock, AlertCircle, Bot, BarChart3, Filter, Download, Eye, ChevronRight, Activity } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -133,7 +133,7 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Entregas Hoje", value: stats.todayDeliveries, icon: Sparkles, color: "text-primary" },
+          { label: "Entregas Hoje", value: stats.todayDeliveries, icon: Wand, color: "text-primary" },
           { label: "Total Execuções", value: stats.totalDeliveries, icon: Activity, color: "text-accent-foreground" },
           { label: "Tasks Concluídas", value: stats.completedTasks, icon: CheckCircle2, color: "text-emerald-500" },
           { label: "Taxa de Sucesso", value: `${stats.successRate}%`, icon: BarChart3, color: "text-primary" },

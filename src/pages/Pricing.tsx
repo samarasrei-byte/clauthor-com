@@ -5,10 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Check, Zap, Shield, Clock, Bot, ArrowRight, Coins, TrendingUp, Users,
-  XCircle, CheckCircle2, DollarSign, Building2, Activity, Sparkles as SparklesIcon,
+  XCircle, CheckCircle2, DollarSign, Building2, Activity, Wand as SparklesIcon,
   Wrench,
 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import SquadPlans from "@/components/pricing/SquadPlans";
 import PricePill from "@/components/pricing/PricePill";
 import RoiCalculator from "@/components/departments/RoiCalculator";
@@ -79,7 +79,7 @@ const Pricing = () => {
         {/* ═════════════ HERO ═════════════ */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
           <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
-            <Sparkles className="h-4 w-4 mr-2" />
+            <Wand className="h-4 w-4 mr-2" />
             Preços por departamento
           </Badge>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">

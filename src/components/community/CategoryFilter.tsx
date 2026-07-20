@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Layers, Megaphone, LayoutGrid } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type CommunityCategory = "duvidas" | "templates" | "showcase" | "anuncios" | "geral";
@@ -17,7 +17,7 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
     { value: "all", labelKey: "community.cat_all", icon: LayoutGrid },
     { value: "duvidas", labelKey: "community.cat_duvidas", icon: MessageSquare },
     { value: "templates", labelKey: "community.cat_templates", icon: Layers },
-    { value: "showcase", labelKey: "community.cat_showcase", icon: Sparkles },
+    { value: "showcase", labelKey: "community.cat_showcase", icon: Wand },
     { value: "anuncios", labelKey: "community.cat_anuncios", icon: Megaphone },
   ];
 

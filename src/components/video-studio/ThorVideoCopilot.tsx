@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, RotateCcw, Bot, User as UserIcon, Loader2 } from "lucide-react";
+import { Send, Wand, RotateCcw, Bot, User as UserIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -165,7 +165,7 @@ export default function ThorVideoCopilot({
         <div className="px-5 pb-3">
           <div className="rounded-xl border border-primary/30 bg-primary/[0.03] p-3.5 space-y-2">
             <div className="flex items-center gap-1.5">
-              <Sparkles strokeWidth={1.5} className="w-3.5 h-3.5 text-primary" />
+              <Wand strokeWidth={1.5} className="w-3.5 h-3.5 text-primary" />
               <div className="text-[11px] uppercase tracking-wider font-medium text-primary">
                 Prompt Final
               </div>
@@ -189,7 +189,7 @@ export default function ThorVideoCopilot({
                 {submitting ? (
                   <Loader2 strokeWidth={1.5} className="w-3.5 h-3.5 animate-spin" />
                 ) : (
-                  <Sparkles strokeWidth={1.5} className="w-3.5 h-3.5" />
+                  <Wand strokeWidth={1.5} className="w-3.5 h-3.5" />
                 )}
                 Gerar vídeo
               </Button>

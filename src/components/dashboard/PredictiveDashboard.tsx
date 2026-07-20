@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, AlertTriangle, Zap, Clock, CreditCard, Users, Brain, ArrowUpRight, ShieldAlert, Activity, BarChart3, Target } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -424,7 +424,7 @@ const PredictiveDashboard = () => {
       if (savedMoney > 0) {
         preds.push({
           id: "roi-real",
-          icon: Sparkles,
+          icon: Wand,
           title: "ROI estimado do seu time de IA",
           description: `${totalExecs.toLocaleString()} execuções = ~${Math.round(savedHours)}h economizadas. Equivalente a R$ ${savedMoney.toLocaleString()} em mão de obra (R$ 50/h, 15min/tarefa).`,
           timeframe: "Acumulado",

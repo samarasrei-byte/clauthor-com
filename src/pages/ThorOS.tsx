@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import {
-  Cpu, Send, Loader2, CheckCircle2, XCircle, Sparkles,
+  Cpu, Send, Loader2, CheckCircle2, XCircle, Wand,
   Network, Layers, FileText, ChevronDown, ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -143,7 +143,7 @@ export default function ThorOS() {
             className="rounded-2xl border border-border/60 bg-card/40 backdrop-blur p-6 space-y-4"
           >
             <div className="flex items-center gap-2">
-              <Sparkles strokeWidth={1.5} className="w-4 h-4 text-primary" />
+              <Wand strokeWidth={1.5} className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium">Qual o objetivo?</span>
             </div>
             <Textarea

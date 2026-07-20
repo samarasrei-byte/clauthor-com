@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useCredits } from "@/hooks/useCredits";
 import { useTokenUsage } from "@/hooks/useCredits";
 import { Progress } from "@/components/ui/progress";
@@ -118,7 +118,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-primary/20 bg-primary/[0.04]"
         >
-          <Sparkles className="h-4 w-4 text-primary shrink-0" />
+          <Wand className="h-4 w-4 text-primary shrink-0" />
           <span className="text-xs text-muted-foreground">
             {t("dashboard.demo_mode_banner", { defaultValue: "📊 Demo mode - these are simulated metrics. Hire your first agent to see real data!" })}
           </span>

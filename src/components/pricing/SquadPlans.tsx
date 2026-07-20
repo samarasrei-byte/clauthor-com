@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Package, Wrench, Building2, ArrowRight, Check, Phone, MessageSquare, Briefcase, BarChart3, Star, FileText, ShoppingCart, Shield, Plus, Flame, ChevronLeft, Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Bot } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "./SquadConsultant";
 import DepartmentMiniChat from "./DepartmentMiniChat";
@@ -25,12 +25,12 @@ const availableAgents = [
   { key: "sales", icon: Briefcase },
   { key: "revenue", icon: BarChart3 },
   { key: "customer_success", icon: Star },
-  { key: "content", icon: Sparkles },
+  { key: "content", icon: Wand },
   { key: "data_analytics", icon: BarChart3 },
   { key: "legal", icon: FileText },
   { key: "security", icon: Shield },
   { key: "ecommerce", icon: ShoppingCart },
-  { key: "research", icon: Sparkles },
+  { key: "research", icon: Wand },
   { key: "rag", icon: FileText },
   { key: "orchestrator", icon: Users },
   { key: "coding", icon: Wrench },
@@ -44,7 +44,7 @@ const availableAgents = [
   { key: "project_management", icon: ClipboardList },
   { key: "supply_chain", icon: Truck },
   { key: "training", icon: GraduationCap },
-  { key: "creative_writer", icon: Sparkles },
+  { key: "creative_writer", icon: Wand },
   { key: "content_producer", icon: Megaphone },
   { key: "support_channel", icon: MessageSquare },
   { key: "support_lead", icon: Star },

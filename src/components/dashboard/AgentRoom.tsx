@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Bot, Zap, MessageSquare, Activity, Eye, Settings2, Play, Pause, MoreHorizontal, TrendingUp, Clock, Users2, Loader2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -106,7 +106,7 @@ const AgentRoom = () => {
             transition={{ duration: 2, repeat: Infinity }}
             className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center"
           >
-            <Sparkles className="h-8 w-8 text-white" />
+            <Wand className="h-8 w-8 text-white" />
           </motion.div>
           
           {/* Pulse Rings */}
@@ -285,7 +285,7 @@ const AgentRoom = () => {
             <h3 className="font-display text-lg font-bold mb-2">Sala Vazia</h3>
             <p className="text-muted-foreground text-sm mb-4">Crie seu primeiro agente para começar</p>
             <Button className="gap-2">
-              <Sparkles className="h-4 w-4" />
+              <Wand className="h-4 w-4" />
               Criar Agente
             </Button>
           </motion.div>

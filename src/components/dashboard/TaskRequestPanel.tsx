@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Compass, Target, Send, ChevronRight, Zap, Bot, ArrowRight, Lightbulb, Building2, TrendingUp, Users, Headphones, Megaphone, DollarSign, ShoppingCart, FileText } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -129,7 +129,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
             >
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <Sparkles className="h-4 w-4 text-primary" />
+                  <Wand className="h-4 w-4 text-primary" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">O que você precisa resolver?</p>
