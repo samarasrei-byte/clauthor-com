@@ -263,7 +263,7 @@ export default function CreateWorkforce() {
               {state.step < STEPS.length - 1 ? (
                 <div className="flex flex-col items-end gap-1.5">
                   {advanceHint && (
-                    <p className="text-[11px] text-amber-500/90">{advanceHint}</p>
+                    <p className="text-[11px] text-warning/90">{advanceHint}</p>
                   )}
                   <Button onClick={advance} disabled={!canAdvance} className="gap-1.5">
                     Avançar <ArrowRight className="h-4 w-4" />
@@ -559,8 +559,8 @@ const StepHierarchy = ({ state }: any) => {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <Node title="🧠 Executivos" items={exec} accent="from-rose-500 to-red-600" />
-        <Node title="🎯 Coordenadores" items={coord} accent="from-amber-500 to-orange-600" />
+        <Node title="🧠 Executivos" items={exec} accent="from-rose-500 to-destructive" />
+        <Node title="🎯 Coordenadores" items={coord} accent="from-warning to-orange-600" />
         <Node title="⚡ Operadores & Especialistas" items={others} accent="from-violet-500 to-purple-600" />
       </div>
       <p className="text-[11px] text-muted-foreground">

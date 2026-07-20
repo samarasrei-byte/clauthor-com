@@ -21,9 +21,9 @@ const STEP_META: Record<
   StepType,
   { icon: React.ComponentType<{ className?: string }>; label: string; tone: string }
 > = {
-  thought: { icon: Brain, label: "Pensamento", tone: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
-  tool_call: { icon: Wrench, label: "Chamada de ferramenta", tone: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
-  tool_result: { icon: CheckCircle2, label: "Resultado da ferramenta", tone: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+  thought: { icon: Brain, label: "Pensamento", tone: "text-info bg-info/10 border-info/20" },
+  tool_call: { icon: Wrench, label: "Chamada de ferramenta", tone: "text-warning bg-warning/10 border-warning/20" },
+  tool_result: { icon: CheckCircle2, label: "Resultado da ferramenta", tone: "text-success bg-success/10 border-success/20" },
   decision: { icon: GitBranch, label: "Decisão", tone: "text-violet-400 bg-violet-500/10 border-violet-500/20" },
   delegation: { icon: Send, label: "Delegação", tone: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
   final_output: { icon: Wand, label: "Saída final", tone: "text-primary bg-primary/10 border-primary/30" },

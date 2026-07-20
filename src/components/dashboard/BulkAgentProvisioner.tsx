@@ -250,7 +250,7 @@ const BulkAgentProvisioner = () => {
           </p>
         </div>
         {status === "done" && (
-          <Badge variant="outline" className="text-green-500 border-green-500/30 bg-green-500/10 px-3 py-1">
+          <Badge variant="outline" className="text-success border-success/30 bg-success/10 px-3 py-1">
             <CheckCircle className="w-4 h-4 mr-1" /> {deployedCount} agentes implantados
           </Badge>
         )}

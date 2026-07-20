@@ -471,7 +471,7 @@ function MetricCard({
     tone === "danger"
       ? "text-destructive"
       : tone === "ok"
-        ? "text-emerald-500"
+        ? "text-success"
         : "text-foreground";
   return (
     <Card className="p-3">

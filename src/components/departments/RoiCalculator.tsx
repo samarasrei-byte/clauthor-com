@@ -249,12 +249,12 @@ export default function RoiCalculator({ departmentId, monthlyPrice, className }:
               className={cn(
                 "rounded-2xl border p-5 transition-colors",
                 worthIt
-                  ? "bg-emerald-500/[0.06] border-emerald-500/30"
-                  : "bg-amber-500/[0.06] border-amber-500/30",
+                  ? "bg-success/[0.06] border-success/30"
+                  : "bg-warning/[0.06] border-warning/30",
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className={cn("w-4 h-4", worthIt ? "text-emerald-400" : "text-amber-400")} />
+                <TrendingUp className={cn("w-4 h-4", worthIt ? "text-success" : "text-warning")} />
                 <div className="text-[10px] uppercase tracking-wider text-white/60">
                   Você economiza
                 </div>
@@ -262,7 +262,7 @@ export default function RoiCalculator({ departmentId, monthlyPrice, className }:
               <div
                 className={cn(
                   "text-3xl font-display font-semibold tabular-nums",
-                  worthIt ? "text-emerald-400" : "text-amber-400",
+                  worthIt ? "text-success" : "text-warning",
                 )}
               >
                 {formatBRL(savings)}

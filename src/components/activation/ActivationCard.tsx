@@ -30,7 +30,7 @@ interface ActivationCardProps {
 }
 
 const STATUS_ICONS: Record<string, JSX.Element> = {
-  done: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+  done: <CheckCircle2 className="h-5 w-5 text-success" />,
   running: <Loader2 className="h-5 w-5 animate-spin text-primary" />,
   failed: <XCircle className="h-5 w-5 text-destructive" />,
   pending: <Circle className="h-5 w-5 text-muted-foreground" />,
@@ -144,7 +144,7 @@ export function ActivationCard({ department, steps, onRefresh }: ActivationCardP
               className={cn(
                 "flex items-start gap-3 rounded-lg border p-3",
                 status === "failed" && "border-destructive/40 bg-destructive/5",
-                status === "done" && "border-green-500/30 bg-green-500/5",
+                status === "done" && "border-success/30 bg-success/5",
               )}
             >
               <div className="flex flex-col items-center pt-0.5">

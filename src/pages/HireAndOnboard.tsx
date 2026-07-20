@@ -182,10 +182,10 @@ export default function HireAndOnboard() {
         <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
           <div className="text-xs uppercase tracking-wider text-white/40 mb-3">Incluso na contratação</div>
           <ul className="space-y-2 text-sm text-white/80">
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Todos os {dept.agentSlugs.length} agentes ativados imediatamente</li>
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Cobertura de execução: {dept.outcome}</li>
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Painel de aprovações e Second Brain em tempo real</li>
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5" /> Preço travado: {formatBRL(dept.priceMonthly)}/mês, sem taxa oculta</li>
+            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Todos os {dept.agentSlugs.length} agentes ativados imediatamente</li>
+            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Cobertura de execução: {dept.outcome}</li>
+            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Painel de aprovações e Second Brain em tempo real</li>
+            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-success mt-0.5" /> Preço travado: {formatBRL(dept.priceMonthly)}/mês, sem taxa oculta</li>
           </ul>
         </Card>
 

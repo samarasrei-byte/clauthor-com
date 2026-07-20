@@ -26,7 +26,7 @@ function formatMs(ms: number): string {
 
 const STATUS_STYLE: Record<string, { icon: React.ComponentType<{ className?: string }>; label: string; tone: string }> = {
   running: { icon: Loader2, label: "Executando", tone: "text-primary bg-primary/10 border-primary/30 animate-pulse" },
-  completed: { icon: CheckCircle2, label: "Concluída", tone: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
+  completed: { icon: CheckCircle2, label: "Concluída", tone: "text-success bg-success/10 border-success/30" },
   failed: { icon: XCircle, label: "Falhou", tone: "text-destructive bg-destructive/10 border-destructive/30" },
   cancelled: { icon: XCircle, label: "Cancelada", tone: "text-muted-foreground bg-muted/40 border-border" },
 };

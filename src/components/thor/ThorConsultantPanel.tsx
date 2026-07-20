@@ -232,7 +232,7 @@ export default function ThorConsultantPanel({
                   <Badge className="text-xs">{SCALE_LABEL[rec.scale]}</Badge>
                 </div>
                 {scaleMismatch && (
-                  <div className="flex items-start gap-2 text-xs text-amber-600 dark:text-amber-400">
+                  <div className="flex items-start gap-2 text-xs text-warning">
                     <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
                     <span>
                       Você ia criar <strong>{SCALE_LABEL[intendedScale!]}</strong>, mas seu objetivo pede <strong>{SCALE_LABEL[rec.scale]}</strong>. {SCALE_UPGRADE_HINT[intendedScale!] ?? ""}

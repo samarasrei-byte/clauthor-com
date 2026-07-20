@@ -532,7 +532,7 @@ function NetworkRow({
       <span
         className={cn(
           "text-[10px] font-mono uppercase tracking-wider",
-          status === "connected" ? "text-emerald-500" : "text-muted-foreground",
+          status === "connected" ? "text-success" : "text-muted-foreground",
         )}
       >
         {status === "connected" ? "ativa" : "conectar"}

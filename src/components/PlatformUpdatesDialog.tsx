@@ -86,8 +86,8 @@ export default function PlatformUpdatesDialog() {
 
   const levelBadge = {
     admin: <Badge className="bg-primary/15 text-primary border-0">Acesso ilimitado</Badge>,
-    ok: <Badge className="bg-emerald-500/15 text-emerald-500 border-0">🟢 Saudável</Badge>,
-    warn: <Badge className="bg-amber-500/15 text-amber-500 border-0">🟡 Atenção</Badge>,
+    ok: <Badge className="bg-success/15 text-success border-0">🟢 Saudável</Badge>,
+    warn: <Badge className="bg-warning/15 text-warning border-0">🟡 Atenção</Badge>,
     crit: <Badge className="bg-destructive/15 text-destructive border-0">🔴 Crítico</Badge>,
   }[level];
 
@@ -158,7 +158,7 @@ export default function PlatformUpdatesDialog() {
                   <Progress value={Math.min(100, usagePercentage)} className="h-1.5" />
                 </div>
                 {level === "warn" && (
-                  <p className="mt-3 text-[11px] text-amber-500 flex items-start gap-1.5">
+                  <p className="mt-3 text-[11px] text-warning flex items-start gap-1.5">
                     <Info className="h-3 w-3 mt-0.5 shrink-0" />
                     Você já usou mais de 80% dos tokens deste ciclo. Considere fazer upgrade para evitar interrupções.
                   </p>

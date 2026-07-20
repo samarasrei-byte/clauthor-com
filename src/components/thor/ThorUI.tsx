@@ -529,7 +529,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
 
               <div className="flex items-center gap-2 mt-1.5">
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-background/60 border border-accent-violet/10">
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-500"
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-success"
                     animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }}
                   />
                   <span className="text-[8px] font-mono font-bold tracking-[0.3em] uppercase text-foreground/80">THOR</span>
@@ -703,8 +703,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
 
                         {/* Status indicator */}
                         <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background z-10 flex items-center justify-center">
-                          <span className="w-full h-full rounded-full bg-emerald-500" />
-                          <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-40" />
+                          <span className="w-full h-full rounded-full bg-success" />
+                          <span className="absolute inset-0 rounded-full bg-success animate-ping opacity-40" />
                         </span>
                       </div>
 
@@ -718,8 +718,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                             {lang.startsWith("pt") ? `Falando com ${visitorName}` : `Talking to ${visitorName}`}
                           </span>
                         ) : (
-                          <span className="text-[9px] text-emerald-500/70 font-mono flex items-center gap-1">
-                            <span className="w-1 h-1 rounded-full bg-emerald-500 inline-block" />
+                          <span className="text-[9px] text-success/70 font-mono flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-success inline-block" />
                             Online
                           </span>
                         )}
@@ -885,8 +885,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
             </div>
           </div>
           <span className="absolute top-0 right-0 w-3 h-3 rounded-full border-2 border-background z-10">
-            <span className="block w-full h-full rounded-full bg-emerald-500" />
-            {!showChat && <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50" />}
+            <span className="block w-full h-full rounded-full bg-success" />
+            {!showChat && <span className="absolute inset-0 rounded-full bg-success animate-ping opacity-50" />}
           </span>
         </div>
       </motion.div>

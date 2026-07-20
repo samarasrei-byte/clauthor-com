@@ -192,7 +192,7 @@ const DepartmentLiveDemo = ({
                   {department.name} · ao vivo
                 </DialogTitle>
                 <span
-                  className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400"
+                  className="rounded-full border border-warning/40 bg-warning/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning"
                   title="Cenário simulado, não dados de cliente real"
                 >
                   Simulação

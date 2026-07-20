@@ -353,7 +353,7 @@ const Departamentos = () => {
 
                   <div className="mt-4 flex items-center gap-2 flex-wrap">
                     <PricePill price={formatPrice(deptPrice, lang)} period={t("departments_page.month")} size="md" />
-                    <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
+                    <Badge className="bg-success/15 text-success border-success/20 text-[10px] font-bold ml-auto">
                       -{dept.discount}% {t("departments_page.pack_discount")}
                     </Badge>
                   </div>
@@ -393,10 +393,10 @@ const Departamentos = () => {
                 </div>
 
                 <div className="px-5 pb-5 space-y-3">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-success/5 border border-success/10">
                     <div>
                      <p className="text-[10px] text-muted-foreground">{t("departments_page.vs_clt")}</p>
-                      <p className="text-sm font-bold text-emerald-400">
+                      <p className="text-sm font-bold text-success">
                         {savingsMultiplier >= 20 ? `20x+` : savingsMultiplier >= 3 ? `${savingsMultiplier}x` : `-${savingsPercent}%`} {t("departments_page.savings")}
                       </p>
                     </div>
@@ -448,7 +448,7 @@ const Departamentos = () => {
                         }
                         className={`w-full h-9 rounded-lg text-xs font-medium inline-flex items-center justify-center gap-1.5 transition-colors ${
                           inCart
-                            ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15"
+                            ? "border border-success/30 bg-success/10 text-success hover:bg-success/15"
                             : "border border-white/10 bg-white/[0.02] text-white/70 hover:bg-white/[0.05] hover:text-white"
                         }`}
                         aria-label={inCart ? "Remover do carrinho" : "Adicionar ao carrinho"}
@@ -517,7 +517,7 @@ const Departamentos = () => {
                   <tr key={row.criteria} className={row.highlight ? "bg-primary/[0.03]" : ""}>
                     <td className="px-6 py-3.5 font-medium text-foreground">{row.criteria}</td>
                     <td className="px-6 py-3.5 text-center text-muted-foreground">{row.clt}</td>
-                    <td className="px-6 py-3.5 text-center font-semibold text-emerald-400">{row.clauthor}</td>
+                    <td className="px-6 py-3.5 text-center font-semibold text-success">{row.clauthor}</td>
                   </tr>
                 ))}
               </tbody>
@@ -577,12 +577,12 @@ const Departamentos = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
-              <p className="font-display font-bold text-xl text-emerald-400">
+              <p className="text-xs text-success font-medium">CLAUTHOR</p>
+              <p className="font-display font-bold text-xl text-success">
                 {formatPrice(totalClauthorCost, lang)}{t("departments_page.month")}
               </p>
             </div>
-            <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
+            <Badge className="bg-success/15 text-success border-success/20 font-bold text-sm px-3 py-1">
               -{totalSavingsPercent}%
             </Badge>
           </div>

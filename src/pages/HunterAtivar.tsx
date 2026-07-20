@@ -120,8 +120,8 @@ const HunterAtivar = () => {
           </div>
 
           {active && (
-            <div className="flex items-center gap-2 p-3 rounded-lg border border-green-500/30 bg-green-500/5 text-sm">
-              <CheckCircle2 className="w-4 h-4 text-green-400" />
+            <div className="flex items-center gap-2 p-3 rounded-lg border border-success/30 bg-success/5 text-sm">
+              <CheckCircle2 className="w-4 h-4 text-success" />
               <span className="text-foreground">Hunter ativo - próxima execução amanhã às 9h</span>
             </div>
           )}

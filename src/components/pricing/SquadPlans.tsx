@@ -238,10 +238,10 @@ export default function SquadPlans() {
                         </div>
                       </div>
 
-                      <div className="mb-4 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                      <div className="mb-4 p-3 rounded-xl bg-success/5 border border-success/10">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-emerald-400">{t("squads.discount")}</span>
-                          <span className="font-display font-bold text-2xl text-emerald-400">-{pack.discount}%</span>
+                          <span className="text-sm font-medium text-success">{t("squads.discount")}</span>
+                          <span className="font-display font-bold text-2xl text-success">-{pack.discount}%</span>
                         </div>
                         <p className="text-[10px] text-muted-foreground mt-1">{t("squads.discount_desc")}</p>
                       </div>
@@ -293,7 +293,7 @@ export default function SquadPlans() {
                       <span className="text-sm text-muted-foreground">
                         / {activeSquad.maxAgents}
                       </span>
-                      <Badge className="bg-emerald-500/20 text-emerald-400 border-0">
+                      <Badge className="bg-success/20 text-success border-0">
                         -{activeSquad.discount}% off
                       </Badge>
                     </div>
@@ -349,7 +349,7 @@ export default function SquadPlans() {
                   </span>
                   <span className="text-sm text-muted-foreground">{t("squads.agents_label")}</span>
                   {teamDiscount > 0 && (
-                    <Badge className="bg-emerald-500/20 text-emerald-400 border-0">
+                    <Badge className="bg-success/20 text-success border-0">
                       -{teamDiscount}% off
                     </Badge>
                   )}
@@ -367,7 +367,7 @@ export default function SquadPlans() {
                     key={tier.min}
                     className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
                       selectedAgents.length >= tier.min
-                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                        ? "bg-success/10 border-success/20 text-success"
                         : "bg-card/30 border-border text-muted-foreground"
                     }`}
                   >
@@ -540,10 +540,10 @@ export default function SquadPlans() {
                   <p className="font-display font-bold text-lg line-through text-muted-foreground">{fp(Object.values(region.departmentClt).reduce((a, b) => a + b, 0))}/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
-                  <p className="font-display font-bold text-lg text-emerald-400">{fp(Object.values(region.departments).reduce((a, b) => a + b, 0))}/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}</p>
+                  <p className="text-xs text-success font-medium">CLAUTHOR</p>
+                  <p className="font-display font-bold text-lg text-success">{fp(Object.values(region.departments).reduce((a, b) => a + b, 0))}/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}</p>
                 </div>
-                <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
+                <Badge className="bg-success/15 text-success border-success/20 font-bold text-sm px-3 py-1">
                   -{Math.round((1 - Object.values(region.departments).reduce((a, b) => a + b, 0) / Object.values(region.departmentClt).reduce((a, b) => a + b, 0)) * 100)}%
                 </Badge>
               </div>

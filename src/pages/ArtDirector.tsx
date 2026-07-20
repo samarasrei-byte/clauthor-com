@@ -342,7 +342,7 @@ export default function ArtDirector() {
                                   <Wand2 strokeWidth={1.5} className="w-3 h-3" />
                                   Prompt sugerido
                                   {m.ready && (
-                                    <Badge className="text-[9px] h-4 px-1 bg-emerald-500/15 text-emerald-600 border-emerald-500/30">
+                                    <Badge className="text-[9px] h-4 px-1 bg-success/15 text-success border-success/30">
                                       Pronto
                                     </Badge>
                                   )}
@@ -828,7 +828,7 @@ function ShareBlock({
             <Textarea value={caption} onChange={(e) => setCaption(e.target.value)} rows={4} className="text-sm resize-none" />
           </div>
           {result && (
-            <div className={cn("rounded-lg border p-3 text-xs", result.ok ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-500" : "border-destructive/30 bg-destructive/5 text-destructive")}>
+            <div className={cn("rounded-lg border p-3 text-xs", result.ok ? "border-success/30 bg-success/5 text-success" : "border-destructive/30 bg-destructive/5 text-destructive")}>
               {result.detail}
             </div>
           )}

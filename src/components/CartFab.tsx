@@ -38,7 +38,7 @@ export default function CartFab() {
         >
           <span className="relative">
             <ShoppingBag className="w-4 h-4" strokeWidth={1.8} />
-            <span className="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-red-500 text-[10px] font-semibold flex items-center justify-center">
+            <span className="absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-destructive text-[10px] font-semibold flex items-center justify-center">
               {items.length}
             </span>
           </span>

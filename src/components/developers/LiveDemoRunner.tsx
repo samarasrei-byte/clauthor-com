@@ -11,15 +11,15 @@ import { Button } from "@/components/ui/button";
  */
 
 const AGENT_COLORS: Record<string, string> = {
-  "growth.strategist": "text-emerald-400",
+  "growth.strategist": "text-success",
   "copy.senior": "text-cyan-400",
   "design.motion": "text-violet-400",
-  "media.buyer": "text-amber-400",
+  "media.buyer": "text-warning",
   "analyst.roas": "text-rose-400",
   "sdr.inbound": "text-cyan-400",
-  "sales.closer": "text-emerald-400",
+  "sales.closer": "text-success",
   "cs.retention": "text-violet-400",
-  "ops.chief": "text-amber-400",
+  "ops.chief": "text-warning",
   "finance.forecast": "text-rose-400",
 };
 const colorFor = (slug: string) => AGENT_COLORS[slug] ?? "text-primary";
@@ -154,9 +154,9 @@ export default function LiveDemoRunner() {
   return (
     <div className="rounded-xl border border-white/[0.08] bg-[#0a0a0f] overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-[#07070c]">
-        <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
-        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-destructive/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-warning/70" />
+        <span className="w-2.5 h-2.5 rounded-full bg-success/70" />
         <span className="ml-3 text-[11px] text-foreground/40 font-mono">
           POST /functions/v1/dev-live-demo
         </span>
@@ -168,8 +168,8 @@ export default function LiveDemoRunner() {
             </>
           ) : (
             <>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="text-emerald-400/80">READY</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
+              <span className="text-success/80">READY</span>
             </>
           )}
         </span>
@@ -245,15 +245,15 @@ export default function LiveDemoRunner() {
               )}
               {l.t === "ok" && (
                 <>
-                  <span className="shrink-0 text-emerald-400">✓</span>
+                  <span className="shrink-0 text-success">✓</span>
                   <span className="text-foreground/80">{l.text}</span>
                   {l.meta && <span className="ml-auto text-[11px] text-foreground/40">{l.meta}</span>}
                 </>
               )}
               {l.t === "warn" && (
                 <>
-                  <span className="shrink-0 text-amber-400">⚠</span>
-                  <span className="text-amber-200/80">{l.text}</span>
+                  <span className="shrink-0 text-warning">⚠</span>
+                  <span className="text-warning/80">{l.text}</span>
                 </>
               )}
               {l.t === "done" && (
