@@ -42,6 +42,7 @@ export default function GlobalDashboardSidebar() {
       ],
     },
     { id: "route:/dashboard/inbox",   label: "Inbox do Agente",    icon: Inbox,        group: zoneWork },
+    { id: "route:/dashboard?tab=execucao&view=files", label: "Meus arquivos", icon: FolderOpen, group: zoneWork },
     { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork, locked: videoLocked, badge: videoLocked ? "Premium" : undefined },
     { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
