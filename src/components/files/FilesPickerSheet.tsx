@@ -70,6 +70,7 @@ export default function FilesPickerSheet({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
   const [pickingId, setPickingId] = useState<string | null>(null);
+  const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files-picker", tenantId, accept?.join(",") ?? "all"],
@@ -92,6 +93,27 @@ export default function FilesPickerSheet({
       }),
     [files, filter, query],
   );
+
+  // Prefetch signed thumbnails for image rows (batched, cached in-memory).
+  useEffect(() => {
+    const targets = filtered.filter((f) => f.file_type === "image" && !thumbs[f.id]).slice(0, 40);
+    if (targets.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const paths = targets.map((t) => t.bucket_path);
+      const { data } = await supabase.storage.from("approval-files").createSignedUrls(paths, 60 * 60);
+      if (cancelled || !data) return;
+      const next: Record<string, string> = {};
+      targets.forEach((t, i) => {
+        const url = data[i]?.signedUrl;
+        if (url) next[t.id] = url;
+      });
+      if (Object.keys(next).length) setThumbs((prev) => ({ ...prev, ...next }));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [filtered, thumbs]);
 
   const availableTypes = useMemo(() => {
     const set = new Set<FileType>();
