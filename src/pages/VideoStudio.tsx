@@ -495,15 +495,19 @@ export default function VideoStudio() {
           </div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto p-6">
-          {/* Grid principal 3 colunas: Copiloto | Palco | Inspector */}
+        {/* Copilot + Inspector as reusable elements for mobile drawers */}
+        {(() => null)()}
+
+        <div className="max-w-[1600px] mx-auto p-4 sm:p-6">
+          {/* Grid principal 3 colunas: Copiloto | Palco | Inspector (colapsam em drawers <lg) */}
           <div className="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)_360px] gap-5">
-            {/* Coluna esquerda: Copiloto Thor */}
+            {/* Coluna esquerda: Copiloto Thor (desktop) */}
             <motion.div
               ref={copilotChatRef}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.24 }}
+              className="hidden lg:block"
             >
               <ThorVideoCopilot
                 messages={copilot.messages}
@@ -547,11 +551,53 @@ export default function VideoStudio() {
               />
             </div>
 
-            {/* Coluna direita: Inspector */}
-            <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
+            {/* Coluna direita: Inspector (desktop) */}
+            <div className="hidden lg:block">
+              <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile drawer · Copiloto Thor */}
+      <Sheet open={mobileCopilotOpen} onOpenChange={setMobileCopilotOpen}>
+        <SheetContent side="left" className="w-full sm:max-w-md p-0 flex flex-col">
+          <SheetHeader className="px-4 py-3 border-b border-border/50">
+            <SheetTitle className="text-sm">Copiloto Thor</SheetTitle>
+          </SheetHeader>
+          <div className="flex-1 overflow-hidden p-3">
+            <ThorVideoCopilot
+              messages={copilot.messages}
+              step={copilot.step}
+              attachment={copilot.attachment}
+              onAttachmentChange={copilot.setAttachment}
+              thinking={copilot.thinking}
+              finalPrompt={copilot.finalPrompt}
+              onFinalPromptChange={copilot.setFinalPrompt}
+              onSend={copilot.sendUserMessage}
+              onReset={copilot.reset}
+              onGenerate={() => {
+                setMobileCopilotOpen(false);
+                handleGenerate();
+              }}
+              canGenerate={!!copilot.finalPrompt && !!quota?.can_generate}
+              submitting={submitting}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Mobile drawer · Inspector */}
+      <Sheet open={mobileInspectorOpen} onOpenChange={setMobileInspectorOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col">
+          <SheetHeader className="px-4 py-3 border-b border-border/50">
+            <SheetTitle className="text-sm">Inspetor</SheetTitle>
+          </SheetHeader>
+          <div className="flex-1 overflow-y-auto p-3">
+            <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* ─── Footer control bar (Kling AI / Sidense style) ─── */}
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/50 bg-background/95 backdrop-blur-xl">
