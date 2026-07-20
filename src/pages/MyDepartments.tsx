@@ -222,7 +222,7 @@ const EmptyState = () => (
     </div>
 
     <Button asChild size="lg" className="gap-2">
-      <Link to="/departamentos">
+      <Link to="/dashboard/departamentos">
         <Plus className="h-4 w-4" />
         Ver catálogo completo
       </Link>
