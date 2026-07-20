@@ -18,7 +18,7 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
   return (
     <div
       className={
-        "sticky top-0 z-40 w-full border-b border-white/[0.06] bg-background/85 backdrop-blur-xl " +
+        "sticky top-0 z-40 w-full border-b border-border/40 bg-background/85 backdrop-blur-xl " +
         (className ?? "")
       }
       aria-label="Progresso da contratação"
@@ -39,7 +39,7 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
                       ? "bg-primary text-primary-foreground"
                       : state === "current"
                       ? "bg-primary/20 text-primary ring-1 ring-primary/40"
-                      : "bg-white/[0.04] text-white/40")
+                      : "bg-muted text-muted-foreground")
                   }
                 >
                   {state === "done" ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
@@ -50,8 +50,8 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
                     (state === "current"
                       ? "text-foreground font-medium"
                       : state === "done"
-                      ? "text-white/60"
-                      : "text-white/35")
+                      ? "text-muted-foreground"
+                      : "text-muted-foreground/60")
                   }
                 >
                   {s.short}
@@ -62,7 +62,7 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
         </ol>
 
         {/* Barra contínua */}
-        <div className="h-1 w-full rounded-full bg-white/[0.05] overflow-hidden">
+        <div className="h-1 w-full rounded-full bg-muted overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}

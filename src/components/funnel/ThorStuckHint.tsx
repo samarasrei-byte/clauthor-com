@@ -75,7 +75,7 @@ export default function ThorStuckHint({ stepKey, message, delayMs = 25000 }: Tho
             type="button"
             onClick={close}
             aria-label="Fechar dica"
-            className="text-white/40 hover:text-white transition-colors shrink-0"
+            className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
