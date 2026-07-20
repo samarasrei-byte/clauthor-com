@@ -50,9 +50,9 @@ interface LearningPreference {
 
 // ─── Status colors ───
 const statusConfig: Record<AgentNode["status"], { color: string; label: string; pulse: boolean }> = {
-  working: { color: "bg-emerald-500", label: "Working", pulse: true },
-  waiting: { color: "bg-amber-400", label: "Waiting", pulse: false },
-  delegating: { color: "bg-blue-500", label: "Delegating", pulse: true },
+  working: { color: "bg-success", label: "Working", pulse: true },
+  waiting: { color: "bg-warning", label: "Waiting", pulse: false },
+  delegating: { color: "bg-info", label: "Delegating", pulse: true },
   error: { color: "bg-destructive", label: "Error", pulse: true },
   idle: { color: "bg-muted-foreground/30", label: "Idle", pulse: false },
 };
@@ -113,10 +113,10 @@ const AgentNodeCard = ({ agent, isSelected, onClick }: { agent: AgentNode; isSel
       <div className="relative">
         <div className={cn(
           "w-12 h-12 rounded-full flex items-center justify-center border-2",
-          agent.status === "working" ? "border-emerald-500/40" :
-          agent.status === "delegating" ? "border-blue-500/40" :
+          agent.status === "working" ? "border-success/40" :
+          agent.status === "delegating" ? "border-info/40" :
           agent.status === "error" ? "border-destructive/40" :
-          agent.status === "waiting" ? "border-amber-400/40" : "border-muted/40"
+          agent.status === "waiting" ? "border-warning/40" : "border-muted/40"
         )}>
           <Bot className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
         </div>
@@ -264,11 +264,11 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
         </div>
         <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-1.5 text-[10px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
               {agentNodes.filter(a => a.status === "working").length} active
           </Badge>
           <Badge variant="secondary" className="gap-1.5 text-[10px]">
-            <AlertTriangle className="h-3 w-3 text-amber-400" />
+            <AlertTriangle className="h-3 w-3 text-warning" />
             {pendingValidations.length} awaiting
           </Badge>
           <Button size="sm" variant="outline" className="gap-1.5 text-[10px]" onClick={handleSimulate}>
@@ -384,7 +384,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
         <Card className="border-border/20 bg-card/40 backdrop-blur-sm">
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-amber-400" />
+              <CheckCircle className="h-4 w-4 text-warning" />
               <CardTitle className="text-sm">Validation Queue</CardTitle>
               <Badge variant="secondary" className="text-[9px] ml-auto">{pendingValidations.length} pending</Badge>
             </div>
@@ -396,8 +396,8 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
                 layout
                 className={cn(
                   "p-4 rounded-xl border transition-colors",
-                  item.status === "pending" ? "border-amber-400/20 bg-amber-500/[0.03]" :
-                  item.status === "approved" ? "border-emerald-500/20 bg-emerald-500/[0.03] opacity-60" :
+                  item.status === "pending" ? "border-warning/20 bg-warning/[0.03]" :
+                  item.status === "approved" ? "border-success/20 bg-success/[0.03] opacity-60" :
                   "border-border/10 bg-background/20"
                 )}
               >
@@ -410,7 +410,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
                     </div>
                     <p className="text-[11px] text-muted-foreground">{item.taskTitle}</p>
                   </div>
-                  {item.status === "approved" && <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />}
+                  {item.status === "approved" && <CheckCircle className="h-4 w-4 text-success shrink-0" />}
                 </div>
                 <div className="p-3 rounded-lg bg-background/40 border border-border/10 mb-3">
                   <p className="text-xs leading-relaxed text-foreground/80">{item.preview}</p>
@@ -544,8 +544,8 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
                   )}
                   <div className={cn(
                     "w-[14px] h-[14px] rounded-full shrink-0 mt-0.5 border-2 border-background z-10",
-                    entry.type === "success" ? "bg-emerald-500" :
-                    entry.type === "warning" ? "bg-amber-400" : "bg-primary/40"
+                    entry.type === "success" ? "bg-success" :
+                    entry.type === "warning" ? "bg-warning" : "bg-primary/40"
                   )} />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs leading-tight">{entry.event}</p>

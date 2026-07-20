@@ -17,8 +17,8 @@ const DEPARTMENTS = [
     name: "Orquestrador Master",
     role: "CEO Digital",
     icon: Crown,
-    color: "text-amber-400",
-    bgColor: "from-amber-500/20 to-primary/20",
+    color: "text-warning",
+    bgColor: "from-warning/20 to-primary/20",
     status: "commander",
     desc: "Coordena todos os departamentos",
   },
@@ -27,8 +27,8 @@ const DEPARTMENTS = [
     name: "CISO",
     role: "Cyber Security",
     icon: ShieldCheck,
-    color: "text-red-400",
-    bgColor: "from-red-500/20 to-primary/20",
+    color: "text-destructive",
+    bgColor: "from-destructive/20 to-primary/20",
     status: "online",
     desc: "Proteção e monitoramento",
   },
@@ -37,8 +37,8 @@ const DEPARTMENTS = [
     name: "CFO",
     role: "Financeiro",
     icon: DollarSign,
-    color: "text-emerald-400",
-    bgColor: "from-emerald-500/20 to-primary/20",
+    color: "text-success",
+    bgColor: "from-success/20 to-primary/20",
     status: "online",
     desc: "Receita, custos e projeções",
   },
@@ -66,9 +66,9 @@ const DEPARTMENTS = [
 
 const SECURITY_TEAM = [
   { id: "soc", name: "SOC Analyst", icon: Eye, color: "text-cyan-400" },
-  { id: "threat", name: "Threat Intel", icon: AlertTriangle, color: "text-red-400" },
-  { id: "firewall", name: "Firewall Mgr", icon: Lock, color: "text-amber-400" },
-  { id: "network", name: "Network Guard", icon: Wifi, color: "text-emerald-400" },
+  { id: "threat", name: "Threat Intel", icon: AlertTriangle, color: "text-destructive" },
+  { id: "firewall", name: "Firewall Mgr", icon: Lock, color: "text-warning" },
+  { id: "network", name: "Network Guard", icon: Wifi, color: "text-success" },
   { id: "infra", name: "Infra Security", icon: Server, color: "text-purple-400" },
   { id: "identity", name: "Identity Mgr", icon: Fingerprint, color: "text-pink-400" },
 ];
@@ -190,9 +190,9 @@ const AdminWarRoom = () => {
             {/* War Room Header */}
             <div className="glass-card rounded-2xl p-4 border border-white/[0.06]">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-primary/20 flex items-center justify-center relative">
-                  <Crown className="h-6 w-6 text-amber-400" />
-                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-warning/20 to-primary/20 flex items-center justify-center relative">
+                  <Crown className="h-6 w-6 text-warning" />
+                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-background animate-pulse" />
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-sm">War Room</h3>
@@ -209,8 +209,8 @@ const AdminWarRoom = () => {
                 </div>
                 <span className="text-[10px] text-muted-foreground">{DEPARTMENTS.length} C-Levels</span>
                 <div className="ml-auto flex items-center gap-1">
-                  <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400 font-medium">LIVE</span>
+                  <Radio className="h-3 w-3 text-success animate-pulse" />
+                  <span className="text-[10px] text-success font-medium">LIVE</span>
                 </div>
               </div>
             </div>
@@ -223,13 +223,13 @@ const AdminWarRoom = () => {
                   <div key={dept.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
                     <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${dept.bgColor} flex items-center justify-center relative`}>
                       <dept.icon className={`h-4 w-4 ${dept.color}`} />
-                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-background" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <p className="text-xs font-medium truncate">{dept.name}</p>
                         {dept.id === "orchestrator" && (
-                          <Badge className="bg-amber-500/15 text-amber-400 text-[8px] border-0 px-1 py-0">MASTER</Badge>
+                          <Badge className="bg-warning/15 text-warning text-[8px] border-0 px-1 py-0">MASTER</Badge>
                         )}
                       </div>
                       <p className="text-[10px] text-muted-foreground">{dept.desc}</p>
@@ -247,7 +247,7 @@ const AdminWarRoom = () => {
                   <div key={agent.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/[0.04] transition-colors">
                     <div className="w-6 h-6 rounded-lg bg-white/[0.04] flex items-center justify-center relative">
                       <agent.icon className={`h-3 w-3 ${agent.color}`} />
-                      <div className="absolute -bottom-px -right-px w-2 h-2 rounded-full bg-emerald-400 border border-background" />
+                      <div className="absolute -bottom-px -right-px w-2 h-2 rounded-full bg-success border border-background" />
                     </div>
                     <p className="text-[10px] font-medium truncate">{agent.name}</p>
                   </div>
@@ -263,16 +263,16 @@ const AdminWarRoom = () => {
               </div>
               <div className="space-y-1.5">
                 {[
-                  { label: "AI Gateway", status: "operational", color: "bg-emerald-400" },
-                  { label: "Database", status: "operational", color: "bg-emerald-400" },
-                  { label: "Auth System", status: "operational", color: "bg-emerald-400" },
-                  { label: "Edge Functions", status: "operational", color: "bg-emerald-400" },
+                  { label: "AI Gateway", status: "operational", color: "bg-success" },
+                  { label: "Database", status: "operational", color: "bg-success" },
+                  { label: "Auth System", status: "operational", color: "bg-success" },
+                  { label: "Edge Functions", status: "operational", color: "bg-success" },
                 ].map((sys) => (
                   <div key={sys.label} className="flex items-center justify-between px-2">
                     <span className="text-[10px] text-muted-foreground">{sys.label}</span>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-1.5 h-1.5 rounded-full ${sys.color}`} />
-                      <span className="text-[9px] text-emerald-400">OK</span>
+                      <span className="text-[9px] text-success">OK</span>
                     </div>
                   </div>
                 ))}
@@ -290,17 +290,17 @@ const AdminWarRoom = () => {
             <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden" onClick={() => setShowPanel(!showPanel)}>
               <Users className="h-4 w-4" />
             </Button>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-primary/20 flex items-center justify-center relative">
-              <Crown className="h-5 w-5 text-amber-400" />
-              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning/20 to-primary/20 flex items-center justify-center relative">
+              <Crown className="h-5 w-5 text-warning" />
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-background" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-display font-bold text-base">War Room - Sala de Comando</h2>
-                <Badge className="bg-amber-500/10 text-amber-400 text-[9px] border-0">PRESIDENCIAL</Badge>
+                <Badge className="bg-warning/10 text-warning text-[9px] border-0">PRESIDENCIAL</Badge>
               </div>
               <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
                 {DEPARTMENTS.length} C-Levels + {SECURITY_TEAM.length} agentes de segurança - Todos os departamentos unificados
               </p>
             </div>
@@ -317,8 +317,8 @@ const AdminWarRoom = () => {
           {messages.length === 0 && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center h-full text-center px-4">
               <div className="relative mb-6">
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/20 to-primary/10 flex items-center justify-center">
-                  <Crown className="h-10 w-10 text-amber-400" />
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-warning/20 to-primary/10 flex items-center justify-center">
+                  <Crown className="h-10 w-10 text-warning" />
                 </div>
                 <div className="absolute -top-1 -right-1">
                   <div className="flex -space-x-1">
@@ -361,8 +361,8 @@ const AdminWarRoom = () => {
               >
                 {msg.role === "assistant" && (
                   <div className="flex flex-col items-center mr-2 mt-1 shrink-0 gap-1">
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/20 to-primary/20 flex items-center justify-center">
-                      <Crown className="h-4 w-4 text-amber-400" />
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-warning/20 to-primary/20 flex items-center justify-center">
+                      <Crown className="h-4 w-4 text-warning" />
                     </div>
                     <div className="flex flex-col gap-0.5">
                       {DEPARTMENTS.slice(1, 5).map((d) => (
@@ -380,7 +380,7 @@ const AdminWarRoom = () => {
                 }`}>
                   {msg.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[10px] font-medium text-amber-400">Orquestrador Master</span>
+                      <span className="text-[10px] font-medium text-warning">Orquestrador Master</span>
                       <div className="flex gap-0.5">
                         {DEPARTMENTS.slice(1).map((d) => (
                           <Badge key={d.id} className={`text-[7px] border-0 px-1 py-0 bg-white/[0.04] ${d.color}`}>
@@ -405,13 +405,13 @@ const AdminWarRoom = () => {
           {isLoading && messages[messages.length - 1]?.role === "user" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-2">
               <div className="flex flex-col items-center shrink-0 gap-1">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/20 to-primary/20 flex items-center justify-center">
-                  <Crown className="h-4 w-4 text-amber-400" />
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-warning/20 to-primary/20 flex items-center justify-center">
+                  <Crown className="h-4 w-4 text-warning" />
                 </div>
               </div>
               <div className="bg-accent/30 border border-white/[0.06] rounded-2xl px-4 py-3">
                 <div className="flex items-center gap-2 mb-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-amber-400" />
+                  <Loader2 className="h-4 w-4 animate-spin text-warning" />
                   <span className="text-xs text-muted-foreground">Consultando todos os departamentos...</span>
                 </div>
                 <div className="flex gap-1.5">

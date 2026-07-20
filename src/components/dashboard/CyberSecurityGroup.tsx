@@ -16,9 +16,9 @@ type Message = { role: "user" | "assistant"; content: string; agent?: string };
 
 const AGENTS = [
   { id: "soc", name: "SOC Analyst", icon: Eye, color: "text-cyan-400", status: "online", desc: "Monitoramento 24/7" },
-  { id: "threat", name: "Threat Intel", icon: ShieldAlert, color: "text-red-400", status: "online", desc: "Inteligência de ameaças" },
-  { id: "firewall", name: "Firewall Manager", icon: Lock, color: "text-amber-400", status: "online", desc: "Controle de acessos" },
-  { id: "network", name: "Network Guard", icon: Wifi, color: "text-emerald-400", status: "online", desc: "Segurança de rede" },
+  { id: "threat", name: "Threat Intel", icon: ShieldAlert, color: "text-destructive", status: "online", desc: "Inteligência de ameaças" },
+  { id: "firewall", name: "Firewall Manager", icon: Lock, color: "text-warning", status: "online", desc: "Controle de acessos" },
+  { id: "network", name: "Network Guard", icon: Wifi, color: "text-success", status: "online", desc: "Segurança de rede" },
   { id: "infra", name: "Infra Security", icon: Server, color: "text-purple-400", status: "online", desc: "Proteção de servidores" },
   { id: "identity", name: "Identity Manager", icon: Fingerprint, color: "text-pink-400", status: "online", desc: "Gestão de identidades" },
 ];
@@ -153,9 +153,9 @@ const CyberSecurityGroup = () => {
             {/* Department Header */}
             <div className="glass-card rounded-2xl p-4 border border-white/[0.06]">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500/20 to-primary/20 flex items-center justify-center relative">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center relative">
                   <Shield className="h-6 w-6 text-primary" />
-                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background" />
+                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-background" />
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-sm">Dept. Cyber Security</h3>
@@ -172,8 +172,8 @@ const CyberSecurityGroup = () => {
                 </div>
                 <span className="text-[10px] text-muted-foreground">{AGENTS.length} agentes online</span>
                 <div className="ml-auto flex items-center gap-1">
-                  <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400 font-medium">LIVE</span>
+                  <Radio className="h-3 w-3 text-success animate-pulse" />
+                  <span className="text-[10px] text-success font-medium">LIVE</span>
                 </div>
               </div>
             </div>
@@ -189,7 +189,7 @@ const CyberSecurityGroup = () => {
                   >
                     <div className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center group-hover:bg-white/[0.08] transition-colors relative">
                       <agent.icon className={`h-4 w-4 ${agent.color}`} />
-                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-background" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">{agent.name}</p>
@@ -203,7 +203,7 @@ const CyberSecurityGroup = () => {
             {/* Threat Level */}
             <div className="glass-card rounded-2xl p-4 border border-white/[0.06]">
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="h-4 w-4 text-amber-400" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span className="text-xs font-medium">Nível de Ameaça</span>
               </div>
               <div className="flex items-center gap-3">
@@ -212,10 +212,10 @@ const CyberSecurityGroup = () => {
                     initial={{ width: 0 }}
                     animate={{ width: "25%" }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400"
+                    className="h-full rounded-full bg-gradient-to-r from-success to-success"
                   />
                 </div>
-                <Badge className="bg-emerald-500/15 text-emerald-400 text-[10px] border-0">BAIXO</Badge>
+                <Badge className="bg-success/15 text-success text-[10px] border-0">BAIXO</Badge>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-3">
                 <div className="text-center p-2 rounded-lg bg-white/[0.02]">
@@ -249,7 +249,7 @@ const CyberSecurityGroup = () => {
             >
               <Users className="h-4 w-4" />
             </Button>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-red-500/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-destructive/20 flex items-center justify-center">
               <ShieldCheck className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -258,7 +258,7 @@ const CyberSecurityGroup = () => {
                 <Badge className="bg-primary/10 text-primary text-[9px] border-0">DEPARTAMENTO</Badge>
               </div>
               <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
                 {AGENTS.length} agentes ativos - Comunicação direta com o Presidente
               </p>
             </div>
@@ -275,11 +275,11 @@ const CyberSecurityGroup = () => {
           {messages.length === 0 && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center h-full text-center px-4">
               <div className="relative mb-6">
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/20 to-red-500/10 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/20 to-destructive/10 flex items-center justify-center">
                   <Shield className="h-10 w-10 text-primary" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-success/20 flex items-center justify-center">
+                  <Radio className="h-3 w-3 text-success animate-pulse" />
                 </div>
               </div>
               <h3 className="font-display text-xl font-bold mb-1">Departamento de Cyber Security</h3>

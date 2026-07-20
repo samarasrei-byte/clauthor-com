@@ -72,17 +72,17 @@ interface Task {
 
 const DEFAULT_AGENTS: WorkspaceAgent[] = [
   { id: "strat",    name: "Estratégia",   emoji: "🧠", role: "Especialista em negócios",    model: "gpt-5.5",         status: "thinking", color: "from-violet-500 to-fuchsia-500", tokens: 12480, memory: 78, lastActivity: "há 12s" },
-  { id: "copy",     name: "Copywriter",   emoji: "✍️", role: "Especialista em escrita",     model: "claude-opus",     status: "working",  color: "from-rose-500 to-orange-500",    tokens: 8420,  memory: 64, lastActivity: "há 3s"  },
-  { id: "dev",      name: "Desenvolvedor",emoji: "💻", role: "Especialista em código",      model: "gpt-5.5",         status: "chatting", color: "from-sky-500 to-cyan-500",       tokens: 15200, memory: 82, lastActivity: "há 1s"  },
-  { id: "analyst",  name: "Analista",     emoji: "📊", role: "Especialista em dados",       model: "gemini-3-pro",    status: "working",  color: "from-emerald-500 to-teal-500",   tokens: 9100,  memory: 55, lastActivity: "há 8s"  },
+  { id: "copy",     name: "Copywriter",   emoji: "✍️", role: "Especialista em escrita",     model: "claude-opus",     status: "working",  color: "from-destructive to-orange-500",    tokens: 8420,  memory: 64, lastActivity: "há 3s"  },
+  { id: "dev",      name: "Desenvolvedor",emoji: "💻", role: "Especialista em código",      model: "gpt-5.5",         status: "chatting", color: "from-info to-cyan-500",       tokens: 15200, memory: 82, lastActivity: "há 1s"  },
+  { id: "analyst",  name: "Analista",     emoji: "📊", role: "Especialista em dados",       model: "gemini-3-pro",    status: "working",  color: "from-success to-teal-500",   tokens: 9100,  memory: 55, lastActivity: "há 8s"  },
   { id: "designer", name: "Designer",     emoji: "🎨", role: "Especialista em UX/UI",       model: "claude-sonnet",   status: "thinking", color: "from-pink-500 to-purple-500",    tokens: 6300,  memory: 42, lastActivity: "há 22s" },
-  { id: "research", name: "Pesquisador",  emoji: "🔎", role: "Especialista em pesquisa",    model: "gemini-3-flash",  status: "offline",  color: "from-amber-500 to-yellow-500",   tokens: 4780,  memory: 38, lastActivity: "há 3min"},
+  { id: "research", name: "Pesquisador",  emoji: "🔎", role: "Especialista em pesquisa",    model: "gemini-3-flash",  status: "offline",  color: "from-warning to-warning",   tokens: 4780,  memory: 38, lastActivity: "há 3min"},
 ];
 
 const STATUS_META: Record<AgentStatus, { label: string; dot: string; ring: string }> = {
-  working:  { label: "Trabalhando", dot: "bg-emerald-500", ring: "ring-emerald-500/40" },
-  thinking: { label: "Pensando",    dot: "bg-amber-500",   ring: "ring-amber-500/40"   },
-  chatting: { label: "Conversando", dot: "bg-sky-500",     ring: "ring-sky-500/40"     },
+  working:  { label: "Trabalhando", dot: "bg-success", ring: "ring-success/40" },
+  thinking: { label: "Pensando",    dot: "bg-warning",   ring: "ring-warning/40"   },
+  chatting: { label: "Conversando", dot: "bg-info",     ring: "ring-info/40"     },
   offline:  { label: "Offline",     dot: "bg-muted-foreground/40", ring: "ring-border" },
 };
 
@@ -492,7 +492,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
               <MessageSquare className="h-4 w-4 text-primary" /> Conversa entre Agentes
             </h2>
             <Badge variant="outline" className="text-xs">
-              <span className="mr-1 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 inline-block" />
+              <span className="mr-1 h-1.5 w-1.5 animate-pulse rounded-full bg-success inline-block" />
               Realtime
             </Badge>
           </div>
@@ -585,9 +585,9 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
           </div>
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
             <KanbanColumn title="Backlog" tasks={tasks.filter(t => t.status === "backlog")} agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-muted/40" />
-            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-sky-500/10" />
-            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")}  agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-amber-500/10" />
-            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}    agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-emerald-500/10" />
+            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-info/10" />
+            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")}  agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-warning/10" />
+            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}    agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-success/10" />
           </div>
 
         </Card>
