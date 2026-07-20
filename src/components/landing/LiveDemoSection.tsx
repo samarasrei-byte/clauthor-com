@@ -187,8 +187,8 @@ export default function LiveDemoSection() {
                       className="px-4 sm:px-6 py-3 rounded-xl bg-primary text-primary-foreground font-mono text-xs sm:text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-30 shadow-lg shadow-primary/20 shrink-0"
                     >
                       <Play className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Rodar Agente</span>
-                      <span className="sm:hidden">Rodar</span>
+                      <span className="hidden sm:inline">Executar agente</span>
+                      <span className="sm:hidden">Executar</span>
                     </button>
                   </div>
                   <p className="font-mono text-[10px] text-muted-foreground/40 text-center">
