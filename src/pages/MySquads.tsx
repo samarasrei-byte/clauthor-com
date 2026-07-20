@@ -106,8 +106,33 @@ const MySquads = () => {
       </header>
 
       {loading && (
-        <div className="flex items-center justify-center py-16 text-muted-foreground">
-          <Loader2 className="h-5 w-5 animate-spin" />
+        <div
+          className="grid gap-3"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
+          aria-busy="true"
+          aria-label="Carregando squads"
+        >
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-border/60 bg-card/60 p-4 animate-pulse"
+            >
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="h-3.5 w-2/3 rounded bg-muted/70" />
+                  <div className="h-2.5 w-full rounded bg-muted/50" />
+                  <div className="h-2.5 w-5/6 rounded bg-muted/40" />
+                </div>
+                <div className="h-4 w-8 rounded bg-muted/50 shrink-0" />
+              </div>
+              <div className="flex gap-1 mb-3">
+                <div className="h-3.5 w-14 rounded bg-muted/50" />
+                <div className="h-3.5 w-10 rounded bg-muted/40" />
+                <div className="h-3.5 w-12 rounded bg-muted/30" />
+              </div>
+              <div className="h-8 w-full rounded-md bg-muted/50" />
+            </div>
+          ))}
         </div>
       )}
 
