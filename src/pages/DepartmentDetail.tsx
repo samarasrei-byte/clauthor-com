@@ -37,7 +37,7 @@ export default function DepartmentDetail() {
       .filter((a): a is NonNullable<typeof a> => !!a);
   }, [dept]);
 
-  if (!dept) return <Navigate to="/departamentos" replace />;
+  if (!dept) return <Navigate to={backHref} replace />;
 
   const Icon = dept.icon;
 
