@@ -45,14 +45,30 @@ export default function GlobalDashboardSidebar() {
     { id: "route:/dashboard/traces",  label: "Rastros de execução",icon: Activity,     group: zoneWork },
 
 
-    // Meu time — hierarquia: Agentes (individual) → Squads (times) → Departamentos (unidade cobrada)
-    { id: "tab:agents",                     label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
-    { id: "route:/meus-squads",             label: "Meus Squads",        icon: UsersRound,   group: zoneTeam },
-    { id: "route:/meus-departamentos",      label: "Meus Departamentos", icon: Building2,    group: zoneTeam },
-    ...(beginner ? [] : [
-      { id: "route:/dashboard/squads",        label: "Catálogo de Squads", icon: UsersRound,   group: zoneTeam } as SidebarItem,
-      { id: "route:/dashboard/departamentos", label: "Catálogo",           icon: Building2,    group: zoneTeam } as SidebarItem,
-    ]),
+    // Meu time — 3 pais dobráveis: Agentes / Squads / Departamentos, cada um com "Meus", "Catálogo" e "Criar/Contratar".
+    {
+      id: "tab:agents", label: "Agentes", icon: Bot, group: zoneTeam,
+      children: [
+        { id: "tab:agents",              label: "Meus agentes",  icon: Bot },
+        { id: "route:/create-agent",     label: "Criar agente",  icon: Bot },
+      ],
+    },
+    {
+      id: "route:/meus-squads", label: "Squads", icon: UsersRound, group: zoneTeam,
+      children: [
+        { id: "route:/meus-squads",         label: "Meus squads",  icon: UsersRound },
+        ...(beginner ? [] : [{ id: "route:/dashboard/squads", label: "Catálogo", icon: UsersRound }]),
+        { id: "route:/dashboard/squads",    label: "Criar squad",  icon: UsersRound },
+      ],
+    },
+    {
+      id: "route:/meus-departamentos", label: "Departamentos", icon: Building2, group: zoneTeam,
+      children: [
+        { id: "route:/meus-departamentos",         label: "Meus departamentos", icon: Building2 },
+        ...(beginner ? [] : [{ id: "route:/dashboard/departamentos", label: "Catálogo", icon: Building2 }]),
+        { id: "route:/dashboard/departamentos",    label: "Contratar novo",     icon: Building2 },
+      ],
+    },
 
 
     // IA & Voz
