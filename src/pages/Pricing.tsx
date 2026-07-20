@@ -361,11 +361,11 @@ const Pricing = () => {
                 audit trail criptográfico e suporte white-glove. Preço sob consulta.
               </p>
             </div>
-            <Link to="/enterprise">
-              <Button variant="outline" className="rounded-xl h-12 px-6 font-semibold gap-2 border-primary/30">
+            <Button asChild variant="outline" className="rounded-xl h-12 px-6 font-semibold gap-2 border-primary/30">
+              <Link to="/enterprise">
                 Falar com vendas <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </motion.div>
 
