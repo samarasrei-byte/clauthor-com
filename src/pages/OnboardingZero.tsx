@@ -87,6 +87,21 @@ export default function OnboardingZero() {
     trackKpi("thor_onboarding_started", { source: "onboarding" });
   }, []);
 
+  // Gate canônico: se o usuário já concluiu o onboarding, manda direto pro dashboard.
+  // Evita loop de retorno ao /welcome ou /onboarding após refresh/OAuth.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { completed } = await readOnboardingStatus(user.id);
+      if (!cancelled && completed) {
+        clearDraft();
+        navigate("/dashboard", { replace: true });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user, navigate]);
+
   // FIX #1 · Quando o `user` hidrata DEPOIS do primeiro render (retorno de OAuth),
   // reavaliamos o stage: se havia draft de reco/company, pulamos direto pro passo empresa.
   // Sem isso o usuário volta e vê Recommendation de novo, entrando em loop mental.
@@ -263,6 +278,13 @@ export default function OnboardingZero() {
       dept_id: pkg.id,
       pain,
       duration_ms: Date.now() - startedAt,
+    });
+
+    // FIX crítico · persistir conclusão no servidor (única fonte da verdade).
+    // Sem isto, o Welcome/gate re-abre o wizard após refresh ou próximo login.
+    await markOnboardingComplete(user.id, {
+      source: "onboarding_zero",
+      snapshot: { pain, picks, company: info, dept_id: pkg.id },
     });
 
     clearDraft();
