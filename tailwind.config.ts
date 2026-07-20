@@ -66,6 +66,11 @@ export default {
         "accent-amber": "hsl(var(--accent-amber))",
         "accent-violet": "hsl(var(--accent-violet))",
         "accent-blue": "hsl(var(--accent-blue))",
+        warning: "hsl(var(--severity-warning))",
+        success: "hsl(var(--severity-success))",
+        info: "hsl(var(--severity-info))",
+        danger: "hsl(var(--severity-danger))",
+        critical: "hsl(var(--severity-critical))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
