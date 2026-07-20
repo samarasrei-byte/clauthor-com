@@ -218,8 +218,14 @@ export default function FilesPickerSheet({
                         "w-full flex items-center gap-3 p-2.5 rounded-lg border border-border/40 bg-background hover:border-primary/40 hover:bg-muted/40 transition-colors text-left disabled:opacity-60",
                       )}
                     >
-                      <div className={cn("h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center", M.ring)}>
-                        {isPicking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" strokeWidth={1.6} />}
+                      <div className={cn("h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden", M.ring)}>
+                        {isPicking ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : f.file_type === "image" && thumbs[f.id] ? (
+                          <img src={thumbs[f.id]} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        ) : (
+                          <Icon className="h-4 w-4" strokeWidth={1.6} />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium truncate">{f.name}</p>
