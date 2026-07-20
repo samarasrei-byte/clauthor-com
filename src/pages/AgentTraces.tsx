@@ -350,9 +350,9 @@ export default function AgentTraces() {
             <Card className="p-4 h-[calc(100vh-320px)] overflow-hidden flex flex-col">
               {selectedRunData ? (
                 <>
-                  <div className="flex items-center justify-between pb-3 border-b mb-3">
-                    <div>
-                      <h3 className="font-display font-semibold text-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pb-3 border-b mb-3">
+                    <div className="min-w-0">
+                      <h3 className="font-display font-semibold text-sm truncate">
                         {selectedRunData.root.agent_name ||
                           selectedRunData.root.name ||
                           "Run"}
@@ -361,7 +361,7 @@ export default function AgentTraces() {
                         {selectedRunData.runId.slice(0, 8)}…
                       </p>
                     </div>
-                    <div className="flex items-center gap-4 text-xs tabular-nums">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs tabular-nums">
                       <span>
                         <span className="text-muted-foreground">Latência:</span>{" "}
                         <span className="font-medium">
