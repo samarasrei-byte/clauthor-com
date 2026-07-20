@@ -43,6 +43,9 @@ const DepartmentCard = ({
   className,
 }: DepartmentCardProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const inDashboard = location.pathname.startsWith("/dashboard");
+  const deptDetailPath = (id: string) => inDashboard ? `/dashboard/departamentos/${id}` : `/departamentos/${id}`;
   const tokens = DEPT_COLOR_TOKENS[department.color];
   const Icon = department.icon;
   const isCompact = variant === "compact";
