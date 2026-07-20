@@ -37,7 +37,7 @@ const StarRating = ({ rating, size = "sm", interactive = false, onChange }: { ra
         key={s}
         className={cn(
           size === "sm" ? "h-3 w-3" : "h-4 w-4",
-          s <= rating ? "fill-amber-400 text-warning" : "text-muted-foreground/30",
+          s <= rating ? "fill-warning text-warning" : "text-muted-foreground/30",
           interactive && "cursor-pointer hover:text-warning transition-colors"
         )}
         onClick={() => interactive && onChange?.(s)}
@@ -84,7 +84,7 @@ const MarketplaceReviews = ({ agentSlug, agentName, compact }: MarketplaceReview
             </span>
           </div>
           <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-warning/10 border border-warning/20">
-            <Star className="h-3 w-3 fill-amber-400 text-warning" />
+            <Star className="h-3 w-3 fill-warning text-warning" />
             <span className="text-xs font-bold text-warning">{avgRating}</span>
             <span className="text-[10px] text-muted-foreground">({reviews.length})</span>
           </div>

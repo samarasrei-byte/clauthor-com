@@ -123,7 +123,7 @@ export default function AgentCardExpanded({
               Impacto {impact.label}
             </span>
             <span className="flex items-center gap-0.5 ml-auto">
-              <Star className="h-3 w-3 fill-amber-400/60 text-warning/60" />
+              <Star className="h-3 w-3 fill-warning/60 text-warning/60" />
               <span className="text-[10px] text-muted-foreground font-medium">{social.rating}</span>
             </span>
           </div>

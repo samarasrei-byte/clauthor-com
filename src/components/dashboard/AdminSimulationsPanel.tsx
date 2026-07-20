@@ -384,7 +384,7 @@ const AdminSimulationsPanel = () => {
                           const impact = (r.impact || "").toLowerCase();
                           const borderColor =
                             impact === "alto" ? "border-l-primary"
-                            : impact === "médio" || impact === "medio" ? "border-l-amber-500"
+                            : impact === "médio" || impact === "medio" ? "border-l-warning"
                             : "border-l-muted-foreground/30";
                           return (
                             <motion.li
