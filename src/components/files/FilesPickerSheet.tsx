@@ -292,12 +292,19 @@ export default function FilesPickerSheet({
               className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
               onClick={(e) => e.stopPropagation()}
             />
-          ) : (
+          ) : preview.kind === "video" ? (
             <video
               src={preview.url}
               controls
               autoPlay
               className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl bg-black"
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <iframe
+              src={preview.url}
+              title={preview.name}
+              className="h-[85vh] w-[90vw] max-w-5xl rounded-lg shadow-2xl bg-background"
               onClick={(e) => e.stopPropagation()}
             />
           )}
