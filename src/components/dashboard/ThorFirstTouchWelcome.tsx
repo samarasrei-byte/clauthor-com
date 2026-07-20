@@ -14,7 +14,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Coins, Bell, Compass, Building2, Sparkles, ArrowRight, X } from "lucide-react";
+import { Coins, Bell, Compass, Building2, Wand, ArrowRight, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
@@ -123,7 +123,7 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
               className="relative shrink-0"
             >
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/30 via-primary/10 to-background border border-primary/40 flex items-center justify-center shadow-lg shadow-primary/20">
-                <Sparkles className="h-6 w-6 text-primary" />
+                <Wand className="h-6 w-6 text-primary" />
               </div>
               <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-70" />

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GitBranch, Bot, Zap, CheckCircle, ArrowRight, Play, RotateCcw, Target, Clock, ArrowRightLeft, Mail, CheckSquare, BarChart3, Calendar, Loader2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -181,7 +181,7 @@ const OrchestrationDemo = () => {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center">
         <div className={`glass-card rounded-2xl px-6 py-4 flex items-center gap-3 border-2 transition-colors ${isRunning ? "border-primary/50 shadow-lg shadow-primary/10" : "border-border"}`}>
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <Wand className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
             <p className="font-display font-bold text-sm">Orchestrator</p>
@@ -225,7 +225,7 @@ const OrchestrationDemo = () => {
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1.5">
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                          <Sparkles className="h-3.5 w-3.5 text-primary" />
+                          <Wand className="h-3.5 w-3.5 text-primary" />
                         </div>
                         <ArrowRightLeft className={`h-3.5 w-3.5 transition-colors ${
                           step.phase === "executing" ? "text-primary animate-pulse" :

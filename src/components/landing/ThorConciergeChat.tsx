@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, ArrowUp, Loader2, Users, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUp, Loader2, Users, Wand } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -654,7 +654,7 @@ export default function ThorConciergeChat({
                 )}
                 {recommendation.kind === "agente" && (
                   <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
-                    <Sparkles className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                    <Wand className="h-5 w-5 text-primary" strokeWidth={1.75} />
                   </div>
                 )}
               </div>

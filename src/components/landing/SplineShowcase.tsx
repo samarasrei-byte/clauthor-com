@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Spotlight } from "@/components/ui/spotlight";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +35,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
               >
                 <div className="flex items-center gap-2 mb-5">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/10 flex items-center justify-center">
-                    <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
+                    <Wand className="h-4 w-4 text-primary" strokeWidth={1.5} />
                   </div>
                   <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary/70">
                     {t("spline.tag", { defaultValue: "NEXT-GEN AI PLATFORM" })}

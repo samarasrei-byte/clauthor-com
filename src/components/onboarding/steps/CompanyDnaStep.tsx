@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader2, Globe, Sparkles } from "lucide-react";
+import { Loader2, Globe, Wand } from "lucide-react";
 
 interface Props {
   scope: "own" | "client";
@@ -71,7 +71,7 @@ export default function CompanyDnaStep({
             >
               {scraping
                 ? <><Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.75} /> Analisando</>
-                : <><Sparkles className="w-4 h-4" strokeWidth={1.75} /> Analisar</>}
+                : <><Wand className="w-4 h-4" strokeWidth={1.75} /> Analisar</>}
             </button>
           </div>
           {error && <p className="type-caption text-destructive mt-2">{error}</p>}

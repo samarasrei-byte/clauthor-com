@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Building2, ArrowRight, ArrowLeft, CheckCircle, MessageSquare, Package, Mic, Shield, Loader2, Globe, Wand2, FileText, ClipboardPaste, Zap, Brain } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -201,7 +201,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
             animate={{ y: 0, opacity: 1 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Wand className="h-3.5 w-3.5" />
             Passo essencial - Ensine seus agentes sobre sua empresa
           </motion.div>
           <h1 className="font-display text-2xl font-bold">

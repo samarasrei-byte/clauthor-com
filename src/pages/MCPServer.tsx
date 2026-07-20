@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, Check, Copy, Plug, Terminal, Zap, Shield, Workflow, Boxes, BookOpen } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 /**
  * /mcp · Setup do CLAUTHOR MCP Server
@@ -143,7 +143,7 @@ export default function MCPServer() {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-3xl font-semibold tracking-tight">CLAUTHOR MCP Server</h1>
                 <Badge variant="secondary" className="gap-1">
-                  <Sparkles className="h-3 w-3" /> Novo
+                  <Wand className="h-3 w-3" /> Novo
                 </Badge>
               </div>
               <p className="text-muted-foreground max-w-2xl">

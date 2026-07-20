@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, TrendingDown, Minus, Users, ShieldCheck } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import SEO from "@/components/SEO";
 
 type MetricKey =
@@ -112,7 +112,7 @@ const BenchmarksPanel = () => {
 
       <header className="space-y-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Wand className="h-5 w-5 text-primary" />
           <Badge variant="outline" className="gap-1">
             <ShieldCheck className="h-3 w-3" /> Anonimato preservado (k≥5)
           </Badge>

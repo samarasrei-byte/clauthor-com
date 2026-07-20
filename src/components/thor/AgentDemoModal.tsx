@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle2, ArrowRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 export type DemoType = "sdr" | "support" | "hr" | "content" | "data" | "generic";
 
@@ -253,7 +253,7 @@ export function AgentDemoModal({ isOpen, onClose, demoType, lang, onCTA }: Agent
                     }}
                     className="flex-1 px-4 py-2.5 rounded-xl bg-accent-violet text-accent-violet-foreground text-xs font-mono font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-lg shadow-accent-violet/20"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Wand className="w-3.5 h-3.5" />
                     {isPt ? "Quero esse agente" : "I want this agent"}
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>

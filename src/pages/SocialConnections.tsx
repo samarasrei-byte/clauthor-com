@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle, Bug, Copy, Trash2, FlaskConical } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Linkedin, Youtube } from "lucide-react";
 import { logger } from "@/lib/logger";
 import { SocialIconsBar } from "@/components/social/SocialIconsBar";
@@ -780,7 +780,7 @@ const SocialConnections = () => {
       {isLinkedInConnected && (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" />
+            <Wand className="w-4 h-4 text-primary" />
             <h2 className="text-lg font-semibold">Métricas LinkedIn · últimos 30 dias</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

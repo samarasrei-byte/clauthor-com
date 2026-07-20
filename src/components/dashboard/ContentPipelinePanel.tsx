@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Instagram, Youtube, Calendar, CheckCircle2, Clock, Zap, FileText, Bot, Loader2, RefreshCw } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -132,7 +132,7 @@ const ContentPipelinePanel = () => {
       {/* Header */}
       <div>
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Wand className="h-5 w-5 text-primary" />
           Pipeline de Conteúdo
           <HelpTooltip id="content-pipeline" text="Solicite e acompanhe roteiros diários para Instagram e YouTube. O sistema também gera automaticamente via event-loop." size={14} />
         </h2>

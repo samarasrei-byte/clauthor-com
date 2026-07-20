@@ -10,7 +10,7 @@
  */
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, Sparkles, ShieldCheck, Bot, TrendingUp, Rocket } from "lucide-react";
+import { X, ArrowRight, Wand, ShieldCheck, Bot, TrendingUp, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -32,8 +32,8 @@ interface ThorGuestTourProps {
   onDismiss: () => void;
 }
 
-const ICON_MAP: Record<IconKind, typeof Sparkles> = {
-  welcome: Sparkles,
+const ICON_MAP: Record<IconKind, typeof Wand> = {
+  welcome: Wand,
   agents: Bot,
   approvals: ShieldCheck,
   metrics: TrendingUp,

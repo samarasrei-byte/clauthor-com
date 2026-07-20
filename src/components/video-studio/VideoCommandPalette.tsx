@@ -9,7 +9,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
-import { Sparkles, RotateCcw, PanelRightOpen, MessageSquare, Zap, Clapperboard, Settings2, ExternalLink } from "lucide-react";
+import { Wand, RotateCcw, PanelRightOpen, MessageSquare, Zap, Clapperboard, Settings2, ExternalLink } from "lucide-react";
 
 type Provider = "veo3" | "replicate" | "lovable";
 
@@ -68,7 +68,7 @@ export default function VideoCommandPalette({
         <CommandEmpty>Nenhum comando encontrado.</CommandEmpty>
         <CommandGroup heading="Ações">
           <CommandItem onSelect={() => run(onGenerate)} disabled={!canGenerate}>
-            <Sparkles className="mr-2 h-4 w-4" />
+            <Wand className="mr-2 h-4 w-4" />
             <span>Gerar vídeo</span>
             <CommandShortcut>G</CommandShortcut>
           </CommandItem>
@@ -100,7 +100,7 @@ export default function VideoCommandPalette({
             onSelect={() => run(() => onSetProvider("veo3"))}
             disabled={!providerAvailable("veo3")}
           >
-            <Sparkles className="mr-2 h-4 w-4" />
+            <Wand className="mr-2 h-4 w-4" />
             <span>Usar Veo 3 · alta qualidade</span>
             <CommandShortcut>1</CommandShortcut>
           </CommandItem>

@@ -1,5 +1,5 @@
 import { MessageSquare, FileText, DollarSign, Calendar, Star, ShoppingCart, Code, Brain, Shield, Mic, Bot, Eye, Workflow, Phone, Search, Users, Briefcase, BarChart3, Layers, Cpu, Globe, Rocket, Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap, HeartHandshake, Crown, Play, TrendingUp, Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays, Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat, Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine, HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import type { PriceTier } from "@/lib/pricing";
 import { ALL_AGENT_SLUGS } from "./workforceArchitecture";
 import {
@@ -50,7 +50,7 @@ export const agentSlugs: Record<string, string> = Object.fromEntries(
 export const agentIcons: Record<string, React.ElementType> = {
   voice_ai: Phone, orchestrator: Workflow, research: Search, coding: Code,
   omnichannel: MessageSquare, revenue: BarChart3, sales: Briefcase,
-  rag: Layers, computer: Cpu, content: Sparkles, security: Shield, hr: Users,
+  rag: Layers, computer: Cpu, content: Wand, security: Shield, hr: Users,
   customer_success: Star, data_analytics: Eye, legal: FileText, ecommerce: ShoppingCart,
   influencer: Megaphone, marketing_automation: Target, creative_design: Palette,
   video_production: Video, seo_growth: Globe, project_management: ClipboardList,
@@ -66,7 +66,7 @@ export const agentIcons: Record<string, React.ElementType> = {
   scheduler: Calendar,
   reputation: Award,
   proposal_gen: FileText,
-  creative_writer: Sparkles,
+  creative_writer: Wand,
   content_producer: Megaphone,
   sales_channel: MessageSquare,
   support_channel: MessageSquare,

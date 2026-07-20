@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, ShieldCheck, DollarSign, Rocket, Crown, Send, Loader2, RotateCcw, Radio, Users, Eye, Lock, Wifi, Server, Fingerprint, TrendingUp, BarChart3, Target, Cpu, Bot, Zap, Globe, AlertTriangle, Activity } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";

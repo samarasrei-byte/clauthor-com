@@ -1,5 +1,5 @@
 import { Phone, Workflow, Search, Code, MessageSquare, BarChart3, Briefcase, Layers, Cpu, Shield, Users, Star, Eye, FileText, ShoppingCart, Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Crown, Rocket, HeartHandshake, Play, Mic, TrendingUp, DollarSign, Calendar, Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays, Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat, Gavel, ShieldCheck, Scale, Package, Factory, Receipt, Cog, ClipboardCheck, HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck, type LucideIcon } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 export interface AgentLandingData {
   slug: string;
@@ -598,7 +598,7 @@ export const agentLandingPages: AgentLandingData[] = [
   },
   {
     slug: "content",
-    icon: Sparkles,
+    icon: Wand,
     accentColor: "pink",
     heroHeadline: "Conteúdo que Converte, Criado por IA",
     heroHighlight: "Converte",
@@ -2371,7 +2371,7 @@ export const agentLandingPages: AgentLandingData[] = [
   // ====== CREATIVE WRITER ======
   {
     slug: "creative_writer",
-    icon: Sparkles,
+    icon: Wand,
     accentColor: "purple",
     heroHeadline: "Textos que Vendem escritos por",
     heroHighlight: "IA Criativa",

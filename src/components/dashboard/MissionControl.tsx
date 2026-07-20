@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Rocket, Eye, CheckCircle, XCircle, Brain, Clock, AlertTriangle, Activity, Zap, Target, ChevronRight, Wand2, ThumbsUp, ThumbsDown, MessageSquare, Bot } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -325,7 +325,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             {/* User node */}
             <div className="flex flex-col items-center gap-1.5 px-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <Wand className="h-4 w-4 text-primary" />
               </div>
               <span className="text-[10px] font-semibold text-primary">You</span>
             </div>
@@ -511,7 +511,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             {overallConfidence >= 80 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
+                  <Wand className="h-4 w-4 text-primary" />
                   <div>
                     <p className="text-xs font-semibold">High confidence detected</p>
                     <p className="text-[10px] text-muted-foreground">Thor can make autonomous decisions based on learned preferences</p>

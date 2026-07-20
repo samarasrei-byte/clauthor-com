@@ -28,7 +28,7 @@ import {
   Brain,
   Database,
   ChevronRight,
-  Sparkles,
+  Wand,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -60,7 +60,7 @@ const SPAN_ICON: Record<Trace["span_type"], any> = {
   llm_call: Brain,
   tool_call: Wrench,
   retrieval: Database,
-  decision: Sparkles,
+  decision: Wand,
   error: AlertCircle,
 };
 

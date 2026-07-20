@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Phone, ExternalLink, CheckCircle, Circle, Loader2, Shield, ArrowRight, ArrowLeft, Copy, AlertTriangle } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { toast } from "sonner";
 import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
@@ -236,7 +236,7 @@ const WhatsAppSetupGuide = () => {
           className="w-full gap-2 border-dashed border-primary/30 text-primary hover:bg-primary/5"
           onClick={skipToCredentials}
         >
-          <Sparkles className="h-3.5 w-3.5" />
+          <Wand className="h-3.5 w-3.5" />
           Já tenho as credenciais - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
@@ -397,7 +397,7 @@ const WhatsAppSetupGuide = () => {
         >
           <Card className="bg-emerald-500/5 border-emerald-500/20">
             <CardContent className="py-8 text-center">
-              <Sparkles className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
+              <Wand className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
               <h3 className="font-display text-lg font-bold mb-1">WhatsApp Conectado! 🎉</h3>
               <p className="text-sm text-muted-foreground">
                 Todos os seus agentes agora podem enviar e receber mensagens via WhatsApp Business.

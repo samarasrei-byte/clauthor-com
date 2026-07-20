@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Bot, Plus, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info, Activity } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -180,7 +180,7 @@ const AgentsSection = ({
         <h2 className="font-display text-xl font-bold">{t("dashboard.agents_tab")} ({agents.length})</h2>
         <div className="flex gap-2">
           <Button variant="outline" onClick={onOpenLibrary} className="gap-1.5">
-            <Sparkles className="h-4 w-4" /> {t("dashboard.library", { defaultValue: "Biblioteca" })}
+            <Wand className="h-4 w-4" /> {t("dashboard.library", { defaultValue: "Biblioteca" })}
           </Button>
           <Link to="/create-agent">
             <Button className="glow gap-1.5">
@@ -196,7 +196,7 @@ const AgentsSection = ({
 
       {agents.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center">
-          <Sparkles className="h-12 w-12 text-primary/30 mx-auto mb-4" />
+          <Wand className="h-12 w-12 text-primary/30 mx-auto mb-4" />
           <h3 className="font-display text-lg font-bold mb-2">{t("dashboard.no_agent_created")}</h3>
           <p className="text-muted-foreground text-sm mb-6">{t("dashboard.start_creating")}</p>
           <Button className="glow" onClick={onOpenLibrary}>{t("dashboard.explore_library")}</Button>

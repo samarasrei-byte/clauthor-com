@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Scale, Brain, ShieldCheck, GitBranch, Clock4, PenLine, Target, Wallet, MessageCircle, ArrowRight, CheckCircle2, Send, Loader2, X, Workflow, Lock, Gauge, ScrollText, Briefcase, HeartHandshake, Search, RefreshCcw, FileSignature, ShieldAlert, BadgeCheck, Zap, TrendingUp, Coins, Timer, AlertTriangle, Flame, Users, XCircle, Trophy, Calculator } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -467,7 +467,7 @@ function ChatWidget() {
         transition={{ delay: 1, type: "spring" }}
         aria-label="Abrir Advogada IA"
       >
-        <Sparkles className="w-5 h-5" />
+        <Wand className="w-5 h-5" />
         <span className="text-sm font-semibold hidden sm:inline">Falar com a Advogada IA</span>
         <span className="absolute -top-1 -right-1 h-3 w-3">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60"></span>
@@ -646,7 +646,7 @@ export default function ApresentacaoAdv() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.12),transparent_50%)]" />
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 text-center">
           <Badge variant="outline" className="mb-6 border-primary/30 text-primary bg-primary/5">
-            <Sparkles className="w-3 h-3 mr-1.5" />
+            <Wand className="w-3 h-3 mr-1.5" />
             Squad Jurídica MCP · 15 agentes orquestrados
           </Badge>
           <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight max-w-4xl mx-auto leading-[1.05]">
@@ -1192,7 +1192,7 @@ export default function ApresentacaoAdv() {
                 {/* Benefícios */}
                 <div className="mt-5">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3" /> Benefícios
+                    <Wand className="w-3 h-3" /> Benefícios
                   </div>
                   <ul className="space-y-1.5">
                     {p.benefits.map((b) => (

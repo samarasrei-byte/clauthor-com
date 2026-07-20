@@ -9,7 +9,7 @@ import {
   MessageSquare,
   Image as ImageIcon,
   Video as VideoIcon,
-  Sparkles,
+  Wand,
   Loader2,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
@@ -240,7 +240,7 @@ export default function AgentInbox() {
 function MediaIcon({ kind }: { kind?: "video" | "image" }) {
   if (kind === "video") return <VideoIcon className="h-4 w-4 text-primary mt-0.5" />;
   if (kind === "image") return <ImageIcon className="h-4 w-4 text-primary mt-0.5" />;
-  return <Sparkles className="h-4 w-4 text-primary mt-0.5" />;
+  return <Wand className="h-4 w-4 text-primary mt-0.5" />;
 }
 
 function EmptyState() {

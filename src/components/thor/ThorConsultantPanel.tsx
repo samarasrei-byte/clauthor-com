@@ -12,7 +12,7 @@
  */
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Loader2, Sparkles, CheckCircle2, AlertTriangle, ArrowRight, X } from "lucide-react";
+import { Brain, Loader2, Wand, CheckCircle2, AlertTriangle, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -205,7 +205,7 @@ export default function ThorConsultantPanel({
 
         <div className="flex flex-wrap gap-2">
           <Button onClick={analyze} disabled={loading || objective.trim().length < 15} className="gap-2">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand className="h-4 w-4" />}
             {loading ? "Analisando…" : "Analisar meu contexto"}
           </Button>
           <Button variant="ghost" onClick={() => { setCollapsed(true); onSkip?.(); }}>

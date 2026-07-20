@@ -1,4 +1,4 @@
-import { Sparkles, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
+import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ interface ProviderInfo {
   label: string;
   eta: string;
   quality: string;
-  icon: typeof Sparkles;
+  icon: typeof Wand;
   available: boolean;
 }
 
@@ -35,8 +35,8 @@ const PROVIDER_ETA: Record<Provider, { eta: string; quality: string }> = {
   lovable: { eta: "Em breve", quality: "Clauthor AI" },
 };
 
-const PROVIDER_ICON: Record<Provider, typeof Sparkles> = {
-  veo3: Sparkles,
+const PROVIDER_ICON: Record<Provider, typeof Wand> = {
+  veo3: Wand,
   replicate: Zap,
   lovable: Clapperboard,
 };
@@ -217,7 +217,7 @@ export default function StageActions({
               </>
             ) : (
               <>
-                <Sparkles strokeWidth={2} className="w-3.5 h-3.5" /> Gerar vídeo
+                <Wand strokeWidth={2} className="w-3.5 h-3.5" /> Gerar vídeo
                 <ArrowRight strokeWidth={2} className="w-3.5 h-3.5" />
               </>
             )}

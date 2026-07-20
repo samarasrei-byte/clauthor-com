@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Scale, FileText, ShieldAlert, Handshake, ClipboardCheck, Settings as SettingsIcon, LogOut, TrendingUp, Clock, CheckCircle2, ArrowRight, ChevronRight, ChevronsLeft, ChevronsRight, Briefcase, Inbox, X, Circle, Lightbulb, Users, LifeBuoy, MessageSquare, Plug, CreditCard, Plus, Send, Mail, Loader2, Workflow } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -317,7 +317,7 @@ const AdvocaciaPainelLayout = () => {
                   <X className="h-3 w-3" />
                 </button>
                 <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5">
-                  <Sparkles className="h-3 w-3" /> Sugestão
+                  <Wand className="h-3 w-3" /> Sugestão
                 </div>
                 <p className="text-xs text-foreground leading-snug mb-2">
                   Quer escalar captação fora do jurídico? Conheça o SDR Outbound.

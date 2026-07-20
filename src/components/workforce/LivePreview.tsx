@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Activity, Boxes, DollarSign, Network, Zap } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { BuilderState } from "@/lib/workforce/types";
 import { AUTONOMY_META, SCALE_META } from "@/lib/workforce/types";
@@ -24,7 +24,7 @@ const LivePreview = ({ state }: Props) => {
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <Wand className="h-3.5 w-3.5 text-primary" />
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Live Blueprint</span>
         </div>
         <Badge variant="outline" className="text-[9px] font-mono">{SCALE_META[state.scale].label}</Badge>

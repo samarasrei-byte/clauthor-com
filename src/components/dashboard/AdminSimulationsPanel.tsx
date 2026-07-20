@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, TrendingUp, PlayCircle, Target, Eye, AlertTriangle, Lightbulb, Check, Wand2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
@@ -331,9 +331,9 @@ const AdminSimulationsPanel = () => {
                   {analyzing ? (
                     <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analisando…</>
                   ) : analysis ? (
-                    <><Sparkles className="h-3.5 w-3.5" /> Refazer análise</>
+                    <><Wand className="h-3.5 w-3.5" /> Refazer análise</>
                   ) : (
-                    <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções</>
+                    <><Wand className="h-3.5 w-3.5" /> Analisar objeções</>
                   )}
                 </Button>
               )}
@@ -351,7 +351,7 @@ const AdminSimulationsPanel = () => {
                 {analysis.patterns && analysis.patterns.length > 0 && (
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2 flex items-center gap-1.5">
-                      <Sparkles className="h-3 w-3" /> Padrões
+                      <Wand className="h-3 w-3" /> Padrões
                     </p>
                     <ul className="space-y-1 text-sm">
                       {analysis.patterns.map((p, i) => (

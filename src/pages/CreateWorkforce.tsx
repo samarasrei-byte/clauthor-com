@@ -2,7 +2,7 @@ import { useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Search, Plus, X, Target, Users, Building2, Globe, Wrench, Plug, BookOpen, Radio, Brain, Shield, Wand2, Rocket, Save, Check, Loader2, ChevronDown } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -169,7 +169,7 @@ export default function CreateWorkforce() {
           <div className="h-4 w-px bg-border" />
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-rose-600 grid place-items-center">
-              <Sparkles className="h-3.5 w-3.5 text-white" />
+              <Wand className="h-3.5 w-3.5 text-white" />
             </div>
             <div>
               <p className="font-display text-sm font-bold leading-tight">Digital Workforce OS</p>

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Film, Image as ImageIcon, LayoutGrid, Search, CheckCircle2, XCircle,
-  Loader2, Play, Sparkles as SparklesLucide, Copy, ExternalLink,
+  Loader2, Play, Wand as SparklesLucide, Copy, ExternalLink,
   SlidersHorizontal, X as XIcon, Clock, ArrowDownUp,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";

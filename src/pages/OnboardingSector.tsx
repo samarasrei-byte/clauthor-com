@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Plug, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Wand, Plug, CheckCircle2 } from "lucide-react";
 import { SECTOR_GROUPS, type AgentPreset } from "@/data/agentPresets";
 
 /**
@@ -48,7 +48,7 @@ export default function OnboardingSector() {
           className="text-center mb-10"
         >
           <Badge variant="outline" className="mb-3 gap-1.5 border-primary/30 text-primary">
-            <Sparkles className="h-3 w-3" /> Onboarding · 2 passos
+            <Wand className="h-3 w-3" /> Onboarding · 2 passos
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-2">
             Qual é o setor do seu agente?

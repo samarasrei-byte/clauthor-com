@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, XCircle, Store } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ export default function AdminMarketplacePanel({ pendingAgents, locale }: AdminMa
       <CardContent>
         {pendingAgents.length === 0 ? (
           <div className="text-center py-12 space-y-3">
-            <Sparkles className="h-10 w-10 text-muted-foreground/30 mx-auto" />
+            <Wand className="h-10 w-10 text-muted-foreground/30 mx-auto" />
             <p className="text-muted-foreground">{t("dashboard.marketplace_empty", { defaultValue: "O marketplace será populado quando usuários publicarem seus agentes." })}</p>
           </div>
         ) : (

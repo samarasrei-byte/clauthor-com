@@ -5,7 +5,7 @@
  */
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Users, TrendingUp } from "lucide-react";
+import { ArrowRight, Wand, Users, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,7 @@ const DepartmentsCatalogPanel = () => {
       <header className="flex items-center justify-between">
         <div>
           <h2 className="font-display font-semibold text-sm flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
+            <Wand className="h-4 w-4 text-primary" />
             Departamentos disponíveis
           </h2>
           <p className="text-[11px] text-muted-foreground mt-0.5">

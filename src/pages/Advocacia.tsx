@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Scale, MessageSquare, ClipboardCheck, ShieldAlert, Handshake, RefreshCw, FileText, CheckCircle2, ArrowRight, Clock, TrendingUp, Users, Lock, Zap, Briefcase } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -379,7 +379,7 @@ export default function Advocacia() {
                 <CheckCircle2 className="w-4 h-4" /> Validação humana obrigatória
               </div>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4" /> Setup em até 7 dias
+                <Wand className="w-4 h-4" /> Setup em até 7 dias
               </div>
             </div>
           </motion.div>
@@ -563,7 +563,7 @@ export default function Advocacia() {
             <div className="mt-5">
               <Link to="/apresentacaoadv">
                 <Button variant="outline" size="sm" className="h-9">
-                  <Sparkles className="w-3.5 h-3.5 mr-2" />
+                  <Wand className="w-3.5 h-3.5 mr-2" />
                   Ver apresentação completa
                 </Button>
               </Link>
@@ -573,7 +573,7 @@ export default function Advocacia() {
           {/* Grid 15 cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {[
-              { Icon: Sparkles, name: "Orquestrador MCP", layer: "MCP", desc: "Classifica e roteia em < 800ms" },
+              { Icon: Wand, name: "Orquestrador MCP", layer: "MCP", desc: "Classifica e roteia em < 800ms" },
               { Icon: Lock, name: "Segurança & LGPD", layer: "MCP", desc: "Validação obrigatória OAB" },
               { Icon: Scale, name: "Processual", layer: "MCP", desc: "Fase + classificação documental" },
               { Icon: Clock, name: "Prazos", layer: "MCP", desc: "CPC art. 219 + feriados" },

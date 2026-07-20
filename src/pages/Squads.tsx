@@ -6,7 +6,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight, CheckCircle2, Sparkles, Zap, Users, TrendingUp, Flame,
+  ArrowRight, CheckCircle2, Wand, Zap, Users, TrendingUp, Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -55,7 +55,7 @@ const Squads = () => {
         <div className="max-w-[1000px] mx-auto text-center">
           <motion.div {...fadeUp}>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.08] px-3 py-1.5 text-xs font-medium text-primary mb-6">
-              <Sparkles className="h-3.5 w-3.5" />
+              <Wand className="h-3.5 w-3.5" />
               {SQUADS.length} squads · os times mais procurados do mercado
             </div>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] mb-6">
@@ -237,7 +237,7 @@ const Squads = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to="/reputacao-ia">
                 <Button size="lg" className="gap-2 h-12 px-7 rounded-full font-medium glow">
-                  <Sparkles className="h-4 w-4" />
+                  <Wand className="h-4 w-4" />
                   Ver Reputação IA
                 </Button>
               </Link>

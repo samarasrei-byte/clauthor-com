@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Building2, ArrowRight, Clock, Bot, Globe, ClipboardPaste } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 
@@ -98,7 +98,7 @@ export default function CompanyBoardGate({ agentName, onSetupCompany, onSkip }: 
         {/* Actions */}
         <div className="flex flex-col gap-2">
           <Button onClick={onSetupCompany} className="w-full h-11 gap-2 glow rounded-xl">
-            <Sparkles className="h-4 w-4" />
+            <Wand className="h-4 w-4" />
             {t("gate.setup_button", { defaultValue: "Configurar minha empresa" })}
             <ArrowRight className="h-4 w-4" />
           </Button>

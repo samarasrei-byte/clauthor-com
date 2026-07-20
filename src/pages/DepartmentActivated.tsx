@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, Calendar, CheckCircle2, MessageCircle, Newspaper,
-  Sparkles, ListChecks, Activity, X, ThumbsUp, ThumbsDown,
+  Wand, ListChecks, Activity, X, ThumbsUp, ThumbsDown,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ function ThorTour({ onDone }: { onDone: () => void }) {
             <X className="w-4 h-4" />
           </button>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-[10px] font-semibold uppercase tracking-wider text-primary">
-            <Sparkles className="w-3 h-3" /> Thor · Passo {step + 1}/{TOUR_STEPS.length}
+            <Wand className="w-3 h-3" /> Thor · Passo {step + 1}/{TOUR_STEPS.length}
           </div>
           <h3 className="mt-3 text-xl font-display font-semibold text-white">{s.title}</h3>
           <p className="mt-2 text-sm text-white/60 leading-relaxed">{s.body}</p>
@@ -287,7 +287,7 @@ export default function DepartmentActivated() {
         {/* Second Brain */}
         <section>
           <h2 className="text-lg font-display font-semibold mb-3 text-white/90 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" /> Second Brain
+            <Wand className="w-4 h-4 text-primary" /> Second Brain
           </h2>
           <SecondBrain deptName={dept.name} />
         </section>

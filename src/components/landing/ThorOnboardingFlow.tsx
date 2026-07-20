@@ -13,7 +13,7 @@ import {
   LayoutDashboard,
   MessageCircle,
   Rocket,
-  Sparkles,
+  Wand,
   Users,
   Zap,
 } from "lucide-react";
@@ -54,7 +54,7 @@ const CHANNELS = [
   { id: "whatsapp", label: "WhatsApp", icon: MessageCircle },
   { id: "email", label: "E-mail", icon: MessageCircle },
   { id: "linkedin", label: "LinkedIn", icon: Users },
-  { id: "instagram", label: "Instagram", icon: Sparkles },
+  { id: "instagram", label: "Instagram", icon: Wand },
 ];
 
 const TOOLS = [

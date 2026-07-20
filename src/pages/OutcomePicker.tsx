@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Target, TrendingUp, Users, MessageCircle, Zap } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,7 +39,7 @@ const PRESETS: Outcome[] = [
   },
   {
     id: "content",
-    icon: Sparkles,
+    icon: Wand,
     title: "Produzir conteúdo em escala",
     description: "Posts, artigos e roteiros com sua voz de marca",
     suggestedFilter: "Marketing",
@@ -93,7 +93,7 @@ const OutcomePicker = () => {
           className="text-center mb-10"
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-4">
-            <Sparkles className="h-3 w-3" />
+            <Wand className="h-3 w-3" />
             Powered by Thor
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">

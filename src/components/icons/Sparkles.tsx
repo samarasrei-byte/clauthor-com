@@ -12,7 +12,7 @@ export interface SparklesProps extends Omit<SVGProps<SVGSVGElement>, "ref"> {
   absoluteStrokeWidth?: boolean;
 }
 
-export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
+export const Wand = forwardRef<SVGSVGElement, SparklesProps>(
   (
     {
       size = 24,
@@ -45,6 +45,6 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
   ),
 );
 
-Sparkles.displayName = "Sparkles";
+Wand.displayName = "Wand";
 
-export default Sparkles;
+export default Wand;

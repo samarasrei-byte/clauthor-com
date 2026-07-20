@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen, BriefcaseBusiness, Activity, Clapperboard, Scissors } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -454,7 +454,7 @@ const ClientDashboard = () => {
     } as SidebarItem));
     const soloItems: SidebarItem[] = soloChildren.length > 0 ? [{
       id: "solo-agents", label: t("dashboard.solo_agents", { defaultValue: "Agentes Avulsos" }),
-      icon: Sparkles, badge: soloChildren.length,
+      icon: Wand, badge: soloChildren.length,
       group: t("dashboard.departments", { defaultValue: "Departamentos" }), children: soloChildren,
     }] : [];
     return { departmentSidebarItems: deptItems, soloAgentItems: soloItems };

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Rocket, Upload, CheckCircle, Loader2, ChevronDown, ChevronRight, Users, Bot, Zap, FileJson, FileSpreadsheet, Brain, Shield } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -283,7 +283,7 @@ const BulkAgentProvisioner = () => {
             <Upload className="w-4 h-4" /> Importar
           </TabsTrigger>
           <TabsTrigger value="ai" className="gap-1.5 text-xs sm:text-sm">
-            <Sparkles className="w-4 h-4" /> Gerar com IA
+            <Wand className="w-4 h-4" /> Gerar com IA
           </TabsTrigger>
         </TabsList>
 
@@ -490,7 +490,7 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
+                <Wand className="w-5 h-5 text-primary" />
                 Geração Automática com IA
               </CardTitle>
             </CardHeader>

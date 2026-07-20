@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Activity, ArrowRight, CheckCircle2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -86,7 +86,7 @@ const AmbientThorCard = ({ onOpenOmnix, onOpenLibrary }: Props) => {
             className="absolute inset-0 rounded-full bg-primary/40 blur-md"
           />
           <div className="relative h-12 w-12 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Wand className="h-5 w-5 text-primary" />
           </div>
         </div>
 

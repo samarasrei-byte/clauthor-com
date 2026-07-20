@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock, TrendingUp, ListChecks, Eye, History, Send, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram, ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X, FileSignature, FileText, FileCheck2, Film, Image as ImageIcon, StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -495,7 +495,7 @@ const ApprovalsCenter = () => {
             </p>
             {isDemoMode && (
               <div className="inline-flex items-center gap-1.5 text-[11px] text-amber-500 mt-1">
-                <Sparkles className="h-3 w-3" />
+                <Wand className="h-3 w-3" />
                 Modo demonstração · exemplos prontos para você sentir o fluxo.
               </div>
             )}
@@ -514,7 +514,7 @@ const ApprovalsCenter = () => {
         <MetricCard icon={CheckCircle2} label="Aprovadas"    value={metrics.approved} accent="emerald" />
         <MetricCard icon={Clock}        label="Pendentes"    value={metrics.pending}  accent="amber" />
         <MetricCard icon={TrendingUp}   label="Taxa aprov."  value={`${metrics.rate}%`} accent="primary" />
-        <MetricCard icon={Sparkles}     label="Tempo médio"  value={`${metrics.avgHours}h`} />
+        <MetricCard icon={Wand}     label="Tempo médio"  value={`${metrics.avgHours}h`} />
         <MetricCard icon={RefreshCw}    label="Revisões"     value={metrics.revisions} accent="sky" />
         <MetricCard
           icon={ShieldCheck}
@@ -665,7 +665,7 @@ const ApprovalsCenter = () => {
                   </div>
                   {selected.agent_name && (
                     <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-                      <Sparkles className="h-3 w-3 text-primary" /> Gerado por {selected.agent_name}
+                      <Wand className="h-3 w-3 text-primary" /> Gerado por {selected.agent_name}
                     </div>
                   )}
                 </SheetHeader>
@@ -1235,7 +1235,7 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
             <div className="text-sm font-medium truncate">{approval.title}</div>
             <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
               {approval.agent_name ? (
-                <><Sparkles className="h-3 w-3 text-primary" />{approval.agent_name}</>
+                <><Wand className="h-3 w-3 text-primary" />{approval.agent_name}</>
               ) : (
                 <>Gerado há {timeAgo(approval.created_at)}</>
               )}

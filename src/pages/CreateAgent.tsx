@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -270,7 +270,7 @@ const CreateAgentPage = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
-            <Sparkles className="h-3 w-3" /> Novo agente
+            <Wand className="h-3 w-3" /> Novo agente
           </div>
           <h1 className="font-display text-4xl font-bold">Vamos criar seu agente</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">Escolha o projeto e o caminho que combina com você. Leva menos de 60 segundos no Express.</p>
@@ -472,7 +472,7 @@ const CreateAgentPage = () => {
             <Card className="glass border-primary/20 mb-4 overflow-hidden">
               <CardHeader className="pb-3">
                 <CardTitle className="font-display text-base flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
+                  <Wand className="h-4 w-4 text-primary" />
                   {t("create_agent.templates_title", { defaultValue: "Templates sugeridos para você" })}
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">{t("create_agent.templates_desc", { defaultValue: "Baseado na sua descrição, esses modelos podem acelerar a criação:" })}</p>

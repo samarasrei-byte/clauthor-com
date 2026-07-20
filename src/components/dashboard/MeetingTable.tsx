@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, Mic, MicOff, HelpCircle, X, MousePointerClick, AtSign, MessageSquare } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 interface TableAgent {
   id: string;
@@ -115,7 +115,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
               animate={{ scale: [1, 1.08, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
             >
-              <Sparkles className="h-4 w-4 text-primary/70" />
+              <Wand className="h-4 w-4 text-primary/70" />
             </motion.div>
 
             {/* Agent count badge */}

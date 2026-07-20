@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Plus, Search, Trash2, Edit3, Save, X, FileText, FolderOpen, Bot, Filter, Upload, Database, AlertCircle } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -189,7 +189,7 @@ const KnowledgeBase = () => {
             <DialogContent className="sm:max-w-lg">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
+                  <Wand className="h-5 w-5 text-primary" />
                   {t("knowledge.add_document")}
                 </DialogTitle>
               </DialogHeader>
@@ -416,7 +416,7 @@ const KnowledgeBase = () => {
       <div className="shrink-0 px-6 py-3 border-t border-border/10 flex items-center justify-between text-[10px] text-muted-foreground">
         <span>{t("knowledge.footer_count", { filtered: filtered.length, total: documents.length })}</span>
         <span className="flex items-center gap-1">
-          <Sparkles className="h-3 w-3 text-primary" />
+          <Wand className="h-3 w-3 text-primary" />
           {t("knowledge.rag_active")}
         </span>
       </div>

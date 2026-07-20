@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowRight, Building2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -48,7 +48,7 @@ export default function CompanyBoardAlert({ onSetup }: CompanyBoardAlertProps) {
             Configure agora - cole a URL do seu site e a IA preenche tudo automaticamente.
           </p>
           <Button size="sm" onClick={onSetup} className="mt-2.5 gap-2 h-8 text-xs">
-            <Sparkles className="h-3.5 w-3.5" />
+            <Wand className="h-3.5 w-3.5" />
             Ensinar meus agentes
             <ArrowRight className="h-3 w-3" />
           </Button>

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ExternalLink, CheckCircle, Circle, Loader2, Shield, ArrowRight, ArrowLeft, AlertTriangle } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { toast } from "sonner";
 import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
@@ -220,7 +220,7 @@ const MetaAdsSetupGuide = () => {
           className="w-full gap-2 border-dashed border-primary/30 text-primary hover:bg-primary/5"
           onClick={skipToCredentials}
         >
-          <Sparkles className="h-3.5 w-3.5" />
+          <Wand className="h-3.5 w-3.5" />
           Já tenho as credenciais - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
@@ -334,7 +334,7 @@ const MetaAdsSetupGuide = () => {
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
           <Card className="bg-emerald-500/5 border-emerald-500/20">
             <CardContent className="py-8 text-center">
-              <Sparkles className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
+              <Wand className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
               <h3 className="font-display text-lg font-bold mb-1">Meta Ads Conectado! 🎉</h3>
               <p className="text-sm text-muted-foreground">
                 Seus agentes de marketing e growth agora podem criar e otimizar campanhas no Facebook e Instagram.

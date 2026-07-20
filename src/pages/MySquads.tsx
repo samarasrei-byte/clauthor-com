@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { UsersRound, Plus, ArrowRight, Sparkles, Loader2 } from "lucide-react";
+import { UsersRound, Plus, ArrowRight, Wand, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -96,7 +96,7 @@ const MySquads = () => {
           className="rounded-2xl border border-dashed border-border/60 bg-gradient-to-br from-primary/[0.04] via-background to-background p-8 md:p-12 text-center"
         >
           <div className="mx-auto h-12 w-12 rounded-2xl bg-primary/10 grid place-items-center mb-4">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Wand className="h-5 w-5 text-primary" />
           </div>
           <h2 className="font-display font-semibold text-lg mb-1.5">
             Monte seu primeiro squad

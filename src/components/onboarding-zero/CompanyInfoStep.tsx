@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Globe, ArrowRight, Sparkles, Check, Building2 } from "lucide-react";
+import { Loader2, Globe, ArrowRight, Wand, Check, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -144,7 +144,7 @@ export default function CompanyInfoStep({ onDone, onSkip, departmentName }: Prop
                 disabled={scraping || !website.trim()}
                 className="h-14 px-6 rounded-full text-base font-semibold"
               >
-                {scraping ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Detectar <Sparkles className="w-4 h-4 ml-1" /></>}
+                {scraping ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Detectar <Wand className="w-4 h-4 ml-1" /></>}
               </Button>
             </div>
 

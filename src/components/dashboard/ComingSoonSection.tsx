@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Rocket, Network, Target, Mic, Store } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 
 const features: Record<string, { title: string; icon: typeof Rocket; desc: string; color: string }> = {
   "mission-control": {
@@ -51,7 +51,7 @@ const ComingSoonSection = ({ feature }: { feature: string }) => {
       </div>
       
       <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
-        <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
+        <Wand className="h-3.5 w-3.5 text-primary animate-pulse" />
         <span className="text-xs font-bold text-primary tracking-wider uppercase">Em breve</span>
       </div>
 

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2, ArrowRight, Zap, Star, Bot, X, Plus, Wand2 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -133,7 +133,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
             transition={{ type: "spring", delay: 0.2 }}
             className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary-glow/20 flex items-center justify-center mx-auto mb-4 border border-primary/20"
           >
-            <Sparkles className="h-7 w-7 text-primary" />
+            <Wand className="h-7 w-7 text-primary" />
           </motion.div>
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-2">
             {lang === "pt" ? "Encontre seu agente ideal" : "Find your ideal agent"}
@@ -174,7 +174,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <>
-                    <Sparkles className="h-4 w-4" />
+                    <Wand className="h-4 w-4" />
                     {lang === "pt" ? "Buscar" : "Search"}
                   </>
                 )}

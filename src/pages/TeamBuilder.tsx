@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Bot, X, Plus, Minus, Search, ShoppingCart, ArrowRight, Layers3, CheckCircle2, Trash2, ChevronDown, Filter, Zap, Target, BookOpen, AlertTriangle, BarChart3, Lightbulb, Database, FileOutput, HelpCircle, ChevronRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -479,7 +479,7 @@ const TeamBuilder = () => {
                 className="mt-4 rounded-xl p-4 border border-border/5 bg-card"
               >
                 <div className="flex items-start gap-3">
-                  <Sparkles className="h-5 w-5 text-primary/60 shrink-0 mt-0.5" />
+                  <Wand className="h-5 w-5 text-primary/60 shrink-0 mt-0.5" />
                   <div>
                     <p className="text-xs font-semibold mb-1">Não sabe por onde começar?</p>
                     <p className="text-[10px] text-muted-foreground mb-2">Veja nossos departamentos prontos ou use o guia de contratação.</p>

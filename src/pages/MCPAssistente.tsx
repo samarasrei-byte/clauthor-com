@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2, ShieldCheck, Scale, Clock, PenLine, Brain, DollarSign, AlertTriangle, CheckCircle2, ChevronDown, Workflow, Lock, ShieldAlert, Settings2, X, ArrowRight } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -122,7 +122,7 @@ const AGENT_META: Record<
     label: "Consultivo",
     short: "Consultivo",
     desc: "Explicação de conceitos e orientação jurídica.",
-    icon: Sparkles,
+    icon: Wand,
     color: "text-indigo-500",
     ring: "ring-indigo-500/30",
     bg: "bg-indigo-500/10",
@@ -186,7 +186,7 @@ const SAMPLE_PROMPTS = [
   {
     title: "Consulta sobre Ritos",
     body: "Explique como funciona o rito sumário no processo civil e em que casos ele é obrigatoriamente aplicado hoje.",
-    icon: Sparkles,
+    icon: Wand,
   },
 ];
 
@@ -634,7 +634,7 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
     >
       <div className="text-center space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/20">
-          <Sparkles className="w-3 h-3 text-primary" />
+          <Wand className="w-3 h-3 text-primary" />
           <span className="text-[10px] font-medium tracking-wide uppercase text-primary">
             Master Control Program
           </span>
@@ -791,7 +791,7 @@ function AssistantTurn({ turn }: { turn: Turn }) {
         <Card className="p-4 border-border/50 bg-card">
           <div className="flex items-start justify-between gap-3 mb-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <Wand className="w-3.5 h-3.5 text-primary" />
               <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                 Análise do orquestrador
               </p>

@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Play, Terminal, CheckCircle2, Building2, Users, Mail } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type DemoPhase = "idle" | "running" | "done";
@@ -272,7 +272,7 @@ export default function LiveDemoSection() {
               className="mt-8 text-center space-y-5"
             >
               <p className="font-mono text-sm sm:text-base text-muted-foreground">
-                <Sparkles className="w-4 h-4 text-primary inline mr-1.5 -mt-0.5" />
+                <Wand className="w-4 h-4 text-primary inline mr-1.5 -mt-0.5" />
                 Seu SDR Agent pode fazer isso para <span className="text-foreground font-bold">100 empresas por dia</span>. Automaticamente.
               </p>
               <Link to="/waitlist">

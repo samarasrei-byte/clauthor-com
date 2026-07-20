@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Globe, ArrowRight, Bot, MessageSquare, Users, Clock, AlertTriangle, Calendar, HeadphonesIcon, Zap, Building2, ShoppingCart, BookOpen, CheckCircle2, Loader2, Phone, Upload, ChevronRight, Star, Shield, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import thorOrb from "@/assets/thor-orb.png";
@@ -719,7 +719,7 @@ const ThorOnboarding = () => {
                   exit={{ opacity: 0, y: -5 }}
                   className="text-xs text-muted-foreground flex items-center gap-2"
                 >
-                  <Sparkles className="h-3 w-3 text-primary" />
+                  <Wand className="h-3 w-3 text-primary" />
                   {ANALYSIS_STEPS[analysisStep]}
                 </motion.p>
               </AnimatePresence>

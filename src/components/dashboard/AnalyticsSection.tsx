@@ -1,5 +1,5 @@
 import { BarChart3 } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useTranslation } from "react-i18next";
@@ -33,7 +33,7 @@ const AnalyticsSection = ({ chartData, totalExecutions, recentLogs, locale, onGo
 
         {!hasData ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Sparkles className="h-10 w-10 text-primary/20 mb-3" />
+            <Wand className="h-10 w-10 text-primary/20 mb-3" />
             <p className="text-sm text-muted-foreground mb-1">{t("dashboard.no_analytics_data", { defaultValue: "Nenhum dado de execução ainda" })}</p>
             <p className="text-xs text-muted-foreground/60 mb-4">{t("dashboard.analytics_hint", { defaultValue: "Os gráficos aparecerão quando seus agentes começarem a trabalhar." })}</p>
             {onGoToAgents && (

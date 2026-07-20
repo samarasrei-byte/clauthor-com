@@ -24,7 +24,7 @@ import {
   ShieldCheck,
   TrendingUp,
   Activity,
-  Sparkles,
+  Wand,
   CheckCircle2,
   Clock,
   Zap,
@@ -191,7 +191,7 @@ export default function PreviewDashboard() {
       <div className="border-b border-primary/20 bg-primary/5 sticky top-0 z-40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-11 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs text-primary">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Wand className="w-3.5 h-3.5" />
             <span className="font-semibold uppercase tracking-wider">Preview ao vivo</span>
             <span className="text-muted-foreground hidden sm:inline">
               · Esse é o painel que você recebe ao ativar
@@ -288,7 +288,7 @@ export default function PreviewDashboard() {
 
             <div className="p-4 rounded-xl border border-primary/25 bg-primary/[0.04]">
               <div className="flex items-center gap-2 mb-2 text-primary">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Wand className="w-3.5 h-3.5" />
                 <p className="text-[10px] uppercase tracking-wider font-semibold">
                   A solução
                 </p>

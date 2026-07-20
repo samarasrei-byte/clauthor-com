@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Search, FileVideo, FileAudio, FileImage, FileText, Palette, Layers, File as FileIcon, Trash2, Copy, FolderOpen, HardDrive, Filter, Grid3x3, List, Download, ArrowUpRight, Plus, Cloud } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ const TYPE_META: Record<FileType, { label: string; singular: string; icon: React
   pdf:       { label: "PDFs",        singular: "PDF",        icon: FileText,  gradient: "from-red-500/20 via-red-500/5 to-transparent",         ring: "text-red-500" },
   doc:       { label: "Documentos",  singular: "Documento",  icon: FileText,  gradient: "from-sky-500/20 via-sky-500/5 to-transparent",         ring: "text-sky-500" },
   brandbook: { label: "Brandbooks",  singular: "Brandbook",  icon: Palette,   gradient: "from-fuchsia-500/20 via-fuchsia-500/5 to-transparent", ring: "text-fuchsia-500" },
-  logo:      { label: "Logos",       singular: "Logo",       icon: Sparkles,  gradient: "from-amber-500/20 via-amber-500/5 to-transparent",     ring: "text-amber-500" },
+  logo:      { label: "Logos",       singular: "Logo",       icon: Wand,  gradient: "from-amber-500/20 via-amber-500/5 to-transparent",     ring: "text-amber-500" },
   marketing: { label: "Marketing",   singular: "Marketing",  icon: Layers,    gradient: "from-cyan-500/20 via-cyan-500/5 to-transparent",       ring: "text-cyan-500" },
   other:     { label: "Outros",      singular: "Outro",      icon: FileIcon,  gradient: "from-muted via-muted/30 to-transparent",                ring: "text-muted-foreground" },
 };

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Clock, AlertCircle, Circle, Plus, Bot, Calendar, Flag, Loader2, Trash2, Zap, Activity, ChevronRight, Layers, Target, Eye, Filter, LayoutGrid, List, Search, X } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -246,7 +246,7 @@ const KanbanBoard = () => {
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle className="font-display flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-primary" /> Nova Missão
+                    <Wand className="h-4 w-4 text-primary" /> Nova Missão
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-3 pt-2">

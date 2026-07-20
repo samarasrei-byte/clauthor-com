@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Building2, ShieldCheck, Globe2, Users, Cpu, Lock, GitBranch, HeadphonesIcon, FileCheck, Workflow, ArrowRight, Check } from "lucide-react";
-import { Sparkles } from "@/components/icons/Sparkles";
+import { Wand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
 
@@ -229,7 +229,7 @@ const Enterprise = () => {
         {/* CTA */}
         <section className="py-32 px-6 border-t border-border/40">
           <motion.div {...fadeUp} className="max-w-3xl mx-auto text-center">
-            <Sparkles className="h-6 w-6 text-primary mx-auto mb-6" />
+            <Wand className="h-6 w-6 text-primary mx-auto mb-6" />
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
               Vamos desenhar sua workforce de IA.
             </h2>
