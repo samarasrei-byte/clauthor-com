@@ -16,7 +16,9 @@ import {
   ArrowRight,
   MessageSquare,
   Info as InfoIcon,
+  FolderOpen,
 } from "lucide-react";
+import FilesPickerSheet, { type PickedFile } from "@/components/files/FilesPickerSheet";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -121,6 +123,23 @@ export default function VideoStudio() {
   // UI state · library sheet, command palette, drop preview
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [filesPickerOpen, setFilesPickerOpen] = useState(false);
+
+  const handlePickFromLibrary = (picked: PickedFile) => {
+    if (picked.file_type !== "image") {
+      toast.error("Escolha uma imagem para usar como referência.");
+      return;
+    }
+    copilot.setAttachment({
+      kind: "image",
+      storagePath: picked.bucket_path,
+      signedUrl: picked.signedUrl,
+      mime: picked.mime || "image/*",
+      size: 0,
+      filename: picked.name,
+    });
+    toast.success(`"${picked.name}" anexado como referência.`);
+  };
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [dropPreview, setDropPreview] = useState<string | null>(null);
   const [dropUploading, setDropUploading] = useState(false);
@@ -477,6 +496,26 @@ export default function VideoStudio() {
                 onOpenChange={setLibraryOpen}
               />
 
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 text-[11px]"
+                      onClick={() => setFilesPickerOpen(true)}
+                      aria-label="Escolher da biblioteca de arquivos"
+                    >
+                      <FolderOpen strokeWidth={1.5} className="w-3.5 h-3.5" />
+                      <span className="hidden md:inline">Biblioteca</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-[11px]">
+                    Reusar imagem da sua biblioteca de arquivos
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0" aria-label="Atualizar">
                 <RefreshCw strokeWidth={1.5} className="w-4 h-4" />
               </Button>
@@ -692,6 +731,15 @@ export default function VideoStudio() {
         onOpenPricing={() => navigate("/pricing")}
         providerAvailable={providerAvailable}
         canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
+      />
+
+      <FilesPickerSheet
+        open={filesPickerOpen}
+        onOpenChange={setFilesPickerOpen}
+        onPick={handlePickFromLibrary}
+        accept={["image"]}
+        title="Escolher imagem de referência"
+        description="Selecione uma imagem já enviada em Meus arquivos para usar como referência do vídeo."
       />
     </>
   );

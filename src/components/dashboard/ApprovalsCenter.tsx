@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock, TrendingUp, ListChecks, Eye, History, Send, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram, ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X, FileSignature, FileText, FileCheck2, Film, Image as ImageIcon, StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2 } from "lucide-react";
+import { CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock, TrendingUp, ListChecks, Eye, History, Send, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram, ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X, FileSignature, FileText, FileCheck2, Film, Image as ImageIcon, StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2, FolderOpen } from "lucide-react";
 import { Wand } from "lucide-react";
+import FilesPickerSheet, { type PickedFile } from "@/components/files/FilesPickerSheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -264,6 +265,13 @@ const ApprovalsCenter = () => {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<any>(null);
   const [quickNote, setQuickNote] = useState("");
+  const [filesPickerOpen, setFilesPickerOpen] = useState(false);
+
+  const handleAttachFromLibrary = (picked: PickedFile) => {
+    const link = `\n[${picked.name}](${picked.signedUrl})`;
+    setQuickNote((prev) => (prev ? `${prev}${link}` : `Anexo: ${picked.name}\n${picked.signedUrl}`));
+    toast.success(`"${picked.name}" anexado à observação.`);
+  };
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -691,7 +699,11 @@ const ApprovalsCenter = () => {
                     placeholder={`Ex: ${selected.delivery_type === "video" ? "Cortar os 2s finais e legendar." : selected.delivery_type === "contract" ? "Revisar cláusula 3 antes de assinar." : "Deixar o título mais direto."}`}
                     className="resize-none text-sm"
                   />
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-between gap-2">
+                    <Button size="sm" variant="ghost" className="gap-1.5 h-8 text-[11px]"
+                      onClick={() => setFilesPickerOpen(true)}>
+                      <FolderOpen className="h-3 w-3" /> Anexar da biblioteca
+                    </Button>
                     <Button size="sm" variant="outline" className="gap-1.5"
                       disabled={!quickNote.trim() || addQuickNote.isPending}
                       onClick={() => addQuickNote.mutate({ approval: selected, body: quickNote.trim() })}>
@@ -800,6 +812,14 @@ const ApprovalsCenter = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <FilesPickerSheet
+        open={filesPickerOpen}
+        onOpenChange={setFilesPickerOpen}
+        onPick={handleAttachFromLibrary}
+        title="Anexar da biblioteca"
+        description="Escolha um arquivo já enviado para incluir na observação enviada ao agente."
+      />
     </div>
   );
 };
