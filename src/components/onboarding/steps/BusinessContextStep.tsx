@@ -39,7 +39,7 @@ export default function BusinessContextStep({ industry, coreBusiness, painPoints
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-muted-foreground">03 · Core business e dores</p>
         <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
-          Em uma frase — o que sua empresa faz?
+          Em uma frase · o que sua empresa faz?
         </h1>
         <p className="type-body text-muted-foreground max-w-lg mx-auto">
           Isso vira memória do Thor e alimenta cada roteiro, atendimento e estratégia.

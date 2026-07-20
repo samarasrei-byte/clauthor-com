@@ -156,12 +156,12 @@ export default function ShareTab({ outputUrl, prompt, generationId, mediaType = 
           compact
           onSelect={(net) => {
             if (!net.ready) {
-              toast.info(`${net.name} — integração em breve`);
+              toast.info(`${net.name} · integração em breve`);
               return;
             }
             if (net.key === "facebook") handleShare("facebook");
             else if (net.key === "instagram") handleShare("instagram");
-            else toast.info(`${net.name} — publicação será liberada em breve`);
+            else toast.info(`${net.name} · publicação será liberada em breve`);
           }}
         />
       </div>

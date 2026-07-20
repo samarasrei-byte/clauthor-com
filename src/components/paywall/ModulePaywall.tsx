@@ -60,7 +60,7 @@ export default function ModulePaywall({
     <>
       <Helmet>
         <title>{moduleLabel} · Contrate para desbloquear</title>
-        <meta name="description" content={`${moduleLabel} — ${moduleDescription}`} />
+        <meta name="description" content={`${moduleLabel} · ${moduleDescription}`} />
       </Helmet>
 
       <div className="h-full overflow-y-auto bg-background">

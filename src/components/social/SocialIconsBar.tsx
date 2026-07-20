@@ -64,7 +64,7 @@ export const SOCIAL_NETWORKS: SocialNetworkDef[] = [
 interface SocialIconsBarProps {
   /** Se true, mostra apenas os ícones (linha compacta). Se false, mostra ícones + labels. */
   compact?: boolean;
-  /** Callback ao clicar. Redes com ready=false disparam com ready=false — trate como "em breve". */
+  /** Callback ao clicar. Redes com ready=false disparam com ready=false · trate como "em breve". */
   onSelect?: (network: SocialNetworkDef) => void;
   /** Redes específicas para filtrar (default: todas 9). */
   filter?: SocialNetwork[];
@@ -104,9 +104,9 @@ export function SocialIconsBar({
             title={
               net.ready
                 ? isConnected
-                  ? `${net.name} — conectado`
-                  : `${net.name} — clique para conectar`
-                : `${net.name} — em breve`
+                  ? `${net.name} · conectado`
+                  : `${net.name} · clique para conectar`
+                : `${net.name} · em breve`
             }
             aria-label={net.name}
             className={cn(

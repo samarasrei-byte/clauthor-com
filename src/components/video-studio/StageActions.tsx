@@ -139,7 +139,7 @@ export default function StageActions({
                   </div>
                   <p className="text-[11px] text-muted-foreground leading-relaxed mb-2">
                     {p.id === "lovable"
-                      ? "O motor Clauthor AI está em treinamento. Fique de olho — usuários pagos ganham acesso antecipado."
+                      ? "O motor Clauthor AI está em treinamento. Fique de olho · usuários pagos ganham acesso antecipado."
                       : `Destrave ${p.label} (${p.quality.toLowerCase()}, ETA ${p.eta}) e mais duração por vídeo com um plano superior.`}
                   </p>
                   {p.id !== "lovable" && (
@@ -187,7 +187,7 @@ export default function StageActions({
           <p className="text-sm text-foreground/90 leading-relaxed line-clamp-4">{finalPrompt}</p>
         ) : (
           <p className="text-xs text-muted-foreground italic">
-            Converse com o Thor à esquerda ou pegue um template no palco — quando o prompt estiver pronto, aparece aqui pra revisão.
+            Converse com o Thor à esquerda ou pegue um template no palco · quando o prompt estiver pronto, aparece aqui pra revisão.
           </p>
         )}
 

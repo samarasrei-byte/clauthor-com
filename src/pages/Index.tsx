@@ -184,7 +184,7 @@ const HomePage = () => {
         className="dark relative bg-[#050505] text-white overflow-hidden isolate"
         aria-label="Hero"
       >
-        {/* Aurora orbs — mesmo efeito da tela de login */}
+        {/* Aurora orbs · mesmo efeito da tela de login */}
         <div aria-hidden className="absolute inset-0 pointer-events-none z-0">
           <motion.div
             animate={{ x: [0, 60, -30, 0], y: [0, -40, 30, 0], scale: [1, 1.15, 0.95, 1] }}
@@ -243,7 +243,7 @@ const HomePage = () => {
             className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
-            e dores — e recomenda apenas os agentes que fazem sentido para o{" "}
+            e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
             <span className="text-foreground font-medium">seu porte, orçamento e cenário</span>.
             De uma pequena operação a um time enterprise.
           </motion.p>

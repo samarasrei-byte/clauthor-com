@@ -519,7 +519,7 @@ const ApprovalsCenter = () => {
         <MetricCard
           icon={ShieldCheck}
           label={metrics.lowConfCount > 0 ? `Confiança · ${metrics.lowConfCount} baixa` : "Confiança média"}
-          value={metrics.avgConfidence != null ? `${metrics.avgConfidence}%` : "—"}
+          value={metrics.avgConfidence != null ? `${metrics.avgConfidence}%` : "·"}
           accent={metrics.avgConfidence == null ? undefined : metrics.avgConfidence >= 85 ? "emerald" : metrics.avgConfidence >= 70 ? "amber" : "sky"}
         />
       </div>

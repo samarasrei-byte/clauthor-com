@@ -34,7 +34,7 @@ export async function createPayPalPlan(
 
   if (error || !data?.success || !data?.plan_id) {
     const friendly = friendlyCheckoutError(raw);
-    const err = new Error(`${friendly.title} — ${friendly.description}`);
+    const err = new Error(`${friendly.title} · ${friendly.description}`);
     (err as any).friendly = friendly;
     throw err;
   }

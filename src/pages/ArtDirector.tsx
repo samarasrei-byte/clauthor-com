@@ -220,7 +220,7 @@ export default function ArtDirector() {
       <ModulePaywall
         module="art"
         moduleLabel="Diretor de Arte"
-        moduleDescription="Duo de agentes — Diretor de Conteúdo refina o briefing e o Artista gera imagens com Clauthor AI."
+        moduleDescription="Duo de agentes · Diretor de Conteúdo refina o briefing e o Artista gera imagens com Clauthor AI."
         requiredDepartments={access.requiredDepartments}
         benefits={[
           "Conversa refinada com o Diretor de Conteúdo",
@@ -238,7 +238,7 @@ export default function ArtDirector() {
         <title>Art Studio · Command Center</title>
         <meta
           name="description"
-          content="Direção de arte com IA — Diretor de Conteúdo refina o briefing e o Artista entrega a imagem final."
+          content="Direção de arte com IA · Diretor de Conteúdo refina o briefing e o Artista entrega a imagem final."
         />
       </Helmet>
 
@@ -272,7 +272,7 @@ export default function ArtDirector() {
         </div>
 
         <div className="max-w-[1600px] mx-auto p-6 space-y-6">
-          {/* Composer colapsável — chat + prompt */}
+          {/* Composer colapsável · chat + prompt */}
           <motion.div
             initial={false}
             animate={{ opacity: 1 }}
@@ -547,7 +547,7 @@ function ArtStage({
               Seu palco está pronto
             </div>
             <div className="text-sm text-white/50 mt-1 max-w-sm">
-              Converse com o Diretor ou escreva um prompt — a imagem final aparece aqui.
+              Converse com o Diretor ou escreva um prompt · a imagem final aparece aqui.
             </div>
             <Button size="sm" variant="secondary" className="mt-5 gap-2" onClick={onGenerate}>
               <Wand strokeWidth={1.5} className="w-4 h-4" /> Abrir composer
@@ -750,7 +750,7 @@ function ShareBlock({
   const publish = async () => {
     if (!target) return;
     if (!tenantId) {
-      toast.error("Tenant indisponível — recarregue a página.");
+      toast.error("Tenant indisponível · recarregue a página.");
       return;
     }
     setPublishing(true);

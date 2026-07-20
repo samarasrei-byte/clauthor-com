@@ -2,14 +2,14 @@
  * IntelligenceHub · Consolidado (7 → 4 tabs, sem duplicidade).
  *
  * Estrutura minimalista:
- *   1. Ao Vivo    — Execuções (feed operacional) + Rede Neural (mapa)
- *   2. Analytics  — Métricas agregadas (sem sub-nav)
+ *   1. Ao Vivo    · Execuções (feed operacional) + Rede Neural (mapa)
+ *   2. Analytics  · Métricas agregadas (sem sub-nav)
  *   3. Qualidade IA
- *   4. Logs       — Eventos brutos + Resultados detalhados (histórico)
+ *   4. Logs       · Eventos brutos + Resultados detalhados (histórico)
  *
  * War Room e IA Live foram unificados dentro de "Execuções" (mesmo domínio:
  * o que está acontecendo agora). Resultados saiu de Analytics porque é
- * histórico, não agregado — vive em Logs junto com os eventos.
+ * histórico, não agregado · vive em Logs junto com os eventos.
  *
  * SubNav usa ToggleGroup para não aninhar Tabs (ARIA correto).
  */

@@ -66,7 +66,7 @@ const readList = (key: string): string[] => {
 };
 
 /**
- * Sidebar "Obsidian Red" — card flutuante, cantos arredondados (Trello-like),
+ * Sidebar "Obsidian Red" · card flutuante, cantos arredondados (Trello-like),
  * página visível ao redor. Busca com um único ícone de ação (X quando há texto,
  * atalho ⌘K quando vazio) e toggle Iniciante/Avançado no rodapé.
  */
@@ -334,7 +334,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         {collapsed ? <ChevronRight className="h-3 w-3" strokeWidth={3} /> : <ChevronLeft className="h-3 w-3" strokeWidth={3} />}
       </button>
 
-      {/* Search — one clear affordance */}
+      {/* Search · one clear affordance */}
       {!collapsed && (
         <div className="px-3 pt-4 pb-2">
           <div className="relative group">
@@ -407,7 +407,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               role="tab"
               aria-selected={beginner}
               onClick={() => { if (!beginner) toggleBeginner(); }}
-              title="Menu simplificado — só o essencial para começar"
+              title="Menu simplificado · só o essencial para começar"
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all",
                 beginner ? "bg-card text-foreground shadow-sm ring-1 ring-border/60" : "text-muted-foreground hover:text-foreground"
@@ -441,7 +441,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         <div className="p-2 border-t border-border/40 flex justify-center">
           <button
             onClick={toggleBeginner}
-            title={beginner ? "Modo Simples ativo — clique para ver tudo" : "Modo Completo ativo — clique para simplificar"}
+            title={beginner ? "Modo Simples ativo · clique para ver tudo" : "Modo Completo ativo · clique para simplificar"}
             className="p-2 rounded-lg hover:bg-card/60 text-muted-foreground hover:text-foreground transition-colors"
           >
             {beginner ? <GraduationCap className="h-4 w-4 text-primary" /> : <Wand className="h-4 w-4" />}

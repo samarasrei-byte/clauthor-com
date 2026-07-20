@@ -223,12 +223,12 @@ const AgentMetricsDetail = () => {
             label="Falhas"
             value={stats.errors}
             accent={stats.errors > 0 ? "text-destructive" : "text-muted-foreground"}
-            sub={stats.total > 0 ? `${Math.round((stats.errors / stats.total) * 100)}% do total` : "—"}
+            sub={stats.total > 0 ? `${Math.round((stats.errors / stats.total) * 100)}% do total` : "·"}
           />
           <KpiCard
             icon={Clock}
             label="Latência média"
-            value={stats.avgMs > 0 ? `${stats.avgMs}ms` : "—"}
+            value={stats.avgMs > 0 ? `${stats.avgMs}ms` : "·"}
             accent="text-violet-400"
             sub={stats.p95 > 0 ? `p95 · ${stats.p95}ms` : undefined}
           />
@@ -249,7 +249,7 @@ const AgentMetricsDetail = () => {
           >
             <div className="flex items-center gap-2 mb-3">
               <Activity className="h-3.5 w-3.5 text-cyan-400" />
-              <span className="text-xs font-medium">Execuções — últimos 14 dias</span>
+              <span className="text-xs font-medium">Execuções · últimos 14 dias</span>
             </div>
             <ResponsiveContainer width="100%" height={200}>
               <AreaChart data={chartData}>
@@ -323,7 +323,7 @@ const AgentMetricsDetail = () => {
               <EmptyState
                 icon={Activity}
                 title="Sem execuções nos últimos 30 dias"
-                description="Este agente ainda não foi acionado — ou está esperando aprovação de uma tarefa. Delegue algo agora e acompanhe o replay em tempo real."
+                description="Este agente ainda não foi acionado · ou está esperando aprovação de uma tarefa. Delegue algo agora e acompanhe o replay em tempo real."
                 action={{
                   label: "Executar tarefa",
                   icon: PlayCircle,

@@ -234,7 +234,7 @@ const App = () => (
                   <Route path="/meus-departamentos" element={<MyDepartments />} />
                   <Route path="/meus-squads" element={<MySquads />} />
 
-                  {/* Squads / Departamentos — versões embutidas no painel para manter sidebar/header
+                  {/* Squads / Departamentos · versões embutidas no painel para manter sidebar/header
                       durante contratação, checkout e ativação (mantém contexto do usuário). */}
                   <Route path="/dashboard/departamentos" element={<Departamentos />} />
                   <Route path="/dashboard/departamentos/:slug" element={<DepartmentDetail />} />

@@ -84,7 +84,7 @@ interface Props {
 
 /**
  * Palco central. Empty state agora carrega 6 templates prontos que pré-preenchem
- * o prompt final — remove a fricção do "e agora, o que eu escrevo?".
+ * o prompt final · remove a fricção do "e agora, o que eu escrevo?".
  *
  * Também aceita drag-and-drop de imagem direto no palco: preview instantâneo
  * via object URL enquanto o upload real acontece em background.
@@ -223,7 +223,7 @@ function EmptyStage({
       </div>
       <div className="text-base font-medium text-white/95 tracking-tight">Comece por um template</div>
       <div className="text-xs text-white/50 mt-1 mb-5 max-w-sm">
-        Clique num modelo e o Thor abre o prompt já preenchido — você só ajusta.
+        Clique num modelo e o Thor abre o prompt já preenchido · você só ajusta.
       </div>
 
       {onPickTemplate && (

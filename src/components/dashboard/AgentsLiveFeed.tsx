@@ -23,7 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 /**
- * AgentsLiveFeed — feed fixo no topo do dashboard mostrando, em tempo real,
+ * AgentsLiveFeed · feed fixo no topo do dashboard mostrando, em tempo real,
  * o que cada agente está produzindo (contrato, post, imagem, CRM, campanha…).
  *
  * Fonte de verdade: `execution_steps` (todos os agentes já gravam aqui).
@@ -101,7 +101,7 @@ export default function AgentsLiveFeed() {
   const navigate = useNavigate();
   const [items, setItems] = useState<FeedItem[]>([]);
 
-  // Initial load — most recent steps across all runs of the tenant (RLS filters)
+  // Initial load · most recent steps across all runs of the tenant (RLS filters)
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -127,7 +127,7 @@ export default function AgentsLiveFeed() {
     return () => { mounted = false; };
   }, []);
 
-  // Realtime — new steps append to the feed
+  // Realtime · new steps append to the feed
   useEffect(() => {
     const channel = supabase
       .channel("agents-live-feed")

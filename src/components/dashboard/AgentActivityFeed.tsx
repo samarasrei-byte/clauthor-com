@@ -42,12 +42,12 @@ export function AgentActivityFeed({ agentId }: { agentId: string }) {
       <EmptyState
         icon={Wand}
         title="Este agente ainda não trabalhou"
-        description="Assim que ele receber a primeira tarefa, você vê cada ação — chamada de LLM, envio de e-mail, busca — em tempo real."
+        description="Assim que ele receber a primeira tarefa, você vê cada ação · chamada de LLM, envio de e-mail, busca · em tempo real."
         action={{
           label: "Dar uma tarefa agora",
           href: "/dashboard?tab=agents",
         }}
-        hint="Toda ação vira um trace replayable — bom para auditar e treinar melhor."
+        hint="Toda ação vira um trace replayable · bom para auditar e treinar melhor."
         size="sm"
       />
     );

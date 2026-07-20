@@ -32,7 +32,7 @@ export function useVideoUpload() {
 
   async function upload(file: File): Promise<UploadedMedia | null> {
     if (!tenantId) {
-      toast.error("Tenant indisponível — recarregue a página.");
+      toast.error("Tenant indisponível · recarregue a página.");
       return null;
     }
     const isImage = file.type.startsWith("image/");
@@ -72,7 +72,7 @@ export function useVideoUpload() {
         }
         lastError = error as unknown as Error;
         console.warn(`[useVideoUpload] attempt ${attempt} failed:`, error.message);
-        // Non-retryable errors: signature/auth/size — break early
+        // Non-retryable errors: signature/auth/size · break early
         if (
           /already exists|permission|forbidden|payload too large/i.test(error.message)
         ) {

@@ -42,7 +42,7 @@ export default function IntegrationMatrix({ departmentId, compact = false }: Pro
             O que os agentes precisam para operar
           </h3>
           <p className="text-sm text-white/50 mt-1 max-w-xl">
-            Transparência antes da compra — você vê exatamente o que vai conectar.
+            Transparência antes da compra · você vê exatamente o que vai conectar.
             A maioria é 1-clique; nenhuma integração exige código.
           </p>
         </div>

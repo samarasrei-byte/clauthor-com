@@ -58,7 +58,7 @@ export default function OnboardingSector() {
           </p>
         </motion.div>
 
-        {/* Passo 1 — Setor */}
+        {/* Passo 1 · Setor */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           {SECTOR_GROUPS.map((g) => {
             const active = sectorId === g.id;
@@ -81,7 +81,7 @@ export default function OnboardingSector() {
           })}
         </div>
 
-        {/* Passo 2 — Agentes sugeridos */}
+        {/* Passo 2 · Agentes sugeridos */}
         <AnimatePresence mode="wait">
           {group && (
             <motion.div

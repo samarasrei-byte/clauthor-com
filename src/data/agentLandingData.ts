@@ -808,7 +808,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionDesc: "IA que monitora saúde do cliente, prevê churn e executa playbooks de retenção automaticamente.",
     solutions: [
       { title: "Health score preditivo", description: "Análise em tempo real de 50+ sinais. Prevê churn com 95% de precisão." },
-      { title: "Playbooks automáticos", description: "Quando detecta risco, executa ações de retenção — decisões sensíveis sobem pra aprovação." },
+      { title: "Playbooks automáticos", description: "Quando detecta risco, executa ações de retenção · decisões sensíveis sobem pra aprovação." },
       { title: "Expansão proativa", description: "Identifica clientes prontos para upsell e cross-sell." },
     ],
     benefits: [
@@ -2570,7 +2570,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionTitle: "Support Channel Agent",
     solutionDesc: "IA que atende, resolve e encanta seus clientes em qualquer canal.",
     solutions: [
-      { title: "Resolução automática", description: "85% dos tickets resolvidos sozinho — o resto escala pra você aprovar." },
+      { title: "Resolução automática", description: "85% dos tickets resolvidos sozinho · o resto escala pra você aprovar." },
       { title: "Multicanal nativo", description: "Chat, email, WhatsApp e redes sociais em um único agente." },
       { title: "Escalação inteligente", description: "Casos complexos encaminhados com contexto completo." },
     ],

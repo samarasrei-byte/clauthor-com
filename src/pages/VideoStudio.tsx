@@ -115,7 +115,7 @@ export default function VideoStudio() {
   const copilot = useVideoCopilot();
   const { upload: uploadFile } = useVideoUpload();
 
-  // UI state — library sheet, command palette, drop preview
+  // UI state · library sheet, command palette, drop preview
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -288,7 +288,7 @@ export default function VideoStudio() {
         toast.error((data as any).message ?? (data as any).error);
         return;
       }
-      toast.success("Vídeo em produção — acompanhe no Inspector.");
+      toast.success("Vídeo em produção · acompanhe no Inspector.");
       const genId = (data as any)?.generation?.id;
       if (genId) setActiveId(genId);
       copilot.reset();
@@ -303,11 +303,11 @@ export default function VideoStudio() {
 
   function handlePickTemplate(t: StageTemplate) {
     copilot.setFinalPrompt(t.prompt);
-    toast.success(`Template "${t.label}" carregado — revise e gere.`);
+    toast.success(`Template "${t.label}" carregado · revise e gere.`);
   }
 
   async function handleDropFile(file: File) {
-    // Instant preview via object URL — user sees the frame while upload happens.
+    // Instant preview via object URL · user sees the frame while upload happens.
     const localUrl = URL.createObjectURL(file);
     setDropPreview(localUrl);
     setDropUploading(true);
@@ -389,7 +389,7 @@ export default function VideoStudio() {
       <ModulePaywall
         module="video"
         moduleLabel="Video Studio"
-        moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Clauthor AI direto do dashboard."
+        moduleDescription="Geração e edição de vídeos com IA · Veo 3, Replicate e Clauthor AI direto do dashboard."
         requiredDepartments={access.requiredDepartments}
         benefits={[
           "Copiloto Thor guia você na criação do prompt ideal",
@@ -410,7 +410,7 @@ export default function VideoStudio() {
         <title>Video Studio · Command Center</title>
         <meta
           name="description"
-          content="Gere vídeos com IA guiado pelo copiloto Thor — Veo 3 e Replicate direto do dashboard."
+          content="Gere vídeos com IA guiado pelo copiloto Thor · Veo 3 e Replicate direto do dashboard."
         />
       </Helmet>
 

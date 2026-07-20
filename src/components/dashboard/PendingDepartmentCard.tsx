@@ -102,7 +102,7 @@ export default function PendingDepartmentCard() {
     <>
       <ThorStuckHint
         stepKey={`pending-${pending.id}`}
-        message={`Falta só o pagamento pra ativar ${pending.department_name}. Clique em 'Ativar agora' — PayPal em 1 clique e cancela quando quiser.`}
+        message={`Falta só o pagamento pra ativar ${pending.department_name}. Clique em 'Ativar agora' · PayPal em 1 clique e cancela quando quiser.`}
       />
       <motion.section
         initial={{ opacity: 0, y: 12 }}

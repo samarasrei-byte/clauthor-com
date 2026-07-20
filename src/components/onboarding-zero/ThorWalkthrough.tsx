@@ -54,10 +54,10 @@ interface Bubble {
 }
 
 const BUBBLES: Bubble[] = [
-  { text: "Oi! Sou o Thor. Em 60 segundos você aprende a usar tudo — sem termos técnicos, prometo." },
-  { text: "Este é o seu Command Center. Aqui você comanda, a IA executa. Você não precisa fazer nada operacional — só aprovar." },
+  { text: "Oi! Sou o Thor. Em 60 segundos você aprende a usar tudo · sem termos técnicos, prometo." },
+  { text: "Este é o seu Command Center. Aqui você comanda, a IA executa. Você não precisa fazer nada operacional · só aprovar." },
   { text: "Veja o menu à esquerda destacado. Cada item é um setor da sua empresa. Clique no primeiro item quando quiser entrar.", highlight: "nav-overview" },
-  { text: "Aqui aparecem seus agentes de IA — cada um com nome, função e memória própria, como um funcionário digital.", highlight: "nav-agents" },
+  { text: "Aqui aparecem seus agentes de IA · cada um com nome, função e memória própria, como um funcionário digital.", highlight: "nav-agents" },
   { text: "Central de Aprovações: tudo que os agentes produzem (posts, propostas, vídeos) chega aqui pra você aprovar com 👍 ou 👎.", highlight: "nav-approvals" },
   { text: "Video Studio: crie vídeos com IA, corte vídeos longos em Shorts/Reels automaticamente e poste nas redes conectadas.", highlight: "nav-video" },
   { text: "Precisa de ajuda a qualquer momento? Clique no T (Thor) no rodapé que eu abro um chat pra resolver junto com você." },
@@ -162,7 +162,7 @@ export default function ThorWalkthrough({ onFinish }: { onFinish?: () => void })
                 Pronto? <span className="text-primary">Vamos começar.</span>
               </h2>
               <p className="text-sm text-muted-foreground mb-8">
-                Sugestão: abra a Central de Aprovações — seu primeiro rascunho já pode estar lá.
+                Sugestão: abra a Central de Aprovações · seu primeiro rascunho já pode estar lá.
               </p>
               <button
                 type="button"

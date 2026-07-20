@@ -609,7 +609,7 @@ const SocialConnections = () => {
           <Badge variant="outline" className="text-[10px] uppercase tracking-wider">OAuth em desenvolvimento</Badge>
         </div>
         <p className="text-xs text-muted-foreground">
-          Estamos preparando as integrações abaixo. A estrutura OAuth já está pronta — só falta ativarmos as credenciais do provedor.
+          Estamos preparando as integrações abaixo. A estrutura OAuth já está pronta · só falta ativarmos as credenciais do provedor.
         </p>
         <SocialIconsBar filter={["pinterest", "threads", "whatsapp"]} />
       </motion.div>

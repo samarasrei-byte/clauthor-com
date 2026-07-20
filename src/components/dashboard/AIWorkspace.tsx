@@ -836,7 +836,7 @@ const KanbanColumn = ({
             <div className="line-clamp-2 font-medium">{t.title}</div>
             <div className="mt-1 flex items-center justify-between gap-1 text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1">
-                {a ? <><span>{a.emoji}</span> {a.name}</> : (t.agent_name ?? "—")}
+                {a ? <><span>{a.emoji}</span> {a.name}</> : (t.agent_name ?? "·")}
               </span>
               {next && (
                 <button

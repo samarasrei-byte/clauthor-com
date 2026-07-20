@@ -734,7 +734,7 @@ const ClientDashboard = () => {
 
 
       <div className="relative h-full">
-        {/* Sidebar global agora vem do DashboardLayout — não duplicamos aqui. */}
+        {/* Sidebar global agora vem do DashboardLayout · não duplicamos aqui. */}
 
         <div className="w-full h-full min-w-0 overflow-hidden">
 

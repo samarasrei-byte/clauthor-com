@@ -55,7 +55,7 @@ const AGENTS: Record<string, { name: string; role: string; emoji: string; logs: 
 
 /**
  * Live Agents Strip · salto #2.
- * Micro-prova de que o time já está trabalhando — não é promessa, é demonstração.
+ * Micro-prova de que o time já está trabalhando · não é promessa, é demonstração.
  */
 export default function LiveAgentsStrip({ focus, companyName = "sua empresa" }: Props) {
   const cfg = AGENTS[focus] ?? AGENTS.comercial;

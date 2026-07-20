@@ -95,7 +95,7 @@ export default function BrandingPreviewStep({ colors, fonts, logo, onColorsChang
             <p className="type-caption text-muted-foreground">Tipografia</p>
             <div className="flex flex-wrap gap-2">
               {fonts.length === 0 && (
-                <p className="type-caption text-muted-foreground/70">Nenhuma fonte detectada — adicione uma abaixo.</p>
+                <p className="type-caption text-muted-foreground/70">Nenhuma fonte detectada · adicione uma abaixo.</p>
               )}
               {fonts.map((f) => (
                 <button
