@@ -21,6 +21,10 @@ import { toast } from "sonner";
 export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const inDashboard = location.pathname.startsWith("/dashboard");
+  const backHref = inDashboard ? "/dashboard/departamentos" : "/departamentos";
+  const checkoutHref = inDashboard ? "/dashboard/checkout" : "/checkout";
   const dept = slug ? getDepartmentById(slug) : undefined;
   const inCart = useDeptSelection((s) => (dept ? s.has(dept.id) : false));
   const addToCart = useDeptSelection((s) => s.add);
