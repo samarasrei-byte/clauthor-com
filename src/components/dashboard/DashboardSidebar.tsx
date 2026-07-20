@@ -247,7 +247,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               )}
               aria-label={isPinned ? "Desafixar" : "Fixar"}
             >
-              <Star className={cn("h-3 w-3", isPinned ? "fill-amber-400 text-amber-400" : "text-muted-foreground/60")} strokeWidth={1.5} />
+              <Star className={cn("h-3 w-3", isPinned ? "fill-warning text-warning" : "text-muted-foreground/60")} strokeWidth={1.5} />
             </span>
           )}
 
