@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock, TrendingUp, ListChecks, Eye, History, Send, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram, ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X, FileSignature, FileText, FileCheck2, Film, Image as ImageIcon, StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2 } from "lucide-react";
+import { CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock, TrendingUp, ListChecks, Eye, History, Send, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram, ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X, FileSignature, FileText, FileCheck2, Film, Image as ImageIcon, StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2, FolderOpen } from "lucide-react";
 import { Wand } from "lucide-react";
+import FilesPickerSheet, { type PickedFile } from "@/components/files/FilesPickerSheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
