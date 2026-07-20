@@ -37,7 +37,7 @@ export default function AdminKpiDashboard() {
   );
 
   const { data: percentiles, isLoading: pLoading } = useQuery({
-    enabled: verified,
+    enabled: verified === true,
     queryKey: ["ttfv-percentiles", range],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_ttfv_percentiles", { _since: since });
@@ -51,7 +51,7 @@ export default function AdminKpiDashboard() {
   });
 
   const { data: daily } = useQuery({
-    enabled: verified,
+    enabled: verified === true,
     queryKey: ["ttfv-daily", range],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_ttfv_daily", { _since: since });
@@ -61,7 +61,7 @@ export default function AdminKpiDashboard() {
   });
 
   const { data: funnel } = useQuery({
-    enabled: verified,
+    enabled: verified === true,
     queryKey: ["wow-funnel", range],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_wow_funnel", { _since: since });
@@ -71,7 +71,7 @@ export default function AdminKpiDashboard() {
   });
 
   const { data: variantStats } = useQuery({
-    enabled: verified,
+    enabled: verified === true,
     queryKey: ["wow-variant-significance", range],
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_wow_variant_significance", { _since: since });
