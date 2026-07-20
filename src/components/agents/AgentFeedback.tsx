@@ -61,7 +61,7 @@ export default function AgentFeedback({ agentId, agentName, userMessage, assista
         <Button
           size="sm"
           variant="ghost"
-          className={`h-7 px-2 ${rating === 1 ? "text-emerald-500" : "text-muted-foreground"}`}
+          className={`h-7 px-2 ${rating === 1 ? "text-success" : "text-muted-foreground"}`}
           onClick={() => submit(1)}
           disabled={saving}
           aria-label="Resposta útil"

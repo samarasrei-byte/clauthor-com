@@ -206,14 +206,15 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               strokeWidth={1.75}
             />
             {numericBadge && (
-              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-500 ring-2 ring-background animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-success ring-2 ring-background animate-pulse" />
             )}
             {item.locked && (
               <span
                 className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-background flex items-center justify-center ring-1 ring-border/60"
                 aria-label="Requer contratação"
               >
-                <Lock className="h-2 w-2 text-amber-500" strokeWidth={2.5} />
+                <Lock className="h-2 w-2 text-warning" strokeWidth={2.5} />
+
               </span>
             )}
           </div>
@@ -246,7 +247,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               )}
               aria-label={isPinned ? "Desafixar" : "Fixar"}
             >
-              <Star className={cn("h-3 w-3", isPinned ? "fill-amber-400 text-amber-400" : "text-muted-foreground/60")} strokeWidth={1.5} />
+              <Star className={cn("h-3 w-3", isPinned ? "fill-warning text-warning" : "text-muted-foreground/60")} strokeWidth={1.5} />
             </span>
           )}
 
@@ -375,7 +376,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         {!collapsed && !q && pinnedItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
-              <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+              <Star className="h-2.5 w-2.5 fill-warning text-warning" />
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">Fixados</span>
             </div>
             {pinnedItems.map((it, i) => renderItem(it, i, { compactRow: true }))}

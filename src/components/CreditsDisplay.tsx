@@ -49,10 +49,11 @@ export function CreditsDisplay() {
   const planLabels: Record<string, string> = { free: "Free", starter: "Starter", pro: "Pro", enterprise: "Enterprise" };
   const planColors: Record<string, string> = {
     free: "bg-muted/80 text-muted-foreground",
-    starter: "bg-cyan-500/15 text-cyan-400",
+    starter: "bg-info/15 text-info",
     pro: "bg-primary/15 text-primary",
-    enterprise: "bg-emerald-500/15 text-emerald-400",
+    enterprise: "bg-success/15 text-success",
   };
+
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-xl p-5">
