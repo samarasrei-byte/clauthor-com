@@ -56,7 +56,7 @@ export default function AdminMarketplacePanel({ pendingAgents, locale }: AdminMa
                     <CheckCircle className="h-4 w-4" /> {t("dashboard.approve", { defaultValue: "Aprovar" })}
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => rejectAgent(agent.id)} className="gap-1">
-                    <XCircle className="h-4 w-4" /> {t("dashboard.reject", { defaultValue: "Rejeitar" })}
+                    <XCircle className="h-4 w-4" /> {t("dashboard.reject", { defaultValue: "Pedir ajuste" })}
                   </Button>
                 </div>
               </div>
