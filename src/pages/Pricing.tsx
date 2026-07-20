@@ -328,13 +328,13 @@ const Pricing = () => {
                 <br />
                 {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{fp(region.comparison.agentStarting)}/{t("pricing_page.per_month").replace("/", "")}</span>.
               </p>
-              <Link to="/departamentos">
-                <Button className="glow rounded-xl px-8 h-12 font-semibold">
+              <Button asChild className="glow rounded-xl px-8 h-12 font-semibold">
+                <Link to="/departamentos">
                   <Zap className="h-4 w-4 mr-2" />
                   Ver os 20 departamentos
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </motion.div>
