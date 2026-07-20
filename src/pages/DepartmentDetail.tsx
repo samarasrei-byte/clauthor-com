@@ -73,7 +73,7 @@ export default function DepartmentDetail() {
     <div className="min-h-dvh bg-background text-foreground">
       <SEO title={`${dept.name} · Clauthor`} description={dept.painPoint} />
 
-      <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-8 md:space-y-10">
         <Link to={backHref} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-colors">
           <ArrowLeft className="w-4 h-4" /> Voltar aos departamentos
         </Link>
@@ -90,10 +90,10 @@ export default function DepartmentDetail() {
               </Badge>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold tracking-tight text-white">
             {dept.name}
           </h1>
-          <p className="text-lg text-white/60 max-w-2xl leading-relaxed">{dept.painPoint}</p>
+          <p className="text-base md:text-lg text-white/60 max-w-2xl leading-relaxed">{dept.painPoint}</p>
         </motion.header>
 
         {/* Live Scene */}
@@ -160,22 +160,22 @@ export default function DepartmentDetail() {
 
 
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 md:p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
           <div>
             <div className="text-sm text-white/50">Pronto para contratar?</div>
             <div className="text-2xl font-semibold text-white mt-1">
               {formatBRL(dept.priceMonthly)}<span className="text-sm text-white/40"> / mês</span>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 justify-end">
-            <Button variant="outline" onClick={handleAdd} className="gap-2">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:justify-end w-full sm:w-auto">
+            <Button variant="outline" onClick={handleAdd} className="gap-2 w-full sm:w-auto">
               {inCart ? (
                 <><Check className="w-4 h-4" /> No carrinho</>
               ) : (
                 <><Plus className="w-4 h-4" /> Adicionar ao carrinho</>
               )}
             </Button>
-            <PremiumCTAButton variant="red" onClick={handleBuyNow}>
+            <PremiumCTAButton variant="red" onClick={handleBuyNow} className="w-full sm:w-auto">
               Ir para checkout <ArrowRight className="w-4 h-4 ml-2" />
             </PremiumCTAButton>
           </div>
