@@ -184,10 +184,10 @@ const AgentMetricsDetail = () => {
 
         {/* Alerts for this agent */}
         {agentAlerts.length > 0 && (
-          <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-3 flex gap-3">
-            <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-warning/25 bg-warning/5 p-3 flex gap-3">
+            <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs font-semibold text-amber-100">
+              <p className="text-xs font-semibold text-warning">
                 {agentAlerts.length} alerta{agentAlerts.length > 1 ? "s" : ""} ativos para este agente
               </p>
               <ul className="mt-1 space-y-0.5">
