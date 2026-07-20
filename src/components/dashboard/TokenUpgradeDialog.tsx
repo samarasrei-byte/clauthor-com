@@ -363,7 +363,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     </div>
                     <p className="font-display text-xl font-bold mb-3">{pack.price}</p>
                     <Button variant="outline" size="sm" className="w-full gap-1.5 border-white/10">
-                      {t("token_upgrade.buy", { defaultValue: "Comprar" })} <ArrowRight className="h-3.5 w-3.5" />
+                      {t("token_upgrade.buy", { defaultValue: "Contratar" })} <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </motion.div>
                 ))}
