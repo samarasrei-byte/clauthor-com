@@ -208,14 +208,14 @@ const AgentMetricsDetail = () => {
             label="Execuções (30d)"
             value={stats.total}
             spark={sparkline}
-            accent="text-cyan-400"
-            sparkColor="#22d3ee"
+            accent="text-info"
+            sparkColor="hsl(var(--info))"
           />
           <KpiCard
             icon={CheckCircle2}
             label="Taxa de sucesso"
             value={`${stats.successRate}%`}
-            accent={stats.successRate >= 90 ? "text-emerald-400" : stats.successRate >= 70 ? "text-amber-400" : "text-destructive"}
+            accent={stats.successRate >= 90 ? "text-success" : stats.successRate >= 70 ? "text-warning" : "text-destructive"}
             progress={stats.successRate}
           />
           <KpiCard
@@ -229,7 +229,7 @@ const AgentMetricsDetail = () => {
             icon={Clock}
             label="Latência média"
             value={stats.avgMs > 0 ? `${stats.avgMs}ms` : "·"}
-            accent="text-violet-400"
+            accent="text-primary/70"
             sub={stats.p95 > 0 ? `p95 · ${stats.p95}ms` : undefined}
           />
           <KpiCard
