@@ -88,9 +88,12 @@ const MySquads = () => {
           </div>
           <h1 className="dash-hero-title font-display font-semibold">Meus Squads</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {loading ? "Carregando..." : activeSquads.length > 0
-              ? `${activeSquads.length} squad${activeSquads.length === 1 ? "" : "s"} ativo${activeSquads.length === 1 ? "" : "s"}`
-              : "Ainda sem squads contratados."}
+            {loading ? "Carregando..." : (() => {
+              const total = activeSquads.length + customSquads.length;
+              return total > 0
+                ? `${total} squad${total === 1 ? "" : "s"} no seu time`
+                : "Ainda sem squads.";
+            })()}
           </p>
         </div>
 
