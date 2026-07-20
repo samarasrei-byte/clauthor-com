@@ -296,7 +296,7 @@ export default function AgentTraces() {
                         {run.hasError ? (
                           <AlertCircle className="h-3.5 w-3.5 text-destructive shrink-0" />
                         ) : (
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0" />
                         )}
                       </div>
                       <div className="flex items-center gap-3 text-[10px] text-muted-foreground tabular-nums">
