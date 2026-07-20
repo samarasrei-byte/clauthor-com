@@ -596,11 +596,11 @@ const Departamentos = () => {
               {t("departments_page.talk_consultant")}
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Link to="/pricing">
-              <Button variant="outline" className="rounded-xl px-8 h-14 font-semibold gap-2">
+            <Button asChild variant="outline" className="rounded-xl px-8 h-14 font-semibold gap-2">
+              <Link to="/pricing">
                 {t("departments_page.view_individual")}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </motion.div>
 
