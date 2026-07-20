@@ -70,7 +70,7 @@ export default function FilesPickerSheet({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
   const [pickingId, setPickingId] = useState<string | null>(null);
-  const [preview, setPreview] = useState<{ url: string; name: string } | null>(null);
+  const [preview, setPreview] = useState<{ url: string; name: string; kind: "image" | "video" } | null>(null);
   const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   const { data: files = [], isLoading } = useQuery({
@@ -97,7 +97,7 @@ export default function FilesPickerSheet({
 
   // Prefetch signed thumbnails for image rows (batched, cached in-memory).
   useEffect(() => {
-    const targets = filtered.filter((f) => f.file_type === "image" && !thumbs[f.id]).slice(0, 40);
+    const targets = filtered.filter((f) => (f.file_type === "image" || f.file_type === "video") && !thumbs[f.id]).slice(0, 40);
     if (targets.length === 0) return;
     let cancelled = false;
     (async () => {
@@ -221,19 +221,25 @@ export default function FilesPickerSheet({
                     >
                       <button
                         type="button"
-                        onClick={() => f.file_type === "image" && thumb && setPreview({ url: thumb, name: f.name })}
-                        disabled={!(f.file_type === "image" && thumb)}
+                        onClick={() => {
+                          if (!thumb) return;
+                          if (f.file_type === "image") setPreview({ url: thumb, name: f.name, kind: "image" });
+                          else if (f.file_type === "video") setPreview({ url: thumb, name: f.name, kind: "video" });
+                        }}
+                        disabled={!((f.file_type === "image" || f.file_type === "video") && thumb)}
                         className={cn(
                           "h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden",
                           M.ring,
-                          f.file_type === "image" && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
+                          (f.file_type === "image" || f.file_type === "video") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
                         )}
-                        aria-label={f.file_type === "image" && thumb ? "Ver imagem" : undefined}
+                        aria-label={thumb ? `Ver ${M.label.toLowerCase()}` : undefined}
                       >
                         {isPicking ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : f.file_type === "image" && thumb ? (
                           <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        ) : f.file_type === "video" && thumb ? (
+                          <video src={thumb} muted playsInline preload="metadata" className="h-full w-full object-cover" />
                         ) : (
                           <Icon className="h-4 w-4" strokeWidth={1.6} />
                         )}
@@ -278,12 +284,22 @@ export default function FilesPickerSheet({
           role="dialog"
           aria-label={`Preview ${preview.name}`}
         >
-          <img
-            src={preview.url}
-            alt={preview.name}
-            className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {preview.kind === "image" ? (
+            <img
+              src={preview.url}
+              alt={preview.name}
+              className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <video
+              src={preview.url}
+              controls
+              autoPlay
+              className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl bg-black"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
         </div>
       )}
     </Sheet>
