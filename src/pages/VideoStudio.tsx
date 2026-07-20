@@ -124,6 +124,8 @@ export default function VideoStudio() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [dropPreview, setDropPreview] = useState<string | null>(null);
   const [dropUploading, setDropUploading] = useState(false);
+  const [mobileCopilotOpen, setMobileCopilotOpen] = useState(false);
+  const [mobileInspectorOpen, setMobileInspectorOpen] = useState(false);
   const copilotChatRef = useRef<HTMLDivElement | null>(null);
 
   // ?prompt= param pre-fills the final prompt (from Marketing agent link, etc)
