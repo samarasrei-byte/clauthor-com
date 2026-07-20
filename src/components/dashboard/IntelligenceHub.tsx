@@ -88,14 +88,17 @@ const IntelligenceHub = ({
   return (
     <div className="space-y-4">
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="bg-muted/30 p-1 flex-wrap h-auto gap-1">
-          {tabs.map((tb) => (
-            <TabsTrigger key={tb.id} value={tb.id} className="gap-1.5 text-xs">
-              <tb.icon className="h-3.5 w-3.5" />
-              {tb.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <div className="overflow-x-auto lg:overflow-visible -mx-1 px-1 scrollbar-thin">
+          <TabsList className="bg-muted/30 p-1 gap-1 lg:flex-wrap h-auto inline-flex lg:flex whitespace-nowrap">
+            {tabs.map((tb) => (
+              <TabsTrigger key={tb.id} value={tb.id} className="gap-1.5 text-xs shrink-0">
+                <tb.icon className="h-3.5 w-3.5" />
+                {tb.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
+
 
         <TabsContent value="live" className="mt-4 space-y-4">
           <Suspense fallback={<SectionLoader />}>
