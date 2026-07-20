@@ -496,6 +496,26 @@ export default function VideoStudio() {
                 onOpenChange={setLibraryOpen}
               />
 
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 text-[11px]"
+                      onClick={() => setFilesPickerOpen(true)}
+                      aria-label="Escolher da biblioteca de arquivos"
+                    >
+                      <FolderOpen strokeWidth={1.5} className="w-3.5 h-3.5" />
+                      <span className="hidden md:inline">Biblioteca</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-[11px]">
+                    Reusar imagem da sua biblioteca de arquivos
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0" aria-label="Atualizar">
                 <RefreshCw strokeWidth={1.5} className="w-4 h-4" />
               </Button>
