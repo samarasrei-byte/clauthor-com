@@ -15,14 +15,13 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import StepRail from "@/components/workforce/StepRail";
 import LivePreview from "@/components/workforce/LivePreview";
 import {
   builderReducer, initialBuilderState, AUTONOMY_META, SCALE_META,
   type AutonomyLevel, type WorkforceScale
 } from "@/lib/workforce/types";
 import {
-  WORKFORCE_CATALOG, WORKFORCE_CATALOG_COUNT, DEPARTMENTS,
+  WORKFORCE_CATALOG, DEPARTMENTS,
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
 import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
