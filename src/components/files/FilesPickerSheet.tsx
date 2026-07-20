@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileImage, FileVideo, FileAudio, FileText, Palette, Layers, File as FileIcon, Search, Loader2, FolderOpen, Wand } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -70,6 +70,7 @@ export default function FilesPickerSheet({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
   const [pickingId, setPickingId] = useState<string | null>(null);
+  const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files-picker", tenantId, accept?.join(",") ?? "all"],
@@ -92,6 +93,27 @@ export default function FilesPickerSheet({
       }),
     [files, filter, query],
   );
+
+  // Prefetch signed thumbnails for image rows (batched, cached in-memory).
+  useEffect(() => {
+    const targets = filtered.filter((f) => f.file_type === "image" && !thumbs[f.id]).slice(0, 40);
+    if (targets.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const paths = targets.map((t) => t.bucket_path);
+      const { data } = await supabase.storage.from("approval-files").createSignedUrls(paths, 60 * 60);
+      if (cancelled || !data) return;
+      const next: Record<string, string> = {};
+      targets.forEach((t, i) => {
+        const url = data[i]?.signedUrl;
+        if (url) next[t.id] = url;
+      });
+      if (Object.keys(next).length) setThumbs((prev) => ({ ...prev, ...next }));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [filtered, thumbs]);
 
   const availableTypes = useMemo(() => {
     const set = new Set<FileType>();
@@ -196,8 +218,14 @@ export default function FilesPickerSheet({
                         "w-full flex items-center gap-3 p-2.5 rounded-lg border border-border/40 bg-background hover:border-primary/40 hover:bg-muted/40 transition-colors text-left disabled:opacity-60",
                       )}
                     >
-                      <div className={cn("h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center", M.ring)}>
-                        {isPicking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" strokeWidth={1.6} />}
+                      <div className={cn("h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden", M.ring)}>
+                        {isPicking ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : f.file_type === "image" && thumbs[f.id] ? (
+                          <img src={thumbs[f.id]} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        ) : (
+                          <Icon className="h-4 w-4" strokeWidth={1.6} />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium truncate">{f.name}</p>
