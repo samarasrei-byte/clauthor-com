@@ -66,10 +66,10 @@ const SPAN_ICON: Record<Trace["span_type"], any> = {
 
 const SPAN_COLOR: Record<Trace["span_type"], string> = {
   run: "text-primary",
-  llm_call: "text-blue-500",
-  tool_call: "text-amber-500",
-  retrieval: "text-purple-500",
-  decision: "text-emerald-500",
+  llm_call: "text-info",
+  tool_call: "text-warning",
+  retrieval: "text-primary/70",
+  decision: "text-success",
   error: "text-destructive",
 };
 
