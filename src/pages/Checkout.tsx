@@ -155,7 +155,7 @@ export default function Checkout() {
         {empty ? (
           <Card className="p-10 bg-white/[0.02] border-white/10 rounded-2xl text-center space-y-4">
             <p className="text-white/60">Você ainda não escolheu departamentos.</p>
-            <Button onClick={() => navigate("/departamentos")}>Ver departamentos</Button>
+            <Button onClick={() => navigate(window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos")}>Ver departamentos</Button>
           </Card>
         ) : (
           <>
@@ -195,7 +195,7 @@ export default function Checkout() {
               </ul>
               <div className="px-4 py-3 flex items-center justify-between border-t border-white/[0.06]">
                 <button
-                  onClick={() => navigate("/departamentos")}
+                  onClick={() => navigate(window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos")}
                   className="text-xs text-white/50 hover:text-white transition-colors"
                 >
                   + Adicionar outro departamento
