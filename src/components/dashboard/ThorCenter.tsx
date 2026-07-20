@@ -328,7 +328,7 @@ export default function ThorCenter({ onNavigate }: Props) {
           value={pendingApprovals.count}
           periodValue={periodCounts.approvals}
           periodLabel={PERIOD_LABEL[period]}
-          hint={pendingApprovals.count === 0 ? "Nada te esperando ✨" : "Requer sua decisão"}
+          hint={pendingApprovals.count === 0 ? "Nada te esperando" : "Requer sua decisão"}
           onClick={() => onNavigate?.("approvals")}
         />
         <QuickAction

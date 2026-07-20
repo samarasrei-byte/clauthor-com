@@ -620,7 +620,7 @@ const ThorOnboarding = () => {
 
     setStep("done");
     await thorSays(
-      "Perfeito! ✨\n\nSeu time de IA já está pronto para trabalhar.\n\nEles já podem:",
+      "Perfeito!\n\nSeu time de IA já está pronto para trabalhar.\n\nEles já podem:",
       { type: "final" }
     );
 

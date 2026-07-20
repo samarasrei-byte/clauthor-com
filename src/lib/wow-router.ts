@@ -86,7 +86,7 @@ export const PAIN_OPTIONS: PainOption[] = [
   {
     id: "outro",
     label: "Outro",
-    emoji: "✨",
+    emoji: "",
     agentSlug: "thor-generalist",
     agentLabel: "Thor",
     outputLabel: "Plano de ação em 5 pontos",

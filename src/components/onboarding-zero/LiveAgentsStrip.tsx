@@ -32,7 +32,7 @@ const AGENTS: Record<string, { name: string; role: string; emoji: string; logs: 
   marketing: {
     name: "Julia · Conteúdo",
     role: "Redes & campanhas",
-    emoji: "✨",
+    emoji: "",
     logs: (e) => [
       `Analisando tom de voz de ${e}…`,
       "Gerando calendário editorial de 30 dias…",
