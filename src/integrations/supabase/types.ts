@@ -1920,6 +1920,7 @@ export type Database = {
           fonts: Json
           id: string
           industry: string | null
+          intelligence: Json
           is_active: boolean
           logo_url: string | null
           pain_points: string[]
@@ -1938,6 +1939,7 @@ export type Database = {
           fonts?: Json
           id?: string
           industry?: string | null
+          intelligence?: Json
           is_active?: boolean
           logo_url?: string | null
           pain_points?: string[]
@@ -1956,6 +1958,7 @@ export type Database = {
           fonts?: Json
           id?: string
           industry?: string | null
+          intelligence?: Json
           is_active?: boolean
           logo_url?: string | null
           pain_points?: string[]

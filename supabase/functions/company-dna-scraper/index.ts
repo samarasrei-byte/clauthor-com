@@ -100,6 +100,7 @@ Deno.serve(async (req) => {
     // Firecrawl v2 sometimes wraps in `data`
     const branding = payload.data?.branding ?? payload.branding ?? {};
     const summary = payload.data?.summary ?? payload.summary ?? "";
+    const markdown = payload.data?.markdown ?? payload.markdown ?? "";
     const metadata = payload.data?.metadata ?? payload.metadata ?? {};
 
     const dna = {
@@ -132,7 +133,51 @@ Deno.serve(async (req) => {
       );
     }
 
-    return new Response(JSON.stringify({ success: true, data: dna }), {
+    // Camada de inteligência · Thor infere ICP / tom / persona a partir do texto.
+    // Não bloqueante: se o gateway falhar, retornamos apenas o DNA visual.
+    let intelligence: Record<string, unknown> = {};
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    const corpus = [dna.title, dna.summary, markdown].filter(Boolean).join("\n\n").slice(0, 8000);
+    if (lovableKey && corpus.length > 40) {
+      try {
+        const aiCtl = new AbortController();
+        const aiTimeout = setTimeout(() => aiCtl.abort(), 20_000);
+        const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Lovable-API-Key": lovableKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "openai/gpt-5.5",
+            messages: [
+              {
+                role: "system",
+                content: "Você é um estrategista B2B brasileiro. Analise o site de uma empresa e devolva UM JSON válido com o schema fornecido. Seja específico e conciso — nada de genérico. Se um campo for desconhecido, use null. Escreva em pt-BR.",
+              },
+              {
+                role: "user",
+                content: `Site: ${dna.sourceUrl}\nTítulo: ${dna.title}\n\nConteúdo:\n${corpus}\n\nDevolva JSON com o schema:\n{\n  "business_summary": "1-2 frases sobre o que a empresa faz",\n  "core_business": "categoria curta (ex: 'SaaS de gestão financeira', 'Consultoria jurídica trabalhista')",\n  "industry_guess": "setor (ex: fintech, healthtech, advocacia, e-commerce)",\n  "icp": { "who": "quem é o cliente ideal", "segment": "porte / setor", "trigger": "quando ele contrata" },\n  "tone_of_voice": { "primary": "adjetivo", "notes": "descrição curta do tom" },\n  "persona": { "role": "cargo do decisor", "pain": "principal dor dele" },\n  "differentiators": ["diferencial 1", "diferencial 2"],\n  "suggested_pain_points": ["dor 1", "dor 2", "dor 3"],\n  "confidence": 0.0\n}`,
+              },
+            ],
+            response_format: { type: "json_object" },
+          }),
+          signal: aiCtl.signal,
+        }).catch((e) => { clearTimeout(aiTimeout); throw e; });
+        clearTimeout(aiTimeout);
+        if (aiResp.ok) {
+          const aiJson = await aiResp.json();
+          const raw = aiJson?.choices?.[0]?.message?.content;
+          if (typeof raw === "string") {
+            try { intelligence = JSON.parse(raw); } catch { /* keep empty */ }
+          }
+        }
+      } catch (e) {
+        console.warn("[company-dna-scraper] AI inference failed", e);
+      }
+    }
+
+    return new Response(JSON.stringify({ success: true, data: { ...dna, intelligence } }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {

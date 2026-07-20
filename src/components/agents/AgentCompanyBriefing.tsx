@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Palette, Target, Users, Trophy, ExternalLink, AlertCircle } from "lucide-react";
-import { useCompanyDna } from "@/hooks/useCompanyDna";
+import { Button } from "@/components/ui/button";
+import { Building2, Palette, Target, Users, Trophy, ExternalLink, AlertCircle, Wand } from "lucide-react";
+import { useCompanyDna, type CompanyIntelligence } from "@/hooks/useCompanyDna";
 
 export interface AgentBriefing {
   icpDemographics: string;
@@ -43,7 +44,36 @@ export default function AgentCompanyBriefing({ value, onChange }: Props) {
     return [c.primary, c.secondary, c.accent].filter(Boolean) as string[];
   }, [dna]);
 
+  const intelligence = (dna?.intelligence ?? {}) as CompanyIntelligence;
+  const hasIntel = Boolean(
+    intelligence.icp?.who ||
+    intelligence.persona?.role ||
+    (intelligence.suggested_pain_points?.length ?? 0) > 0,
+  );
+
   const set = (patch: Partial<AgentBriefing>) => onChange({ ...value, ...patch });
+
+  const autoFillFromDna = () => {
+    const icp = intelligence.icp ?? {};
+    const persona = intelligence.persona ?? {};
+    const tone = intelligence.tone_of_voice ?? {};
+    const patch: Partial<AgentBriefing> = {};
+    if (!value.icpDemographics && (icp.who || icp.segment)) {
+      patch.icpDemographics = [icp.who, icp.segment].filter(Boolean).join(" · ");
+    }
+    if (!value.icpPains) {
+      const pains = intelligence.suggested_pain_points?.filter(Boolean) ?? [];
+      if (pains.length) patch.icpPains = pains.slice(0, 4).join("; ");
+      else if (persona.pain) patch.icpPains = persona.pain;
+    }
+    if (!value.icpJourney && icp.trigger) {
+      patch.icpJourney = `Gatilho de contratação: ${icp.trigger}`;
+    }
+    if (!value.leadCriteria && persona.role) {
+      patch.leadCriteria = `Decisor: ${persona.role}${tone.primary ? ` · Tom preferido: ${tone.primary}` : ""}`;
+    }
+    if (Object.keys(patch).length) onChange({ ...value, ...patch });
+  };
 
   return (
     <Card className="glass border-border">
@@ -135,8 +165,21 @@ export default function AgentCompanyBriefing({ value, onChange }: Props) {
 
         {/* ICP */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold">
-            <Users className="h-4 w-4 text-primary" /> Perfil de Cliente Ideal (ICP)
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Users className="h-4 w-4 text-primary" /> Perfil de Cliente Ideal (ICP)
+            </div>
+            {hasIntel && (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={autoFillFromDna}
+                className="h-7 text-[11px] gap-1.5"
+              >
+                <Wand className="h-3 w-3" /> Preencher com Thor
+              </Button>
+            )}
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
