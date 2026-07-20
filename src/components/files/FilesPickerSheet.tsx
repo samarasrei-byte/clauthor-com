@@ -284,12 +284,22 @@ export default function FilesPickerSheet({
           role="dialog"
           aria-label={`Preview ${preview.name}`}
         >
-          <img
-            src={preview.url}
-            alt={preview.name}
-            className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {preview.kind === "image" ? (
+            <img
+              src={preview.url}
+              alt={preview.name}
+              className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <video
+              src={preview.url}
+              controls
+              autoPlay
+              className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl bg-black"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
         </div>
       )}
     </Sheet>
