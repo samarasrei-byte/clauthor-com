@@ -46,6 +46,7 @@ const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
 const MySquads = lazyRetry(() => import("./pages/MySquads"));
+const Arquivos = lazyRetry(() => import("./pages/Arquivos"));
 
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
