@@ -256,6 +256,7 @@ const MySquads = () => {
             </motion.article>
           ))}
         </div>
+        </>
       )}
     </div>
   );
