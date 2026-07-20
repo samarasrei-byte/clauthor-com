@@ -246,6 +246,6 @@ function stepLabel(s: CopilotStep): string {
     case "prompt_review":
       return "Montando prompt…";
     case "ready":
-      return "Prompt pronto ✨";
+      return "Prompt pronto";
   }
 }
