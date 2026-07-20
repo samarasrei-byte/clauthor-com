@@ -98,7 +98,7 @@ const MySquads = () => {
         </div>
 
         <Button asChild size="sm" className="gap-1.5 shadow-sm">
-          <Link to="/squads">
+          <Link to="/dashboard/squads">
             <Plus className="h-3.5 w-3.5" />
             Contratar squad
           </Link>
@@ -135,7 +135,7 @@ const MySquads = () => {
             {SQUADS.slice(0, 4).map((s) => (
               <Link
                 key={s.slug}
-                to={`/squads/${s.slug}`}
+                to={`/dashboard/squads/${s.slug}`}
                 className="group rounded-xl border border-border/50 bg-card/60 p-3 text-left hover:border-primary/40 hover:bg-card transition-all"
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -150,7 +150,7 @@ const MySquads = () => {
           </div>
 
           <Button asChild size="lg" className="gap-2">
-            <Link to="/squads">
+            <Link to="/dashboard/squads">
               <Plus className="h-4 w-4" />
               Ver catálogo de squads
             </Link>

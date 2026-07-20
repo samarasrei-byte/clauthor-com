@@ -127,7 +127,7 @@ export default function Checkout() {
 
       <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to="/departamentos" className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
+          <Link to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Continuar montando
           </Link>
           <ClauthorLogo className="h-5 opacity-70" />
@@ -155,7 +155,7 @@ export default function Checkout() {
         {empty ? (
           <Card className="p-10 bg-white/[0.02] border-white/10 rounded-2xl text-center space-y-4">
             <p className="text-white/60">Você ainda não escolheu departamentos.</p>
-            <Button onClick={() => navigate("/departamentos")}>Ver departamentos</Button>
+            <Button onClick={() => navigate(window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos")}>Ver departamentos</Button>
           </Card>
         ) : (
           <>
@@ -195,7 +195,7 @@ export default function Checkout() {
               </ul>
               <div className="px-4 py-3 flex items-center justify-between border-t border-white/[0.06]">
                 <button
-                  onClick={() => navigate("/departamentos")}
+                  onClick={() => navigate(window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos")}
                   className="text-xs text-white/50 hover:text-white transition-colors"
                 >
                   + Adicionar outro departamento

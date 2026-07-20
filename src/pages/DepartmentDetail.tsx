@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,10 @@ import { toast } from "sonner";
 export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const inDashboard = location.pathname.startsWith("/dashboard");
+  const backHref = inDashboard ? "/dashboard/departamentos" : "/departamentos";
+  const checkoutHref = inDashboard ? "/dashboard/checkout" : "/checkout";
   const dept = slug ? getDepartmentById(slug) : undefined;
   const inCart = useDeptSelection((s) => (dept ? s.has(dept.id) : false));
   const addToCart = useDeptSelection((s) => s.add);
@@ -33,7 +37,7 @@ export default function DepartmentDetail() {
       .filter((a): a is NonNullable<typeof a> => !!a);
   }, [dept]);
 
-  if (!dept) return <Navigate to="/departamentos" replace />;
+  if (!dept) return <Navigate to={backHref} replace />;
 
   const Icon = dept.icon;
 
@@ -62,7 +66,7 @@ export default function DepartmentDetail() {
         agentSlugs: [...dept.agentSlugs],
       });
     }
-    navigate("/checkout");
+    navigate(checkoutHref);
   };
 
   return (
@@ -70,7 +74,7 @@ export default function DepartmentDetail() {
       <SEO title={`${dept.name} · Clauthor`} description={dept.painPoint} />
 
       <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
-        <Link to="/departamentos" className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-colors">
+        <Link to={backHref} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-colors">
           <ArrowLeft className="w-4 h-4" /> Voltar aos departamentos
         </Link>
 

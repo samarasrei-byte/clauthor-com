@@ -87,7 +87,7 @@ const MyDepartments = () => {
         </div>
 
         <Button asChild size="sm" className="gap-1.5 shadow-sm">
-          <Link to="/departamentos">
+          <Link to="/dashboard/departamentos">
             <Plus className="h-3.5 w-3.5" />
             Novo departamento
           </Link>
@@ -166,13 +166,13 @@ const ContractedCard = ({ item, index }: { item: ContractedDept; index: number }
 
       <div className="flex items-center gap-2 mt-3">
         <Button asChild size="sm" variant="secondary" className="flex-1 text-xs h-8 gap-1">
-          <Link to={`/departamento-ativo/${item.department_id}`}>
+          <Link to={`/dashboard/departamento-ativo/${item.department_id}`}>
             Abrir painel
             <ArrowRight className="h-3 w-3" />
           </Link>
         </Button>
         <Button asChild size="sm" variant="ghost" className="text-xs h-8 gap-1 text-muted-foreground">
-          <Link to={`/departamentos/${item.department_id}`}>
+          <Link to={`/dashboard/departamentos/${item.department_id}`}>
             <ExternalLink className="h-3 w-3" />
           </Link>
         </Button>
@@ -222,7 +222,7 @@ const EmptyState = () => (
     </div>
 
     <Button asChild size="lg" className="gap-2">
-      <Link to="/departamentos">
+      <Link to="/dashboard/departamentos">
         <Plus className="h-4 w-4" />
         Ver catálogo completo
       </Link>

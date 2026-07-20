@@ -41,7 +41,7 @@ export default function HireAndOnboard() {
     }
   }, [dept, user]);
 
-  if (!dept) return <Navigate to="/departamentos" replace />;
+  if (!dept) return <Navigate to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} replace />;
   const Icon = dept.icon;
 
   const activate = async () => {
@@ -142,7 +142,7 @@ export default function HireAndOnboard() {
       {/* Header minimalista de checkout · sem Navbar global */}
       <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to={`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
+          <Link to={window.location.pathname.startsWith("/dashboard")?`/dashboard/departamentos/${dept.id}`:`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Voltar
           </Link>
           <ClauthorLogo className="h-5 opacity-70" />

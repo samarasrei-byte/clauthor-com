@@ -29,7 +29,7 @@ const demandBadge: Record<NonNullable<Squad["demand"]>, { label: string; classNa
 };
 
 const Squads = () => {
-  const targetHref = (s: Squad) => s.overrideHref ?? `/squads/${s.slug}`;
+  const targetHref = (s: Squad) => s.overrideHref ?? (window.location.pathname.startsWith("/dashboard")?`/dashboard/squads/${s.slug}`:`/squads/${s.slug}`);
 
   return (
     <div className="min-h-dvh bg-background text-foreground antialiased">
@@ -212,7 +212,7 @@ const Squads = () => {
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> 20 departamentos disponíveis</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> +200 especialistas de IA</li>
               </ul>
-              <Link to="/departamentos" className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-primary hover:underline">
+              <Link to={window.location.pathname.startsWith("/dashboard")?"/dashboard/departamentos":"/departamentos"} className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-primary hover:underline">
                 Ver departamentos <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </Card>

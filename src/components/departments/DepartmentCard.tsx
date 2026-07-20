@@ -10,7 +10,7 @@
  */
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, ShieldCheck, Diamond } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
@@ -43,6 +43,9 @@ const DepartmentCard = ({
   className,
 }: DepartmentCardProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const inDashboard = location.pathname.startsWith("/dashboard");
+  const deptDetailPath = (id: string) => inDashboard ? `/dashboard/departamentos/${id}` : `/departamentos/${id}`;
   const tokens = DEPT_COLOR_TOKENS[department.color];
   const Icon = department.icon;
   const isCompact = variant === "compact";
@@ -144,7 +147,7 @@ const DepartmentCard = ({
               className="flex-1 gap-2 border-white/[0.08] bg-white/[0.02] text-white/80 hover:bg-white/[0.05] hover:text-white hover:border-white/[0.14]"
               onClick={() => {
                 onSeeLiveDemo(department);
-                navigate(`/departamentos/${department.id}`);
+                navigate(deptDetailPath(department.id));
               }}
               aria-label={`Ver detalhes do ${department.name}`}
             >
@@ -156,7 +159,7 @@ const DepartmentCard = ({
               variant="red"
               onClick={() => {
                 onHire(department);
-                navigate(`/contratar/${department.id}`);
+                navigate(inDashboard ? `/dashboard/contratar/${department.id}` : `/contratar/${department.id}`);
               }}
               aria-label={`Contratar ${department.name}`}
               className="flex-1"
