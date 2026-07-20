@@ -43,11 +43,11 @@ export default function FunnelResumeBanner() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
-          <p className="text-xs sm:text-sm text-foreground/90 flex-1 min-w-0 truncate">
-            <span className="text-white/60">Você parou em</span>{" "}
+          <p className="text-xs sm:text-sm text-foreground flex-1 min-w-0 truncate">
+            <span className="text-muted-foreground">Você parou em</span>{" "}
             <span className="font-medium">{label}</span>
             {deptLabel && (
-              <span className="hidden sm:inline text-white/60"> · {deptLabel}</span>
+              <span className="hidden sm:inline text-muted-foreground"> · {deptLabel}</span>
             )}
           </p>
           <Link
@@ -60,7 +60,7 @@ export default function FunnelResumeBanner() {
             type="button"
             aria-label="Descartar"
             onClick={() => { clearFunnel(); setHidden(true); }}
-            className="p-1.5 rounded-full text-white/40 hover:text-white transition-colors shrink-0"
+            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <X className="w-3.5 h-3.5" />
           </button>
