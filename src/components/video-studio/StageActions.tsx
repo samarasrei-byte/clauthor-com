@@ -1,4 +1,4 @@
-import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Wand } from "lucide-react";
+import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
