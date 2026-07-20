@@ -227,11 +227,11 @@ const Pricing = () => {
               </p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <Link to="/team-builder">
-                <Button className="glow rounded-xl h-12 px-6 font-semibold gap-2">
+              <Button asChild className="glow rounded-xl h-12 px-6 font-semibold gap-2">
+                <Link to="/team-builder">
                   Montar meu squad <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </motion.div>
