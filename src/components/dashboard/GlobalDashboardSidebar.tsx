@@ -72,7 +72,7 @@ export default function GlobalDashboardSidebar() {
         { id: "tab:system",       label: "Operações & Config", icon: Settings },
       ],
     },
-  ]), [videoLocked]);
+  ]), [videoLocked, beginner]);
 
   const activeItem = useMemo(() => {
     // Rotas dedicadas: match por pathname.
