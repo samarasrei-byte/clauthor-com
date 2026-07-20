@@ -90,10 +90,10 @@ export default function DepartmentDetail() {
               </Badge>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold tracking-tight text-white">
             {dept.name}
           </h1>
-          <p className="text-lg text-white/60 max-w-2xl leading-relaxed">{dept.painPoint}</p>
+          <p className="text-base md:text-lg text-white/60 max-w-2xl leading-relaxed">{dept.painPoint}</p>
         </motion.header>
 
         {/* Live Scene */}
