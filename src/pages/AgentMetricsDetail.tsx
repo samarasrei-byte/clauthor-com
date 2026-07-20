@@ -22,11 +22,11 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 
 const STATUS_COLORS: Record<string, string> = {
-  success: "text-emerald-400 bg-emerald-500/10",
+  success: "text-success bg-success/10",
   error: "text-destructive bg-destructive/10",
   failed: "text-destructive bg-destructive/10",
-  pending: "text-amber-400 bg-amber-500/10",
-  running: "text-blue-400 bg-blue-500/10",
+  pending: "text-warning bg-warning/10",
+  running: "text-info bg-info/10",
 };
 
 const AgentMetricsDetail = () => {
@@ -134,6 +134,36 @@ const AgentMetricsDetail = () => {
   const sparkline = chartData.map((d) => d.exec);
   const agentAlerts = health?.alerts.filter((a) => a.agentId === agentId) ?? [];
 
+  const initialLoading = agentQ.isLoading || logsQ.isLoading || tokensQ.isLoading;
+
+  if (initialLoading && !agent) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-20 rounded-md bg-muted/40 animate-pulse" />
+          <div className="h-10 w-10 rounded-xl bg-muted/40 animate-pulse" />
+          <div className="flex-1 space-y-2">
+            <div className="h-6 w-1/3 rounded bg-muted/40 animate-pulse" />
+            <div className="h-3 w-1/4 rounded bg-muted/30 animate-pulse" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-24 rounded-2xl bg-muted/40 border border-border/40 animate-pulse"
+              style={{ animationDelay: `${i * 70}ms` }}
+            />
+          ))}
+        </div>
+        <div className="grid lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3 h-56 rounded-2xl bg-muted/30 border border-border/40 animate-pulse" />
+          <div className="lg:col-span-2 h-56 rounded-2xl bg-muted/30 border border-border/40 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <SEO
@@ -184,10 +214,10 @@ const AgentMetricsDetail = () => {
 
         {/* Alerts for this agent */}
         {agentAlerts.length > 0 && (
-          <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-3 flex gap-3">
-            <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-warning/25 bg-warning/5 p-3 flex gap-3">
+            <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs font-semibold text-amber-100">
+              <p className="text-xs font-semibold text-warning">
                 {agentAlerts.length} alerta{agentAlerts.length > 1 ? "s" : ""} ativos para este agente
               </p>
               <ul className="mt-1 space-y-0.5">
@@ -208,14 +238,14 @@ const AgentMetricsDetail = () => {
             label="Execuções (30d)"
             value={stats.total}
             spark={sparkline}
-            accent="text-cyan-400"
-            sparkColor="#22d3ee"
+            accent="text-info"
+            sparkColor="hsl(var(--info))"
           />
           <KpiCard
             icon={CheckCircle2}
             label="Taxa de sucesso"
             value={`${stats.successRate}%`}
-            accent={stats.successRate >= 90 ? "text-emerald-400" : stats.successRate >= 70 ? "text-amber-400" : "text-destructive"}
+            accent={stats.successRate >= 90 ? "text-success" : stats.successRate >= 70 ? "text-warning" : "text-destructive"}
             progress={stats.successRate}
           />
           <KpiCard
@@ -229,7 +259,7 @@ const AgentMetricsDetail = () => {
             icon={Clock}
             label="Latência média"
             value={stats.avgMs > 0 ? `${stats.avgMs}ms` : "·"}
-            accent="text-violet-400"
+            accent="text-primary/70"
             sub={stats.p95 > 0 ? `p95 · ${stats.p95}ms` : undefined}
           />
           <KpiCard
@@ -248,15 +278,15 @@ const AgentMetricsDetail = () => {
             className="lg:col-span-3 rounded-2xl p-4 border border-border/40 bg-card/60"
           >
             <div className="flex items-center gap-2 mb-3">
-              <Activity className="h-3.5 w-3.5 text-cyan-400" />
+              <Activity className="h-3.5 w-3.5 text-info" />
               <span className="text-xs font-medium">Execuções · últimos 14 dias</span>
             </div>
             <ResponsiveContainer width="100%" height={200}>
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="agent-exec-grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                    <stop offset="5%" stopColor="hsl(var(--info))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--info))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />

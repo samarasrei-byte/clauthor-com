@@ -66,10 +66,10 @@ const SPAN_ICON: Record<Trace["span_type"], any> = {
 
 const SPAN_COLOR: Record<Trace["span_type"], string> = {
   run: "text-primary",
-  llm_call: "text-blue-500",
-  tool_call: "text-amber-500",
-  retrieval: "text-purple-500",
-  decision: "text-emerald-500",
+  llm_call: "text-info",
+  tool_call: "text-warning",
+  retrieval: "text-primary/70",
+  decision: "text-success",
   error: "text-destructive",
 };
 
@@ -198,7 +198,7 @@ export default function AgentTraces() {
             </p>
           </div>
           <Badge variant="outline" className="gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
             Live · atualiza a cada 15s
           </Badge>
         </div>
@@ -254,10 +254,27 @@ export default function AgentTraces() {
         )}
 
         {isLoading && (
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full" />
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4">
+            <Card className="p-2 h-[calc(100vh-320px)] space-y-2">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="h-16 w-full rounded-lg"
+                  style={{ animationDelay: `${i * 70}ms` }}
+                />
+              ))}
+            </Card>
+            <Card className="p-4 h-[calc(100vh-320px)] space-y-3">
+              <Skeleton className="h-8 w-1/3" />
+              <Skeleton className="h-3 w-1/4" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className="h-14 w-full rounded-lg"
+                  style={{ animationDelay: `${i * 90}ms` }}
+                />
+              ))}
+            </Card>
           </div>
         )}
 
@@ -296,7 +313,7 @@ export default function AgentTraces() {
                         {run.hasError ? (
                           <AlertCircle className="h-3.5 w-3.5 text-destructive shrink-0" />
                         ) : (
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0" />
                         )}
                       </div>
                       <div className="flex items-center gap-3 text-[10px] text-muted-foreground tabular-nums">
@@ -333,9 +350,9 @@ export default function AgentTraces() {
             <Card className="p-4 h-[calc(100vh-320px)] overflow-hidden flex flex-col">
               {selectedRunData ? (
                 <>
-                  <div className="flex items-center justify-between pb-3 border-b mb-3">
-                    <div>
-                      <h3 className="font-display font-semibold text-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pb-3 border-b mb-3">
+                    <div className="min-w-0">
+                      <h3 className="font-display font-semibold text-sm truncate">
                         {selectedRunData.root.agent_name ||
                           selectedRunData.root.name ||
                           "Run"}
@@ -344,7 +361,7 @@ export default function AgentTraces() {
                         {selectedRunData.runId.slice(0, 8)}…
                       </p>
                     </div>
-                    <div className="flex items-center gap-4 text-xs tabular-nums">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs tabular-nums">
                       <span>
                         <span className="text-muted-foreground">Latência:</span>{" "}
                         <span className="font-medium">
