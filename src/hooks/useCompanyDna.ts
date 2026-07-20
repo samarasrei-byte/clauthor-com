@@ -16,6 +16,18 @@ export interface BrandFont {
   role?: "heading" | "body" | "mono";
 }
 
+export interface CompanyIntelligence {
+  business_summary?: string | null;
+  core_business?: string | null;
+  industry_guess?: string | null;
+  icp?: { who?: string | null; segment?: string | null; trigger?: string | null } | null;
+  tone_of_voice?: { primary?: string | null; notes?: string | null } | null;
+  persona?: { role?: string | null; pain?: string | null } | null;
+  differentiators?: string[];
+  suggested_pain_points?: string[];
+  confidence?: number | null;
+}
+
 export interface CompanyDna {
   id?: string;
   scope: "own" | "client";
@@ -28,6 +40,7 @@ export interface CompanyDna {
   core_business?: string | null;
   pain_points: string[];
   industry?: string | null;
+  intelligence?: CompanyIntelligence;
 }
 
 export interface ScrapeResult {
@@ -40,6 +53,7 @@ export interface ScrapeResult {
   summary: string;
   title: string;
   sourceUrl: string;
+  intelligence?: CompanyIntelligence;
 }
 
 const emptyDna = (scope: "own" | "client" = "own"): CompanyDna => ({
@@ -47,6 +61,7 @@ const emptyDna = (scope: "own" | "client" = "own"): CompanyDna => ({
   brand_colors: {},
   fonts: [],
   pain_points: [],
+  intelligence: {},
 });
 
 export function useCompanyDna() {
@@ -82,6 +97,7 @@ export function useCompanyDna() {
           core_business: data.core_business,
           pain_points: data.pain_points ?? [],
           industry: data.industry,
+          intelligence: ((data as Record<string, unknown>).intelligence ?? {}) as CompanyIntelligence,
         });
       }
       setLoading(false);
@@ -121,6 +137,7 @@ export function useCompanyDna() {
         core_business: payload.core_business ?? null,
         pain_points: payload.pain_points ?? [],
         industry: payload.industry ?? null,
+        intelligence: JSON.parse(JSON.stringify(payload.intelligence ?? {})),
       };
 
       if (payload.id) {
