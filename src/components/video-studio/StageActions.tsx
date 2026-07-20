@@ -1,4 +1,4 @@
-import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Sparkle } from "lucide-react";
+import { Wand, Zap, Clapperboard, Lock, ArrowRight, Loader2, Pencil, Check, Wand } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -132,7 +132,7 @@ export default function StageActions({
                 <TooltipTrigger asChild>{pill}</TooltipTrigger>
                 <TooltipContent side="bottom" className="max-w-[240px] p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Sparkle className="w-3.5 h-3.5 text-primary" />
+                    <Wand className="w-3.5 h-3.5 text-primary" />
                     <span className="text-[11px] font-semibold">
                       {p.id === "lovable" ? "Chegando em breve" : "Recurso do plano superior"}
                     </span>
