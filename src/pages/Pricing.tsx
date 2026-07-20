@@ -186,18 +186,19 @@ const Pricing = () => {
                   </div>
                 </div>
 
-                <Link
-                  to="/auth"
-                  state={{ hireIntent: { type: "department", label: deptName, slugs: dept.agents.map((a) => a.key) } }}
+                <Button
+                  asChild
+                  className={`w-full rounded-xl h-12 font-semibold gap-2 ${dept.popular ? "glow" : ""}`}
+                  variant={dept.popular ? "default" : "outline"}
                 >
-                  <Button
-                    className={`w-full rounded-xl h-12 font-semibold gap-2 ${dept.popular ? "glow" : ""}`}
-                    variant={dept.popular ? "default" : "outline"}
+                  <Link
+                    to="/auth"
+                    state={{ hireIntent: { type: "department", label: deptName, slugs: dept.agents.map((a) => a.key) } }}
                   >
                     Contratar departamento
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </motion.div>
             );
           })}
@@ -226,11 +227,11 @@ const Pricing = () => {
               </p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <Link to="/team-builder">
-                <Button className="glow rounded-xl h-12 px-6 font-semibold gap-2">
+              <Button asChild className="glow rounded-xl h-12 px-6 font-semibold gap-2">
+                <Link to="/team-builder">
                   Montar meu squad <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </motion.div>
@@ -327,13 +328,13 @@ const Pricing = () => {
                 <br />
                 {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{fp(region.comparison.agentStarting)}/{t("pricing_page.per_month").replace("/", "")}</span>.
               </p>
-              <Link to="/departamentos">
-                <Button className="glow rounded-xl px-8 h-12 font-semibold">
+              <Button asChild className="glow rounded-xl px-8 h-12 font-semibold">
+                <Link to="/departamentos">
                   <Zap className="h-4 w-4 mr-2" />
                   Ver os 20 departamentos
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </motion.div>
@@ -360,11 +361,11 @@ const Pricing = () => {
                 audit trail criptográfico e suporte white-glove. Preço sob consulta.
               </p>
             </div>
-            <Link to="/enterprise">
-              <Button variant="outline" className="rounded-xl h-12 px-6 font-semibold gap-2 border-primary/30">
+            <Button asChild variant="outline" className="rounded-xl h-12 px-6 font-semibold gap-2 border-primary/30">
+              <Link to="/enterprise">
                 Falar com vendas <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </motion.div>
 

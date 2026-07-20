@@ -137,7 +137,7 @@ export default function SquadConsultant() {
               })}
               className="rounded-xl bg-card/50 border-border"
             />
-            <Button type="submit" size="icon" className="rounded-xl shrink-0" disabled={!input.trim()}>
+            <Button type="submit" size="icon" aria-label="Enviar mensagem ao consultor" className="rounded-xl shrink-0" disabled={!input.trim()}>
               <Send className="h-4 w-4" />
             </Button>
           </form>

@@ -193,16 +193,12 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/auth">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-normal">
-                    {t("nav.login")}
-                  </Button>
-                </Link>
-                <Link to="/auth" state={{ signup: true }}>
-                  <PremiumCTAButton variant="red" size="sm" showArrow={false}>
-                    {t("auth.create_account")}
-                  </PremiumCTAButton>
-                </Link>
+                <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-normal">
+                  <Link to="/auth">{t("nav.login")}</Link>
+                </Button>
+                <PremiumCTAButton variant="red" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
+                  {t("auth.create_account")}
+                </PremiumCTAButton>
               </>
             )}
           </div>
@@ -306,16 +302,18 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Link to="/auth" onClick={() => setMobileOpen(false)}>
-                      <Button variant="ghost" className="w-full h-10 text-[14px] font-normal">
-                        {t("nav.login")}
-                      </Button>
-                    </Link>
-                    <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
-                      <PremiumCTAButton variant="red" size="sm" showArrow={false} className="w-full">
-                        {t("auth.create_account")}
-                      </PremiumCTAButton>
-                    </Link>
+                    <Button asChild variant="ghost" className="w-full h-10 text-[14px] font-normal" onClick={() => setMobileOpen(false)}>
+                      <Link to="/auth">{t("nav.login")}</Link>
+                    </Button>
+                    <PremiumCTAButton
+                      variant="red"
+                      size="sm"
+                      showArrow={false}
+                      className="w-full"
+                      onClick={() => { setMobileOpen(false); navigate("/auth", { state: { signup: true } }); }}
+                    >
+                      {t("auth.create_account")}
+                    </PremiumCTAButton>
                   </>
                 )}
               </div>
