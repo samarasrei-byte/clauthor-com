@@ -812,6 +812,14 @@ const ApprovalsCenter = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <FilesPickerSheet
+        open={filesPickerOpen}
+        onOpenChange={setFilesPickerOpen}
+        onPick={handleAttachFromLibrary}
+        title="Anexar da biblioteca"
+        description="Escolha um arquivo já enviado para incluir na observação enviada ao agente."
+      />
     </div>
   );
 };
