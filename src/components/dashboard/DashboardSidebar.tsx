@@ -376,7 +376,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         {!collapsed && !q && pinnedItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
-              <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+              <Star className="h-2.5 w-2.5 fill-warning text-warning" />
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">Fixados</span>
             </div>
             {pinnedItems.map((it, i) => renderItem(it, i, { compactRow: true }))}
