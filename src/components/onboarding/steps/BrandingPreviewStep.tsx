@@ -166,7 +166,7 @@ export default function BrandingPreviewStep({ colors, fonts, logo, onColorsChang
               style={{ background: primary, color: colors.background || "#fff", fontFamily: `"${bodyFont}", system-ui` }}
               type="button"
             >
-              Assinar agora
+              Contratar
             </button>
           </div>
         </div>
