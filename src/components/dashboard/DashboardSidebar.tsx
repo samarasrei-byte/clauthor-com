@@ -8,8 +8,6 @@ import {
   Search,
   Star,
   X,
-  GraduationCap,
-  Wand,
   Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
