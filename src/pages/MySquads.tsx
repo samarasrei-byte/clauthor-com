@@ -75,11 +75,11 @@ const MySquads = () => {
   const isEmpty = !loading && activeSquads.length === 0 && customSquads.length === 0;
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 py-6 md:py-8">
+    <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 py-5 md:py-8">
       <SEO title="Meus Squads" description="Squads verticais de IA ativos na sua conta." />
 
-      <header className="flex items-start justify-between gap-4 mb-6">
-        <div>
+      <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-5 md:mb-6">
+        <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <UsersRound className="h-4 w-4 text-primary" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
@@ -97,7 +97,7 @@ const MySquads = () => {
           </p>
         </div>
 
-        <Button asChild size="sm" className="gap-1.5 shadow-sm">
+        <Button asChild size="sm" className="gap-1.5 shadow-sm w-full sm:w-auto shrink-0">
           <Link to="/dashboard/squads">
             <Plus className="h-3.5 w-3.5" />
             Contratar squad
