@@ -46,9 +46,14 @@ export default function GlobalDashboardSidebar() {
 
 
     // Meu time — hierarquia: Agentes (individual) → Squads (times) → Departamentos (unidade cobrada)
-    { id: "tab:agents",                label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
-    { id: "tab:squads",                label: "Squads",             icon: UsersRound,   group: zoneTeam },
-    { id: "route:/departamentos",      label: "Departamentos",      icon: Building2,    group: zoneTeam },
+    { id: "tab:agents",                     label: "Meus Agentes",       icon: Bot,          group: zoneTeam },
+    { id: "route:/meus-squads",             label: "Meus Squads",        icon: UsersRound,   group: zoneTeam },
+    { id: "route:/meus-departamentos",      label: "Meus Departamentos", icon: Building2,    group: zoneTeam },
+    ...(beginner ? [] : [
+      { id: "route:/squads",                label: "Catálogo de Squads", icon: UsersRound,   group: zoneTeam } as SidebarItem,
+      { id: "route:/departamentos",         label: "Catálogo",           icon: Building2,    group: zoneTeam } as SidebarItem,
+    ]),
+
 
     // IA & Voz
     {
