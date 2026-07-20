@@ -221,19 +221,25 @@ export default function FilesPickerSheet({
                     >
                       <button
                         type="button"
-                        onClick={() => f.file_type === "image" && thumb && setPreview({ url: thumb, name: f.name })}
-                        disabled={!(f.file_type === "image" && thumb)}
+                        onClick={() => {
+                          if (!thumb) return;
+                          if (f.file_type === "image") setPreview({ url: thumb, name: f.name, kind: "image" });
+                          else if (f.file_type === "video") setPreview({ url: thumb, name: f.name, kind: "video" });
+                        }}
+                        disabled={!((f.file_type === "image" || f.file_type === "video") && thumb)}
                         className={cn(
                           "h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden",
                           M.ring,
-                          f.file_type === "image" && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
+                          (f.file_type === "image" || f.file_type === "video") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
                         )}
-                        aria-label={f.file_type === "image" && thumb ? "Ver imagem" : undefined}
+                        aria-label={thumb ? `Ver ${M.label.toLowerCase()}` : undefined}
                       >
                         {isPicking ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : f.file_type === "image" && thumb ? (
                           <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        ) : f.file_type === "video" && thumb ? (
+                          <video src={thumb} muted playsInline preload="metadata" className="h-full w-full object-cover" />
                         ) : (
                           <Icon className="h-4 w-4" strokeWidth={1.6} />
                         )}
