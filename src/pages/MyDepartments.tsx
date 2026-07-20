@@ -119,7 +119,7 @@ const MyDepartments = () => {
 };
 
 const ContractedCard = ({ item, index }: { item: ContractedDept; index: number }) => {
-  const pkg = getDepartmentPackage(item.department_id);
+  const pkg = getDepartmentById(item.department_id);
   const status = STATUS_META[item.status] ?? STATUS_META.active;
   const StatusIcon = status.icon;
   const Icon = pkg?.icon ?? Building2;
