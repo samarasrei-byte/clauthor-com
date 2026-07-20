@@ -62,7 +62,7 @@ const DashboardLayout = () => {
   const { t } = useTranslation();
 
   const BANNER_CONFIG: Record<string, { bg: string; border: string; icon: string; text: string }> = {
-    caution: { bg: "bg-amber-500/10", border: "border-amber-500/20", icon: "text-amber-400", text: t("token_banner.caution") },
+    caution: { bg: "bg-warning/10", border: "border-warning/20", icon: "text-warning", text: t("token_banner.caution") },
     warning: { bg: "bg-orange-500/10", border: "border-orange-500/20", icon: "text-orange-400", text: t("token_banner.warning") },
     critical: { bg: "bg-destructive/10", border: "border-destructive/20", icon: "text-destructive", text: t("token_banner.critical") },
   };

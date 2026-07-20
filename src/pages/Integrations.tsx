@@ -221,13 +221,13 @@ const IntegrationsPage = () => {
                     <span className="text-[10px] text-muted-foreground/60">{popularityLabel}</span>
                   )}
                   {connector.apiStatus === "live" && (
-                    <span className="flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-success/10 text-success border border-success/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
                       API ativa
                     </span>
                   )}
                   {connector.apiStatus === "beta" && (
-                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-warning/10 text-warning border border-warning/20">
                       Beta
                     </span>
                   )}
@@ -237,8 +237,8 @@ const IntegrationsPage = () => {
                     </span>
                   )}
                   {connected && (
-                    <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium ml-auto">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="flex items-center gap-0.5 text-[9px] text-success font-medium ml-auto">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                       Vinculado
                     </span>
                   )}
@@ -254,7 +254,7 @@ const IntegrationsPage = () => {
                 {connector.status === "soon" ? (
                   <Badge variant="secondary" className="text-[10px]">Em breve</Badge>
                 ) : connected ? (
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                 ) : (
                   <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 )}

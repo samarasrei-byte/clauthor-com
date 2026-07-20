@@ -137,18 +137,18 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
       icon: Globe,
       title: "Colar URL do site",
       desc: "Analisamos automaticamente todas as páginas do seu site",
-      color: "from-blue-500/20 to-blue-500/5",
-      borderColor: "border-blue-500/30",
-      iconColor: "text-blue-400",
+      color: "from-info/20 to-info/5",
+      borderColor: "border-info/30",
+      iconColor: "text-info",
     },
     {
       id: "documents" as const,
       icon: FileUp,
       title: "Enviar documentos",
       desc: "PDFs, planilhas, manuais e documentos internos",
-      color: "from-emerald-500/20 to-emerald-500/5",
-      borderColor: "border-emerald-500/30",
-      iconColor: "text-emerald-400",
+      color: "from-success/20 to-success/5",
+      borderColor: "border-success/30",
+      iconColor: "text-success",
     },
     {
       id: "crm" as const,
@@ -272,13 +272,13 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                           transition={{ delay: i * 0.1 }}
                           className={cn(
                             "flex items-center gap-4 p-4 rounded-xl border transition-all",
-                            isDone ? "bg-emerald-500/10 border-emerald-500/30" :
+                            isDone ? "bg-success/10 border-success/30" :
                             isActive ? "bg-primary/10 border-primary/30" :
                             "bg-card/30 border-border/20 opacity-40"
                           )}
                         >
                           {isDone ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                            <CheckCircle2 className="h-5 w-5 text-success shrink-0" />
                           ) : isActive ? (
                             <Loader2 className="h-5 w-5 text-primary animate-spin shrink-0" />
                           ) : (
@@ -286,7 +286,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                           )}
                           <span className={cn(
                             "text-sm font-medium",
-                            isDone ? "text-emerald-400" : isActive ? "text-primary" : "text-muted-foreground"
+                            isDone ? "text-success" : isActive ? "text-primary" : "text-muted-foreground"
                           )}>
                             {step.label}
                           </span>
@@ -303,7 +303,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                     className="space-y-4 py-4"
                   >
                     <div className="text-center">
-                      <div className="text-lg font-display font-bold text-emerald-400 mb-2">
+                      <div className="text-lg font-display font-bold text-success mb-2">
                         ✓ Base de conhecimento criada!
                       </div>
                       <p className="text-sm text-muted-foreground mb-4">

@@ -87,7 +87,7 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
       <header className="sticky top-0 z-40 border-b border-white/5 bg-black/50 backdrop-blur-md">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
             <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">
               Setup · {subjectType === "agent" ? "Agente" : subjectType === "squad" ? "Squad" : "Departamento"}
             </span>
@@ -101,7 +101,7 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
                   <span
                     className={cn(
                       "w-1.5 h-1.5 rounded-full transition-all",
-                      done ? "bg-emerald-400" : active ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" : "bg-white/20",
+                      done ? "bg-success" : active ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" : "bg-white/20",
                     )}
                   />
                   <span
@@ -121,7 +121,7 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
           </button>
         </div>
         <div className="h-0.5 bg-white/5">
-          <div className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all" style={{ width: `${progress}%` }} />
+          <div className="h-full bg-gradient-to-r from-cyan-400 to-success transition-all" style={{ width: `${progress}%` }} />
         </div>
       </header>
 
@@ -247,12 +247,12 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
                         }
                         className={cn(
                           "w-full p-4 rounded-2xl border flex items-center gap-3 text-left transition-all",
-                          active ? "bg-emerald-500/10 border-emerald-400/50" : "bg-white/[0.03] border-white/10 hover:border-white/25",
+                          active ? "bg-success/10 border-success/50" : "bg-white/[0.03] border-white/10 hover:border-white/25",
                         )}
                       >
                         <div className={cn(
                           "w-5 h-5 rounded-md border flex items-center justify-center transition-all",
-                          active ? "bg-emerald-400 border-emerald-400" : "border-white/25",
+                          active ? "bg-success border-success" : "border-white/25",
                         )}>
                           {active && <CheckCircle2 className="w-4 h-4 text-black" />}
                         </div>
@@ -355,8 +355,8 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
                     maxLength={800}
                   />
                 </Field>
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/20 flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-success/10 to-cyan-500/10 border border-success/20 flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                   <p className="text-sm text-white/80">
                     Ao concluir, essa tarefa aparece pré-preenchida no dashboard para você aprovar e executar.
                   </p>

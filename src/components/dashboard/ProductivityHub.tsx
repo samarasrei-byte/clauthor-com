@@ -333,7 +333,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
 };
 
 const statusMeta = {
-  connected: { icon: CheckCircle2, label: "Conectado", cls: "text-emerald-500" },
+  connected: { icon: CheckCircle2, label: "Conectado", cls: "text-success" },
   disconnected: { icon: XCircle, label: "Não conectado", cls: "text-muted-foreground/60" },
   syncing: { icon: Loader2, label: "Sincronizando", cls: "text-primary animate-spin" },
   error: { icon: AlertCircle, label: "Erro de sincronização", cls: "text-destructive" },

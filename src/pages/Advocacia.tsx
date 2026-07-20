@@ -593,8 +593,8 @@ export default function Advocacia() {
                 a.layer === "MCP"
                   ? "border-primary/30 bg-primary/5 text-primary"
                   : a.layer === "Comercial"
-                  ? "border-emerald-500/25 bg-emerald-500/5 text-emerald-500"
-                  : "border-amber-500/25 bg-amber-500/5 text-amber-500";
+                  ? "border-success/25 bg-success/5 text-success"
+                  : "border-warning/25 bg-warning/5 text-warning";
               return (
                 <div
                   key={a.name}
@@ -703,13 +703,13 @@ export default function Advocacia() {
 
           {/* WhatsApp Beta Notice */}
           <div className="mt-10 max-w-2xl mx-auto">
-            <Card className="p-5 bg-amber-500/5 border-amber-500/30 text-left">
+            <Card className="p-5 bg-warning/5 border-warning/30 text-left">
               <div className="flex items-start gap-3">
-                <div className="shrink-0 w-9 h-9 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-warning/15 text-warning flex items-center justify-center">
                   <MessageSquare className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-2">
+                  <Badge className="bg-warning/20 text-warning border border-warning/40 hover:bg-warning/20 mb-2">
                     Beta · Máximo 5 escritórios nesta fase
                   </Badge>
                   <p className="text-sm text-foreground/80">

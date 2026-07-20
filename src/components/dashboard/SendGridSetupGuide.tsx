@@ -144,7 +144,7 @@ const SendGridSetupGuide = () => {
             <span className="text-xs font-medium text-muted-foreground">
               {completedSteps.size} de {STEPS.length} etapas concluídas
             </span>
-            <Badge variant="secondary" className={`text-[10px] ${allDone ? "bg-emerald-500/15 text-emerald-500" : ""}`}>
+            <Badge variant="secondary" className={`text-[10px] ${allDone ? "bg-success/15 text-success" : ""}`}>
               {allDone ? "✅ Completo" : `${Math.round(progress)}%`}
             </Badge>
           </div>
@@ -169,7 +169,7 @@ const SendGridSetupGuide = () => {
               currentStep === i
                 ? "bg-primary/10 border-primary/30 text-primary"
                 : completedSteps.has(i)
-                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                ? "bg-success/10 border-success/20 text-success"
                 : "bg-muted/10 border-border/20 text-muted-foreground hover:bg-muted/20"
             }`}
           >
@@ -342,9 +342,9 @@ const SendGridSetupGuide = () => {
       {/* Success */}
       {allDone && (
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-          <Card className="bg-emerald-500/5 border-emerald-500/20">
+          <Card className="bg-success/5 border-success/20">
             <CardContent className="py-8 text-center">
-              <Wand className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
+              <Wand className="h-10 w-10 text-success mx-auto mb-3" />
               <h3 className="font-display text-lg font-bold mb-1">SendGrid Conectado! 🎉</h3>
               <p className="text-sm text-muted-foreground">
                 Seus agentes agora podem enviar e-mails automaticamente. Até 100 emails/dia no plano gratuito.

@@ -24,9 +24,9 @@ interface PendingAction {
 }
 
 const riskConfig = {
-  low: { color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30", icon: Zap, label: "Baixo" },
-  medium: { color: "bg-amber-500/20 text-amber-400 border-amber-500/30", icon: AlertTriangle, label: "Médio" },
-  high: { color: "bg-red-500/20 text-red-400 border-red-500/30", icon: ShieldAlert, label: "Alto" },
+  low: { color: "bg-success/20 text-success border-success/30", icon: Zap, label: "Baixo" },
+  medium: { color: "bg-warning/20 text-warning border-warning/30", icon: AlertTriangle, label: "Médio" },
+  high: { color: "bg-destructive/20 text-destructive border-destructive/30", icon: ShieldAlert, label: "Alto" },
   critical: { color: "bg-purple-500/20 text-purple-400 border-purple-500/30", icon: ShieldAlert, label: "Crítico" },
 };
 
@@ -113,12 +113,12 @@ export function PendingActionsPanel() {
   if (loading || actions.length === 0) return null;
 
   return (
-    <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-red-500/5">
+    <Card className="border-warning/30 bg-gradient-to-br from-warning/5 to-destructive/5">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
-          <ShieldCheck className="h-5 w-5 text-amber-400" />
+          <ShieldCheck className="h-5 w-5 text-warning" />
           Ações Pendentes
-          <Badge variant="outline" className="ml-auto bg-amber-500/20 text-amber-400 border-amber-500/30">
+          <Badge variant="outline" className="ml-auto bg-warning/20 text-warning border-warning/30">
             {actions.length}
           </Badge>
         </CardTitle>
@@ -176,7 +176,7 @@ export function PendingActionsPanel() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="flex-1 text-xs border-red-500/30 text-red-400 hover:bg-red-500/10"
+                      className="flex-1 text-xs border-destructive/30 text-destructive hover:bg-destructive/10"
                       onClick={() => handleDecision(action.id, "rejected")}
                       disabled={processingId === action.id}
                     >
@@ -185,7 +185,7 @@ export function PendingActionsPanel() {
                     </Button>
                     <Button
                       size="sm"
-                      className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="flex-1 text-xs bg-success hover:bg-success text-white"
                       onClick={() => handleDecision(action.id, "approved")}
                       disabled={processingId === action.id || !!isExpired}
                     >

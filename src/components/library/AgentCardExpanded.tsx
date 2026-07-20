@@ -31,13 +31,13 @@ interface AgentCardExpandedProps {
 
 const IMPACT_CONFIG = {
   low: { label: "Baixo", color: "text-muted-foreground", bg: "bg-muted/20", ring: "ring-muted/30" },
-  medium: { label: "Médio", color: "text-amber-400", bg: "bg-amber-500/10", ring: "ring-amber-500/20" },
-  high: { label: "Alto", color: "text-emerald-400", bg: "bg-emerald-500/10", ring: "ring-emerald-500/20" },
+  medium: { label: "Médio", color: "text-warning", bg: "bg-warning/10", ring: "ring-warning/20" },
+  high: { label: "Alto", color: "text-success", bg: "bg-success/10", ring: "ring-success/20" },
 };
 
 const COMPLEXITY_CONFIG = {
-  beginner: { label: "Iniciante", color: "text-emerald-400", icon: CheckCircle },
-  intermediate: { label: "Intermediário", color: "text-amber-400", icon: Layers },
+  beginner: { label: "Iniciante", color: "text-success", icon: CheckCircle },
+  intermediate: { label: "Intermediário", color: "text-warning", icon: Layers },
   advanced: { label: "Avançado", color: "text-rose-400", icon: Cpu },
 };
 
@@ -123,16 +123,16 @@ export default function AgentCardExpanded({
               Impacto {impact.label}
             </span>
             <span className="flex items-center gap-0.5 ml-auto">
-              <Star className="h-3 w-3 fill-amber-400/60 text-amber-400/60" />
+              <Star className="h-3 w-3 fill-amber-400/60 text-warning/60" />
               <span className="text-[10px] text-muted-foreground font-medium">{social.rating}</span>
             </span>
           </div>
 
           {/* Expected Outcome - the hook */}
           {desc && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/5 ring-1 ring-emerald-500/15 mb-3">
-              <TrendingUp className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-              <span className="text-[11px] font-medium text-emerald-400">{desc.expectedOutcome}</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-success/5 ring-1 ring-success/15 mb-3">
+              <TrendingUp className="h-3.5 w-3.5 text-success shrink-0" />
+              <span className="text-[11px] font-medium text-success">{desc.expectedOutcome}</span>
             </div>
           )}
 
@@ -142,7 +142,7 @@ export default function AgentCardExpanded({
             {capabilities.slice(0, 4).map((cap, i) => (
               <span key={i} className="text-[9px] px-2 py-0.5 rounded-md bg-muted/20 ring-1 ring-border/20 text-foreground/60 font-medium flex items-center gap-1">
                 <span className={`w-1 h-1 rounded-full shrink-0 ${
-                  i % 3 === 0 ? 'bg-emerald-400' : i % 3 === 1 ? 'bg-blue-400' : 'bg-primary/70'
+                  i % 3 === 0 ? 'bg-success' : i % 3 === 1 ? 'bg-info' : 'bg-primary/70'
                 }`} />
                 {cap}
               </span>
@@ -151,7 +151,7 @@ export default function AgentCardExpanded({
 
           {/* Triggers */}
           <div className="flex items-center gap-1.5 mb-4">
-            <Zap className="h-2.5 w-2.5 text-amber-400/50 shrink-0" />
+            <Zap className="h-2.5 w-2.5 text-warning/50 shrink-0" />
             <span className="text-[9px] text-muted-foreground/50 truncate">
               Ativado por: {triggers.slice(0, 3).map(t => t.replace(/_/g, " ")).join(" · ")}
             </span>
@@ -178,7 +178,7 @@ export default function AgentCardExpanded({
               {isAdmin ? (
                 <Button
                   size="sm"
-                  className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-emerald-600 hover:bg-emerald-700"
+                  className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-success hover:bg-success"
                   onClick={onNavigate}
                 >
                   <Zap className="h-3 w-3" />

@@ -86,9 +86,9 @@ const AdminMarginAnalysis = () => {
   const fmt = (n: number) => `${symbol} ${n.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}`;
 
   const marginColor = (m: number) =>
-    m >= 70 ? "text-emerald-500" : m >= 55 ? "text-amber-500" : "text-red-500";
+    m >= 70 ? "text-success" : m >= 55 ? "text-warning" : "text-destructive";
   const marginBg = (m: number) =>
-    m >= 70 ? "bg-emerald-500/10 border-emerald-500/20" : m >= 55 ? "bg-amber-500/10 border-amber-500/20" : "bg-red-500/10 border-red-500/20";
+    m >= 70 ? "bg-success/10 border-success/20" : m >= 55 ? "bg-warning/10 border-warning/20" : "bg-destructive/10 border-destructive/20";
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
@@ -116,7 +116,7 @@ const AdminMarginAnalysis = () => {
         </CardContent></Card>
         <Card><CardContent className="p-4">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Lucro</div>
-          <div className="text-xl font-bold text-emerald-500">{fmt(totals.profit)}</div>
+          <div className="text-xl font-bold text-success">{fmt(totals.profit)}</div>
         </CardContent></Card>
         <Card className={cn("border", marginBg(totals.margin))}><CardContent className="p-4">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Margem média</div>
@@ -199,7 +199,7 @@ const AdminMarginAnalysis = () => {
                     <td className="text-right py-3 px-2 tabular-nums text-muted-foreground">{r.actionsPerMonth.toLocaleString("pt-BR")}</td>
                     <td className="text-right py-3 px-2 tabular-nums text-muted-foreground">{fmt(r.aiCostBRL)}</td>
                     <td className="text-right py-3 px-2 tabular-nums text-muted-foreground">{fmt(r.totalCost)}</td>
-                    <td className="text-right py-3 px-2 tabular-nums text-emerald-500 font-semibold">{fmt(r.profit)}</td>
+                    <td className="text-right py-3 px-2 tabular-nums text-success font-semibold">{fmt(r.profit)}</td>
                     <td className="text-right py-3 px-2">
                       <span className={cn("font-bold tabular-nums", marginColor(r.margin))}>{r.margin.toFixed(1)}%</span>
                     </td>
@@ -216,7 +216,7 @@ const AdminMarginAnalysis = () => {
                   <td></td>
                   <td></td>
                   <td className="text-right py-3 px-2 tabular-nums">{fmt(totals.cost)}</td>
-                  <td className="text-right py-3 px-2 tabular-nums text-emerald-500">{fmt(totals.profit)}</td>
+                  <td className="text-right py-3 px-2 tabular-nums text-success">{fmt(totals.profit)}</td>
                   <td className="text-right py-3 px-2">
                     <span className={cn("tabular-nums", marginColor(totals.margin))}>{totals.margin.toFixed(1)}%</span>
                   </td>
@@ -233,11 +233,11 @@ const AdminMarginAnalysis = () => {
       </Card>
 
       {/* Alerts */}
-      <Card className="border-amber-500/20 bg-amber-500/5">
+      <Card className="border-warning/20 bg-warning/5">
         <CardContent className="p-4 flex gap-3">
-          <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+          <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
           <div className="text-xs space-y-1">
-            <p className="font-semibold text-amber-500">Regras para preservar margem</p>
+            <p className="font-semibold text-warning">Regras para preservar margem</p>
             <ul className="space-y-0.5 text-muted-foreground list-disc list-inside">
               <li>Departamentos com margem &lt; 55% (vermelho) precisam de rate limit + overage transparente.</li>
               <li>Roteamento inteligente (Sonnet apenas para tarefas complexas) é obrigatório · sem isso, Suporte e Criação viram prejuízo.</li>

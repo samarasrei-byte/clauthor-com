@@ -40,12 +40,12 @@ const EVENT_META: Record<
   string,
   { icon: React.ComponentType<{ className?: string }>; label: string; tone: string }
 > = {
-  community_post_created: { icon: MessageSquare, label: "Publicação", tone: "text-blue-500" },
+  community_post_created: { icon: MessageSquare, label: "Publicação", tone: "text-info" },
   linkedin_post_published: { icon: Linkedin, label: "LinkedIn", tone: "text-sky-500" },
-  task_completed: { icon: CheckCircle2, label: "Tarefa concluída", tone: "text-emerald-500" },
-  agent_executed: { icon: Zap, label: "Agente executado", tone: "text-amber-500" },
-  approval_approved: { icon: ShieldCheck, label: "Aprovado", tone: "text-emerald-500" },
-  approval_rejected: { icon: ShieldCheck, label: "Rejeitado", tone: "text-red-500" },
+  task_completed: { icon: CheckCircle2, label: "Tarefa concluída", tone: "text-success" },
+  agent_executed: { icon: Zap, label: "Agente executado", tone: "text-warning" },
+  approval_approved: { icon: ShieldCheck, label: "Aprovado", tone: "text-success" },
+  approval_rejected: { icon: ShieldCheck, label: "Rejeitado", tone: "text-destructive" },
 };
 
 const fallback = { icon: FileText, label: "Atividade", tone: "text-muted-foreground" };
@@ -113,10 +113,10 @@ export function LiveActivityFeed({
           <Activity className="h-4 w-4" />
           Atividade ao vivo
         </CardTitle>
-        <Badge variant="outline" className="gap-1.5 border-emerald-500/30 text-emerald-600 dark:text-emerald-400">
+        <Badge variant="outline" className="gap-1.5 border-success/30 text-success">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </span>
           AO VIVO
         </Badge>

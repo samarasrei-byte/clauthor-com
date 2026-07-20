@@ -816,13 +816,13 @@ const WhatsAppTab = () => {
   return (
     <div className="space-y-4">
       {/* Block 4.1 · WhatsApp Beta Notice */}
-      <Card className="p-4 bg-amber-500/5 border-amber-500/30">
+      <Card className="p-4 bg-warning/5 border-warning/30">
         <div className="flex items-start gap-3">
-          <div className="shrink-0 w-8 h-8 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+          <div className="shrink-0 w-8 h-8 rounded-md bg-warning/15 text-warning flex items-center justify-center">
             <MessageSquare className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-1.5 text-[10px]">
+            <Badge className="bg-warning/20 text-warning border border-warning/40 hover:bg-warning/20 mb-1.5 text-[10px]">
               Beta · Máximo 5 escritórios nesta fase
             </Badge>
             <p className="text-xs text-foreground/80">

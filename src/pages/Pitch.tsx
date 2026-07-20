@@ -381,7 +381,7 @@ const Pitch = () => {
           </div>
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
             <GlassCard hover={false} className="border-destructive/20 text-center"><p className="text-[10px] font-mono text-destructive/80 font-bold mb-2">{l.unitHuman}</p><p className="text-xl font-display font-bold text-foreground">{l.unitHumanPrice}</p><p className="text-xs text-muted-foreground mt-1">{l.unitHumanDesc}</p></GlassCard>
-            <GlassCard hover={false} className="border-yellow-500/20 text-center"><p className="text-[10px] font-mono text-yellow-500/80 font-bold mb-2">{l.unitChatbot}</p><p className="text-xl font-display font-bold text-foreground">{l.unitChatbotPrice}</p><p className="text-xs text-muted-foreground mt-1">{l.unitChatbotDesc}</p></GlassCard>
+            <GlassCard hover={false} className="border-warning/20 text-center"><p className="text-[10px] font-mono text-warning/80 font-bold mb-2">{l.unitChatbot}</p><p className="text-xl font-display font-bold text-foreground">{l.unitChatbotPrice}</p><p className="text-xs text-muted-foreground mt-1">{l.unitChatbotDesc}</p></GlassCard>
             <GlassCard hover={false} className="border-primary/30 bg-primary/[0.03] text-center"><p className="text-[10px] font-mono text-primary font-bold mb-2">{l.unitClauthor}</p><p className="text-xl font-display font-bold text-primary">{l.unitClauthorPrice}</p><p className="text-xs text-muted-foreground mt-1">{l.unitClauthorDesc}</p></GlassCard>
           </div>
           <div className="max-w-lg mx-auto space-y-5">
@@ -436,9 +436,9 @@ const Pitch = () => {
           <div className="text-center mb-8"><h3 className="text-xl md:text-2xl font-display font-bold tracking-tight mb-2">{l.compTitle}</h3><p className="text-sm text-muted-foreground max-w-2xl mx-auto">{l.compSub}</p></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* CrewAI */}
-            <GlassCard hover={false} className="border-yellow-500/20">
-              <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center"><Code className="w-5 h-5 text-yellow-500" /></div><div><h3 className="font-bold text-foreground">CrewAI</h3><span className="text-[10px] text-yellow-500/80 font-mono uppercase tracking-wider">{l.multiAgentFw}</span></div></div>
-              <div className="mb-3"><p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{l.realStrengths}</p><ul className="space-y-1.5 text-xs">{l.crewAiStrengths.map(t => <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-yellow-500 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>)}</ul></div>
+            <GlassCard hover={false} className="border-warning/20">
+              <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center"><Code className="w-5 h-5 text-warning" /></div><div><h3 className="font-bold text-foreground">CrewAI</h3><span className="text-[10px] text-warning/80 font-mono uppercase tracking-wider">{l.multiAgentFw}</span></div></div>
+              <div className="mb-3"><p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{l.realStrengths}</p><ul className="space-y-1.5 text-xs">{l.crewAiStrengths.map(t => <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-warning mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>)}</ul></div>
               <div><p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">{l.criticalLimitations}</p><ul className="space-y-1.5 text-xs">{l.crewAiWeaknesses.map(t => <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">{"\u2717"}</span><span className="text-muted-foreground">{t}</span></li>)}</ul></div>
               <div className="mt-3 pt-3 border-t border-border/30"><p className="text-[10px] text-muted-foreground italic">{l.crewAiVerdict}</p></div>
             </GlassCard>

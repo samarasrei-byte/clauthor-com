@@ -30,11 +30,11 @@ interface FileRow {
 const TYPE_META: Record<FileType, { label: string; singular: string; icon: React.ElementType; gradient: string; ring: string }> = {
   video:     { label: "Vídeos",      singular: "Vídeo",      icon: FileVideo, gradient: "from-rose-500/20 via-rose-500/5 to-transparent",        ring: "text-rose-500" },
   audio:     { label: "Áudios",      singular: "Áudio",      icon: FileAudio, gradient: "from-violet-500/20 via-violet-500/5 to-transparent",   ring: "text-violet-500" },
-  image:     { label: "Imagens",     singular: "Imagem",     icon: FileImage, gradient: "from-emerald-500/20 via-emerald-500/5 to-transparent", ring: "text-emerald-500" },
-  pdf:       { label: "PDFs",        singular: "PDF",        icon: FileText,  gradient: "from-red-500/20 via-red-500/5 to-transparent",         ring: "text-red-500" },
+  image:     { label: "Imagens",     singular: "Imagem",     icon: FileImage, gradient: "from-success/20 via-success/5 to-transparent", ring: "text-success" },
+  pdf:       { label: "PDFs",        singular: "PDF",        icon: FileText,  gradient: "from-destructive/20 via-destructive/5 to-transparent",         ring: "text-destructive" },
   doc:       { label: "Documentos",  singular: "Documento",  icon: FileText,  gradient: "from-sky-500/20 via-sky-500/5 to-transparent",         ring: "text-sky-500" },
   brandbook: { label: "Brandbooks",  singular: "Brandbook",  icon: Palette,   gradient: "from-fuchsia-500/20 via-fuchsia-500/5 to-transparent", ring: "text-fuchsia-500" },
-  logo:      { label: "Logos",       singular: "Logo",       icon: Wand,  gradient: "from-amber-500/20 via-amber-500/5 to-transparent",     ring: "text-amber-500" },
+  logo:      { label: "Logos",       singular: "Logo",       icon: Wand,  gradient: "from-warning/20 via-warning/5 to-transparent",     ring: "text-warning" },
   marketing: { label: "Marketing",   singular: "Marketing",  icon: Layers,    gradient: "from-cyan-500/20 via-cyan-500/5 to-transparent",       ring: "text-cyan-500" },
   other:     { label: "Outros",      singular: "Outro",      icon: FileIcon,  gradient: "from-muted via-muted/30 to-transparent",                ring: "text-muted-foreground" },
 };
@@ -204,7 +204,7 @@ const FilesLibrary = () => {
         <div className="relative mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
           <StatPill icon={Layers} label="Total" value={files.length} />
           <StatPill icon={HardDrive} label="Espaço" value={formatSize(totalSize)} />
-          <StatPill icon={FileImage} label="Imagens" value={counts.image || 0} accent="text-emerald-500" />
+          <StatPill icon={FileImage} label="Imagens" value={counts.image || 0} accent="text-success" />
           <StatPill icon={FileVideo} label="Vídeos" value={counts.video || 0} accent="text-rose-500" />
         </div>
       </div>

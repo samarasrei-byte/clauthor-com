@@ -169,7 +169,7 @@ const HeroBriefing = ({
         {/* Coluna esquerda: greeting + status + CTA */}
         <div className="flex-1 min-w-0 space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground/70">
-            <span className={`h-1.5 w-1.5 rounded-full ${isLive ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground/40"}`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${isLive ? "bg-success animate-pulse" : "bg-muted-foreground/40"}`} />
             {isLive ? "operação ativa" : agentsCount ? "aguardando ordem" : "conta nova"}
           </div>
 
@@ -241,7 +241,7 @@ function StatCell({
     delta == null
       ? "text-muted-foreground/60"
       : delta > 0
-      ? "text-emerald-400"
+      ? "text-success"
       : delta < 0
       ? "text-destructive"
       : "text-muted-foreground/60";

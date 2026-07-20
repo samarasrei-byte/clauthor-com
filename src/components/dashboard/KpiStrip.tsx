@@ -40,8 +40,8 @@ interface KpiStripProps {
 
 const ACCENT_ICON: Record<KpiAccent, string> = {
   primary: "text-primary",
-  emerald: "text-emerald-500",
-  amber:   "text-amber-500",
+  emerald: "text-success",
+  amber:   "text-warning",
   sky:     "text-sky-500",
   violet:  "text-violet-500",
   muted:   "text-muted-foreground",

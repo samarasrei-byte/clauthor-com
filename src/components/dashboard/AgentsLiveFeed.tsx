@@ -58,13 +58,13 @@ interface FeedItem {
 }
 
 const KIND_META: Record<ArtifactKind, { icon: React.ComponentType<{ className?: string }>; label: string; tone: string }> = {
-  contract:  { icon: ScrollText,    label: "Contrato",    tone: "text-amber-300 bg-amber-500/10 border-amber-500/20" },
-  proposal:  { icon: Handshake,     label: "Proposta",    tone: "text-emerald-300 bg-emerald-500/10 border-emerald-500/20" },
+  contract:  { icon: ScrollText,    label: "Contrato",    tone: "text-warning bg-warning/10 border-warning/20" },
+  proposal:  { icon: Handshake,     label: "Proposta",    tone: "text-success bg-success/10 border-success/20" },
   carousel:  { icon: LayoutGrid,    label: "Carrossel",   tone: "text-fuchsia-300 bg-fuchsia-500/10 border-fuchsia-500/20" },
   post:      { icon: Megaphone,     label: "Post",        tone: "text-sky-300 bg-sky-500/10 border-sky-500/20" },
-  email:     { icon: Mail,          label: "E-mail",      tone: "text-blue-300 bg-blue-500/10 border-blue-500/20" },
+  email:     { icon: Mail,          label: "E-mail",      tone: "text-info bg-info/10 border-info/20" },
   image:     { icon: ImageIcon,     label: "Imagem",      tone: "text-pink-300 bg-pink-500/10 border-pink-500/20" },
-  video:     { icon: Video,         label: "Vídeo",       tone: "text-red-300 bg-red-500/10 border-red-500/20" },
+  video:     { icon: Video,         label: "Vídeo",       tone: "text-destructive bg-destructive/10 border-destructive/20" },
   crm:       { icon: Users,         label: "CRM",         tone: "text-cyan-300 bg-cyan-500/10 border-cyan-500/20" },
   campaign:  { icon: Megaphone,     label: "Campanha",    tone: "text-violet-300 bg-violet-500/10 border-violet-500/20" },
   message:   { icon: MessageSquare, label: "Mensagem",    tone: "text-indigo-300 bg-indigo-500/10 border-indigo-500/20" },
@@ -163,8 +163,8 @@ export default function AgentsLiveFeed() {
       <div className="flex items-center justify-between px-1 pb-2">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </span>
           <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Seus agentes agora

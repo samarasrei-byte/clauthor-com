@@ -63,13 +63,13 @@ const LiveTasksTicker = () => {
             <span className="relative flex h-2 w-2 shrink-0">
               <span className={cn(
                 "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                current.status === "completed" ? "bg-emerald-400" :
-                current.status === "failed" ? "bg-red-400" : "bg-primary"
+                current.status === "completed" ? "bg-success" :
+                current.status === "failed" ? "bg-destructive" : "bg-primary"
               )} />
               <span className={cn(
                 "relative inline-flex rounded-full h-2 w-2",
-                current.status === "completed" ? "bg-emerald-500" :
-                current.status === "failed" ? "bg-red-500" : "bg-primary"
+                current.status === "completed" ? "bg-success" :
+                current.status === "failed" ? "bg-destructive" : "bg-primary"
               )} />
             </span>
             <Activity className="h-3 w-3 text-muted-foreground shrink-0" strokeWidth={1.5} />

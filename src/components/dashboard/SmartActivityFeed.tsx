@@ -89,7 +89,7 @@ const SmartActivityFeed = ({ logs, agents }: SmartActivityFeedProps) => {
             {f === "all" && t("dashboard.filter_all", { defaultValue: "Todos" })}
             {f === "success" && (
               <span className="flex items-center gap-1">
-                <CheckCircle className="h-2.5 w-2.5 text-emerald-400" />
+                <CheckCircle className="h-2.5 w-2.5 text-success" />
                 {t("dashboard.filter_success", { defaultValue: "Sucesso" })}
               </span>
             )}
@@ -151,7 +151,7 @@ const SmartActivityFeed = ({ logs, agents }: SmartActivityFeedProps) => {
                     >
                       <div
                         className={`w-2 h-2 rounded-full shrink-0 ${
-                          log.status === "success" ? "bg-emerald-500" : "bg-destructive animate-pulse"
+                          log.status === "success" ? "bg-success" : "bg-destructive animate-pulse"
                         }`}
                       />
                       <span className="text-xs font-medium flex-1 truncate">{log.agent_name}</span>

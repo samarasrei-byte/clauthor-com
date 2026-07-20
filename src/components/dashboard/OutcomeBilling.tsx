@@ -78,12 +78,12 @@ const OutcomeBilling = () => {
           value={formatBRL(stats.mrr)}
         />
         <StatCard
-          icon={<Clock className="h-4 w-4 text-amber-500" />}
+          icon={<Clock className="h-4 w-4 text-warning" />}
           label={t("outcomes.pending", { defaultValue: "A cobrar" })}
           value={formatBRL(stats.pendingValue)}
         />
         <StatCard
-          icon={<DollarSign className="h-4 w-4 text-emerald-500" />}
+          icon={<DollarSign className="h-4 w-4 text-success" />}
           label={t("outcomes.paid", { defaultValue: "Recebido" })}
           value={formatBRL(stats.paidValue)}
         />

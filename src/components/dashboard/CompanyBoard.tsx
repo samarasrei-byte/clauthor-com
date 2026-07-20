@@ -23,7 +23,7 @@ const categories = [
   { id: "financeiro", label: "Financeiro", icon: DollarSign, color: "bg-accent-emerald/15 text-accent-emerald" },
   { id: "equipe", label: "Equipe", icon: Users, color: "bg-accent-blue/15 text-accent-blue" },
   { id: "metas", label: "Metas", icon: Target, color: "bg-accent-violet/15 text-accent-violet" },
-  { id: "produtos", label: "Produtos/Serviços", icon: Briefcase, color: "bg-yellow-500/15 text-yellow-500" },
+  { id: "produtos", label: "Produtos/Serviços", icon: Briefcase, color: "bg-warning/15 text-warning" },
   { id: "docs", label: "Documentos", icon: FileText, color: "bg-muted text-muted-foreground" },
 ];
 

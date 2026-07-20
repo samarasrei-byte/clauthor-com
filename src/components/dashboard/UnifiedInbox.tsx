@@ -32,7 +32,7 @@ interface ConversationThread {
 
 const CHANNEL_CONFIG: Record<string, { icon: typeof MessageSquare; label: string; color: string; dot: string }> = {
   dashboard: { icon: MessageSquare, label: "Chat", color: "text-primary", dot: "bg-primary" },
-  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-emerald-400", dot: "bg-emerald-400" },
+  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-success", dot: "bg-success" },
   email: { icon: Mail, label: "E-mail", color: "text-accent-blue", dot: "bg-accent-blue" },
 };
 

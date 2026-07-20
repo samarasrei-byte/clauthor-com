@@ -81,7 +81,7 @@ const plans: Plan[] = [
     priceNum: 0,
     replaces: "Replaces 30+ employees",
     icon: Rocket,
-    color: "text-emerald-400",
+    color: "text-success",
     features: [
       "100M+ tokens/month",
       "Dedicated infrastructure",
@@ -317,7 +317,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                       <div className="space-y-2">
                         {plan.features.map((f) => (
                           <div key={f} className="flex items-start gap-2">
-                            <CheckCircle className="h-3.5 w-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                            <CheckCircle className="h-3.5 w-3.5 text-success mt-0.5 shrink-0" />
                             <span className="text-xs text-muted-foreground">{f}</span>
                           </div>
                         ))}
@@ -352,7 +352,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     onClick={() => handleSelectPack(pack.id)}
                   >
                     {pack.savings && (
-                      <Badge className="absolute -top-2 right-3 bg-emerald-500/20 text-emerald-400 text-[10px] border-0">
+                      <Badge className="absolute -top-2 right-3 bg-success/20 text-success text-[10px] border-0">
                         {pack.savings}
                       </Badge>
                     )}
@@ -396,12 +396,12 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 <p className="text-sm font-medium mb-3">{t("token_upgrade.payment_method", { defaultValue: "Método de pagamento:" })}</p>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="rounded-xl border border-blue-500 bg-blue-500/10 p-4 cursor-pointer transition-all"
+                  className="rounded-xl border border-info bg-info/10 p-4 cursor-pointer transition-all"
                   onClick={() => handlePayment("paypal")}
                 >
                   <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                      <Globe className="h-4 w-4 text-blue-500" />
+                    <div className="w-9 h-9 rounded-lg bg-info/10 flex items-center justify-center">
+                      <Globe className="h-4 w-4 text-info" />
                     </div>
                     <div>
                       <p className="font-display font-bold text-sm">PayPal</p>
@@ -415,10 +415,10 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5 space-y-4"
+                className="rounded-xl border border-info/20 bg-info/5 p-5 space-y-4"
               >
                 <div className="flex items-center gap-2">
-                  <Globe className="h-5 w-5 text-blue-500" />
+                  <Globe className="h-5 w-5 text-info" />
                   <p className="font-display font-bold">{t("token_upgrade.pay_with_paypal", { defaultValue: "Pagamento via PayPal" })}</p>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -432,7 +432,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                   ))}
                 </div>
                 <Button 
-                  className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full gap-2 bg-info hover:bg-info text-white"
                   onClick={handlePaypalCheckout}
                   disabled={paypalLoading}
                 >
@@ -453,7 +453,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 {isTestUser && (
                   <Button 
                     variant="outline"
-                    className="w-full gap-2 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 mt-2"
+                    className="w-full gap-2 border-warning/30 text-warning hover:bg-warning/10 mt-2"
                     onClick={handleTestBypass}
                     disabled={paypalLoading}
                   >

@@ -260,7 +260,7 @@ const MediaGalleryPanel = () => {
           </div>
           <div className="flex gap-2">
             <StatPill icon={Film} label="Vídeos" value={counts.video} accent="text-rose-500" />
-            <StatPill icon={ImageIcon} label="Artes" value={counts.image} accent="text-emerald-500" />
+            <StatPill icon={ImageIcon} label="Artes" value={counts.image} accent="text-success" />
             <StatPill icon={SparklesLucide} label="Total" value={counts.all} />
           </div>
         </div>
@@ -279,7 +279,7 @@ const MediaGalleryPanel = () => {
         <div className="flex flex-wrap gap-2">
           <FilterChip active={filter === "all"} onClick={() => setFilter("all")} icon={LayoutGrid} label="Todos" count={counts.all} />
           <FilterChip active={filter === "video"} onClick={() => setFilter("video")} icon={Film} label="Vídeos" count={counts.video} accent="text-rose-500" />
-          <FilterChip active={filter === "image"} onClick={() => setFilter("image")} icon={ImageIcon} label="Artes" count={counts.image} accent="text-emerald-500" />
+          <FilterChip active={filter === "image"} onClick={() => setFilter("image")} icon={ImageIcon} label="Artes" count={counts.image} accent="text-success" />
 
           <Popover>
             <PopoverTrigger asChild>
@@ -447,7 +447,7 @@ const MediaTile = ({ item, decision, onClick }: { item: MediaItem; decision?: "a
           item.url ? (
             <img src={item.url} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
           ) : (
-            <ImageIcon className="h-10 w-10 text-emerald-500/70" strokeWidth={1.2} />
+            <ImageIcon className="h-10 w-10 text-success/70" strokeWidth={1.2} />
           )
         )}
         <Badge variant="outline" className="absolute top-2 left-2 text-[9px] bg-background/80 backdrop-blur border-border/60">
@@ -458,8 +458,8 @@ const MediaTile = ({ item, decision, onClick }: { item: MediaItem; decision?: "a
             className={cn(
               "absolute top-2 right-2 text-[9px] backdrop-blur border-0",
               decision === "approved"
-                ? "bg-emerald-500/90 text-white"
-                : "bg-amber-500/90 text-white",
+                ? "bg-success/90 text-white"
+                : "bg-warning/90 text-white",
             )}
           >
             {decision === "approved" ? "Aprovado" : "Ajuste"}

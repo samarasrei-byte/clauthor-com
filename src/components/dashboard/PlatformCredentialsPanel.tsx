@@ -150,15 +150,15 @@ const PlatformCredentialsPanel = () => {
             return (
               <div key={preset.name} className="rounded-xl border border-border/30 p-3">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isConnected ? "bg-emerald-500/15" : "bg-muted/30"}`}>
-                    <preset.icon className={`h-4 w-4 ${isConnected ? "text-emerald-500" : "text-muted-foreground"}`} />
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isConnected ? "bg-success/15" : "bg-muted/30"}`}>
+                    <preset.icon className={`h-4 w-4 ${isConnected ? "text-success" : "text-muted-foreground"}`} />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium">{preset.label}</p>
                       {isConnected && (
-                        <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="flex items-center gap-0.5 text-[9px] text-success font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                           Conectado
                         </span>
                       )}
@@ -174,7 +174,7 @@ const PlatformCredentialsPanel = () => {
                         onClick={() => handlePresetSave(preset.name, key)}
                         className={`text-[10px] px-2 py-1 rounded-md border transition-colors ${
                           hasCred
-                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                            ? "bg-success/10 border-success/20 text-success"
                             : "bg-muted/20 border-border/30 text-muted-foreground hover:bg-primary/10 hover:border-primary/20 hover:text-primary"
                         }`}
                       >
@@ -240,7 +240,7 @@ const PlatformCredentialsPanel = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className={`text-[9px] ${cred.is_active ? "bg-emerald-500/15 text-emerald-500" : "bg-muted"}`}>
+                    <Badge variant="secondary" className={`text-[9px] ${cred.is_active ? "bg-success/15 text-success" : "bg-muted"}`}>
                       {cred.is_active ? "Ativo" : "Inativo"}
                     </Badge>
                     <Button
@@ -269,14 +269,14 @@ const PlatformCredentialsPanel = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                className="w-16 h-16 rounded-full bg-emerald-500/15 flex items-center justify-center"
+                className="w-16 h-16 rounded-full bg-success/15 flex items-center justify-center"
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.15, type: "spring", stiffness: 400, damping: 12 }}
                 >
-                  <Check className="h-8 w-8 text-emerald-500" />
+                  <Check className="h-8 w-8 text-success" />
                 </motion.div>
               </motion.div>
               <motion.p

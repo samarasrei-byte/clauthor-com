@@ -22,7 +22,7 @@ const CompetitiveMoat = () => {
 
   const renderCell = (value: boolean | string) => {
     if (value === true) return <Check className="h-4 w-4 text-accent-emerald mx-auto" />;
-    if (value === "partial") return <span className="font-mono text-[10px] text-amber-400 mx-auto block text-center">~</span>;
+    if (value === "partial") return <span className="font-mono text-[10px] text-warning mx-auto block text-center">~</span>;
     return <X className="h-3.5 w-3.5 text-destructive/40 mx-auto" />;
   };
 

@@ -130,7 +130,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
                   <p className="text-sm text-muted-foreground mt-0.5">{connector.shortDesc}</p>
                 </div>
                 {allRequiredConnected ? (
-                  <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20 shrink-0">
+                  <Badge className="bg-success/15 text-success border-success/20 shrink-0">
                     <CheckCircle className="h-3 w-3 mr-1" /> Vinculado
                   </Badge>
                 ) : (
@@ -237,7 +237,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
                 <label className="text-xs text-muted-foreground mb-1 block">
                   {field.label} {field.required && <span className="text-destructive">*</span>}
                   {connectedKeys.has(field.key) && (
-                    <span className="text-emerald-500 ml-1">✓ salvo</span>
+                    <span className="text-success ml-1">✓ salvo</span>
                   )}
                 </label>
                 <Input

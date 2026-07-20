@@ -104,14 +104,14 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
                   className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="w-2 h-2 rounded-full bg-success" />
                     <span className="text-sm font-medium">{sub.agent_name}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-muted-foreground">
                       {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mo" })}
                     </span>
-                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 text-[10px]">
+                    <Badge variant="secondary" className="bg-success/10 text-success text-[10px]">
                       {t("subscription.status_active", { defaultValue: "Active" })}
                     </Badge>
                   </div>
@@ -125,12 +125,12 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
         <div className="pt-4 border-t border-white/5">
           <h3 className="text-sm font-medium mb-3">{t("subscription.payment_method", { defaultValue: "Payment Method" })}</h3>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02]">
-            <Globe className="h-4 w-4 text-blue-500" />
+            <Globe className="h-4 w-4 text-info" />
             <div>
               <p className="text-sm font-medium">PayPal</p>
               <p className="text-[10px] text-muted-foreground">{t("subscription.recurring", { defaultValue: "Monthly recurring billing" })}</p>
             </div>
-            <Badge variant="secondary" className="ml-auto bg-blue-500/10 text-blue-400 text-[10px]">
+            <Badge variant="secondary" className="ml-auto bg-info/10 text-info text-[10px]">
               {t("subscription.status_active", { defaultValue: "Active" })}
             </Badge>
           </div>

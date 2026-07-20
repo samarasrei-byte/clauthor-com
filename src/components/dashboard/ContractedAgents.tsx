@@ -32,8 +32,8 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
     >
       <div className="p-6 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <Wand className="h-4 w-4 text-emerald-500" />
+          <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+            <Wand className="h-4 w-4 text-success" />
           </div>
           <div>
             <h2 className="font-display font-semibold">{t("dashboard.contracted_agents", { defaultValue: "Agentes Contratados" })}</h2>
@@ -74,11 +74,11 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                   <div>
                     <p className="font-medium text-sm">{sub.agent_name}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className="text-[10px] bg-emerald-500/10 text-emerald-500">
+                      <Badge variant="secondary" className="text-[10px] bg-success/10 text-success">
                         {t("dashboard.active_label", { defaultValue: "Ativo" })}
                       </Badge>
                       {sub.current_period_end && (

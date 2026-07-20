@@ -171,7 +171,7 @@ const SalesCallTranscriber = () => {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <Card className="glass-card border-border/10 p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                   <span className="text-sm font-medium">Transcrição pronta</span>
                 </div>
 

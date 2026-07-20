@@ -223,7 +223,7 @@ export default function PreviewDashboard() {
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
             {teamAgents.length} agentes prontos
           </div>
         </div>
@@ -298,8 +298,8 @@ export default function PreviewDashboard() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.04]">
-              <div className="flex items-center gap-2 mb-2 text-emerald-500">
+            <div className="p-4 rounded-xl border border-success/25 bg-success/[0.04]">
+              <div className="flex items-center gap-2 mb-2 text-success">
                 <Rocket className="w-3.5 h-3.5" />
                 <p className="text-[10px] uppercase tracking-wider font-semibold">
                   A entrega
@@ -352,7 +352,7 @@ export default function PreviewDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                       <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                         Ativo
                       </span>
@@ -401,7 +401,7 @@ export default function PreviewDashboard() {
                             startDelay={baseDelay + 200}
                           />
                         </p>
-                        <p className="text-[11px] mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                        <p className="text-[11px] mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-success/10 text-success border border-success/20">
                           <CheckCircle2 className="w-3 h-3" /> {ev.outcome}
                         </p>
                       </div>
@@ -478,8 +478,8 @@ export default function PreviewDashboard() {
                   />
                   <MetricTile label="1º resultado" value={metrics.timeToValue} />
                 </div>
-                <div className="p-3 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.04]">
-                  <p className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                <div className="p-3 rounded-xl border border-success/25 bg-success/[0.04]">
+                  <p className="text-[10px] uppercase tracking-wider text-success">
                     Economia vs CLT
                   </p>
                   <p className="text-lg font-semibold mt-1 tracking-[-0.01em]">
@@ -506,10 +506,10 @@ export default function PreviewDashboard() {
             </div>
             <ul className="hidden md:flex items-center gap-4 text-[11px] text-muted-foreground">
               <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Ativa em minutos
+                <CheckCircle2 className="w-3 h-3 text-success" /> Ativa em minutos
               </li>
               <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Cancele quando quiser
+                <CheckCircle2 className="w-3 h-3 text-success" /> Cancele quando quiser
               </li>
             </ul>
           </div>

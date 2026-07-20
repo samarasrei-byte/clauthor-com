@@ -130,10 +130,10 @@ const AdminCostsDashboard = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { icon: DollarSign, color: "text-emerald-400", label: "Custo Total", value: `$${totalCost.toFixed(4)}`, sub: `${totalTokens.toLocaleString()} tokens` },
+          { icon: DollarSign, color: "text-success", label: "Custo Total", value: `$${totalCost.toFixed(4)}`, sub: `${totalTokens.toLocaleString()} tokens` },
           { icon: TrendingDown, color: "text-primary", label: "Economia", value: `${savings}%`, sub: "vs usar Pro para tudo" },
           { icon: Zap, color: "text-cyan-400", label: "Chamadas", value: tokenUsage.length.toString(), sub: "requisições totais" },
-          { icon: DollarSign, color: "text-amber-400", label: "Custo/Chamada", value: `$${tokenUsage.length > 0 ? (totalCost / tokenUsage.length).toFixed(6) : "0"}`, sub: "média por requisição" },
+          { icon: DollarSign, color: "text-warning", label: "Custo/Chamada", value: `$${tokenUsage.length > 0 ? (totalCost / tokenUsage.length).toFixed(6) : "0"}`, sub: "média por requisição" },
         ].map((card, i) => (
           <motion.div key={card.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">

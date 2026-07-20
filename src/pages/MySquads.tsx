@@ -243,7 +243,7 @@ const MySquads = () => {
                     {s.tagline}
                   </p>
                 </div>
-                <Badge className="text-[9px] bg-emerald-500/15 text-emerald-500 border-emerald-500/30 shrink-0">
+                <Badge className="text-[9px] bg-success/15 text-success border-success/30 shrink-0">
                   Ativo
                 </Badge>
               </div>

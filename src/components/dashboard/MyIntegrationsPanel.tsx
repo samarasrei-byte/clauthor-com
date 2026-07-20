@@ -100,7 +100,7 @@ const MyIntegrationsPanel = ({ onNavigate }: Props) => {
                 <span className="text-[11px] font-medium block truncate">{connector.name}</span>
               </div>
               {connected ? (
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                <CheckCircle className="h-3.5 w-3.5 text-success shrink-0" />
               ) : (
                 <Circle className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0" />
               )}

@@ -16,15 +16,15 @@ interface InnovationDef {
 }
 
 const innovationDefs: InnovationDef[] = [
-  { id: 1, icon: Brain, nameKey: "roadmap.inno1_name", taglineKey: "roadmap.inno1_tag", impactKey: "roadmap.impact_high", impactColor: "text-amber-400", quarter: "Q2 2026" },
-  { id: 2, icon: Network, nameKey: "roadmap.inno2_name", taglineKey: "roadmap.inno2_tag", impactKey: "roadmap.impact_high", impactColor: "text-amber-400", quarter: "Q3 2026" },
-  { id: 3, icon: TrendingUp, nameKey: "roadmap.inno3_name", taglineKey: "roadmap.inno3_tag", impactKey: "roadmap.impact_high", impactColor: "text-amber-400", quarter: "Q2 2026" },
-  { id: 4, icon: Mic, nameKey: "roadmap.inno4_name", taglineKey: "roadmap.inno4_tag", impactKey: "roadmap.impact_medium", impactColor: "text-blue-400", quarter: "Q2 2026" },
+  { id: 1, icon: Brain, nameKey: "roadmap.inno1_name", taglineKey: "roadmap.inno1_tag", impactKey: "roadmap.impact_high", impactColor: "text-warning", quarter: "Q2 2026" },
+  { id: 2, icon: Network, nameKey: "roadmap.inno2_name", taglineKey: "roadmap.inno2_tag", impactKey: "roadmap.impact_high", impactColor: "text-warning", quarter: "Q3 2026" },
+  { id: 3, icon: TrendingUp, nameKey: "roadmap.inno3_name", taglineKey: "roadmap.inno3_tag", impactKey: "roadmap.impact_high", impactColor: "text-warning", quarter: "Q2 2026" },
+  { id: 4, icon: Mic, nameKey: "roadmap.inno4_name", taglineKey: "roadmap.inno4_tag", impactKey: "roadmap.impact_medium", impactColor: "text-info", quarter: "Q2 2026" },
   { id: 5, icon: Workflow, nameKey: "roadmap.inno5_name", taglineKey: "roadmap.inno5_tag", impactKey: "roadmap.impact_very_high", impactColor: "text-primary", quarter: "Q3 2026" },
-  { id: 6, icon: Lightbulb, nameKey: "roadmap.inno6_name", taglineKey: "roadmap.inno6_tag", impactKey: "roadmap.impact_high", impactColor: "text-amber-400", quarter: "Q3 2026" },
-  { id: 7, icon: BarChart3, nameKey: "roadmap.inno7_name", taglineKey: "roadmap.inno7_tag", impactKey: "roadmap.impact_medium", impactColor: "text-blue-400", quarter: "Q2 2026" },
-  { id: 8, icon: Users, nameKey: "roadmap.inno8_name", taglineKey: "roadmap.inno8_tag", impactKey: "roadmap.impact_medium", impactColor: "text-blue-400", quarter: "Q3 2026" },
-  { id: 9, icon: Copy, nameKey: "roadmap.inno9_name", taglineKey: "roadmap.inno9_tag", impactKey: "roadmap.impact_medium", impactColor: "text-blue-400", quarter: "Q2 2026" },
+  { id: 6, icon: Lightbulb, nameKey: "roadmap.inno6_name", taglineKey: "roadmap.inno6_tag", impactKey: "roadmap.impact_high", impactColor: "text-warning", quarter: "Q3 2026" },
+  { id: 7, icon: BarChart3, nameKey: "roadmap.inno7_name", taglineKey: "roadmap.inno7_tag", impactKey: "roadmap.impact_medium", impactColor: "text-info", quarter: "Q2 2026" },
+  { id: 8, icon: Users, nameKey: "roadmap.inno8_name", taglineKey: "roadmap.inno8_tag", impactKey: "roadmap.impact_medium", impactColor: "text-info", quarter: "Q3 2026" },
+  { id: 9, icon: Copy, nameKey: "roadmap.inno9_name", taglineKey: "roadmap.inno9_tag", impactKey: "roadmap.impact_medium", impactColor: "text-info", quarter: "Q2 2026" },
   { id: 10, icon: Code2, nameKey: "roadmap.inno10_name", taglineKey: "roadmap.inno10_tag", impactKey: "roadmap.impact_very_high", impactColor: "text-primary", quarter: "Q3 2026" },
 ];
 

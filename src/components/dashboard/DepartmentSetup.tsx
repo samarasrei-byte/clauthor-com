@@ -223,8 +223,8 @@ const defaultIntegrations: DeptIntegration[] = [
 ];
 
 const priorityColors = {
-  essencial: "bg-red-500/10 text-red-500 border-red-500/20",
-  recomendada: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  essencial: "bg-destructive/10 text-destructive border-destructive/20",
+  recomendada: "bg-warning/10 text-warning border-warning/20",
   opcional: "bg-muted text-muted-foreground border-border",
 };
 
@@ -366,7 +366,7 @@ export default function DepartmentSetup({ departmentId, departmentName, onComple
           </div>
           <Progress value={progress} className="h-2" />
           {essentialCount > 0 && essentialDone < essentialCount && (
-            <div className="flex items-center gap-1.5 text-xs text-amber-500">
+            <div className="flex items-center gap-1.5 text-xs text-warning">
               <AlertTriangle className="h-3 w-3" />
               <span>{essentialCount - essentialDone} integração(ões) essencial(is) pendente(s)</span>
             </div>
@@ -389,7 +389,7 @@ export default function DepartmentSetup({ departmentId, departmentName, onComple
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <Card className={`transition-all ${isCompleted ? "border-emerald-500/30 bg-emerald-500/5" : "border-border"}`}>
+              <Card className={`transition-all ${isCompleted ? "border-success/30 bg-success/5" : "border-border"}`}>
                 <CardContent className="p-4 space-y-3">
                   {/* Card Header */}
                   <button
@@ -397,10 +397,10 @@ export default function DepartmentSetup({ departmentId, departmentName, onComple
                     className="flex items-center gap-3 w-full text-left"
                   >
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                      isCompleted ? "bg-emerald-500/15" : "bg-primary/10"
+                      isCompleted ? "bg-success/15" : "bg-primary/10"
                     }`}>
                       {isCompleted ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : (
                         <Icon className="h-5 w-5 text-primary" />
                       )}
@@ -412,7 +412,7 @@ export default function DepartmentSetup({ departmentId, departmentName, onComple
                           {priorityLabels[ig.priority]}
                         </Badge>
                         {isCompleted && (
-                          <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20 text-[9px]">
+                          <Badge className="bg-success/15 text-success border-success/20 text-[9px]">
                             Conectado
                           </Badge>
                         )}

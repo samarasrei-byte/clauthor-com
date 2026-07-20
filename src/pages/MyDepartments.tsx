@@ -30,8 +30,8 @@ type ContractedDept = {
 };
 
 const STATUS_META: Record<string, { label: string; icon: any; className: string }> = {
-  active: { label: "Ativo", icon: CheckCircle2, className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
-  pending_payment: { label: "Aguardando pagamento", icon: Clock, className: "bg-amber-500/15 text-amber-500 border-amber-500/30" },
+  active: { label: "Ativo", icon: CheckCircle2, className: "bg-success/15 text-success border-success/30" },
+  pending_payment: { label: "Aguardando pagamento", icon: Clock, className: "bg-warning/15 text-warning border-warning/30" },
   paused: { label: "Pausado", icon: AlertTriangle, className: "bg-muted text-muted-foreground border-border" },
   cancelled: { label: "Cancelado", icon: AlertTriangle, className: "bg-destructive/10 text-destructive border-destructive/30" },
 };

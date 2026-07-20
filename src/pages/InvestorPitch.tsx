@@ -315,7 +315,7 @@ const InvestorPitch = () => {
             {[
               {
                 tag: "Problema",
-                color: "text-red-500",
+                color: "text-destructive",
                 title: "Folha de pagamento devorando margem",
                 body: "Hoje, uma operação média mantém ~20 colaboradores executando tarefas repetitivas de conhecimento (relatórios, prospecção, triagem jurídica, atendimento, cobrança). Isso custa cerca de R$ 240k/mês em folha, sem contar encargos, turnover e retrabalho. É lento, inconsistente e não escala junto com a demanda.",
                 explain: "Por que importa: a maior linha de custo do SaaS B2B brasileiro é gente fazendo trabalho que IA já consegue executar melhor.",
@@ -329,14 +329,14 @@ const InvestorPitch = () => {
               },
               {
                 tag: "Diferencial",
-                color: "text-emerald-500",
+                color: "text-success",
                 title: "O que ninguém mais entrega",
                 body: "Quatro moats combinados: (1) outcome-based pricing, o cliente paga por resultado entregue, não por seat; (2) memória hierárquica em 4 camadas (episódica, semântica, procedural, identidade) via pgvector; (3) MCP nativo, plugável em Claude Desktop, Cursor e qualquer cliente compatível; (4) Trust Center com audit trail criptográfico ponta a ponta.",
                 explain: "Lindy, Relevance AI e MultiOn entregam pedaços disso. Nenhum combina os quatro, e nenhum nasceu multilíngue de verdade.",
               },
               {
                 tag: "Uso do Capital",
-                color: "text-amber-500",
+                color: "text-warning",
                 title: "R$ 200k agora · R$ 3M no roadmap",
                 body: "Round atual de R$ 200k por 10% para destravar go-live: 45% Marketing (campanha G8 Prospect em 7 países), 30% Tecnologia (infra de memória vetorial, MCP em produção, marketplace de agentes) e 25% Pessoas (líder de growth e CS multilíngue). Próxima rodada de R$ 3M planejada após atingir as métricas do trimestre seguinte.",
                 explain: "Cada real tem destino definido e métrica associada. Payback projetado em menos de 12 meses sob premissas conservadoras.",
@@ -379,12 +379,12 @@ const InvestorPitch = () => {
           </motion.div>
 
           {/* Transparência: estágio MVP + gaps técnicos para escala */}
-          <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-amber-500/30">
+          <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-warning/30">
             <div className="flex items-center gap-2 mb-4">
-              <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Plataforma Pronta · Escalando Infraestrutura</span>
+              <span className="h-2 w-2 rounded-full bg-warning animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-warning">Transparência Radical · Plataforma Pronta · Escalando Infraestrutura</span>
             </div>
-            <h3 className="text-2xl font-bold mb-3">Plataforma <span className="text-amber-500">pronta para go-live</span>, ativação em até 10 dias com o aporte de infraestrutura</h3>
+            <h3 className="text-2xl font-bold mb-3">Plataforma <span className="text-warning">pronta para go-live</span>, ativação em até 10 dias com o aporte de infraestrutura</h3>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, 20 departamentos, multi-tenant, auditoria criptográfica, 14 idiomas) e <span className="text-foreground font-semibold">aprovada na bateria final</span> de testes de carga, segurança e UX. O produto existe, foi validado tecnicamente e está pronto para receber clientes.
               Com o aporte, ativamos o <span className="text-foreground font-semibold">cluster de produção dimensionado para 3.000 a 4.000 usuários simultâneos</span>, servidor dedicado, vector DB, observabilidade, CDN global e fila distribuída. Go-live em <span className="text-foreground font-semibold">no máximo 10 dias</span> após o investimento:
@@ -488,7 +488,7 @@ const InvestorPitch = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="h-3.5 w-3.5 text-primary" />
                   <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">{mk.when}</span>
-                  {mk.done && <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-mono">EM ROTA</span>}
+                  {mk.done && <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-success/15 text-success font-mono">EM ROTA</span>}
                 </div>
                 <h3 className="font-bold mb-2">{mk.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{mk.desc}</p>

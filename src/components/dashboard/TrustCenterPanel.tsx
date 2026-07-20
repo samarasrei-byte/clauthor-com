@@ -19,9 +19,9 @@ interface AuditEntry {
 }
 
 const statusMeta: Record<AuditEntry["status"], { icon: React.ReactNode; color: string; label: string }> = {
-  success: { icon: <CheckCircle2 className="h-3.5 w-3.5" />, color: "text-emerald-500", label: "Sucesso" },
+  success: { icon: <CheckCircle2 className="h-3.5 w-3.5" />, color: "text-success", label: "Sucesso" },
   failed: { icon: <XCircle className="h-3.5 w-3.5" />, color: "text-destructive", label: "Falhou" },
-  blocked: { icon: <AlertTriangle className="h-3.5 w-3.5" />, color: "text-amber-500", label: "Bloqueado" },
+  blocked: { icon: <AlertTriangle className="h-3.5 w-3.5" />, color: "text-warning", label: "Bloqueado" },
   pending: { icon: <Clock className="h-3.5 w-3.5" />, color: "text-muted-foreground", label: "Pendente" },
 };
 
@@ -56,7 +56,7 @@ export default function TrustCenterPanel() {
             Trilha de auditoria imutável (SHA-256 encadeado) · prova criptográfica de cada ação dos agentes.
           </p>
         </div>
-        <Badge variant="outline" className="gap-1 border-emerald-500/40 text-emerald-500">
+        <Badge variant="outline" className="gap-1 border-success/40 text-success">
           <CheckCircle2 className="h-3 w-3" /> {entries.length} eventos
         </Badge>
       </div>

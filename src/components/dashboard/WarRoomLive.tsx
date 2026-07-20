@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 
 // ── Status helpers ──
 const StatusIcon = ({ status }: { status: string }) => {
-  if (status === "success") return <CheckCircle className="h-3 w-3 text-emerald-400" />;
+  if (status === "success") return <CheckCircle className="h-3 w-3 text-success" />;
   if (status === "error") return <XCircle className="h-3 w-3 text-destructive" />;
   if (status === "running") return <Loader2 className="h-3 w-3 text-primary animate-spin" />;
   return <Clock className="h-3 w-3 text-muted-foreground" />;
@@ -208,7 +208,7 @@ const WarRoomLive = () => {
       <div className="flex items-center gap-3">
         <div className="relative">
           <Radio className="h-5 w-5 text-primary" />
-          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-destructive animate-pulse" />
         </div>
         <div>
           <h2 className="text-lg font-semibold text-foreground">War Room Live</h2>
@@ -241,13 +241,13 @@ const WarRoomLive = () => {
             <motion.div
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
-              className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-3 flex items-center gap-3"
+              className="rounded-xl border border-warning/30 bg-warning/5 p-3 flex items-center gap-3"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                <Clock className="h-4 w-4 text-amber-400" />
+              <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center shrink-0">
+                <Clock className="h-4 w-4 text-warning" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-amber-400">🐌 Lentidão detectada</p>
+                <p className="text-xs font-semibold text-warning">🐌 Lentidão detectada</p>
                 <p className="text-[10px] text-muted-foreground">Tempo médio de execução 2x acima do normal na última hora</p>
               </div>
             </motion.div>
@@ -319,12 +319,12 @@ const WarRoomLive = () => {
                   <div className={cn(
                     "mt-0.5 h-7 w-7 rounded-md flex items-center justify-center shrink-0",
                     item.feedType === "action" && "bg-primary/10",
-                    item.feedType === "chat" && "bg-blue-500/10",
-                    item.feedType === "deliverable" && "bg-amber-500/10",
+                    item.feedType === "chat" && "bg-info/10",
+                    item.feedType === "deliverable" && "bg-warning/10",
                   )}>
                     {item.feedType === "action" && <Zap className="h-3.5 w-3.5 text-primary" />}
-                    {item.feedType === "chat" && <MessageSquare className="h-3.5 w-3.5 text-blue-400" />}
-                    {item.feedType === "deliverable" && <Package className="h-3.5 w-3.5 text-amber-400" />}
+                    {item.feedType === "chat" && <MessageSquare className="h-3.5 w-3.5 text-info" />}
+                    {item.feedType === "deliverable" && <Package className="h-3.5 w-3.5 text-warning" />}
                   </div>
 
                   {/* Content */}

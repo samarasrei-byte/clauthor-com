@@ -235,7 +235,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
     intermediate: "bg-cyan-500/15 text-cyan-400",
-    advanced: "bg-emerald-500/15 text-emerald-400",
+    advanced: "bg-success/15 text-success",
     enterprise: "bg-primary/15 text-primary",
   };
 
@@ -254,7 +254,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
             <p className="font-display font-semibold text-sm">{agent.name}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
-              <Badge variant="secondary" className={`text-[9px] ${agent.status === "active" ? "bg-emerald-500/20 text-emerald-500" : ""}`}>{agent.status}</Badge>
+              <Badge variant="secondary" className={`text-[9px] ${agent.status === "active" ? "bg-success/20 text-success" : ""}`}>{agent.status}</Badge>
               <span className="text-[10px] text-muted-foreground">{agent.total_executions} execuções</span>
             </div>
           </div>
@@ -322,21 +322,21 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                             <div className="flex items-center gap-1.5">
                               <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{ch.label}</p>
                               {isChannelConnected(ch.id) && ch.id !== "dashboard" && (
-                                <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="flex items-center gap-0.5 text-[9px] text-success font-medium">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                                   Conectado
                                 </span>
                               )}
                               {ch.id === "dashboard" && (
-                                <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                <span className="flex items-center gap-0.5 text-[9px] text-success font-medium">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-success" />
                                   Nativo
                                 </span>
                               )}
                             </div>
                             <p className="text-[10px] text-muted-foreground truncate">{ch.desc}</p>
                           </div>
-                          {status === "valid" && <Check className="h-4 w-4 text-emerald-500 shrink-0" />}
+                          {status === "valid" && <Check className="h-4 w-4 text-success shrink-0" />}
                           {active && !status && <Check className="h-4 w-4 text-primary shrink-0" />}
                         </button>
 
@@ -569,8 +569,8 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
                   <div className="flex items-center gap-1.5">
                     <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{intgName}</p>
                     {connectedIntegrationNames.has(intgName) && (
-                      <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="flex items-center gap-0.5 text-[9px] text-success font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                         Conectado
                       </span>
                     )}
