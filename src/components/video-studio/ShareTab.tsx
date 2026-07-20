@@ -240,7 +240,7 @@ export default function ShareTab({ outputUrl, prompt, generationId, mediaType = 
           </div>
 
           {lastResult && (
-            <div className={`rounded-lg border p-3 text-xs ${lastResult.ok ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-500" : "border-destructive/30 bg-destructive/5 text-destructive"}`}>
+            <div className={`rounded-lg border p-3 text-xs ${lastResult.ok ? "border-success/30 bg-success/5 text-success" : "border-destructive/30 bg-destructive/5 text-destructive"}`}>
               <div className="flex items-start gap-2">
                 {lastResult.ok ? <CheckCircle2 className="w-4 h-4 mt-0.5" /> : null}
                 <span>{lastResult.detail}</span>

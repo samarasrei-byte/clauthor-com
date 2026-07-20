@@ -237,7 +237,7 @@ const AdminDashboard = () => {
               <div className="relative">
                 <div className="absolute inset-0 rounded-lg bg-primary/20 blur-md animate-pulse" />
                 <Shield className="h-6 w-6 text-primary relative" />
-                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success border-2 border-background" />
               </div>
               <h1 className="font-display text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text">CLAUTHOR</h1>
               <Badge variant="outline" className="border-primary/30 text-primary text-[10px] font-mono shadow-[0_0_8px_hsl(var(--primary)/0.15)]">ADMIN MASTER</Badge>

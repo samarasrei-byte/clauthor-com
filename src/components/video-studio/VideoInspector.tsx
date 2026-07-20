@@ -146,7 +146,7 @@ function Row({ label, value, mono }: { label: string; value: React.ReactNode; mo
 function StatusPill({ status, progress }: { status: string; progress: number }) {
   const tone =
     status === "completed"
-      ? "bg-green-500/10 text-green-600 dark:text-green-400"
+      ? "bg-success/10 text-success"
       : status === "failed"
       ? "bg-destructive/10 text-destructive"
       : "bg-primary/10 text-primary";
@@ -160,7 +160,7 @@ function StatusPill({ status, progress }: { status: string; progress: number }) 
 
 function StepIcon({ status }: { status: "in_progress" | "completed" | "failed" }) {
   if (status === "failed") return <XCircle strokeWidth={1.5} className="w-3.5 h-3.5 text-destructive shrink-0 mt-0.5" />;
-  if (status === "completed") return <CheckCircle2 strokeWidth={1.5} className="w-3.5 h-3.5 text-green-500 shrink-0 mt-0.5" />;
+  if (status === "completed") return <CheckCircle2 strokeWidth={1.5} className="w-3.5 h-3.5 text-success shrink-0 mt-0.5" />;
   return <Loader2 strokeWidth={1.5} className="w-3.5 h-3.5 text-primary animate-spin shrink-0 mt-0.5" />;
 }
 

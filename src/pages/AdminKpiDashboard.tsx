@@ -183,7 +183,7 @@ export default function AdminKpiDashboard() {
                       </div>
                       <div className="text-lg font-semibold">
                         p90: {fmtMs(p90)}{" "}
-                        <span className={`text-sm font-normal ${p90Off != null && p90Off > 0 ? "text-destructive" : "text-emerald-500"}`}>
+                        <span className={`text-sm font-normal ${p90Off != null && p90Off > 0 ? "text-destructive" : "text-success"}`}>
                           {p90Off != null && (p90Off > 0 ? `+${p90Off.toFixed(0)}%` : `${p90Off.toFixed(0)}%`)}
                         </span>
                       </div>
@@ -236,7 +236,7 @@ export default function AdminKpiDashboard() {
                             <td className="py-2 pr-4">{fmtMs(d.p50_ms)}</td>
                             <td className="py-2 pr-4">{fmtMs(d.p90_ms)}</td>
                             <td className="py-2 pr-4">
-                              <span className={d.p90_ms <= target ? "text-emerald-500" : "text-destructive"}>
+                              <span className={d.p90_ms <= target ? "text-success" : "text-destructive"}>
                                 {d.p90_ms <= target ? "✓" : "✗"}
                               </span>
                             </td>
@@ -308,7 +308,7 @@ export default function AdminKpiDashboard() {
                         }
                         if (sig && winner !== "inconclusive") {
                           return (
-                            <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono">
+                            <span className="px-2 py-1 rounded-full bg-success/10 text-success font-mono">
                               ✓ significante · vencedor: <strong className="uppercase">{winner}</strong> · χ²={chi}
                             </span>
                           );
@@ -332,7 +332,7 @@ export default function AdminKpiDashboard() {
                           key={v.variant}
                           className={`rounded-lg border p-3 ${
                             isWinner
-                              ? "border-emerald-500/50 bg-emerald-500/5"
+                              ? "border-success/50 bg-success/5"
                               : "border-border/60 bg-muted/20"
                           }`}
                         >
@@ -341,7 +341,7 @@ export default function AdminKpiDashboard() {
                               {v.variant === "voice" ? "🎙️ Voz" : "📝 Formulário"}
                             </span>
                             {isWinner && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono uppercase">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-success/20 text-success font-mono uppercase">
                                 Vencedor
                               </span>
                             )}
