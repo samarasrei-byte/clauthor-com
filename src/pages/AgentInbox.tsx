@@ -245,15 +245,27 @@ function MediaIcon({ kind }: { kind?: "video" | "image" }) {
 
 function EmptyState() {
   return (
-    <div className="p-10 text-center text-sm text-muted-foreground space-y-2">
-      <Inbox className="h-8 w-8 mx-auto opacity-40" />
-      <p>Nenhuma notificação por aqui.</p>
-      <p className="text-xs">
-        Assim que o cliente aprovar ou pedir ajuste em uma entrega, você verá aqui.
+    <div className="p-10 md:p-14 text-center">
+      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center mb-4">
+        <Inbox className="h-6 w-6 text-primary" />
+      </div>
+      <h2 className="font-display font-semibold text-lg mb-1.5">
+        Sua caixa de entrada está limpa
+      </h2>
+      <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-5">
+        Quando um cliente aprovar ou pedir ajuste em uma entrega dos seus agentes,
+        a notificação aparece aqui em tempo real.
       </p>
+      <a
+        href="/dashboard/departamentos"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+      >
+        Ver departamentos ativos →
+      </a>
     </div>
   );
 }
+
 
 function DetailPanel({ item }: { item: MediaNotif }) {
   const isRevision = item.type === "media_revision_requested";
