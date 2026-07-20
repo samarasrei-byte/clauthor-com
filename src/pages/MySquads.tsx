@@ -98,7 +98,7 @@ const MySquads = () => {
         </div>
 
         <Button asChild size="sm" className="gap-1.5 shadow-sm">
-          <Link to="/squads">
+          <Link to="/dashboard/squads">
             <Plus className="h-3.5 w-3.5" />
             Contratar squad
           </Link>
