@@ -22,11 +22,11 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 
 const STATUS_COLORS: Record<string, string> = {
-  success: "text-emerald-400 bg-emerald-500/10",
+  success: "text-success bg-success/10",
   error: "text-destructive bg-destructive/10",
   failed: "text-destructive bg-destructive/10",
-  pending: "text-amber-400 bg-amber-500/10",
-  running: "text-blue-400 bg-blue-500/10",
+  pending: "text-warning bg-warning/10",
+  running: "text-info bg-info/10",
 };
 
 const AgentMetricsDetail = () => {
