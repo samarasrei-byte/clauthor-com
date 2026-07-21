@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Inbox, Clapperboard, Scissors, Activity, Brain,
   Layers3, Bot, CheckSquare, BarChart3, Plug, Settings, Radar, Building2, UsersRound,
-  FolderOpen,
+  FolderOpen, Trello,
 } from "lucide-react";
 import DashboardSidebar, { SidebarItem } from "./DashboardSidebar";
 import { useBeginnerMode, BEGINNER_ALLOWED_IDS } from "@/hooks/useBeginnerMode";
@@ -46,6 +46,8 @@ export default function GlobalDashboardSidebar() {
     },
     { id: "route:/dashboard/inbox", label: "Inbox Unificado", icon: Inbox, group: zoneWork,
       description: "LinkedIn, Instagram, WhatsApp, Facebook, TikTok e e-mails em um só lugar." },
+    { id: "route:/kanban", label: "Kanban 2050", icon: Trello, group: zoneWork,
+      description: "Quadro visual multi-board · arraste tarefas entre estágios, com prioridades, tags e checklist." },
     { id: "route:/dashboard/arquivos", label: "Meus arquivos", icon: FolderOpen, group: zoneWork,
       description: "Documentos, vídeos e imagens organizados por projeto." },
     { id: "route:/video", label: "Video Hub", icon: Clapperboard, group: zoneWork,
