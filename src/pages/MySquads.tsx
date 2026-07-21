@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { SQUADS } from "@/data/squads";
 import SEO from "@/components/SEO";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 
 type ContractedDept = {
   id: string;
