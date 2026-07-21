@@ -167,7 +167,11 @@ export default function CreateWorkforce() {
             <ArrowLeft className="h-4 w-4 mr-1" /> Sair
           </Button>
           <div className="h-4 w-px bg-border" />
-          <div className="flex items-center gap-2">
+          <Link to="/" aria-label="Clauthor · início" className="flex items-center">
+            <ClauthorLogo size="sm" />
+          </Link>
+          <div className="h-4 w-px bg-border hidden sm:block" />
+          <div className="hidden sm:flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-rose-600 grid place-items-center">
               <Wand className="h-3.5 w-3.5 text-white" />
             </div>
