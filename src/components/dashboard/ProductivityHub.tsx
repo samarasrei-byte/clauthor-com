@@ -98,7 +98,7 @@ const SectionCard = ({
         </div>
         <div className="min-w-0">
           <h3 className="dash-title">{title}</h3>
-          {description && <p className="dash-caption mt-0.5">{description}</p>}
+          {description && <p className="dash-label normal-case tracking-normal text-muted-foreground mt-0.5">{description}</p>}
         </div>
       </div>
       {action && <div className="shrink-0">{action}</div>}
