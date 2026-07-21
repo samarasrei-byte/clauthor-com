@@ -67,21 +67,21 @@ const KpiStrip = ({ items, cols = 4, className }: KpiStripProps) => {
             className="glass-card rounded-xl p-4 border border-border/10 flex flex-col gap-1.5 relative overflow-hidden"
           >
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[10px] font-medium uppercase tracking-wide truncate">
+              <span className="dash-eyebrow truncate">
                 {item.label}
               </span>
               {Icon && <Icon className={cn("h-3.5 w-3.5 shrink-0", ACCENT_ICON[accent])} />}
             </div>
             <div className="flex items-end gap-1">
-              <span className="font-display text-2xl font-bold tracking-tight text-foreground tabular-nums">
+              <span className="dash-kpi text-2xl leading-none">
                 {item.value}
               </span>
               {item.max != null && (
-                <span className="text-xs text-muted-foreground mb-0.5">/ {item.max}</span>
+                <span className="dash-label text-xs mb-0.5">/ {item.max}</span>
               )}
             </div>
             {item.sub && (
-              <span className="text-[10px] text-muted-foreground/80 truncate">{item.sub}</span>
+              <span className="dash-label text-[10px] truncate">{item.sub}</span>
             )}
             {hasNumericMax && (
               <Progress

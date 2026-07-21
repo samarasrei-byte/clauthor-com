@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Home } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * Contextual breadcrumb for the dashboard shell.
- * Renders a compact trail based on the current path so users always know
- * where they are inside the "Meu trabalho / IA / Configurações" hierarchy.
- * Hidden on the dashboard root to avoid noise.
+ * Renders a compact trail based on the current path + a right-side portal
+ * slot (`<BreadcrumbActions>`) for page-level contextual actions.
  */
 const LABELS: Record<string, string> = {
   dashboard: "Painel",
@@ -37,12 +37,28 @@ const prettify = (seg: string) =>
     .replace(/[-_]/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
+export const BREADCRUMB_ACTIONS_ID = "dash-breadcrumb-actions";
+
+/**
+ * Portal helper — renders `children` into the breadcrumb's right-side slot.
+ * Usage inside any dashboard page:
+ *   <BreadcrumbActions><Button>Nova ação</Button></BreadcrumbActions>
+ */
+export function BreadcrumbActions({ children }: { children: ReactNode }) {
+  const [target, setTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = document.getElementById(BREADCRUMB_ACTIONS_ID);
+    setTarget(el);
+  }, []);
+  if (!target) return null;
+  return createPortal(children, target);
+}
+
 const DashboardBreadcrumb = () => {
   const { pathname } = useLocation();
 
   const crumbs = useMemo(() => {
     const parts = pathname.split("/").filter(Boolean);
-    // Hide on bare /dashboard
     if (parts.length <= 1) return [];
     return parts.map((seg, i) => ({
       label: prettify(seg),
@@ -51,7 +67,14 @@ const DashboardBreadcrumb = () => {
     }));
   }, [pathname]);
 
-  if (crumbs.length === 0) return null;
+  if (crumbs.length === 0) {
+    // Always render the actions target so pages can portal into it even on /dashboard.
+    return (
+      <div className="flex items-center px-4 sm:px-6 pt-3">
+        <div id={BREADCRUMB_ACTIONS_ID} className="ml-auto flex items-center gap-2" />
+      </div>
+    );
+  }
 
   return (
     <nav
@@ -80,6 +103,7 @@ const DashboardBreadcrumb = () => {
           )}
         </span>
       ))}
+      <div id={BREADCRUMB_ACTIONS_ID} className="ml-auto flex items-center gap-2" />
     </nav>
   );
 };
