@@ -74,9 +74,12 @@ function resolveCTA(pathname: string): CTA | null {
 export default function PrimaryCTA() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { thor } = useFloatingDock();
 
   const cta = useMemo(() => resolveCTA(location.pathname), [location.pathname]);
-  if (!cta) return null;
+  // Exclusão mútua: se o Thor Guia está ativo (bottom-center), o PrimaryCTA
+  // (bottom-right) some para evitar dois FABs competindo pela mesma zona.
+  if (!cta || thor) return null;
 
   const Icon = cta.icon;
 
