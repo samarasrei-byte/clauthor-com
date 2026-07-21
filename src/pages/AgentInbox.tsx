@@ -1,221 +1,317 @@
 import { useMemo, useState } from "react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Inbox,
-  CheckCheck,
-  ExternalLink,
-  MessageSquare,
-  Image as ImageIcon,
-  Video as VideoIcon,
-  Wand,
+  Search,
+  Mail,
+  MessageCircle,
   Loader2,
+  Plug,
+  Linkedin,
+  Instagram,
+  Facebook,
+  Phone,
+  Music2,
+  Bot,
+  User as UserIcon,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
-type Filter = "all" | "revision" | "approved" | "unread";
+// ── Channels ────────────────────────────────────────────────────────────────
+type ChannelId =
+  | "all"
+  | "linkedin"
+  | "instagram"
+  | "whatsapp"
+  | "facebook"
+  | "tiktok"
+  | "email";
 
-interface MediaNotif {
-  id: string;
-  created_at: string;
-  is_read: boolean;
-  title: string;
-  message: string;
-  type: string;
-  metadata: {
-    approval_id?: string;
-    media_id?: string;
-    media_kind?: "video" | "image";
-    media_url?: string | null;
-    networks?: string[];
-    decision?: "approve" | "reject";
-  } | null;
+interface ChannelDef {
+  id: Exclude<ChannelId, "all">;
+  label: string;
+  icon: typeof Mail;
+  color: string;
+  connected: boolean;
+  connectHref?: string;
 }
 
-const RELEVANT_TYPES = ["media_approved", "media_revision_requested"];
+const CHANNELS: ChannelDef[] = [
+  { id: "linkedin",  label: "LinkedIn",  icon: Linkedin,      color: "text-[#0A66C2]", connected: true,  connectHref: "/dashboard/hunter" },
+  { id: "instagram", label: "Instagram", icon: Instagram,     color: "text-[#E4405F]", connected: false, connectHref: "/settings/social" },
+  { id: "whatsapp",  label: "WhatsApp",  icon: Phone,         color: "text-success",   connected: true,  connectHref: "/dashboard/whatsapp" },
+  { id: "facebook",  label: "Facebook",  icon: Facebook,      color: "text-[#1877F2]", connected: false, connectHref: "/settings/social" },
+  { id: "tiktok",    label: "TikTok",    icon: Music2,        color: "text-foreground",connected: false, connectHref: "/settings/social" },
+  { id: "email",     label: "E-mail",    icon: Mail,          color: "text-accent-blue", connected: true },
+];
 
+interface Thread {
+  id: string;
+  channel: Exclude<ChannelId, "all">;
+  title: string;
+  preview: string;
+  timestamp: string;
+  unread: boolean;
+  fromMe?: boolean;
+  href?: string;
+  body?: string;
+}
+
+// ── Page ────────────────────────────────────────────────────────────────────
 export default function AgentInbox() {
   const { user } = useAuth();
-  const qc = useQueryClient();
-  const [filter, setFilter] = useState<Filter>("all");
+  const [channel, setChannel] = useState<ChannelId>("all");
+  const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data: items = [], isLoading } = useQuery({
-    queryKey: ["agent-inbox", user?.id],
+  // LinkedIn (via Hunter) ---------------------------------------------------
+  const linkedinQuery = useQuery({
+    queryKey: ["inbox-linkedin", user?.id],
     enabled: !!user?.id,
+    refetchInterval: 30_000,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("notifications")
-        .select("id, created_at, is_read, title, message, type, metadata")
+      const { data } = await supabase
+        .from("hunter_messages_inbox")
+        .select("id, content, sender, sent_at, read_at, conversation_id")
         .eq("user_id", user!.id)
-        .in("type", RELEVANT_TYPES)
-        .order("created_at", { ascending: false })
-        .limit(200);
-      if (error) throw error;
-      return (data ?? []) as MediaNotif[];
+        .order("sent_at", { ascending: false })
+        .limit(100);
+      return (data ?? []).map<Thread>((m) => ({
+        id: `li-${m.id}`,
+        channel: "linkedin",
+        title: m.sender || "LinkedIn",
+        preview: m.content,
+        body: m.content,
+        timestamp: m.sent_at,
+        unread: !m.read_at,
+        fromMe: m.sender === "me",
+        href: "/dashboard/hunter",
+      }));
     },
-    refetchInterval: 20_000,
   });
 
-  const filtered = useMemo(() => {
-    return items.filter((n) => {
-      if (filter === "unread") return !n.is_read;
-      if (filter === "revision") return n.type === "media_revision_requested";
-      if (filter === "approved") return n.type === "media_approved";
-      return true;
-    });
-  }, [items, filter]);
+  // WhatsApp ----------------------------------------------------------------
+  const whatsappQuery = useQuery({
+    queryKey: ["inbox-whatsapp", user?.id],
+    enabled: !!user?.id,
+    refetchInterval: 30_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("whatsapp_messages")
+        .select("id, text_body, direction, created_at, conversation_id")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      return (data ?? []).map<Thread>((m: any) => ({
+        id: `wa-${m.id}`,
+        channel: "whatsapp",
+        title: `WhatsApp · ${(m.conversation_id || "").slice(0, 8)}`,
+        preview: m.text_body || "(mídia)",
+        body: m.text_body || "(mensagem sem texto)",
+        timestamp: m.created_at,
+        unread: m.direction === "inbound",
+        fromMe: m.direction === "outbound",
+        href: "/dashboard/whatsapp",
+      }));
+    },
+  });
 
-  const selected = filtered.find((n) => n.id === selectedId) ?? filtered[0] ?? null;
+  // E-mail (approvals / notifications) --------------------------------------
+  const emailQuery = useQuery({
+    queryKey: ["inbox-email", user?.id],
+    enabled: !!user?.id,
+    refetchInterval: 30_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("notifications")
+        .select("id, title, message, created_at, is_read, type, metadata")
+        .eq("user_id", user!.id)
+        .in("type", ["media_approved", "media_revision_requested", "email"])
+        .order("created_at", { ascending: false })
+        .limit(50);
+      return (data ?? []).map<Thread>((n) => ({
+        id: `em-${n.id}`,
+        channel: "email",
+        title: n.title,
+        preview: n.message,
+        body: n.message,
+        timestamp: n.created_at,
+        unread: !n.is_read,
+      }));
+    },
+  });
 
-  const counts = useMemo(
-    () => ({
-      all: items.length,
-      unread: items.filter((n) => !n.is_read).length,
-      revision: items.filter((n) => n.type === "media_revision_requested").length,
-      approved: items.filter((n) => n.type === "media_approved").length,
-    }),
-    [items],
+  const isLoading =
+    linkedinQuery.isLoading || whatsappQuery.isLoading || emailQuery.isLoading;
+
+  const allThreads: Thread[] = useMemo(
+    () => [
+      ...(linkedinQuery.data ?? []),
+      ...(whatsappQuery.data ?? []),
+      ...(emailQuery.data ?? []),
+    ],
+    [linkedinQuery.data, whatsappQuery.data, emailQuery.data],
   );
 
-  const markRead = useMutation({
-    mutationFn: async (ids: string[]) => {
-      const { error } = await supabase
-        .from("notifications")
-        .update({ is_read: true })
-        .in("id", ids);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["agent-inbox", user?.id] });
-    },
-  });
+  const counts = useMemo(() => {
+    const c: Record<ChannelId, number> = {
+      all: allThreads.length,
+      linkedin: 0, instagram: 0, whatsapp: 0, facebook: 0, tiktok: 0, email: 0,
+    };
+    for (const t of allThreads) c[t.channel]++;
+    return c;
+  }, [allThreads]);
 
-  const handleSelect = (n: MediaNotif) => {
-    setSelectedId(n.id);
-    if (!n.is_read) markRead.mutate([n.id]);
-  };
-
-  const markAllRead = () => {
-    const ids = items.filter((n) => !n.is_read).map((n) => n.id);
-    if (!ids.length) {
-      toast.info("Não há notificações não lidas.");
-      return;
+  const filtered = useMemo(() => {
+    let out = allThreads;
+    if (channel !== "all") out = out.filter((t) => t.channel === channel);
+    if (search) {
+      const q = search.toLowerCase();
+      out = out.filter(
+        (t) =>
+          t.title.toLowerCase().includes(q) ||
+          t.preview.toLowerCase().includes(q),
+      );
     }
-    markRead.mutate(ids, {
-      onSuccess: () => toast.success(`${ids.length} notificações marcadas como lidas`),
-    });
-  };
+    return out.sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
+  }, [allThreads, channel, search]);
+
+  const selected = filtered.find((t) => t.id === selectedId) ?? filtered[0] ?? null;
+
+  const activeChannelDef =
+    channel !== "all" ? CHANNELS.find((c) => c.id === channel) : null;
+  const showConnectState =
+    activeChannelDef && !activeChannelDef.connected && filtered.length === 0;
 
   return (
     <>
       <Helmet>
-        <title>Inbox do Agente · Clauthor</title>
+        <title>Inbox Unificado · Clauthor</title>
         <meta
           name="description"
-          content="Central de aprovações e feedback do cliente para os agentes"
+          content="Todas as conversas dos seus agentes — LinkedIn, Instagram, WhatsApp, Facebook, TikTok e e-mails — num só lugar."
         />
       </Helmet>
 
-      <div className="p-6 space-y-4">
+      <div className="p-4 sm:p-6 space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold flex items-center gap-2">
               <Inbox className="h-6 w-6 text-primary" />
-              Inbox do Agente
+              Inbox Unificado
             </h1>
             <p className="text-sm text-muted-foreground">
-              Decisões e feedback do cliente sobre entregas de mídia
+              LinkedIn · Instagram · WhatsApp · Facebook · TikTok · E-mail — tudo em um lugar.
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={markAllRead}
-            disabled={markRead.isPending || counts.unread === 0}
-          >
-            <CheckCheck className="h-4 w-4 mr-2" />
-            Marcar tudo como lido
-          </Button>
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar conversas..."
+              className="pl-9 h-9"
+            />
+          </div>
         </div>
 
-        {/* Filters */}
-        <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)}>
-          <TabsList>
-            <TabsTrigger value="all">
-              Todas <Badge variant="secondary" className="ml-2">{counts.all}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="unread">
-              Não lidas <Badge variant="secondary" className="ml-2">{counts.unread}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="revision">
-              Ajustes <Badge variant="secondary" className="ml-2">{counts.revision}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="approved">
-              Aprovados <Badge variant="secondary" className="ml-2">{counts.approved}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+        {/* Channel Tabs */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <ChannelPill
+            active={channel === "all"}
+            onClick={() => { setChannel("all"); setSelectedId(null); }}
+            icon={Inbox}
+            label="Todos"
+            count={counts.all}
+          />
+          {CHANNELS.map((c) => (
+            <ChannelPill
+              key={c.id}
+              active={channel === c.id}
+              onClick={() => { setChannel(c.id); setSelectedId(null); }}
+              icon={c.icon}
+              label={c.label}
+              count={counts[c.id]}
+              iconColor={c.color}
+              disabled={!c.connected}
+            />
+          ))}
+        </div>
 
-        {/* Split view */}
+        {/* Body */}
         <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4 min-h-[560px]">
           {/* List */}
           <Card className="p-0 overflow-hidden">
-            <ScrollArea className="h-[560px]">
+            <ScrollArea className="h-[600px]">
               {isLoading ? (
-                <div className="p-6 flex items-center justify-center text-muted-foreground">
+                <div className="p-6 flex items-center justify-center text-muted-foreground text-sm">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Carregando…
+                  Carregando conversas…
                 </div>
+              ) : showConnectState ? (
+                <ConnectChannelState channel={activeChannelDef!} />
               ) : filtered.length === 0 ? (
-                <EmptyState />
+                <EmptyInbox />
               ) : (
                 <ul className="divide-y">
-                  {filtered.map((n) => (
-                    <li key={n.id}>
-                      <button
-                        onClick={() => handleSelect(n)}
-                        className={cn(
-                          "w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors",
-                          selected?.id === n.id && "bg-muted",
-                          !n.is_read && "font-medium",
-                        )}
-                      >
-                        <div className="flex items-start gap-2">
-                          <MediaIcon kind={n.metadata?.media_kind} />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <p className="truncate text-sm">{n.title}</p>
-                              {!n.is_read && (
-                                <span className="h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                              )}
+                  {filtered.map((t) => {
+                    const def = CHANNELS.find((c) => c.id === t.channel)!;
+                    const Icon = def.icon;
+                    return (
+                      <li key={t.id}>
+                        <button
+                          onClick={() => setSelectedId(t.id)}
+                          className={cn(
+                            "w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors",
+                            selected?.id === t.id && "bg-muted",
+                          )}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={cn("mt-0.5 shrink-0", def.color)}>
+                              <Icon className="h-4 w-4" />
                             </div>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {n.message}
-                            </p>
-                            <p className="text-[10px] text-muted-foreground mt-1">
-                              {formatDistanceToNow(new Date(n.created_at), {
-                                addSuffix: true,
-                                locale: ptBR,
-                              })}
-                            </p>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className={cn(
+                                  "truncate text-sm",
+                                  t.unread ? "font-semibold" : "font-medium",
+                                )}>
+                                  {t.title}
+                                </p>
+                                {t.unread && (
+                                  <span className="h-2 w-2 rounded-full bg-primary flex-shrink-0" />
+                                )}
+                              </div>
+                              <p className="text-xs text-muted-foreground truncate">
+                                {t.fromMe && <span className="text-foreground/60">Você: </span>}
+                                {t.preview}
+                              </p>
+                              <p className="text-[10px] text-muted-foreground mt-1">
+                                {formatDistanceToNow(new Date(t.timestamp), {
+                                  addSuffix: true,
+                                  locale: ptBR,
+                                })}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      </button>
-                    </li>
-                  ))}
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </ScrollArea>
@@ -224,10 +320,11 @@ export default function AgentInbox() {
           {/* Detail */}
           <Card className="p-6">
             {selected ? (
-              <DetailPanel item={selected} />
+              <ThreadDetail thread={selected} />
             ) : (
-              <div className="h-full flex items-center justify-center text-muted-foreground">
-                Selecione uma notificação
+              <div className="h-full flex flex-col items-center justify-center text-muted-foreground text-sm">
+                <MessageCircle className="h-8 w-8 mb-2 opacity-40" />
+                Selecione uma conversa para abrir
               </div>
             )}
           </Card>
@@ -237,117 +334,128 @@ export default function AgentInbox() {
   );
 }
 
-function MediaIcon({ kind }: { kind?: "video" | "image" }) {
-  if (kind === "video") return <VideoIcon className="h-4 w-4 text-primary mt-0.5" />;
-  if (kind === "image") return <ImageIcon className="h-4 w-4 text-primary mt-0.5" />;
-  return <Wand className="h-4 w-4 text-primary mt-0.5" />;
+// ── Subcomponents ───────────────────────────────────────────────────────────
+function ChannelPill({
+  active, onClick, icon: Icon, label, count, iconColor, disabled,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: typeof Mail;
+  label: string;
+  count: number;
+  iconColor?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border",
+        active
+          ? "bg-primary text-primary-foreground border-primary"
+          : "bg-card hover:bg-muted border-border text-foreground/80",
+      )}
+    >
+      <Icon className={cn("h-3.5 w-3.5", !active && iconColor)} />
+      <span>{label}</span>
+      {count > 0 && (
+        <Badge
+          variant="secondary"
+          className={cn(
+            "ml-0.5 h-4 px-1.5 text-[10px]",
+            active && "bg-primary-foreground/20 text-primary-foreground",
+          )}
+        >
+          {count}
+        </Badge>
+      )}
+      {disabled && !active && (
+        <span className="text-[9px] uppercase tracking-wide text-muted-foreground/70 ml-0.5">
+          conectar
+        </span>
+      )}
+    </button>
+  );
 }
 
-function EmptyState() {
+function ConnectChannelState({ channel }: { channel: ChannelDef }) {
+  const Icon = channel.icon;
   return (
-    <div className="p-10 md:p-14 text-center">
-      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center mb-4">
-        <Inbox className="h-6 w-6 text-primary" />
+    <div className="p-10 text-center">
+      <div className={cn(
+        "mx-auto h-14 w-14 rounded-2xl bg-muted grid place-items-center mb-4",
+        channel.color,
+      )}>
+        <Icon className="h-6 w-6" />
       </div>
-      <h2 className="font-display font-semibold text-lg mb-1.5">
-        Sua caixa de entrada está limpa
+      <h2 className="font-semibold text-lg mb-1.5">
+        Conecte sua conta {channel.label}
       </h2>
       <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-5">
-        Quando um cliente aprovar ou pedir ajuste em uma entrega dos seus agentes,
-        a notificação aparece aqui em tempo real.
+        Autorize o acesso para que os agentes recebam e respondam mensagens de {channel.label} direto por aqui.
       </p>
-      <a
-        href="/dashboard/departamentos"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
-      >
-        Ver departamentos ativos →
-      </a>
+      {channel.connectHref && (
+        <Button asChild size="sm">
+          <Link to={channel.connectHref}>
+            <Plug className="h-4 w-4 mr-2" />
+            Conectar {channel.label}
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }
 
+function EmptyInbox() {
+  return (
+    <div className="p-10 text-center">
+      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center mb-4">
+        <Inbox className="h-6 w-6 text-primary" />
+      </div>
+      <h2 className="font-semibold text-lg mb-1.5">Sua caixa está limpa</h2>
+      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+        Quando chegar uma nova mensagem de qualquer canal conectado, ela aparece aqui em tempo real.
+      </p>
+    </div>
+  );
+}
 
-function DetailPanel({ item }: { item: MediaNotif }) {
-  const isRevision = item.type === "media_revision_requested";
-  const meta = item.metadata ?? {};
-  const networks = meta.networks ?? [];
-
+function ThreadDetail({ thread }: { thread: Thread }) {
+  const def = CHANNELS.find((c) => c.id === thread.channel)!;
+  const Icon = def.icon;
   return (
     <div className="space-y-5">
-      <div>
-        <Badge variant={isRevision ? "destructive" : "default"} className="mb-2">
-          {isRevision ? "Ajuste solicitado" : "Aprovado pelo cliente"}
-        </Badge>
-        <h2 className="text-lg font-semibold">{item.title}</h2>
-        <p className="text-xs text-muted-foreground mt-1">
-          {formatDistanceToNow(new Date(item.created_at), {
-            addSuffix: true,
-            locale: ptBR,
-          })}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <Badge variant="outline" className="mb-2 gap-1.5">
+            <Icon className={cn("h-3 w-3", def.color)} />
+            {def.label}
+          </Badge>
+          <h2 className="text-lg font-semibold">{thread.title}</h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            {formatDistanceToNow(new Date(thread.timestamp), {
+              addSuffix: true,
+              locale: ptBR,
+            })}
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-lg border bg-muted/30 p-4">
+        <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2 flex items-center gap-1.5">
+          {thread.fromMe ? <UserIcon className="h-3 w-3" /> : <Bot className="h-3 w-3" />}
+          {thread.fromMe ? "Enviado por você" : "Recebido"}
+        </div>
+        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+          {thread.body || thread.preview}
         </p>
       </div>
 
-      {/* Preview */}
-      {meta.media_url && (
-        <div className="rounded-lg overflow-hidden border bg-muted/30 max-h-80">
-          {meta.media_kind === "video" ? (
-            <video src={meta.media_url} controls className="w-full max-h-80" />
-          ) : (
-            <img
-              src={meta.media_url}
-              alt={item.title}
-              className="w-full max-h-80 object-contain"
-            />
-          )}
-        </div>
+      {thread.href && (
+        <Button variant="outline" size="sm" asChild>
+          <Link to={thread.href}>Abrir na visão completa</Link>
+        </Button>
       )}
-
-      {/* Message */}
-      <div>
-        <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1 flex items-center gap-1">
-          <MessageSquare className="h-3 w-3" />
-          Feedback do cliente
-        </div>
-        <p className="text-sm whitespace-pre-wrap">{item.message}</p>
-      </div>
-
-      {/* Networks */}
-      {networks.length > 0 && (
-        <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
-            Redes selecionadas
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {networks.map((n) => (
-              <Badge key={n} variant="outline">
-                {n}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex flex-wrap gap-2 pt-2 border-t">
-        {meta.approval_id && (
-          <Button variant="outline" size="sm" asChild>
-            <a href={`/dashboard?approval=${meta.approval_id}`}>
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Abrir na Central de Aprovações
-            </a>
-          </Button>
-        )}
-        {isRevision && meta.media_kind === "video" && (
-          <Button size="sm" asChild>
-            <a href="/video-studio">Refazer no Studio</a>
-          </Button>
-        )}
-        {!isRevision && (
-          <Button size="sm" asChild>
-            <a href="/settings/social">Configurar publicação</a>
-          </Button>
-        )}
-      </div>
     </div>
   );
 }
