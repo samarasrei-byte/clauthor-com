@@ -64,16 +64,16 @@ const ExecutionHealthBanner = ({ onGoToWarRoom }: Props) => {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-foreground">{config.title}</span>
-            <Badge variant="outline" className="text-[8px] h-4 border-border/20">
+            <span className="dash-title">{config.title}</span>
+            <Badge variant="outline" className="dash-eyebrow h-4 border-border/20">
               Score {health.healthScore}
             </Badge>
           </div>
-          <p className="text-[10px] text-muted-foreground mt-0.5">{config.desc}</p>
+          <p className="dash-label mt-0.5 normal-case tracking-normal">{config.desc}</p>
         </div>
         <button
           onClick={onGoToWarRoom}
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-medium text-primary hover:bg-primary/10 transition-colors shrink-0"
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg dash-label text-primary hover:bg-primary/10 transition-colors shrink-0"
         >
           War Room <ArrowRight className="h-3 w-3" />
         </button>
