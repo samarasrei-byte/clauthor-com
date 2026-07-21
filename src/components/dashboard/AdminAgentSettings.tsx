@@ -83,10 +83,10 @@ const AdminAgentSettings = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="font-display text-xl font-bold flex items-center gap-2">
+        <h2 className="dash-title flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" /> Configurações de Agentes - Admin
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="dash-label mt-1">
           Gerencie prompts, integrações e canais de todos os agentes da plataforma
         </p>
       </div>
@@ -103,9 +103,9 @@ const AdminAgentSettings = () => {
           <div key={s.label} className="glass-card rounded-xl p-3 border border-white/[0.06]">
             <div className="flex items-center gap-2 mb-1">
               <s.icon className={`h-3.5 w-3.5 ${s.color}`} />
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{s.label}</span>
+              <span className="dash-eyebrow">{s.label}</span>
             </div>
-            <p className="font-display text-lg font-bold">{s.value}</p>
+            <p className="dash-kpi">{s.value}</p>
           </div>
         ))}
       </div>
@@ -149,7 +149,7 @@ const AdminAgentSettings = () => {
         </div>
       </div>
 
-      <p className="text-xs text-muted-foreground">{filtered.length} agentes encontrados</p>
+      <p className="dash-label">{filtered.length} agentes encontrados</p>
 
       {/* Agent List */}
       {isLoading ? (
@@ -228,7 +228,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
           </div>
           <div className="text-left">
             <div className="flex items-center gap-2">
-              <p className="font-display font-semibold text-sm">{agent.name}</p>
+              <p className="dash-title text-sm">{agent.name}</p>
               {hasIssues && <AlertTriangle className="h-3.5 w-3.5 text-warning" />}
             </div>
             <div className="flex items-center gap-2 mt-0.5">
@@ -259,7 +259,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
             <div className="px-4 pb-5 space-y-5 border-t border-white/[0.06] pt-4">
               {/* Status Toggle */}
               <div className="flex items-center gap-3">
-                <label className="text-xs font-medium text-muted-foreground">Status:</label>
+                <label className="dash-label">Status:</label>
                 <div className="flex gap-1.5">
                   {["draft", "active", "paused", "archived"].map((s) => (
                     <Button key={s} variant={status === s ? "default" : "ghost"} size="sm" onClick={() => setStatus(s)} className="text-xs capitalize">
@@ -271,13 +271,13 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Objective */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Objetivo</label>
+                <label className="dash-label mb-2 block">Objetivo</label>
                 <Input value={objective} onChange={(e) => setObjective(e.target.value)} placeholder="Objetivo do agente..." className="bg-accent/20 border-white/[0.08]" />
               </div>
 
               {/* Prompt */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
+                <label className="dash-label mb-2 flex items-center gap-2">
                   Prompt / Instruções
                   {(!instructions || instructions.trim().length < 10) && (
                     <Badge className="bg-warning/15 text-warning text-[8px] border-0">SEM PROMPT</Badge>
@@ -289,12 +289,12 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
                   placeholder="Defina o comportamento, tom de voz e regras..."
                   className="min-h-[140px] bg-accent/20 border-white/[0.08] font-mono text-xs"
                 />
-                <p className="text-[10px] text-muted-foreground mt-1">{instructions.length} chars</p>
+                <p className="dash-eyebrow mt-1">{instructions.length} chars</p>
               </div>
 
               {/* Channels */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
+                <label className="dash-label mb-2 flex items-center gap-2">
                   Canais
                   {channels.length === 0 && <Badge className="bg-warning/15 text-warning text-[8px] border-0">NENHUM</Badge>}
                 </label>
@@ -320,7 +320,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Integrations */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Integrações</label>
+                <label className="dash-label mb-2 block">Integrações</label>
                 <div className="flex flex-wrap gap-2">
                   {INTEGRATION_OPTIONS.map((intg) => {
                     const active = integrations.includes(intg.id);
