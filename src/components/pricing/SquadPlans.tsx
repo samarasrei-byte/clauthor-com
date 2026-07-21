@@ -423,10 +423,10 @@ export default function SquadPlans() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`group relative rounded-2xl bg-background border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 ${
+                    className={`group relative rounded-2xl bg-background border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-24px_rgba(0,0,0,0.5),0_0_0_1px_hsl(var(--accent-amber)/0.18)] ${
                       dept.popular 
                         ? "border-primary/30" 
-                        : "border-border hover:border-primary/20"
+                        : "border-border hover:border-[hsl(var(--accent-amber)/0.35)]"
                     }`}
                   >
                     {dept.popular && (
