@@ -90,7 +90,18 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
   const [recent, setRecent] = useState<string[]>(() => readList(LS_KEYS.recent));
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const tooltipBaseId = useId();
   const [beginner, , toggleBeginner] = useBeginnerMode();
+  const { speak: ttsSpeak } = useElevenLabsTTS();
+
+  /** Narra um item usando ElevenLabs (com fallback nativo automático). */
+  const speakSidebar = useCallback((text: string) => {
+    if (!text) return;
+    // Fire-and-forget · não bloqueia navegação
+    void ttsSpeak(text);
+  }, [ttsSpeak]);
+
 
   // Persist
   useEffect(() => {
