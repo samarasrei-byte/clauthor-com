@@ -109,12 +109,12 @@ const NextStepsCard = () => {
 
       <div className="flex items-center gap-2 mb-1.5">
         <Diamond className="h-4 w-4 text-primary" />
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Próximos passos</p>
+        <p className="dash-eyebrow text-primary">Próximos passos</p>
       </div>
-      <h3 className="font-display text-lg font-semibold leading-[1.15] tracking-tight capitalize">
+      <h3 className="dash-title text-lg capitalize">
         Agora que {pathLabel} está a caminho…
       </h3>
-      <p className="text-[13px] text-muted-foreground mt-1.5">Três passos rápidos para deixar tudo redondo.</p>
+      <p className="dash-label mt-1.5">Três passos rápidos para deixar tudo redondo.</p>
 
       <div className="grid gap-2.5 mt-4 md:grid-cols-3">
         {steps.map((s) => {
