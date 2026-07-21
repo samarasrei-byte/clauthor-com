@@ -78,13 +78,13 @@ const HunterICP = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="w-5 h-5 text-primary" /> Passo 2 - Definir ICP (cliente ideal)
+          <CardTitle className="dash-title flex items-center gap-2">
+            <Target className="w-5 h-5 text-primary" /> Passo 2 · Definir ICP (cliente ideal)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Cargo alvo *</Label>
+            <Label className="dash-label">Cargo alvo *</Label>
             <Input
               value={form.cargo_alvo}
               onChange={(e) => setForm({ ...form, cargo_alvo: e.target.value })}
@@ -92,7 +92,7 @@ const HunterICP = () => {
             />
           </div>
           <div className="space-y-2">
-            <Label>Cidade / Localização</Label>
+            <Label className="dash-label">Cidade / Localização</Label>
             <Input
               value={form.localizacao_alvo}
               onChange={(e) => setForm({ ...form, localizacao_alvo: e.target.value })}
@@ -100,13 +100,14 @@ const HunterICP = () => {
             />
           </div>
           <div className="space-y-2">
-            <Label>Setor</Label>
+            <Label className="dash-label">Setor</Label>
             <Input
               value={form.setor_alvo}
               onChange={(e) => setForm({ ...form, setor_alvo: e.target.value })}
               placeholder="Ex: SaaS B2B, E-commerce, Fintech"
             />
           </div>
+
           <div className="flex justify-between pt-2">
             <Button variant="outline" onClick={() => navigate("/hunter-linkedin")} className="gap-2">
               <ArrowLeft className="w-4 h-4" /> Voltar
