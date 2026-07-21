@@ -70,7 +70,7 @@ export default function GlobalDashboardSidebar() {
         { id: "route:/meus-squads",        label: "Meus squads",        icon: UsersRound, description: "Squads especializados que você já ativou." },
         ...(beginner ? [] : [{ id: "route:/dashboard/departamentos", label: "Catálogo de departamentos", icon: Building2, description: "Explore departamentos disponíveis para contratar." }]),
         ...(beginner ? [] : [{ id: "route:/dashboard/squads",        label: "Catálogo de squads",        icon: UsersRound, description: "Explore squads pré-configurados." }]),
-        { id: "route:/dashboard/departamentos", label: "Contratar novo", icon: Building2, description: "Adicione um novo departamento ao seu time." },
+        { id: "route:/dashboard/departamentos?novo=1", label: "Contratar novo", icon: Building2, description: "Adicione um novo departamento ao seu time." },
       ],
     },
 
