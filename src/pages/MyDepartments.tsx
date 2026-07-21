@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { DEPARTMENT_PACKAGES, formatBRL, getDepartmentById } from "@/data/departmentPackages";
 import SEO from "@/components/SEO";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 
 type ContractedDept = {
   id: string;
