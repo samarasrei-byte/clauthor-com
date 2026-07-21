@@ -140,8 +140,8 @@ const HunterDashboard = () => {
               {hotLeads.map(lead => (
                 <div key={lead.id} className="flex items-center justify-between p-3 rounded-lg border border-border/40 hover:border-primary/30 transition-colors">
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-foreground truncate">{lead.nome_completo}</p>
-                    <p className="text-xs text-muted-foreground truncate">{lead.cargo} · {lead.empresa}</p>
+                    <p className="dash-title text-sm truncate">{lead.nome_completo}</p>
+                    <p className="dash-label truncate mt-0.5">{lead.cargo} · {lead.empresa}</p>
                   </div>
                   {lead.linkedin_url && (
                     <Button asChild variant="ghost" size="sm">
