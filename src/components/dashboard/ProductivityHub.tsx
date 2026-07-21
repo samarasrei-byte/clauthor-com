@@ -97,8 +97,8 @@ const SectionCard = ({
           <Icon className="h-4.5 w-4.5 text-primary" strokeWidth={1.75} />
         </div>
         <div className="min-w-0">
-          <h3 className="font-display font-semibold text-sm tracking-tight">{title}</h3>
-          {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
+          <h3 className="dash-title">{title}</h3>
+          {description && <p className="dash-caption mt-0.5">{description}</p>}
         </div>
       </div>
       {action && <div className="shrink-0">{action}</div>}
