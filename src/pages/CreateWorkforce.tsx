@@ -1,5 +1,6 @@
 import { useMemo, useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ClauthorLogo from "@/components/ClauthorLogo";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Search, Plus, X, Target, Users, Building2, Globe, Wrench, Plug, BookOpen, Radio, Brain, Shield, Wand2, Rocket, Save, Check, Loader2, ChevronDown } from "lucide-react";
 import { Wand } from "lucide-react";
