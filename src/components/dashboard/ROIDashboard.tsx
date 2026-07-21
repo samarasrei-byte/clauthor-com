@@ -137,11 +137,11 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Wand className="h-4 w-4 text-primary" />
-          <h3 className="font-display text-sm font-bold">
+          <h3 className="dash-title">
             {t("roi.title", { defaultValue: "ROI em Tempo Real" })}
           </h3>
         </div>
-        <span className="text-[10px] text-muted-foreground px-2 py-0.5 rounded-full bg-muted/50">
+        <span className="dash-eyebrow text-muted-foreground px-2 py-0.5 rounded-full bg-muted/50">
           {t("roi.live", { defaultValue: "● Ao vivo" })}
         </span>
       </div>
@@ -164,16 +164,16 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
               <div className="flex items-center justify-between">
                 <Icon className={cn("h-4 w-4", card.color)} />
                 {card.trend && TrendIcon && (
-                  <span className={cn("text-[9px] font-medium flex items-center gap-0.5", card.trend.color)}>
+                  <span className={cn("dash-eyebrow font-medium flex items-center gap-0.5", card.trend.color)}>
                     <TrendIcon className="h-2.5 w-2.5" /> {card.trend.text}
                   </span>
                 )}
               </div>
               <div>
-                <div className="text-xl font-bold font-display">{card.value}</div>
-                <div className="text-[10px] text-muted-foreground">{card.label}</div>
+                <div className="dash-kpi">{card.value}</div>
+                <div className="dash-label text-muted-foreground">{card.label}</div>
               </div>
-              <div className="text-[9px] text-muted-foreground/60">{card.sub}</div>
+              <div className="dash-eyebrow text-muted-foreground/60">{card.sub}</div>
             </motion.div>
           );
         })}
@@ -181,7 +181,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
 
       {/* Comparison bar */}
       <div className="rounded-lg border border-border/10 bg-card/30 p-3">
-        <div className="flex items-center justify-between text-[11px] mb-2">
+        <div className="flex items-center justify-between dash-label mb-2">
           <span className="text-muted-foreground">
             {t("roi.comparison", { defaultValue: "Custo Humano vs IA" })}
           </span>
@@ -199,7 +199,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
             style={{ width: `${Math.min(100, (metrics.agentCost / Math.max(1, metrics.humanEquivalentCost)) * 100)}%` }}
           />
         </div>
-        <div className="flex justify-between text-[9px] text-muted-foreground mt-1">
+        <div className="flex justify-between dash-eyebrow text-muted-foreground mt-1">
           <span>👤 R$ {metrics.humanEquivalentCost.toLocaleString("pt-BR")}</span>
           <span>🤖 R$ {metrics.agentCost.toLocaleString("pt-BR")}</span>
         </div>
