@@ -295,6 +295,45 @@
   html.dash-dense .kpi-value,
   html.dash-dense [data-kpi] { font-variant-numeric: tabular-nums; }
 
+  /* ============================================================
+     Premium dashboard typography utilities (Mission Control tier).
+     Reuse these classes instead of ad-hoc Tailwind stacks so every
+     card obeys the same hierarchy.
+       .dash-eyebrow  → section kicker above titles
+       .dash-title    → card / panel title (display font)
+       .dash-kpi      → numeric KPI value (tabular)
+       .dash-label    → muted supporting label
+     ============================================================ */
+  .dash-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+  .dash-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+  }
+  .dash-kpi {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: hsl(var(--foreground));
+  }
+  .dash-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: hsl(var(--muted-foreground));
+  }
+
 
   body {
     @apply bg-background text-foreground antialiased;
