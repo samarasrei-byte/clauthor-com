@@ -70,7 +70,7 @@ export default function FilesPickerSheet({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
   const [pickingId, setPickingId] = useState<string | null>(null);
-  const [preview, setPreview] = useState<{ url: string; name: string; kind: "image" | "video" | "pdf" } | null>(null);
+  const [preview, setPreview] = useState<{ url: string; name: string; kind: "image" | "video" | "pdf" | "audio" } | null>(null);
   const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   const { data: files = [], isLoading } = useQuery({
@@ -97,7 +97,7 @@ export default function FilesPickerSheet({
 
   // Prefetch signed thumbnails for image rows (batched, cached in-memory).
   useEffect(() => {
-    const targets = filtered.filter((f) => (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && !thumbs[f.id]).slice(0, 40);
+    const targets = filtered.filter((f) => (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf" || f.file_type === "audio") && !thumbs[f.id]).slice(0, 40);
     if (targets.length === 0) return;
     let cancelled = false;
     (async () => {
@@ -226,12 +226,13 @@ export default function FilesPickerSheet({
                           if (f.file_type === "image") setPreview({ url: thumb, name: f.name, kind: "image" });
                           else if (f.file_type === "video") setPreview({ url: thumb, name: f.name, kind: "video" });
                           else if (f.file_type === "pdf") setPreview({ url: thumb, name: f.name, kind: "pdf" });
+                          else if (f.file_type === "audio") setPreview({ url: thumb, name: f.name, kind: "audio" });
                         }}
-                        disabled={!((f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && thumb)}
+                        disabled={!((f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf" || f.file_type === "audio") && thumb)}
                         className={cn(
                           "h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center overflow-hidden",
                           M.ring,
-                          (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
+                          (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf" || f.file_type === "audio") && thumb && "cursor-zoom-in hover:ring-2 hover:ring-primary/40",
                         )}
                         aria-label={thumb ? `Ver ${M.label.toLowerCase()}` : undefined}
                       >
@@ -300,6 +301,22 @@ export default function FilesPickerSheet({
               className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl bg-black"
               onClick={(e) => e.stopPropagation()}
             />
+          ) : preview.kind === "audio" ? (
+            <div
+              className="w-[90vw] max-w-lg rounded-lg shadow-2xl bg-card border border-border/60 p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
+                  <FileAudio className="h-5 w-5 text-violet-500" strokeWidth={1.6} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{preview.name}</p>
+                  <p className="text-[11px] text-muted-foreground">Áudio</p>
+                </div>
+              </div>
+              <audio src={preview.url} controls autoPlay className="w-full" />
+            </div>
           ) : (
             <iframe
               src={preview.url}
