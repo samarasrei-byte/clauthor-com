@@ -97,8 +97,8 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
         <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border/20 flex items-center justify-center mx-auto">
           <FileText className="h-7 w-7 text-muted-foreground/50" />
         </div>
-        <h3 className="font-display text-lg font-semibold">{t("results.empty_title")}</h3>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+        <h3 className="dash-title text-lg">{t("results.empty_title")}</h3>
+        <p className="dash-label text-sm max-w-md mx-auto">
           {t("results.empty_desc")}
         </p>
         <Button variant="outline" size="sm" onClick={() => onNavigate?.("overview")}>
@@ -112,8 +112,8 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold">{t("results.title")}</h2>
-          <p className="text-sm text-muted-foreground">{t("results.subtitle")}</p>
+          <h2 className="dash-title text-xl">{t("results.title")}</h2>
+          <p className="dash-label text-sm">{t("results.subtitle")}</p>
         </div>
         <Badge variant="secondary" className="text-xs">
           {reports.length + executions.length} {t("results.results_count")}

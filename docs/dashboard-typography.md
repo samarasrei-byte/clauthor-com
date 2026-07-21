@@ -40,5 +40,38 @@ carregam apenas peso, tracking, line-height e cor semântica.
 - `MonthlyROICard.tsx`
 - `NextStepsCard.tsx`
 - `FirstDeliveryCard.tsx`
+- `WowKpiCard.tsx`
+- `KpiStrip.tsx`
+- `AnalyticsSection.tsx`
+- `DeliverablesHub.tsx`
+- `AgentLiveTimeline.tsx`
+- `ExecutionResultsPanel.tsx`
 
 Novos cards do painel devem seguir o mesmo padrão.
+
+## Breadcrumb contextual actions
+
+O shell renderiza um slot à direita do breadcrumb (`<div id="dash-breadcrumb-actions">`).
+Qualquer página do painel pode injetar botões contextuais nele via portal:
+
+```tsx
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
+import { Button } from "@/components/ui/button";
+
+export default function VideoStudioPage() {
+  return (
+    <>
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline">Nova cena</Button>
+        <Button size="sm">Publicar</Button>
+      </BreadcrumbActions>
+      {/* resto da página */}
+    </>
+  );
+}
+```
+
+Regras:
+1. Máximo **2 ações** — reserve espaço para o breadcrumb em telas pequenas.
+2. Use `size="sm"` sempre — o slot é 32px de altura.
+3. Ação primária à direita, secundária à esquerda.
