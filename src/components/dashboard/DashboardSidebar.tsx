@@ -502,13 +502,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
       </nav>
 
-      {/* Footer · atalhos discretos */}
+      {/* Footer · atalho recolher (⌘K removido — já indicado no campo de busca) */}
       {!collapsed && (
-        <div className="shrink-0 px-3 py-2 border-t border-border/40 flex items-center justify-between text-[9.5px] font-medium text-muted-foreground/60">
-          <span className="flex items-center gap-1">
-            <kbd className="px-1 py-0.5 rounded border border-border/40 bg-background/50 font-mono">⌘K</kbd>
-            <span>buscar</span>
-          </span>
+        <div className="shrink-0 px-3 py-2 border-t border-border/40 flex items-center justify-end text-[9.5px] font-medium text-muted-foreground/60">
           <span className="flex items-center gap-1">
             <kbd className="px-1 py-0.5 rounded border border-border/40 bg-background/50 font-mono">⌘B</kbd>
             <span>recolher</span>
