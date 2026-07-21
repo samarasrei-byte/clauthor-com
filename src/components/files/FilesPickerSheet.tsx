@@ -97,7 +97,7 @@ export default function FilesPickerSheet({
 
   // Prefetch signed thumbnails for image rows (batched, cached in-memory).
   useEffect(() => {
-    const targets = filtered.filter((f) => (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf") && !thumbs[f.id]).slice(0, 40);
+    const targets = filtered.filter((f) => (f.file_type === "image" || f.file_type === "video" || f.file_type === "pdf" || f.file_type === "audio") && !thumbs[f.id]).slice(0, 40);
     if (targets.length === 0) return;
     let cancelled = false;
     (async () => {
