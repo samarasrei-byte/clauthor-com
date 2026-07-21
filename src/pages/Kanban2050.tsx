@@ -831,7 +831,7 @@ export default function Kanban2050() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-lg font-semibold">{board.name}</h1>
+                  <h1 className="dash-title">{board.name}</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="text-muted-foreground hover:text-foreground">
