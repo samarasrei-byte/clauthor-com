@@ -91,10 +91,10 @@ export default function DepartmentMiniChat({ departmentId, autoPlay = true, comp
       {/* Header */}
       <div className="flex items-center gap-1.5 mb-2">
         <Zap className="h-3 w-3 text-primary/60" />
-        <span className="text-[9px] text-primary/50 uppercase tracking-[0.15em] font-bold">Orquestração ao vivo</span>
+        <span className="dash-eyebrow text-primary/60">Orquestração ao vivo</span>
         <div className="ml-auto flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-          <span className="text-[8px] text-success/60">LIVE</span>
+          <span className="dash-eyebrow text-success/70">LIVE</span>
         </div>
       </div>
 
