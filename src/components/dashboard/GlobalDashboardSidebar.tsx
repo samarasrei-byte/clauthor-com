@@ -38,6 +38,7 @@ export default function GlobalDashboardSidebar() {
       description: "Seu ambiente operacional · produtividade, inteligência e aprovações.",
       children: [
         { id: "tab:productivity",     label: "Produtividade",      icon: Layers3,     description: "Tarefas, prazos e execução dos agentes em tempo real." },
+        { id: "route:/dashboard/kanban", label: "Kanban", icon: Trello, description: "Quadro visual · arraste tarefas entre estágios, com prioridades, tags e checklist." },
         { id: "tab:intelligence-hub", label: "Inteligência",       icon: BarChart3,   description: "KPIs consolidados e insights gerados pela IA." },
         { id: "tab:media",            label: "Mídia",              icon: LayoutDashboard, description: "Biblioteca de imagens, vídeos e áudios produzidos pelos agentes." },
         { id: "tab:approvals",        label: "Central de Aprovações", icon: CheckSquare, description: "Aprove ou rejeite entregas antes de publicar." },
@@ -46,10 +47,9 @@ export default function GlobalDashboardSidebar() {
     },
     { id: "route:/dashboard/inbox", label: "Inbox Unificado", icon: Inbox, group: zoneWork,
       description: "LinkedIn, Instagram, WhatsApp, Facebook, TikTok e e-mails em um só lugar." },
-    { id: "route:/kanban", label: "Kanban 2050", icon: Trello, group: zoneWork,
-      description: "Quadro visual multi-board · arraste tarefas entre estágios, com prioridades, tags e checklist." },
     { id: "route:/dashboard/arquivos", label: "Meus arquivos", icon: FolderOpen, group: zoneWork,
       description: "Documentos, vídeos e imagens organizados por projeto." },
+
     { id: "route:/video", label: "Video Hub", icon: Clapperboard, group: zoneWork,
       description: "Estúdio de vídeo com Veo 3 e corte automático de clipes.",
       locked: videoLocked, badge: videoLocked ? "Premium" : undefined },
