@@ -64,8 +64,8 @@ export default function WowKpiCard() {
             <Zap className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider">KPIs InstantWow</h3>
-            <p className="text-[11px] text-muted-foreground">Últimos 7 dias · meta &lt; 90s</p>
+            <p className="dash-eyebrow mb-1">KPIs InstantWow</p>
+            <h3 className="dash-title text-sm">Últimos 7 dias · meta &lt; 90s</h3>
           </div>
         </div>
         <Button
