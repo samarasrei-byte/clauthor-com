@@ -60,8 +60,8 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
               <Wand className="h-6 w-6 text-primary" />
             </motion.div>
             <div>
-              <h2 className="font-display text-xl font-bold">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Complete your payment without leaving the page" })}</p>
+              <h2 className="dash-title font-display">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>
+              <p className="dash-label text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Complete your payment without leaving the page" })}</p>
             </div>
             <FlowProgressBar currentStep="payment" className="mt-4" />
           </div>
