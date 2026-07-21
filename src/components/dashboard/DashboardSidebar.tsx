@@ -206,9 +206,15 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
         <button
           onClick={() => {
-            if (hasChildren && !collapsed) toggleGroup(item.id);
-            else onItemChange(item.id);
+            if (hasChildren && !collapsed) {
+              toggleGroup(item.id);
+            } else {
+              speakSidebar(item.description ? `${item.label}. ${item.description}` : item.label);
+              onItemChange(item.id);
+            }
           }}
+          title={item.description ? `${item.label} · ${item.description}` : item.label}
+          aria-label={item.description ? `${item.label}. ${item.description}` : item.label}
           className={cn(
             "w-full flex items-center gap-2.5 rounded-xl transition-all duration-150 group relative",
             collapsed ? "px-2 py-1.5 justify-center" : "px-2.5 py-1.5",
