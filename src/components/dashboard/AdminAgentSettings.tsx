@@ -320,7 +320,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Integrations */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Integrações</label>
+                <label className="dash-label mb-2 block">Integrações</label>
                 <div className="flex flex-wrap gap-2">
                   {INTEGRATION_OPTIONS.map((intg) => {
                     const active = integrations.includes(intg.id);
