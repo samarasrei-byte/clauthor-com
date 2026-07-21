@@ -70,7 +70,7 @@ const HunterDashboard = () => {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <Target className="w-7 h-7 text-primary" />
-          <h1 className="text-2xl font-bold text-foreground">Hunter</h1>
+          <h1 className="dash-title text-2xl">Hunter</h1>
         </div>
         <div className="flex gap-2 flex-wrap">
           <Button asChild variant="default" className="gap-2 relative">
