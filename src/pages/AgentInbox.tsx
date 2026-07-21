@@ -438,8 +438,8 @@ function ThreadDetail({ thread }: { thread: Thread }) {
             <Icon className={cn("h-3 w-3", def.color)} />
             {def.label}
           </Badge>
-          <h2 className="text-lg font-semibold">{thread.title}</h2>
-          <p className="text-xs text-muted-foreground mt-1">
+          <h2 className="dash-title">{thread.title}</h2>
+          <p className="dash-label mt-1">
             {formatDistanceToNow(new Date(thread.timestamp), {
               addSuffix: true,
               locale: ptBR,
