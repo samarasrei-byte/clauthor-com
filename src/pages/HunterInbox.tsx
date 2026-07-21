@@ -285,8 +285,8 @@ const HunterInbox = () => {
                   <AvatarFallback>{active.lead_name?.[0] || "?"}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-foreground truncate">{active.lead_name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{active.lead_headline}</p>
+                  <p className="dash-label font-medium text-foreground truncate">{active.lead_name}</p>
+                  <p className="dash-label text-muted-foreground truncate">{active.lead_headline}</p>
                 </div>
                 {active.lead_profile_url && (
                   <Button asChild variant="ghost" size="sm" className="gap-1">
