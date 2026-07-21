@@ -173,12 +173,12 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
     >
       <header className="flex items-center justify-between mb-5">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/80 mb-1.5">
+          <p className="dash-eyebrow mb-1.5">
             ROI do mês · {monthName}
           </p>
           <h2
             id="monthly-roi-title"
-            className="font-display text-lg font-semibold text-foreground tracking-tight"
+            className="dash-title text-lg"
           >
             {isEmpty
               ? "Ainda sem tarefas este mês"
