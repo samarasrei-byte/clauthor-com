@@ -40,11 +40,11 @@ export default function CompanyBoardAlert({ onSetup }: CompanyBoardAlertProps) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-sm">Seus agentes não conhecem sua empresa</h3>
+            <h3 className="dash-title">Seus agentes não conhecem sua empresa</h3>
             <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Sem informações da empresa, os agentes respondem de forma genérica. 
+          <p className="dash-label mt-1 normal-case tracking-normal">
+            Sem informações da empresa, os agentes respondem de forma genérica.
             Configure agora - cole a URL do seu site e a IA preenche tudo automaticamente.
           </p>
           <Button size="sm" onClick={onSetup} className="mt-2.5 gap-2 h-8 text-xs">
