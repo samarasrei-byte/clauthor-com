@@ -376,7 +376,7 @@ const Departamentos = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-[13px] font-medium truncate group-hover/agent:text-primary transition-colors">
-                            {t(`library_page.agents.${agent.key}_title`)}
+                            {t(`library_page.agents.${agent.key}_title`, { defaultValue: agent.role })}
                           </p>
                           <p className="text-[10px] text-muted-foreground">
                             {t("departments_page.replaces", { role: agent.role })}
