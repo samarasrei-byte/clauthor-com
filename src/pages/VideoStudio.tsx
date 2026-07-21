@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 import {
 
   Loader2,
@@ -437,6 +438,15 @@ export default function VideoStudio() {
           content="Gere vídeos com IA guiado pelo copiloto Thor · Veo 3 e Replicate direto do dashboard."
         />
       </Helmet>
+
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={() => setFilesPickerOpen(true)} className="h-8 gap-1.5 text-xs">
+          <FolderOpen strokeWidth={1.5} className="h-3.5 w-3.5" /> Biblioteca
+        </Button>
+        <Button size="sm" onClick={() => setPaletteOpen(true)} className="h-8 gap-1.5 text-xs">
+          <CommandIcon strokeWidth={1.5} className="h-3.5 w-3.5" /> Comandos
+        </Button>
+      </BreadcrumbActions>
 
       <CopilotTour />
 

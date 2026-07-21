@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Trash2, Search, X, Calendar, Flag, Tag as TagIcon, GripVertical,
@@ -810,6 +811,15 @@ export default function Kanban2050() {
           content="Kanban moderno com estágios customizáveis, WIP, checklists, tags, prazos e drag-and-drop. Gestão visual pensada para escalar."
         />
       </Helmet>
+
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={() => setCmdOpen(true)} className="h-8 gap-1.5 text-xs">
+          <CmdIcon className="h-3.5 w-3.5" /> ⌘K
+        </Button>
+        <Button size="sm" onClick={() => firstColId && createTask(firstColId)} className="h-8 gap-1.5 text-xs">
+          <Plus className="h-3.5 w-3.5" /> Nova tarefa
+        </Button>
+      </BreadcrumbActions>
 
       <div className="h-full flex flex-col overflow-hidden">
         {/* HEADER */}

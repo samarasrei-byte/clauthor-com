@@ -18,6 +18,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 import { Link } from "react-router-dom";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -205,6 +206,12 @@ export default function AgentInbox() {
           content="Todas as conversas dos seus agentes — LinkedIn, Instagram, WhatsApp, Facebook, TikTok e e-mails — num só lugar."
         />
       </Helmet>
+
+      <BreadcrumbActions>
+        <Button asChild size="sm" variant="outline" className="h-8 gap-1.5 text-xs">
+          <Link to="/dashboard/integrations"><Plug className="h-3.5 w-3.5" /> Conectar canal</Link>
+        </Button>
+      </BreadcrumbActions>
 
       <div className="p-4 sm:p-6 space-y-4">
         {/* Header */}
