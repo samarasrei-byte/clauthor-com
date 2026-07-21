@@ -271,7 +271,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Objective */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Objetivo</label>
+                <label className="dash-label mb-2 block">Objetivo</label>
                 <Input value={objective} onChange={(e) => setObjective(e.target.value)} placeholder="Objetivo do agente..." className="bg-accent/20 border-white/[0.08]" />
               </div>
 
