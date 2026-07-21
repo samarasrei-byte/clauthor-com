@@ -78,10 +78,10 @@ const AgentRoom = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
             <Users2 className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-medium text-primary">Sua Equipe de IA</span>
+            <span className="dash-eyebrow text-primary">Sua Equipe de IA</span>
           </div>
-          <h1 className="font-display text-3xl font-bold gradient-text mb-2">Sala Digital de Agentes</h1>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          <h1 className="dash-hero-title font-display font-semibold gradient-text mb-2">Sala Digital de Agentes</h1>
+          <p className="dash-label text-muted-foreground max-w-md mx-auto">
             {agents.length} membros ativos na sua equipe autônoma
           </p>
         </motion.div>
@@ -315,9 +315,9 @@ const AgentRoom = () => {
             >
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <stat.icon className={cn("h-4 w-4", `text-${stat.color}-500`)} />
-                <span className="text-[11px]">{stat.label}</span>
+                <span className="dash-eyebrow">{stat.label}</span>
               </div>
-              <p className="text-2xl font-bold font-display">{stat.value}</p>
+              <p className="dash-kpi font-display">{stat.value}</p>
             </motion.div>
           ))}
         </motion.div>

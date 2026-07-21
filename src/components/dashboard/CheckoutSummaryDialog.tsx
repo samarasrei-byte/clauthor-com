@@ -60,8 +60,8 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
               <Wand className="h-6 w-6 text-primary" />
             </motion.div>
             <div>
-              <h2 className="font-display text-xl font-bold">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Complete your payment without leaving the page" })}</p>
+              <h2 className="dash-title font-display">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>
+              <p className="dash-label text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Complete your payment without leaving the page" })}</p>
             </div>
             <FlowProgressBar currentStep="payment" className="mt-4" />
           </div>
@@ -89,8 +89,8 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
                 <p className="font-display font-bold text-lg leading-tight">{data.label}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="font-display text-2xl font-bold text-primary">{formattedPrice}</p>
-                <p className="text-[10px] text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
+                <p className="dash-kpi font-display text-primary">{formattedPrice}</p>
+                <p className="dash-eyebrow text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
               </div>
             </div>
 
@@ -113,7 +113,7 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
 
             {data.slugs.length > 0 && (
               <div className="space-y-2">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+                <p className="dash-eyebrow text-muted-foreground/60">
                   {data.slugs.length} {t("checkout.agents_included_label", { defaultValue: "agent(s) included" })}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
