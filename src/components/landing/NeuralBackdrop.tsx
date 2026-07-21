@@ -9,9 +9,18 @@ interface Props {
 
 const NeuralBackdrop = ({ className = "" }: Props) => {
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} aria-hidden>
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none bg-grain ${className}`} aria-hidden>
       {/* Base preta pura */}
       <div className="absolute inset-0 bg-[#050505]" />
+
+      {/* Radial elevation · surface depth from center */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 30%, hsl(0 0% 8%) 0%, transparent 70%)",
+        }}
+      />
 
       {/* Grid ultra sutil */}
       <div
