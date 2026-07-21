@@ -104,11 +104,11 @@ export function FirstDeliveryCard({ onOpenApprovals }: Props) {
             <Diamond className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.15em] text-primary/80 mb-1">
+            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/90 mb-1.5">
               <CheckCircle2 className="h-3 w-3" />
               Primeiro entregável aprovado
             </div>
-            <h3 className="text-base md:text-lg font-semibold text-foreground truncate">
+            <h3 className="font-display text-base md:text-lg font-semibold text-foreground tracking-tight truncate">
               {approval.title}
             </h3>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">

@@ -173,12 +173,12 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
     >
       <header className="flex items-center justify-between mb-5">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground mb-1">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/80 mb-1.5">
             ROI do mês · {monthName}
           </p>
           <h2
             id="monthly-roi-title"
-            className="text-lg font-semibold text-foreground tracking-tight"
+            className="font-display text-lg font-semibold text-foreground tracking-tight"
           >
             {isEmpty
               ? "Ainda sem tarefas este mês"
@@ -263,21 +263,21 @@ interface MetricProps {
 function Metric({ icon: Icon, label, value, hint, accent }: MetricProps) {
   return (
     <div className="bg-card p-5">
-      <div className="flex items-center gap-2 text-muted-foreground mb-3">
+      <div className="flex items-center gap-2 text-muted-foreground/80 mb-3">
         <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium">
+        <span className="text-[10px] uppercase tracking-[0.18em] font-semibold">
           {label}
         </span>
       </div>
       <div
         className={cn(
-          "text-3xl font-semibold tracking-tight mb-1",
+          "font-display text-[28px] sm:text-3xl font-semibold tabular-nums tracking-[-0.02em] leading-none mb-2",
           accent ? "text-primary" : "text-foreground",
         )}
       >
         {value}
       </div>
-      <p className="text-xs text-muted-foreground leading-snug">{hint}</p>
+      <p className="text-[11px] text-muted-foreground/70 leading-snug">{hint}</p>
     </div>
   );
 }
