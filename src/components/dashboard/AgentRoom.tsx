@@ -315,9 +315,9 @@ const AgentRoom = () => {
             >
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <stat.icon className={cn("h-4 w-4", `text-${stat.color}-500`)} />
-                <span className="text-[11px]">{stat.label}</span>
+                <span className="dash-eyebrow">{stat.label}</span>
               </div>
-              <p className="text-2xl font-bold font-display">{stat.value}</p>
+              <p className="dash-kpi font-display">{stat.value}</p>
             </motion.div>
           ))}
         </motion.div>
