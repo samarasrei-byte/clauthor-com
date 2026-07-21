@@ -80,7 +80,7 @@ const AgentHealthAlerts = () => {
       {rest > 0 && (
         <button
           onClick={() => navigate("/dashboard/traces")}
-          className="mt-3 w-full text-center text-[10px] font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground"
+          className="mt-3 w-full text-center dash-eyebrow text-muted-foreground hover:text-foreground"
         >
           + {rest} outros alertas · abrir War Room
         </button>
