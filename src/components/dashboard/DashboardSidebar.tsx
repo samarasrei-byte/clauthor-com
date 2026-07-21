@@ -335,7 +335,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           )}
 
           {collapsed && (
-            <div className="absolute left-full ml-3 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border/60 text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-normal max-w-[220px] z-50 shadow-xl">
+            <div
+              id={item.description ? `${tooltipBaseId}-${item.id}` : undefined}
+              role="tooltip"
+              className="absolute left-full ml-3 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border/60 text-xs opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none transition-opacity whitespace-normal max-w-[220px] z-50 shadow-xl"
+            >
               <div className="font-semibold mb-0.5">{item.label}</div>
               {item.description && (
                 <div className="text-[10.5px] text-muted-foreground leading-snug">{item.description}</div>
@@ -343,6 +347,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             </div>
           )}
         </button>
+
 
         <AnimatePresence>
           {hasChildren && isExpanded && !collapsed && (
