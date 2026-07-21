@@ -275,7 +275,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
             <div className="px-4 pb-5 space-y-5 border-t border-white/[0.06] pt-4">
               {/* Objective */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Objetivo do Agente</label>
+                <label className="dash-label mb-2 block">Objetivo do Agente</label>
                 <Input
                   value={objective}
                   onChange={(e) => setObjective(e.target.value)}
@@ -286,7 +286,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
               {/* Instructions / Prompt */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                <label className="dash-label mb-2 block">
                   Prompt / Instruções do Agente
                 </label>
                 <Textarea
@@ -302,7 +302,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
               {/* Channels */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Canais de Comunicação</label>
+                <label className="dash-label mb-2 block">Canais de Comunicação</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {CHANNEL_OPTIONS.map((ch) => {
                     const active = channels.includes(ch.id);
@@ -542,7 +542,7 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
 
   return (
     <div>
-      <label className="text-xs font-medium text-muted-foreground mb-1 block">
+      <label className="dash-label mb-1 block">
         Integrações {agentKey ? `- ${agentName}` : "- Genéricas"}
       </label>
       <p className="text-[10px] text-muted-foreground/60 mb-3">
