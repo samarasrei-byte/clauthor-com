@@ -64,19 +64,25 @@ const DepartmentCard = ({
           // Glass base · unified across all departments
           "border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl",
           "shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset,0_20px_40px_-20px_rgba(0,0,0,0.6)]",
-          "hover:border-white/[0.14] hover:bg-white/[0.035] hover:-translate-y-0.5",
+          "hover:border-white/[0.16] hover:bg-white/[0.04] hover:-translate-y-1",
+          "hover:shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_30px_60px_-24px_rgba(0,0,0,0.75),0_0_0_1px_hsl(var(--accent-amber)/0.15)]",
         )}
       >
-        {/* Subtle top highlight · mimics glass reflection */}
+        {/* Subtle top highlight · mimics glass reflection, warms on hover */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"
         />
-        {/* Soft ambient glow on hover · monochrome */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-white/[0.04] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--accent-amber)/0.5)] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
+        {/* Soft ambient glow on hover · warm amber tint */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-[hsl(var(--accent-amber)/0.08)] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+        />
+
 
         <CardHeader className={cn("relative z-10 space-y-3", isCompact && "pb-3")}>
           <div className="flex items-start justify-between gap-3">
