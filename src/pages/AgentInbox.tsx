@@ -419,8 +419,8 @@ function EmptyInbox() {
       <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center mb-4">
         <Inbox className="h-6 w-6 text-primary" />
       </div>
-      <h2 className="font-semibold text-lg mb-1.5">Sua caixa está limpa</h2>
-      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+      <h2 className="dash-title mb-1.5">Sua caixa está limpa</h2>
+      <p className="dash-body-muted max-w-sm mx-auto">
         Quando chegar uma nova mensagem de qualquer canal conectado, ela aparece aqui em tempo real.
       </p>
     </div>
