@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import ironbergSlide1 from "@/assets/approval-ironberg/ironberg-1.png.asset.json";
 import ironbergSlide2 from "@/assets/approval-ironberg/ironberg-2.png.asset.json";
 import ConfidenceBadge, { normalizeConfidence, derivedConfidence } from "./ConfidenceBadge";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 
 // Extrai o confidence score do content ou deriva de forma determinística (fallback demo).
 const getApprovalConfidence = (a: { id: string; content?: any; __demo?: boolean }): number | null => {
