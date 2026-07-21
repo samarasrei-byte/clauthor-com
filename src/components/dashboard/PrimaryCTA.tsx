@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Wand, Scissors, Inbox, Users, Bot, Radar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useFloatingDock } from "@/components/dashboard/FloatingDock";
 
 type CTA = {
   label: string;
