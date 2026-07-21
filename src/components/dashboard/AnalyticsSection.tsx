@@ -68,19 +68,19 @@ const AnalyticsSection = ({ chartData, totalExecutions, recentLogs, locale, onGo
             </div>
             <div className="grid grid-cols-3 gap-4 mt-6">
               <div className="bg-card/50 rounded-xl p-4">
-                <p className="text-xs text-muted-foreground mb-1">{t("dashboard.this_month")}</p>
-                <p className="font-display text-xl font-bold">{totalExecutions.toLocaleString(locale)}</p>
+                <p className="dash-label mb-1">{t("dashboard.this_month")}</p>
+                <p className="dash-kpi text-xl">{totalExecutions.toLocaleString(locale)}</p>
                 <p className="text-xs text-primary">{t("dashboard.executions")}</p>
               </div>
               <div className="bg-card/50 rounded-xl p-4">
-                <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_rate")}</p>
-                <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? Math.round((recentLogs.filter((l: any) => l.status === "success").length / recentLogs.length) * 100) : 100}%</p>
-                <p className="text-xs text-muted-foreground">{t("dashboard.of_success")}</p>
+                <p className="dash-label mb-1">{t("dashboard.avg_rate")}</p>
+                <p className="dash-kpi text-xl">{recentLogs.length > 0 ? Math.round((recentLogs.filter((l: any) => l.status === "success").length / recentLogs.length) * 100) : 100}%</p>
+                <p className="dash-label">{t("dashboard.of_success")}</p>
               </div>
               <div className="bg-card/50 rounded-xl p-4">
-                <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_time")}</p>
-                <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? (recentLogs.reduce((a: number, l: any) => a + (l.execution_time_ms || 0), 0) / recentLogs.length / 1000).toFixed(1) : "0"}s</p>
-                <p className="text-xs text-muted-foreground">{t("dashboard.per_execution")}</p>
+                <p className="dash-label mb-1">{t("dashboard.avg_time")}</p>
+                <p className="dash-kpi text-xl">{recentLogs.length > 0 ? (recentLogs.reduce((a: number, l: any) => a + (l.execution_time_ms || 0), 0) / recentLogs.length / 1000).toFixed(1) : "0"}s</p>
+                <p className="dash-label">{t("dashboard.per_execution")}</p>
               </div>
             </div>
           </>
