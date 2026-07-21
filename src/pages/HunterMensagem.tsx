@@ -86,13 +86,13 @@ const HunterMensagem = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-primary" /> Passo 3 - Mensagem (icebreaker)
+          <CardTitle className="dash-title flex items-center gap-2">
+            <MessageSquare className="w-5 h-5 text-primary" /> Passo 3 · Mensagem (icebreaker)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Variáveis disponíveis (clique para inserir)</Label>
+            <Label className="dash-label">Variáveis disponíveis (clique para inserir)</Label>
             <div className="flex flex-wrap gap-2">
               {VARIABLES.map(v => (
                 <Badge key={v} variant="secondary" className="cursor-pointer hover:bg-primary/20" onClick={() => insertVar(v)}>
@@ -103,7 +103,7 @@ const HunterMensagem = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Template da mensagem (máx 280 caracteres)</Label>
+            <Label className="dash-label">Template da mensagem (máx 280 caracteres)</Label>
             <Textarea
               value={template}
               onChange={(e) => setTemplate(e.target.value)}
@@ -111,18 +111,19 @@ const HunterMensagem = () => {
               maxLength={280}
               placeholder="Olá {{primeiro_nome}}, vi seu trabalho como {{cargo}} na {{empresa}}..."
             />
-            <p className="text-xs text-muted-foreground text-right">{template.length}/280</p>
+            <p className="dash-label text-right">{template.length}/280</p>
           </div>
 
           <div className="space-y-2">
-            <Label>Preview ao vivo</Label>
+            <Label className="dash-label">Preview ao vivo</Label>
             <div className="p-4 rounded-lg bg-muted/40 border border-border/60 text-sm text-foreground whitespace-pre-wrap">
               {preview}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="dash-label">
               Exemplo usando: {SAMPLE.primeiro_nome} · {SAMPLE.cargo} · {SAMPLE.empresa}
             </p>
           </div>
+
 
           <div className="flex justify-between pt-2">
             <Button variant="outline" onClick={() => navigate("/hunter-icp")} className="gap-2">
