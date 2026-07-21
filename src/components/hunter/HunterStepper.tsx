@@ -21,7 +21,7 @@ const HunterStepper = ({ current }: { current: number }) => {
             <Link
               to={s.path}
               className={cn(
-                "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors",
+                "flex items-center gap-2 px-3 py-2 rounded-lg border dash-label transition-colors",
                 isActive && "border-primary bg-primary/10 text-foreground font-semibold",
                 isDone && "border-success/40 bg-success/5 text-success",
                 !isActive && !isDone && "border-border/60 text-muted-foreground hover:border-border",
@@ -30,7 +30,7 @@ const HunterStepper = ({ current }: { current: number }) => {
               {isDone ? (
                 <CheckCircle2 className="w-4 h-4" />
               ) : (
-                <span className={cn("w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold", isActive ? "bg-primary text-primary-foreground" : "bg-muted")}>{s.n}</span>
+                <span className={cn("w-5 h-5 rounded-full flex items-center justify-center dash-eyebrow font-bold", isActive ? "bg-primary text-primary-foreground" : "bg-muted")}>{s.n}</span>
               )}
               <span className="hidden sm:inline">{s.label}</span>
             </Link>
