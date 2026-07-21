@@ -114,8 +114,8 @@ export default function DepartmentMiniChat({ departmentId, autoPlay = true, comp
                 <Bot className="h-2.5 w-2.5 text-primary/70" />
               </div>
               <div className="flex-1 min-w-0">
-                <span className="text-[9px] font-bold text-primary/50 block leading-none mb-0.5">{msg.agent}</span>
-                <p className="text-[11px] text-foreground/70 leading-snug">{msg.text}</p>
+                <span className="dash-eyebrow text-primary/60 block mb-0.5">{msg.agent}</span>
+                <p className="dash-label text-foreground/75">{msg.text}</p>
               </div>
             </motion.div>
           ))}
