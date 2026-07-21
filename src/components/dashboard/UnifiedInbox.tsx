@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare, Phone, Mail, Search, Filter,
   Clock, Bot, User, ChevronRight, Inbox as InboxIcon,
-  ArrowUpRight, Circle
+  ArrowUpRight, Circle, Linkedin, Instagram, Facebook, Music2
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +16,10 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
 import { notify, toastWithUndo } from "@/lib/notify";
+import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
+import { PlatformKey } from "@/components/inbox/platformThemes";
 
-type ChannelType = "all" | "dashboard" | "whatsapp" | "email";
+type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
 interface ConversationThread {
   id: string;
@@ -32,9 +34,14 @@ interface ConversationThread {
 
 const CHANNEL_CONFIG: Record<string, { icon: typeof MessageSquare; label: string; color: string; dot: string }> = {
   dashboard: { icon: MessageSquare, label: "Chat", color: "text-primary", dot: "bg-primary" },
-  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-success", dot: "bg-success" },
-  email: { icon: Mail, label: "E-mail", color: "text-accent-blue", dot: "bg-accent-blue" },
+  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-success", dot: "bg-[#25D366]" },
+  email: { icon: Mail, label: "E-mail", color: "text-accent-blue", dot: "bg-[#D93025]" },
+  linkedin: { icon: Linkedin, label: "LinkedIn", color: "text-accent-blue", dot: "bg-[#0A66C2]" },
+  instagram: { icon: Instagram, label: "Instagram", color: "text-primary", dot: "bg-[#E1306C]" },
+  facebook: { icon: Facebook, label: "Messenger", color: "text-accent-blue", dot: "bg-[#0084FF]" },
+  tiktok: { icon: Music2, label: "TikTok", color: "text-primary", dot: "bg-[#FE2C55]" },
 };
+
 
 const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name: string }) => void }) => {
   const { user } = useAuth();
