@@ -240,16 +240,16 @@ const HunterInbox = () => {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="font-medium text-sm text-foreground truncate">{c.lead_name || "Sem nome"}</p>
-                      <span className="text-[10px] text-muted-foreground shrink-0">
+                      <p className="dash-label font-medium text-foreground truncate">{c.lead_name || "Sem nome"}</p>
+                      <span className="dash-eyebrow text-muted-foreground shrink-0">
                         {c.last_message_at
                           ? formatDistanceToNow(new Date(c.last_message_at), { locale: ptBR, addSuffix: false })
                           : ""}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground truncate">{c.lead_headline}</p>
+                    <p className="dash-label text-muted-foreground truncate">{c.lead_headline}</p>
                     <div className="flex items-center justify-between gap-2 mt-1">
-                      <p className="text-xs text-muted-foreground truncate flex-1">{c.last_message_preview}</p>
+                      <p className="dash-label text-muted-foreground truncate flex-1">{c.last_message_preview}</p>
                       {c.unread_count > 0 && (
                         <Badge variant="destructive" className="rounded-full h-5 min-w-5 px-1.5 text-[10px]">
                           {c.unread_count}
