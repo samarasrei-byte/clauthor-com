@@ -148,7 +148,7 @@ function TaskCard({
       layout
       layoutId={task.id}
       draggable
-      onDragStart={onDragStart}
+      onDragStart={onDragStart as any}
       onClick={onOpen}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
