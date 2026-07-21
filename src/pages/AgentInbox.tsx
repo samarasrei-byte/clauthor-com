@@ -395,10 +395,10 @@ function ConnectChannelState({ channel }: { channel: ChannelDef }) {
       )}>
         <Icon className="h-6 w-6" />
       </div>
-      <h2 className="font-semibold text-lg mb-1.5">
+      <h2 className="dash-title mb-1.5">
         Conecte sua conta {channel.label}
       </h2>
-      <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-5">
+      <p className="dash-label max-w-sm mx-auto mb-5">
         Autorize o acesso para que os agentes recebam e respondam mensagens de {channel.label} direto por aqui.
       </p>
       {channel.connectHref && (
@@ -419,8 +419,8 @@ function EmptyInbox() {
       <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 grid place-items-center mb-4">
         <Inbox className="h-6 w-6 text-primary" />
       </div>
-      <h2 className="font-semibold text-lg mb-1.5">Sua caixa está limpa</h2>
-      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+      <h2 className="dash-title mb-1.5">Sua caixa está limpa</h2>
+      <p className="dash-label max-w-sm mx-auto">
         Quando chegar uma nova mensagem de qualquer canal conectado, ela aparece aqui em tempo real.
       </p>
     </div>
@@ -438,8 +438,8 @@ function ThreadDetail({ thread }: { thread: Thread }) {
             <Icon className={cn("h-3 w-3", def.color)} />
             {def.label}
           </Badge>
-          <h2 className="text-lg font-semibold">{thread.title}</h2>
-          <p className="text-xs text-muted-foreground mt-1">
+          <h2 className="dash-title">{thread.title}</h2>
+          <p className="dash-label mt-1">
             {formatDistanceToNow(new Date(thread.timestamp), {
               addSuffix: true,
               locale: ptBR,

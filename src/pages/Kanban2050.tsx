@@ -491,7 +491,7 @@ function ColumnView({
           style={{ background: column.color }}
           aria-hidden
         />
-        <h3 className="text-sm font-semibold flex-1 truncate">{column.name}</h3>
+        <h3 className="dash-title flex-1 truncate">{column.name}</h3>
         <Badge variant="secondary" className={cn(
           "h-5 px-1.5 text-[10px] tabular-nums",
           wipExceeded && "bg-destructive/15 text-destructive"
@@ -831,7 +831,7 @@ export default function Kanban2050() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-lg font-semibold">{board.name}</h1>
+                  <h1 className="dash-title">{board.name}</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="text-muted-foreground hover:text-foreground">
