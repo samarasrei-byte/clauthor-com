@@ -26,7 +26,6 @@ export default function GlobalDashboardSidebar() {
 
   const zoneWork = "Meu trabalho";
   const zoneTeam = "Meu time";
-  const zoneAI = "IA & Voz";
   const zoneConfig = "Configuração";
 
   const items: SidebarItem[] = useMemo(() => ([
