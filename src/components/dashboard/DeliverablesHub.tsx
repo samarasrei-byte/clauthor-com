@@ -120,12 +120,12 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="font-display text-xl font-bold flex items-center gap-2">
+        <h2 className="dash-title text-xl flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
           {t("deliverables.title", { defaultValue: "Central de Entregas" })}
           <HelpTooltip id="deliverables-intro" text="Visualize todos os entregáveis dos seus agentes em um único lugar: execuções, tarefas concluídas e relatórios." size={14} />
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="dash-label text-sm mt-1">
           {t("deliverables.subtitle", { defaultValue: "Tudo que seus agentes produziram, consolidado." })}
         </p>
       </div>

@@ -131,11 +131,11 @@ const AgentLiveTimeline = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="font-display text-xl font-bold flex items-center gap-2">
+          <h2 className="dash-title text-xl flex items-center gap-2">
             <Eye className="h-5 w-5 text-primary" />
             {t("timeline.title", { defaultValue: "Agent Live Timeline" })}
           </h2>
-          <p className="text-sm text-muted-foreground">{t("timeline.subtitle", { defaultValue: "Acompanhe em tempo real o que seus agentes estão fazendo" })}</p>
+          <p className="dash-label text-sm">{t("timeline.subtitle", { defaultValue: "Acompanhe em tempo real o que seus agentes estão fazendo" })}</p>
         </div>
         <div className="flex items-center gap-1 bg-card/50 rounded-xl p-1 border border-border/20">
           {statusFilters.map(f => (
@@ -171,8 +171,8 @@ const AgentLiveTimeline = () => {
       ) : filtered.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center">
           <Bot className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-          <h3 className="font-display text-lg font-bold mb-2">{t("timeline.no_activity", { defaultValue: "Nenhuma atividade ainda" })}</h3>
-          <p className="text-muted-foreground text-sm">{t("timeline.no_activity_desc", { defaultValue: "Quando seus agentes começarem a trabalhar, você verá tudo aqui em tempo real." })}</p>
+          <h3 className="dash-title text-lg mb-2">{t("timeline.no_activity", { defaultValue: "Nenhuma atividade ainda" })}</h3>
+          <p className="dash-label text-sm">{t("timeline.no_activity_desc", { defaultValue: "Quando seus agentes começarem a trabalhar, você verá tudo aqui em tempo real." })}</p>
         </div>
       ) : (
         <ScrollArea className="h-[calc(100vh-20rem)]">
