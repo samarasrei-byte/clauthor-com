@@ -1,5 +1,6 @@
 import { useMemo, useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ClauthorLogo from "@/components/ClauthorLogo";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Search, Plus, X, Target, Users, Building2, Globe, Wrench, Plug, BookOpen, Radio, Brain, Shield, Wand2, Rocket, Save, Check, Loader2, ChevronDown } from "lucide-react";
 import { Wand } from "lucide-react";
@@ -166,7 +167,11 @@ export default function CreateWorkforce() {
             <ArrowLeft className="h-4 w-4 mr-1" /> Sair
           </Button>
           <div className="h-4 w-px bg-border" />
-          <div className="flex items-center gap-2">
+          <Link to="/" aria-label="Clauthor · início" className="flex items-center">
+            <ClauthorLogo size="sm" />
+          </Link>
+          <div className="h-4 w-px bg-border hidden sm:block" />
+          <div className="hidden sm:flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-rose-600 grid place-items-center">
               <Wand className="h-3.5 w-3.5 text-white" />
             </div>
