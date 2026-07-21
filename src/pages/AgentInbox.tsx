@@ -398,7 +398,7 @@ function ConnectChannelState({ channel }: { channel: ChannelDef }) {
       <h2 className="dash-title mb-1.5">
         Conecte sua conta {channel.label}
       </h2>
-      <p className="dash-body-muted max-w-sm mx-auto mb-5">
+      <p className="dash-label max-w-sm mx-auto mb-5">
         Autorize o acesso para que os agentes recebam e respondam mensagens de {channel.label} direto por aqui.
       </p>
       {channel.connectHref && (
@@ -420,7 +420,7 @@ function EmptyInbox() {
         <Inbox className="h-6 w-6 text-primary" />
       </div>
       <h2 className="dash-title mb-1.5">Sua caixa está limpa</h2>
-      <p className="dash-body-muted max-w-sm mx-auto">
+      <p className="dash-label max-w-sm mx-auto">
         Quando chegar uma nova mensagem de qualquer canal conectado, ela aparece aqui em tempo real.
       </p>
     </div>
