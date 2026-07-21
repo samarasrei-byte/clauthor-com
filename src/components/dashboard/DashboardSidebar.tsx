@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+
 
 export interface SidebarChild {
   id: string;
@@ -68,22 +70,11 @@ const readList = (key: string): string[] => {
 };
 
 /**
- * Cancela qualquer fala ativa e narra o texto informado usando Web Speech API.
- * Falha silenciosamente em navegadores sem suporte (Safari em iframes, etc).
+ * `speakSidebar` foi substituído por `useElevenLabsTTS` (voz premium com fallback
+ * automático para speechSynthesis nativo caso a edge function falhe). O hook
+ * mantém um lock global — nunca duas falas simultâneas.
  */
-const speakSidebar = (text: string) => {
-  try {
-    const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
-    if (!synth || !text) return;
-    synth.cancel(); // pausa fala anterior · requisito #2
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "pt-BR";
-    u.rate = 1.05;
-    u.pitch = 1;
-    u.volume = 0.9;
-    synth.speak(u);
-  } catch { /* noop */ }
-};
+
 
 /**
  * Sidebar "Obsidian Red" · card flutuante, cantos arredondados (Trello-like),
@@ -99,7 +90,18 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
   const [recent, setRecent] = useState<string[]>(() => readList(LS_KEYS.recent));
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const tooltipBaseId = useId();
   const [beginner, , toggleBeginner] = useBeginnerMode();
+  const { speak: ttsSpeak } = useElevenLabsTTS();
+
+  /** Narra um item usando ElevenLabs (com fallback nativo automático). */
+  const speakSidebar = useCallback((text: string) => {
+    if (!text) return;
+    // Fire-and-forget · não bloqueia navegação
+    void ttsSpeak(text);
+  }, [ttsSpeak]);
+
 
   // Persist
   useEffect(() => {
@@ -139,6 +141,41 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  /**
+   * Roving keyboard navigation dentro do `<nav>`. Setas ↑/↓ movem foco entre
+   * botões, Home/End pulam extremos, Enter/Space aciona o item focado.
+   * Compatível com screen readers · cada botão continua sendo `<button>` nativo.
+   */
+  const handleNavKeyDown = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const focusables = Array.from(
+      nav.querySelectorAll<HTMLButtonElement>("button[data-sb-item]:not([disabled])"),
+    );
+    if (focusables.length === 0) return;
+    const idx = focusables.indexOf(document.activeElement as HTMLButtonElement);
+    let next = idx;
+    switch (e.key) {
+      case "ArrowDown":
+        next = idx < 0 ? 0 : Math.min(idx + 1, focusables.length - 1);
+        break;
+      case "ArrowUp":
+        next = idx < 0 ? focusables.length - 1 : Math.max(idx - 1, 0);
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = focusables.length - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    focusables[next]?.focus();
+  }, []);
+
 
   const toggleGroup = useCallback((id: string) => {
     setExpandedGroups(prev => {
@@ -205,6 +242,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
 
         <button
+          data-sb-item={item.id}
           onClick={() => {
             if (hasChildren && !collapsed) {
               toggleGroup(item.id);
@@ -213,16 +251,20 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               onItemChange(item.id);
             }
           }}
-          title={item.description ? `${item.label} · ${item.description}` : item.label}
-          aria-label={item.description ? `${item.label}. ${item.description}` : item.label}
+          aria-label={item.label}
+          aria-current={isActive ? "page" : undefined}
+          aria-expanded={hasChildren ? isExpanded : undefined}
+          aria-describedby={item.description ? `${tooltipBaseId}-${item.id}` : undefined}
           className={cn(
             "w-full flex items-center gap-2.5 rounded-xl transition-all duration-150 group relative",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background",
             collapsed ? "px-2 py-1.5 justify-center" : "px-2.5 py-1.5",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
               : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
+
           <div className="relative shrink-0">
             <item.icon
               className={cn(
@@ -293,7 +335,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           )}
 
           {collapsed && (
-            <div className="absolute left-full ml-3 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border/60 text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-normal max-w-[220px] z-50 shadow-xl">
+            <div
+              id={item.description ? `${tooltipBaseId}-${item.id}` : undefined}
+              role="tooltip"
+              className="absolute left-full ml-3 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border/60 text-xs opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none transition-opacity whitespace-normal max-w-[220px] z-50 shadow-xl"
+            >
               <div className="font-semibold mb-0.5">{item.label}</div>
               {item.description && (
                 <div className="text-[10.5px] text-muted-foreground leading-snug">{item.description}</div>
@@ -301,6 +347,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             </div>
           )}
         </button>
+
 
         <AnimatePresence>
           {hasChildren && isExpanded && !collapsed && (
@@ -318,19 +365,22 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   return (
                     <button
                       key={child.id}
+                      data-sb-item={child.id}
                       onClick={() => {
                         speakSidebar(child.description ? `${child.label}. ${child.description}` : child.label);
                         onItemChange(child.id);
                       }}
-                      title={child.description ? `${child.label} · ${child.description}` : child.label}
                       aria-label={child.description ? `${child.label}. ${child.description}` : child.label}
+                      aria-current={isChildActive ? "page" : undefined}
                       className={cn(
                         "w-full flex items-center gap-2 px-2 py-1 rounded-lg text-[11.5px] font-medium transition-all",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
                           : "text-foreground/75 hover:text-foreground hover:bg-card/60"
                       )}
                     >
+
                       <ChildIcon className="h-3 w-3 shrink-0" strokeWidth={1.75} />
                       <span className="truncate">{child.label}</span>
                     </button>
@@ -409,6 +459,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
       {/* Nav · overlay scrollbar (aparece só no hover), fade top/bottom */}
       <nav
+        ref={navRef}
+        onKeyDown={handleNavKeyDown}
+        aria-label="Navegação principal"
         className={cn(
           "flex-1 min-h-0 py-1.5 px-2 space-y-0.5 overflow-y-auto",
           "[scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent]",
@@ -418,6 +471,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           "[mask-image:linear-gradient(to_bottom,transparent,black_12px,black_calc(100%-12px),transparent)]"
         )}
       >
+
         {!collapsed && !q && pinnedItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
