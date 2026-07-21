@@ -87,15 +87,15 @@ const HunterAtivar = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Power className="w-5 h-5 text-primary" /> Passo 4 - Ativar Hunter
+          <CardTitle className="dash-title flex items-center gap-2">
+            <Power className="w-5 h-5 text-primary" /> Passo 4 · Ativar Hunter
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between p-4 rounded-lg border border-border/60 bg-card/40">
             <div className="space-y-1">
-              <Label className="text-base font-semibold">Ativar Hunter</Label>
-              <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <Label className="dash-title text-base">Ativar Hunter</Label>
+              <p className="dash-label flex items-center gap-1.5">
                 <Clock className="w-3 h-3" /> Execução diária automática às 9h
               </p>
             </div>
@@ -104,8 +104,8 @@ const HunterAtivar = () => {
 
           <div className="space-y-3 p-4 rounded-lg border border-border/60 bg-card/40">
             <div className="flex items-center justify-between">
-              <Label>Limite diário de ações</Label>
-              <span className="text-lg font-mono font-bold text-primary">{dailyLimit}</span>
+              <Label className="dash-label">Limite diário de ações</Label>
+              <span className="dash-kpi text-primary">{dailyLimit}</span>
             </div>
             <Slider
               value={[dailyLimit]}
@@ -114,7 +114,7 @@ const HunterAtivar = () => {
               step={5}
               onValueChange={(v) => handleLimitChange(v[0])}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="dash-label">
               Recomendado: 20/dia. Acima de 50 pode acionar bloqueio do LinkedIn.
             </p>
           </div>
@@ -122,9 +122,10 @@ const HunterAtivar = () => {
           {active && (
             <div className="flex items-center gap-2 p-3 rounded-lg border border-success/30 bg-success/5 text-sm">
               <CheckCircle2 className="w-4 h-4 text-success" />
-              <span className="text-foreground">Hunter ativo - próxima execução amanhã às 9h</span>
+              <span className="text-foreground">Hunter ativo · próxima execução amanhã às 9h</span>
             </div>
           )}
+
 
           <div className="flex justify-between pt-2 gap-3 flex-wrap">
             <Button variant="outline" onClick={() => navigate("/hunter-mensagem")} className="gap-2">
