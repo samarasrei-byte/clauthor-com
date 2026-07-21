@@ -206,6 +206,7 @@ const AdminDashboard = () => {
     { id: "margin", label: "Margem por Depto", icon: TrendingUp, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
+    { id: "paypal-sandbox", label: "Sandbox PayPal", icon: FlaskConical, group: t("dashboard.system", { defaultValue: "Sistema" }) },
   ];
 
   const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
