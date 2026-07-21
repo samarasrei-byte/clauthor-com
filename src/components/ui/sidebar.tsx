@@ -192,7 +192,7 @@ const Sidebar = React.forwardRef<
       />
       <div
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] pb-4 transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] pb-3 transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -568,7 +568,7 @@ const SidebarMenuSub = React.forwardRef<HTMLUListElement, React.ComponentProps<"
       ref={ref}
       data-sidebar="menu-sub"
       className={cn(
-        "mx-2 flex min-w-0 translate-x-px flex-col gap-0.5 border-l border-sidebar-border/60 pl-2 pr-1 py-0.5",
+        "mx-1.5 flex min-w-0 translate-x-px flex-col gap-0.5 border-l border-sidebar-border/60 pl-1.5 pr-0.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         className,
       )}
