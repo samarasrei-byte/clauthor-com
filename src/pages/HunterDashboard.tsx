@@ -70,7 +70,7 @@ const HunterDashboard = () => {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <Target className="w-7 h-7 text-primary" />
-          <h1 className="text-2xl font-bold text-foreground">Hunter</h1>
+          <h1 className="dash-title text-2xl">Hunter</h1>
         </div>
         <div className="flex gap-2 flex-wrap">
           <Button asChild variant="default" className="gap-2 relative">
@@ -98,8 +98,8 @@ const HunterDashboard = () => {
         <Card className="border-primary/40 bg-primary/5">
           <CardContent className="p-4 flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="font-semibold text-foreground">Comece configurando seu Hunter em 4 passos</p>
-              <p className="text-sm text-muted-foreground">LinkedIn → ICP → Mensagem → Ativar</p>
+              <p className="dash-title text-sm">Comece configurando seu Hunter em 4 passos</p>
+              <p className="dash-label mt-0.5">LinkedIn → ICP → Mensagem → Ativar</p>
             </div>
             <Button asChild><Link to="/hunter-linkedin">Começar agora</Link></Button>
           </CardContent>
@@ -116,8 +116,8 @@ const HunterDashboard = () => {
             <CardContent className="p-5 flex items-center gap-4">
               <Icon className={`w-8 h-8 ${color}`} />
               <div>
-                <p className="text-3xl font-bold text-foreground">{value}</p>
-                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="dash-kpi text-3xl">{value}</p>
+                <p className="dash-label mt-0.5">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -126,7 +126,7 @@ const HunterDashboard = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="dash-title text-base flex items-center gap-2">
             🔥 Leads quentes <Badge variant="secondary">{hotLeads.length}</Badge>
           </CardTitle>
         </CardHeader>
@@ -140,8 +140,8 @@ const HunterDashboard = () => {
               {hotLeads.map(lead => (
                 <div key={lead.id} className="flex items-center justify-between p-3 rounded-lg border border-border/40 hover:border-primary/30 transition-colors">
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-foreground truncate">{lead.nome_completo}</p>
-                    <p className="text-xs text-muted-foreground truncate">{lead.cargo} · {lead.empresa}</p>
+                    <p className="dash-title text-sm truncate">{lead.nome_completo}</p>
+                    <p className="dash-label truncate mt-0.5">{lead.cargo} · {lead.empresa}</p>
                   </div>
                   {lead.linkedin_url && (
                     <Button asChild variant="ghost" size="sm">
