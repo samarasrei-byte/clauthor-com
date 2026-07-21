@@ -39,10 +39,10 @@ const AgentSummaryCards = ({ agents, onChatWith }: AgentSummaryCardsProps) => {
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Bot className="h-4 w-4 text-primary" />
-        <span className="text-sm font-medium">
+        <span className="dash-label font-medium">
           {t("dashboard.your_agents", { defaultValue: "Seus Agentes" })}
         </span>
-        <Badge variant="secondary" className="text-[10px]">{activeAgents.length}</Badge>
+        <Badge variant="secondary" className="dash-eyebrow">{activeAgents.length}</Badge>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -58,17 +58,17 @@ const AgentSummaryCards = ({ agents, onChatWith }: AgentSummaryCardsProps) => {
               <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4.5 w-4.5 text-primary" />
               </div>
-              <Badge className={`text-[9px] border ${tierColors[agent.tier] || tierColors.basic}`}>
+              <Badge className={`dash-eyebrow border ${tierColors[agent.tier] || tierColors.basic}`}>
                 {agent.tier.toUpperCase()}
               </Badge>
             </div>
 
-            <h4 className="text-sm font-semibold mb-1 truncate">{agent.name}</h4>
-            <p className="text-[10px] text-muted-foreground line-clamp-2 mb-3 min-h-[28px]">
+            <h4 className="dash-title mb-1 truncate">{agent.name}</h4>
+            <p className="dash-label text-muted-foreground line-clamp-2 mb-3 min-h-[28px]">
               {agent.description || t("dashboard.agent_no_desc", { defaultValue: "Agente especializado" })}
             </p>
 
-            <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-3">
+            <div className="flex items-center gap-3 dash-eyebrow text-muted-foreground mb-3">
               <span className="flex items-center gap-1">
                 <Zap className="h-3 w-3" />
                 {agent.total_executions} {t("dashboard.exec_short", { defaultValue: "exec." })}
@@ -78,6 +78,7 @@ const AgentSummaryCards = ({ agents, onChatWith }: AgentSummaryCardsProps) => {
                 {new Date(agent.updated_at).toLocaleDateString(locale, { day: "2-digit", month: "short" })}
               </span>
             </div>
+
 
             <Button
               size="sm"
