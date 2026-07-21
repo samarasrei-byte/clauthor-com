@@ -83,10 +83,10 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-2xl border-b ${
         scrolled
-          ? "bg-black/95 backdrop-blur-2xl [&_*]:!text-white/80"
-          : "bg-background/60 backdrop-blur-2xl"
+          ? "bg-background/85 border-border/40 shadow-[0_1px_0_0_hsl(var(--border)/0.4),0_8px_24px_-12px_rgba(0,0,0,0.6)]"
+          : "bg-background/70 border-transparent"
       } ${mobileOpen ? "z-[9999]" : ""}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
