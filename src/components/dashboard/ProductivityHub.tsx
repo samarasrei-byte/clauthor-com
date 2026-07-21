@@ -97,8 +97,8 @@ const SectionCard = ({
           <Icon className="h-4.5 w-4.5 text-primary" strokeWidth={1.75} />
         </div>
         <div className="min-w-0">
-          <h3 className="font-display font-semibold text-sm tracking-tight">{title}</h3>
-          {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
+          <h3 className="dash-title">{title}</h3>
+          {description && <p className="dash-label normal-case tracking-normal text-muted-foreground mt-0.5">{description}</p>}
         </div>
       </div>
       {action && <div className="shrink-0">{action}</div>}
@@ -284,7 +284,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
         <div className="rounded-xl border border-border/30 bg-background/50 p-3">
           <div className="flex items-center gap-2 mb-1.5">
             <CalendarDays className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">Agenda</span>
+            <span className="dash-eyebrow">Agenda</span>
           </div>
           <p className="text-xs text-foreground/90 leading-relaxed">
             <span className="font-semibold">{MOCK_EVENTS.length} compromissos</span>, destaque para revisão de proposta com <span className="font-medium">Acme</span> às 10:30 e 1:1 com o Thor às 16h.
@@ -294,7 +294,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
         <div className="rounded-xl border border-border/30 bg-background/50 p-3">
           <div className="flex items-center gap-2 mb-1.5">
             <Inbox className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">Caixa de entrada</span>
+            <span className="dash-eyebrow">Caixa de entrada</span>
           </div>
           <p className="text-xs text-foreground/90 leading-relaxed">
             <span className="font-semibold">{MOCK_INBOX.action.length + MOCK_INBOX.info.length + MOCK_INBOX.low.length} e-mails</span>, {MOCK_INBOX.action.length} exigem resposta, {MOCK_INBOX.info.length} informativos, {MOCK_INBOX.low.length} baixa prioridade.
@@ -304,7 +304,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
         <div className="rounded-xl border border-border/30 bg-background/50 p-3 md:col-span-2">
           <div className="flex items-center gap-2 mb-1.5">
             <Newspaper className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">Notícias</span>
+            <span className="dash-eyebrow">Notícias</span>
           </div>
           <p className="text-xs text-foreground/90 leading-relaxed">
             Anthropic lançou o Claude Opus 4.8 (raciocínio multi-passo), fintechs brasileiras captaram <span className="font-medium">R$ 2,3 bi</span> no trimestre, e a Apple aposta em chips M5 focados em IA local.
@@ -315,7 +315,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
       <div className="rounded-xl border border-primary/25 bg-primary/[0.04] p-3">
         <div className="flex items-center gap-2 mb-2">
           <ListChecks className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-primary/80">Suas 3 prioridades hoje</span>
+          <span className="dash-eyebrow text-primary/80">Suas 3 prioridades hoje</span>
         </div>
         <ol className="space-y-1.5">
           {priorities.map((p, i) => (
@@ -414,12 +414,12 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
         <div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 mb-3">
             <CalendarDays className="h-3 w-3 text-primary" strokeWidth={1.75} />
-            <span className="text-[10px] font-medium tracking-wide text-primary uppercase">Central de Produtividade</span>
+            <span className="dash-eyebrow text-primary">Central de Produtividade</span>
           </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">
+          <h1 className="dash-hero-title">
             Central de Produtividade
           </h1>
-          <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
+          <p className="dash-label normal-case tracking-normal text-muted-foreground mt-1.5 max-w-2xl">
             Organize sua rotina, acompanhe seus compromissos, gerencie seus e-mails e receba um resumo inteligente do seu dia.
           </p>
         </div>
