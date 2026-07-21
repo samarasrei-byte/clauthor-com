@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare, Phone, Mail, Search, Filter,
   Clock, Bot, User, ChevronRight, Inbox as InboxIcon,
-  ArrowUpRight, Circle
+  ArrowUpRight, Circle, Linkedin, Instagram, Facebook, Music2
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +16,10 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
 import { notify, toastWithUndo } from "@/lib/notify";
+import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
+import { PlatformKey } from "@/components/inbox/platformThemes";
 
-type ChannelType = "all" | "dashboard" | "whatsapp" | "email";
+type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
 interface ConversationThread {
   id: string;
@@ -32,9 +34,14 @@ interface ConversationThread {
 
 const CHANNEL_CONFIG: Record<string, { icon: typeof MessageSquare; label: string; color: string; dot: string }> = {
   dashboard: { icon: MessageSquare, label: "Chat", color: "text-primary", dot: "bg-primary" },
-  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-success", dot: "bg-success" },
-  email: { icon: Mail, label: "E-mail", color: "text-accent-blue", dot: "bg-accent-blue" },
+  whatsapp: { icon: Phone, label: "WhatsApp", color: "text-success", dot: "bg-[#25D366]" },
+  email: { icon: Mail, label: "E-mail", color: "text-accent-blue", dot: "bg-[#D93025]" },
+  linkedin: { icon: Linkedin, label: "LinkedIn", color: "text-accent-blue", dot: "bg-[#0A66C2]" },
+  instagram: { icon: Instagram, label: "Instagram", color: "text-primary", dot: "bg-[#E1306C]" },
+  facebook: { icon: Facebook, label: "Messenger", color: "text-accent-blue", dot: "bg-[#0084FF]" },
+  tiktok: { icon: Music2, label: "TikTok", color: "text-primary", dot: "bg-[#FE2C55]" },
 };
+
 
 const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name: string }) => void }) => {
   const { user } = useAuth();
@@ -85,10 +92,14 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
 
     for (const msg of messages) {
       const key = msg.agent_id || msg.agent_name || "general";
-      const channel: ChannelType = (msg.metadata as any)?.channel === "whatsapp"
-        ? "whatsapp"
-        : (msg.metadata as any)?.channel === "email"
-        ? "email"
+      const rawChannel = (msg.metadata as any)?.channel as string | undefined;
+      const channel: ChannelType =
+        rawChannel === "whatsapp" ? "whatsapp"
+        : rawChannel === "email" ? "email"
+        : rawChannel === "linkedin" ? "linkedin"
+        : rawChannel === "instagram" ? "instagram"
+        : rawChannel === "facebook" ? "facebook"
+        : rawChannel === "tiktok" ? "tiktok"
         : "dashboard";
 
       if (!threadMap.has(key)) {
@@ -133,12 +144,28 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
 
   const selectedThreadInfo = threads.find(t => t.id === selectedThread);
 
+  // Adapt DB messages to the skin's shape
+  const skinMessages: SkinMessage[] = useMemo(() => {
+    return threadMessages.map((m: any) => ({
+      id: m.id,
+      content: m.content,
+      role: m.role === "user" ? "user" : (m.role === "assistant" ? "assistant" : "contact"),
+      created_at: m.created_at,
+      status: m.role === "user" ? "read" : undefined,
+    }));
+  }, [threadMessages]);
+
   const channelTabs: { id: ChannelType; label: string; count: number }[] = [
     { id: "all", label: "Todos", count: threads.length },
     { id: "dashboard", label: "Chat", count: threads.filter(t => t.channel === "dashboard").length },
     { id: "whatsapp", label: "WhatsApp", count: threads.filter(t => t.channel === "whatsapp").length },
+    { id: "linkedin", label: "LinkedIn", count: threads.filter(t => t.channel === "linkedin").length },
+    { id: "instagram", label: "Instagram", count: threads.filter(t => t.channel === "instagram").length },
+    { id: "facebook", label: "Messenger", count: threads.filter(t => t.channel === "facebook").length },
+    { id: "tiktok", label: "TikTok", count: threads.filter(t => t.channel === "tiktok").length },
     { id: "email", label: "E-mail", count: threads.filter(t => t.channel === "email").length },
   ];
+
 
   return (
     <div className="h-full flex flex-col gap-4 p-4 sm:p-6">
@@ -329,83 +356,46 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
           </ScrollArea>
         </div>
 
-        {/* Message Detail */}
+        {/* Message Detail — native platform skin */}
         <AnimatePresence mode="wait">
-          {selectedThread ? (
+          {selectedThread && selectedThreadInfo ? (
             <motion.div
               key={selectedThread}
               initial={{ opacity: 0, x: 8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
-              className="flex-1 flex flex-col min-w-0"
+              className="flex-1 flex flex-col min-w-0 relative"
             >
-              {/* Thread Header */}
-              <div className="flex items-center justify-between p-3 border-b border-border/10">
-                <div className="flex items-center gap-2.5">
-                  <button
-                    onClick={() => setSelectedThread(null)}
-                    className="sm:hidden p-1 hover:bg-muted/10 rounded"
-                  >
-                    <ChevronRight className="h-4 w-4 rotate-180 text-muted-foreground" />
-                  </button>
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Bot className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <p className="text-[11.5px] font-semibold text-foreground">{selectedThreadInfo?.agentName}</p>
-                    <div className="flex items-center gap-1.5">
-                      {selectedThreadInfo && (
-                        <Badge variant="outline" className="text-[8px] px-1.5 py-0 h-4 border-border/20">
-                          {CHANNEL_CONFIG[selectedThreadInfo.channel]?.label || "Chat"}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {selectedThreadInfo?.agentId && onOpenChat && (
-                  <button
-                    onClick={() => onOpenChat({ id: selectedThreadInfo.agentId!, name: selectedThreadInfo.agentName })}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium hover:bg-primary/15 transition-colors"
-                  >
-                    Abrir Chat <ArrowUpRight className="h-3 w-3" />
-                  </button>
-                )}
-              </div>
-
-              {/* Messages */}
-              <ScrollArea className="flex-1 p-3">
-                <div className="space-y-2.5 max-w-2xl">
-                  {threadMessages.map(msg => (
-                    <div
-                      key={msg.id}
-                      className={cn(
-                        "flex gap-2",
-                        msg.role === "user" ? "justify-end" : "justify-start"
-                      )}
-                    >
-                      {msg.role !== "user" && (
-                        <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                          <Bot className="h-3 w-3 text-primary" strokeWidth={1.5} />
-                        </div>
-                      )}
-                      <div className={cn(
-                        "max-w-[75%] px-3 py-2 rounded-xl text-[11px] leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-primary text-primary-foreground rounded-br-sm"
-                          : "bg-muted/30 text-foreground border border-border/10 rounded-bl-sm"
-                      )}>
-                        {msg.content}
-                      </div>
-                      {msg.role === "user" && (
-                        <div className="w-6 h-6 rounded-md bg-muted/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <User className="h-3 w-3 text-muted-foreground" strokeWidth={1.5} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
+              {onOpenChat && selectedThreadInfo.agentId && (
+                <button
+                  onClick={() => onOpenChat({ id: selectedThreadInfo.agentId!, name: selectedThreadInfo.agentName })}
+                  className="absolute top-2 right-2 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-background/80 backdrop-blur border border-border/20 text-foreground text-[10px] font-medium hover:bg-background transition-colors shadow-sm"
+                >
+                  Abrir Chat interno <ArrowUpRight className="h-3 w-3" />
+                </button>
+              )}
+              <PlatformChatSkin
+                platform={(selectedThreadInfo.channel === "all" ? "dashboard" : selectedThreadInfo.channel) as PlatformKey}
+                contactName={selectedThreadInfo.agentName}
+                contactSubtitle={
+                  selectedThreadInfo.channel === "whatsapp" ? "online"
+                  : selectedThreadInfo.channel === "linkedin" ? "Agente · Ativo agora"
+                  : selectedThreadInfo.channel === "instagram" ? "Ativo(a) agora"
+                  : selectedThreadInfo.channel === "facebook" ? "Ativo(a) agora"
+                  : selectedThreadInfo.channel === "tiktok" ? "Online"
+                  : selectedThreadInfo.channel === "email" ? "Caixa de entrada"
+                  : "Assistente IA"
+                }
+                messages={skinMessages}
+                onBack={() => setSelectedThread(null)}
+                onSend={(text) => {
+                  notify.info("Envio em conexão", {
+                    description: "Conecte a plataforma para enviar mensagens reais a partir daqui.",
+                  });
+                }}
+              />
             </motion.div>
+
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
