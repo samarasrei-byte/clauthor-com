@@ -83,10 +83,10 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-2xl border-b ${
         scrolled
-          ? "bg-black/95 backdrop-blur-2xl [&_*]:!text-white/80"
-          : "bg-background/60 backdrop-blur-2xl"
+          ? "bg-background/85 border-border/40 shadow-[0_1px_0_0_hsl(var(--border)/0.4),0_8px_24px_-12px_rgba(0,0,0,0.6)]"
+          : "bg-background/70 border-transparent"
       } ${mobileOpen ? "z-[9999]" : ""}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
@@ -196,7 +196,7 @@ const Navbar = () => {
                 <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-normal">
                   <Link to="/auth">{t("nav.login")}</Link>
                 </Button>
-                <PremiumCTAButton variant="red" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
+                <PremiumCTAButton variant="outline" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
                   {t("auth.create_account")}
                 </PremiumCTAButton>
               </>
