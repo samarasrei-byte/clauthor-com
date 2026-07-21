@@ -70,22 +70,11 @@ const readList = (key: string): string[] => {
 };
 
 /**
- * Cancela qualquer fala ativa e narra o texto informado usando Web Speech API.
- * Falha silenciosamente em navegadores sem suporte (Safari em iframes, etc).
+ * `speakSidebar` foi substituído por `useElevenLabsTTS` (voz premium com fallback
+ * automático para speechSynthesis nativo caso a edge function falhe). O hook
+ * mantém um lock global — nunca duas falas simultâneas.
  */
-const speakSidebar = (text: string) => {
-  try {
-    const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
-    if (!synth || !text) return;
-    synth.cancel(); // pausa fala anterior · requisito #2
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "pt-BR";
-    u.rate = 1.05;
-    u.pitch = 1;
-    u.volume = 0.9;
-    synth.speak(u);
-  } catch { /* noop */ }
-};
+
 
 /**
  * Sidebar "Obsidian Red" · card flutuante, cantos arredondados (Trello-like),
