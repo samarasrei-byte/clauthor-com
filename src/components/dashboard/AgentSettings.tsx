@@ -251,7 +251,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
             <Bot className="h-5 w-5 text-primary" />
           </div>
           <div className="text-left">
-            <p className="font-display font-semibold text-sm">{agent.name}</p>
+            <p className="dash-title text-sm">{agent.name}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
               <Badge variant="secondary" className={`text-[9px] ${agent.status === "active" ? "bg-success/20 text-success" : ""}`}>{agent.status}</Badge>
