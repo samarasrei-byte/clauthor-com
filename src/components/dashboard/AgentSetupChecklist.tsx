@@ -185,16 +185,16 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${isComplete ? "bg-primary" : "bg-accent-foreground/50 animate-pulse"}`} />
-                <span className="font-display font-semibold text-xs truncate max-w-[140px]">{agent.name}</span>
+                <span className="dash-title text-xs truncate max-w-[140px]">{agent.name}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {isPureAI && (
-                  <Badge variant="secondary" className="text-[8px] px-1.5 py-0 bg-primary/10 text-primary border-0">
+                  <Badge variant="secondary" className="dash-eyebrow px-1.5 py-0 bg-primary/10 text-primary border-0">
                     <Wand className="h-2.5 w-2.5 mr-0.5" />
                     {t("setup_checklist.pure_ai", { defaultValue: "Pure AI" })}
                   </Badge>
                 )}
-                <span className={`text-[10px] font-mono font-bold ${isComplete ? "text-primary" : "text-muted-foreground"}`}>
+                <span className={`dash-kpi text-[10px] ${isComplete ? "text-primary" : "text-muted-foreground"}`}>
                   {pct}%
                 </span>
               </div>
