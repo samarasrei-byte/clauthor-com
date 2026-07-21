@@ -264,6 +264,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
+          {/* Âncora vertical do item ativo · padrão Linear/Notion */}
+          {isActive && !collapsed && (
+            <span
+              aria-hidden
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[3px] rounded-full bg-primary"
+            />
+          )}
+
 
           <div className="relative shrink-0">
             <item.icon
