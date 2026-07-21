@@ -77,7 +77,7 @@ export default function GlobalDashboardSidebar() {
 
     // IA & Voz
     {
-      id: "tab:omnix", label: "THOR", icon: Brain, group: zoneAI,
+      id: "tab:omnix", label: "THOR", icon: Brain, group: zoneWork,
       description: "Seu copiloto executivo · voz, chat e orquestração.",
       children: [
         { id: "tab:omnix",       label: "Conversar",  icon: Brain, description: "Fale ou escreva com o THOR para pedir ações." },
