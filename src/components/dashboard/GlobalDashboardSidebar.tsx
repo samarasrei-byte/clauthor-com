@@ -31,38 +31,46 @@ export default function GlobalDashboardSidebar() {
 
   const items: SidebarItem[] = useMemo(() => ([
     // Meu trabalho
-    { id: "tab:overview",             label: "Command Center",     icon: LayoutDashboard, group: zoneWork },
+    { id: "tab:overview", label: "Command Center", icon: LayoutDashboard, group: zoneWork,
+      description: "Visão geral do seu dia · KPIs, alertas e próximas ações." },
     {
       id: "tab:workspace", label: "Área de trabalho", icon: Layers3, group: zoneWork,
+      description: "Seu ambiente operacional · produtividade, inteligência e aprovações.",
       children: [
-        { id: "tab:productivity",     label: "Produtividade",      icon: Layers3 },
-        { id: "tab:intelligence-hub", label: "Inteligência",       icon: BarChart3 },
-        { id: "tab:media",            label: "Mídia",              icon: LayoutDashboard },
-        { id: "tab:approvals",        label: "Central de Aprovações", icon: CheckSquare },
-        { id: "route:/dashboard/traces", label: "Rastros de execução", icon: Activity },
+        { id: "tab:productivity",     label: "Produtividade",      icon: Layers3,     description: "Tarefas, prazos e execução dos agentes em tempo real." },
+        { id: "tab:intelligence-hub", label: "Inteligência",       icon: BarChart3,   description: "KPIs consolidados e insights gerados pela IA." },
+        { id: "tab:media",            label: "Mídia",              icon: LayoutDashboard, description: "Biblioteca de imagens, vídeos e áudios produzidos pelos agentes." },
+        { id: "tab:approvals",        label: "Central de Aprovações", icon: CheckSquare, description: "Aprove ou rejeite entregas antes de publicar." },
+        { id: "route:/dashboard/traces", label: "Rastros de execução", icon: Activity, description: "Passo a passo do que cada agente executou · auditoria completa." },
       ],
     },
-    { id: "route:/dashboard/inbox",   label: "Inbox do Agente",    icon: Inbox,        group: zoneWork },
-    { id: "route:/dashboard/arquivos", label: "Meus arquivos", icon: FolderOpen, group: zoneWork },
-    { id: "route:/video",             label: "Video Hub",          icon: Clapperboard, group: zoneWork, locked: videoLocked, badge: videoLocked ? "Premium" : undefined },
+    { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, group: zoneWork,
+      description: "Mensagens e conversas capturadas pelos agentes." },
+    { id: "route:/dashboard/arquivos", label: "Meus arquivos", icon: FolderOpen, group: zoneWork,
+      description: "Documentos, vídeos e imagens organizados por projeto." },
+    { id: "route:/video", label: "Video Hub", icon: Clapperboard, group: zoneWork,
+      description: "Estúdio de vídeo com Veo 3 e corte automático de clipes.",
+      locked: videoLocked, badge: videoLocked ? "Premium" : undefined },
 
 
-    // Meu time · 2 pais dobráveis: Agentes / Time (Squads + Departamentos unificados)
+    // Meu time
     {
       id: "tab:agents", label: "Agentes", icon: Bot, group: zoneTeam,
+      description: "Seus funcionários digitais e criação de novos agentes.",
       children: [
-        { id: "tab:agents",              label: "Meus agentes",  icon: Bot },
-        { id: "route:/create-agent",     label: "Criar agente",  icon: Bot },
+        { id: "tab:agents",              label: "Meus agentes",  icon: Bot, description: "Todos os agentes que você já contratou." },
+        { id: "route:/create-agent",     label: "Criar agente",  icon: Bot, description: "Assistente guiado para lançar um novo agente." },
       ],
     },
     {
       id: "route:/meus-departamentos", label: "Time", icon: Building2, group: zoneTeam,
+      description: "Departamentos e squads contratados · catálogo para expandir.",
       children: [
-        { id: "route:/meus-departamentos",         label: "Meus departamentos", icon: Building2 },
-        { id: "route:/meus-squads",                label: "Meus squads",        icon: UsersRound },
-        ...(beginner ? [] : [{ id: "route:/dashboard/departamentos", label: "Catálogo de departamentos", icon: Building2 }]),
-        ...(beginner ? [] : [{ id: "route:/dashboard/squads",        label: "Catálogo de squads",         icon: UsersRound }]),
-        { id: "route:/dashboard/departamentos",    label: "Contratar novo",     icon: Building2 },
+        { id: "route:/meus-departamentos", label: "Meus departamentos", icon: Building2, description: "Departamentos ativos na sua operação." },
+        { id: "route:/meus-squads",        label: "Meus squads",        icon: UsersRound, description: "Squads especializados que você já ativou." },
+        ...(beginner ? [] : [{ id: "route:/dashboard/departamentos", label: "Catálogo de departamentos", icon: Building2, description: "Explore departamentos disponíveis para contratar." }]),
+        ...(beginner ? [] : [{ id: "route:/dashboard/squads",        label: "Catálogo de squads",        icon: UsersRound, description: "Explore squads pré-configurados." }]),
+        { id: "route:/dashboard/departamentos", label: "Contratar novo", icon: Building2, description: "Adicione um novo departamento ao seu time." },
       ],
     },
 
@@ -71,18 +79,20 @@ export default function GlobalDashboardSidebar() {
     // IA & Voz
     {
       id: "tab:omnix", label: "THOR", icon: Brain, group: zoneAI,
+      description: "Seu copiloto executivo · voz, chat e orquestração.",
       children: [
-        { id: "tab:omnix",       label: "Conversar",  icon: Brain },
-        { id: "tab:thor-center", label: "Visão geral", icon: Radar },
+        { id: "tab:omnix",       label: "Conversar",  icon: Brain, description: "Fale ou escreva com o THOR para pedir ações." },
+        { id: "tab:thor-center", label: "Visão geral", icon: Radar, description: "Painel do THOR · o que ele está executando agora." },
       ],
     },
 
     // Configuração
     {
       id: "tab:system", label: "Sistema", icon: Settings, group: zoneConfig,
+      description: "Integrações, credenciais e operações da conta.",
       children: [
-        { id: "tab:integrations", label: "Integrações",       icon: Plug },
-        { id: "tab:system",       label: "Operações & Config", icon: Settings },
+        { id: "tab:integrations", label: "Integrações", icon: Plug, description: "Conecte WhatsApp, e-mail, CRM e outras ferramentas." },
+        { id: "tab:system",       label: "Operações & Config", icon: Settings, description: "Preferências gerais, chaves e ajustes avançados." },
       ],
     },
   ]), [videoLocked, beginner]);
