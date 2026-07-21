@@ -85,6 +85,7 @@ const Welcome = lazyRetry(() => import("./pages/Welcome"));
 const OutcomePicker = lazyRetry(() => import("./pages/OutcomePicker"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
+const Kanban2050 = lazyRetry(() => import("./pages/Kanban2050"));
 
 const Experience = lazyRetry(() => import("./pages/Experience"));
 const ThorConcierge = lazyRetry(() => import("./pages/ThorConcierge"));
