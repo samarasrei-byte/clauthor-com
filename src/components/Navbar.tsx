@@ -196,7 +196,7 @@ const Navbar = () => {
                 <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-normal">
                   <Link to="/auth">{t("nav.login")}</Link>
                 </Button>
-                <PremiumCTAButton variant="red" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
+                <PremiumCTAButton variant="outline" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
                   {t("auth.create_account")}
                 </PremiumCTAButton>
               </>
