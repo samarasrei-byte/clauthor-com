@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText, ChevronDown, Activity, XCircle } from "lucide-react";
+import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, ChevronLeft, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText, ChevronDown, Activity, XCircle } from "lucide-react";
 import { Wand } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useQuery } from "@tanstack/react-query";
