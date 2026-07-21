@@ -53,14 +53,14 @@ const AgentHealthAlerts = () => {
             <AlertTriangle className="h-3.5 w-3.5 text-warning" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Alertas de saúde dos agentes</h3>
-            <p className="text-[10px] text-muted-foreground">
+            <h3 className="dash-title text-sm">Alertas de saúde dos agentes</h3>
+            <p className="dash-label">
               {data.alerts.length} anomalia{data.alerts.length > 1 ? "s" : ""} detectada
               {data.alerts.length > 1 ? "s" : ""} · última varredura agora
             </p>
           </div>
         </div>
-        <Badge variant="outline" className="text-[9px] border-border/40">
+        <Badge variant="outline" className="dash-eyebrow border-border/40">
           Monitoramento contínuo
         </Badge>
       </header>
