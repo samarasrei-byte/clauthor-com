@@ -89,8 +89,8 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
                 <p className="font-display font-bold text-lg leading-tight">{data.label}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="font-display text-2xl font-bold text-primary">{formattedPrice}</p>
-                <p className="text-[10px] text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
+                <p className="dash-kpi font-display text-primary">{formattedPrice}</p>
+                <p className="dash-eyebrow text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
               </div>
             </div>
 
