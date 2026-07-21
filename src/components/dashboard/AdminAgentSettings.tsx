@@ -228,7 +228,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
           </div>
           <div className="text-left">
             <div className="flex items-center gap-2">
-              <p className="font-display font-semibold text-sm">{agent.name}</p>
+              <p className="dash-title text-sm">{agent.name}</p>
               {hasIssues && <AlertTriangle className="h-3.5 w-3.5 text-warning" />}
             </div>
             <div className="flex items-center gap-2 mt-0.5">
