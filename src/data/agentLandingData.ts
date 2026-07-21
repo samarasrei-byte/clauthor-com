@@ -241,7 +241,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionDesc: "IA que escreve código de produção, faz code review, roda testes e deploya - tudo sozinha.",
     solutions: [
       { title: "Código de produção", description: "Escreve código limpo, testado e documentado em qualquer linguagem." },
-      { title: "CI/CD autônomo", description: "Integra com GitHub, roda testes, faz deploy. Ciclo completo sem intervenção." },
+      { title: "CI/CD com aprovações", description: "Integra com GitHub, roda testes, prepara deploy com aprovação inteligente antes de subir." },
       { title: "Debug inteligente", description: "Identifica e corrige bugs automaticamente. Análise de logs em tempo real." },
     ],
     benefits: [
@@ -2575,7 +2575,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Escalação inteligente", description: "Casos complexos encaminhados com contexto completo." },
     ],
     benefits: [
-      { metric: "85%", label: "Auto-resolução", description: "Tickets resolvidos sem humano." },
+      { metric: "85%", label: "Auto-resolução", description: "Tickets resolvidos pela IA com escalonamento humano quando necessário." },
       { metric: "<30s", label: "Resposta", description: "Tempo médio de primeira resposta." },
       { metric: "-80%", label: "Custo", description: "Redução no custo de suporte." },
       { metric: "98%", label: "Satisfação", description: "CSAT dos atendimentos automatizados." },
