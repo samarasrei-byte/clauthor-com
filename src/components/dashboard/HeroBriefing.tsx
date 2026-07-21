@@ -160,10 +160,11 @@ const HeroBriefing = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       aria-label="Resumo do dia"
-      className="relative overflow-hidden rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm"
+      className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-primary/[0.06] via-card/80 to-card/40 backdrop-blur-sm shadow-[0_1px_0_0_hsl(var(--foreground)/0.04)_inset,0_20px_60px_-30px_hsl(var(--primary)/0.25)]"
     >
       {/* accent glow único, discreto */}
-      <div className="pointer-events-none absolute -top-24 -right-16 w-72 h-72 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 -right-16 w-80 h-80 rounded-full bg-primary/15 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
       <div className="relative p-6 sm:p-8 flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-10">
         {/* Coluna esquerda: greeting + status + CTA */}
