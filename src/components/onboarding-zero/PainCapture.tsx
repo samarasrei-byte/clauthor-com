@@ -215,7 +215,7 @@ export default function PainCapture({ initial = "", onDone }: Props) {
             transition={{ duration: 0.4 }}
             className="flex flex-col items-center w-full max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-widest text-primary/70 mb-4">Thor está entendendo</p>
+            <p className="dash-eyebrow text-primary/70 mb-4">Thor está entendendo</p>
 
             <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight text-center leading-[1.15] mb-3 min-h-[3em]">
               &ldquo;{typed}
