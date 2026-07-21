@@ -207,6 +207,12 @@ export default function AgentInbox() {
         />
       </Helmet>
 
+      <BreadcrumbActions>
+        <Button asChild size="sm" variant="outline" className="h-8 gap-1.5 text-xs">
+          <Link to="/dashboard/integrations"><Plug className="h-3.5 w-3.5" /> Conectar canal</Link>
+        </Button>
+      </BreadcrumbActions>
+
       <div className="p-4 sm:p-6 space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
