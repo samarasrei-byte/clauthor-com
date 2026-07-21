@@ -17,6 +17,8 @@ export interface SidebarChild {
   id: string;
   label: string;
   icon?: React.ElementType;
+  /** Fala/descrição contextual usada em tooltip e narração TTS ao clicar. */
+  description?: string;
 }
 
 export interface SidebarItem {
@@ -27,6 +29,8 @@ export interface SidebarItem {
   group?: string;
   children?: SidebarChild[];
   colorClass?: string;
+  /** Fala/descrição contextual usada em tooltip e narração TTS ao clicar. */
+  description?: string;
   /** Se true, exibe cadeado sobre o ícone (acesso bloqueado / paywall). */
   locked?: boolean;
 }
