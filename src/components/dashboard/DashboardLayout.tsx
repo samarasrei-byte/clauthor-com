@@ -174,6 +174,9 @@ const DashboardLayout = () => {
               </Tooltip>
             )}
 
+            {/* Divisor sutil entre cluster de navegação e cluster de conta */}
+            <span aria-hidden className="hidden sm:block h-5 w-px bg-border/50 mx-1" />
+
             {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar · evita duplicidade */}
 
             <Tooltip>
