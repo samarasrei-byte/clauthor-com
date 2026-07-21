@@ -459,6 +459,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
       {/* Nav · overlay scrollbar (aparece só no hover), fade top/bottom */}
       <nav
+        ref={navRef}
+        onKeyDown={handleNavKeyDown}
+        aria-label="Navegação principal"
         className={cn(
           "flex-1 min-h-0 py-1.5 px-2 space-y-0.5 overflow-y-auto",
           "[scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent]",
@@ -468,6 +471,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           "[mask-image:linear-gradient(to_bottom,transparent,black_12px,black_calc(100%-12px),transparent)]"
         )}
       >
+
         {!collapsed && !q && pinnedItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
