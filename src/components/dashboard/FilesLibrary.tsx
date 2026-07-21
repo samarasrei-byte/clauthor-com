@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 
 type FileType = "video" | "audio" | "image" | "pdf" | "doc" | "brandbook" | "logo" | "marketing" | "other";
 
@@ -158,6 +159,14 @@ const FilesLibrary = () => {
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
     >
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={createFolder} className="h-8 gap-1.5 text-xs">
+          <FolderOpen className="h-3.5 w-3.5" /> Nova pasta
+        </Button>
+        <Button size="sm" onClick={() => inputRef.current?.click()} disabled={uploadMutation.isPending} className="h-8 gap-1.5 text-xs">
+          <Upload className="h-3.5 w-3.5" /> Enviar
+        </Button>
+      </BreadcrumbActions>
       {/* Drop overlay */}
       <AnimatePresence>
         {dragging && (
