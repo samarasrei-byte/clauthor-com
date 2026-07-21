@@ -67,13 +67,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // THEN check for existing session — re-validate with getUser to catch bad_jwt
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!mounted) return;
-      setSession(session);
-      setUser(session?.user ?? null);
-      
+
       if (session?.user) {
+        // Re-validate the token with Auth server; if it's stale/invalid (bad_jwt,
+        // missing sub claim, revoked signing key), sign out to clear the bogus
+        // localStorage state instead of leaving the user in a broken auth loop.
+        const { data: userData, error: userErr } = await supabase.auth.getUser();
+        if (!mounted) return;
+        if (userErr || !userData?.user) {
+          await supabase.auth.signOut().catch(() => {});
+          setSession(null);
+          setUser(null);
+          setRole(null);
+          setIsLoading(false);
+          return;
+        }
+        setSession(session);
+        setUser(session.user);
         supabase
           .from("user_roles")
           .select("role")
@@ -87,7 +100,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsLoading(false);
           });
       } else {
+        setSession(null);
+        setUser(null);
         setIsLoading(false);
+
       }
     });
 
