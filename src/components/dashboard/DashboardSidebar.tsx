@@ -142,6 +142,41 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  /**
+   * Roving keyboard navigation dentro do `<nav>`. Setas ↑/↓ movem foco entre
+   * botões, Home/End pulam extremos, Enter/Space aciona o item focado.
+   * Compatível com screen readers · cada botão continua sendo `<button>` nativo.
+   */
+  const handleNavKeyDown = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const focusables = Array.from(
+      nav.querySelectorAll<HTMLButtonElement>("button[data-sb-item]:not([disabled])"),
+    );
+    if (focusables.length === 0) return;
+    const idx = focusables.indexOf(document.activeElement as HTMLButtonElement);
+    let next = idx;
+    switch (e.key) {
+      case "ArrowDown":
+        next = idx < 0 ? 0 : Math.min(idx + 1, focusables.length - 1);
+        break;
+      case "ArrowUp":
+        next = idx < 0 ? focusables.length - 1 : Math.max(idx - 1, 0);
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = focusables.length - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    focusables[next]?.focus();
+  }, []);
+
+
   const toggleGroup = useCallback((id: string) => {
     setExpandedGroups(prev => {
       const next = new Set(prev);
