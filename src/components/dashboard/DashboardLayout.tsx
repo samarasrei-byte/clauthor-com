@@ -108,7 +108,7 @@ const DashboardLayout = () => {
         </AnimatePresence>
 
         {/* Fixed top bar */}
-        <header className="h-14 bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
+        <header className="h-14 surface-1 border-b border-border/40 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
           <div className="flex items-center gap-2">
             {showGlobalSidebar && (
               <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
