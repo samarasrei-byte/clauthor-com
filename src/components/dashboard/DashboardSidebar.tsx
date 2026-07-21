@@ -502,9 +502,16 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
       </nav>
 
-      {/* Footer · atalho recolher (⌘K removido — já indicado no campo de busca) */}
+      {/* Footer · status do sistema + atalho recolher */}
       {!collapsed && (
-        <div className="shrink-0 px-3 py-2 border-t border-border/40 flex items-center justify-end text-[9.5px] font-medium text-muted-foreground/60">
+        <div className="shrink-0 px-3 py-2 border-t border-border/40 flex items-center justify-between gap-2 text-[9.5px] font-medium text-muted-foreground/60">
+          <span className="flex items-center gap-1.5" title="Rede neural operacional">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-success/70 animate-ping opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+            </span>
+            <span className="uppercase tracking-[0.14em]">online</span>
+          </span>
           <span className="flex items-center gap-1">
             <kbd className="px-1 py-0.5 rounded border border-border/40 bg-background/50 font-mono">⌘B</kbd>
             <span>recolher</span>
