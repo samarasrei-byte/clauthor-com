@@ -53,14 +53,14 @@ const AgentHealthAlerts = () => {
             <AlertTriangle className="h-3.5 w-3.5 text-warning" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Alertas de saúde dos agentes</h3>
-            <p className="text-[10px] text-muted-foreground">
+            <h3 className="dash-title text-sm">Alertas de saúde dos agentes</h3>
+            <p className="dash-label">
               {data.alerts.length} anomalia{data.alerts.length > 1 ? "s" : ""} detectada
               {data.alerts.length > 1 ? "s" : ""} · última varredura agora
             </p>
           </div>
         </div>
-        <Badge variant="outline" className="text-[9px] border-border/40">
+        <Badge variant="outline" className="dash-eyebrow border-border/40">
           Monitoramento contínuo
         </Badge>
       </header>
@@ -80,7 +80,7 @@ const AgentHealthAlerts = () => {
       {rest > 0 && (
         <button
           onClick={() => navigate("/dashboard/traces")}
-          className="mt-3 w-full text-center text-[10px] font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground"
+          className="mt-3 w-full text-center dash-eyebrow text-muted-foreground hover:text-foreground"
         >
           + {rest} outros alertas · abrir War Room
         </button>
@@ -104,14 +104,14 @@ function AlertRow({ alert, onOpen }: { alert: AgentAlert; onOpen: () => void }) 
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold truncate">{alert.title}</span>
-          <span className={cn("text-[9px] px-1.5 py-0.5 rounded", cls.pill)}>{alert.metric}</span>
+          <span className="dash-title text-xs truncate">{alert.title}</span>
+          <span className={cn("dash-eyebrow px-1.5 py-0.5 rounded", cls.pill)}>{alert.metric}</span>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{alert.message}</p>
+        <p className="dash-label mt-0.5 line-clamp-2">{alert.message}</p>
       </div>
       <button
         onClick={onOpen}
-        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-medium text-primary hover:bg-primary/10 transition-colors shrink-0"
+        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg dash-label text-primary hover:bg-primary/10 transition-colors shrink-0"
       >
         Analisar <ArrowRight className="h-3 w-3" />
       </button>

@@ -148,10 +148,10 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             <Shield className="h-4.5 w-4.5 text-primary" />
           </div>
           <div>
-            <h3 className="font-display font-semibold text-sm">
+            <h3 className="dash-title text-sm">
               {t("setup_checklist.title", { defaultValue: "Agent Setup" })}
             </h3>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="dash-label">
               {overallPct === 100
                 ? t("setup_checklist.all_done", { defaultValue: "✅ All agents configured!" })
                 : t("setup_checklist.progress", {
@@ -163,7 +163,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold text-primary">{overallPct}%</span>
+          <span className="dash-kpi text-xs text-primary">{overallPct}%</span>
           <Progress value={overallPct} className="w-20 h-2" />
         </div>
       </div>
@@ -185,16 +185,16 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${isComplete ? "bg-primary" : "bg-accent-foreground/50 animate-pulse"}`} />
-                <span className="font-display font-semibold text-xs truncate max-w-[140px]">{agent.name}</span>
+                <span className="dash-title text-xs truncate max-w-[140px]">{agent.name}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {isPureAI && (
-                  <Badge variant="secondary" className="text-[8px] px-1.5 py-0 bg-primary/10 text-primary border-0">
+                  <Badge variant="secondary" className="dash-eyebrow px-1.5 py-0 bg-primary/10 text-primary border-0">
                     <Wand className="h-2.5 w-2.5 mr-0.5" />
                     {t("setup_checklist.pure_ai", { defaultValue: "Pure AI" })}
                   </Badge>
                 )}
-                <span className={`text-[10px] font-mono font-bold ${isComplete ? "text-primary" : "text-muted-foreground"}`}>
+                <span className={`dash-kpi text-[10px] ${isComplete ? "text-primary" : "text-muted-foreground"}`}>
                   {pct}%
                 </span>
               </div>
@@ -233,7 +233,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
 
       {/* Show more if some are hidden */}
       {pendingCount > visibleChecklists.length && (
-        <p className="text-[10px] text-muted-foreground text-center">
+        <p className="dash-label text-center">
           +{pendingCount - visibleChecklists.length} {t("setup_checklist.more_pending", { defaultValue: "agents pending" })}
         </p>
       )}
