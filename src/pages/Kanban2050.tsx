@@ -491,7 +491,7 @@ function ColumnView({
           style={{ background: column.color }}
           aria-hidden
         />
-        <h3 className="text-sm font-semibold flex-1 truncate">{column.name}</h3>
+        <h3 className="dash-title flex-1 truncate">{column.name}</h3>
         <Badge variant="secondary" className={cn(
           "h-5 px-1.5 text-[10px] tabular-nums",
           wipExceeded && "bg-destructive/15 text-destructive"
