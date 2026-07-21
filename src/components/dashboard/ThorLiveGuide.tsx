@@ -485,7 +485,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         exit={{ y: 24, opacity: 0 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
         onClick={() => setIsExpanded(true)}
-        className="fixed bottom-24 right-4 sm:bottom-28 sm:right-6 z-50 group flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-background/70 backdrop-blur-xl border border-border/30 shadow-[0_4px_24px_hsl(0_0%_0%/0.18)] hover:border-primary/40 transition-colors"
+        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 group flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-background/75 backdrop-blur-xl border border-border/40 shadow-[0_8px_32px_hsl(0_0%_0%/0.22)] hover:border-primary/50 hover:shadow-[0_10px_40px_hsl(var(--primary)/0.25)] transition-all"
       >
         <span className="relative flex h-2 w-2 shrink-0">
           <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
@@ -511,7 +511,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.98 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
-        className="fixed bottom-24 right-4 sm:bottom-28 sm:right-6 z-50 w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/20 bg-background/85 backdrop-blur-2xl shadow-[0_12px_40px_hsl(0_0%_0%/0.25)] overflow-hidden"
+        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 w-[380px] max-w-[calc(100vw-2rem)] rounded-[28px] border border-border/25 bg-background/85 backdrop-blur-2xl shadow-[0_20px_60px_-15px_hsl(0_0%_0%/0.35),0_0_0_1px_hsl(var(--primary)/0.06)] overflow-hidden"
       >
         {/* Header: slim · dot + label + inline waveform + controls */}
         <div className="px-3.5 pt-3 pb-2 flex items-center gap-2.5">
