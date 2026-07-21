@@ -139,8 +139,8 @@ export default function HireAndOnboard() {
     <div className="min-h-dvh bg-background text-foreground">
       <SEO title={`Contratar ${dept.name} · Clauthor`} description={`Ative o ${dept.name} e comece agora.`} />
 
-      {/* Header minimalista de checkout · sem Navbar global */}
-      <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md">
+      {/* Header minimalista de checkout · unificado com /checkout */}
+      <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link to={window.location.pathname.startsWith("/dashboard")?`/dashboard/departamentos/${dept.id}`:`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Voltar
