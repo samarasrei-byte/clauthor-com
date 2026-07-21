@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, lazy, Suspense, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, lazy, Suspense, ReactNode } from "react";
 import LiveTasksTicker from "./LiveTasksTicker";
 import HelpButton from "./HelpButton";
 
@@ -66,6 +66,18 @@ export const FloatingDockProvider = ({ children }: { children: ReactNode }) => {
 
 const FloatingDock = () => {
   const { thor } = useFloatingDock();
+  // Suprime o guia flutuante enquanto qualquer Radix Dialog/Sheet estiver aberto
+  // (Radix trava scroll no <body> via data-scroll-locked). Evita colisão visual
+  // com PlatformUpdatesDialog, ThorDailyGreeting, ActivateModal etc.
+  const [dialogOpen, setDialogOpen] = useState(false);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const check = () => setDialogOpen(document.body.hasAttribute("data-scroll-locked"));
+    check();
+    const mo = new MutationObserver(check);
+    mo.observe(document.body, { attributes: true, attributeFilter: ["data-scroll-locked", "style"] });
+    return () => mo.disconnect();
+  }, []);
 
   return (
     <>
@@ -74,7 +86,7 @@ const FloatingDock = () => {
       {/* bottom-right */}
       <HelpButton />
       {/* bottom-center (reserved zone) */}
-      {thor && (
+      {thor && !dialogOpen && (
         <Suspense fallback={null}>
           <ThorLiveGuide
             activeSection={thor.activeSection}
