@@ -294,7 +294,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Channels */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
+                <label className="dash-label mb-2 flex items-center gap-2">
                   Canais
                   {channels.length === 0 && <Badge className="bg-warning/15 text-warning text-[8px] border-0">NENHUM</Badge>}
                 </label>
