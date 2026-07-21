@@ -242,6 +242,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
 
         <button
+          data-sb-item={item.id}
           onClick={() => {
             if (hasChildren && !collapsed) {
               toggleGroup(item.id);
@@ -250,16 +251,20 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               onItemChange(item.id);
             }
           }}
-          title={item.description ? `${item.label} · ${item.description}` : item.label}
-          aria-label={item.description ? `${item.label}. ${item.description}` : item.label}
+          aria-label={item.label}
+          aria-current={isActive ? "page" : undefined}
+          aria-expanded={hasChildren ? isExpanded : undefined}
+          aria-describedby={item.description ? `${tooltipBaseId}-${item.id}` : undefined}
           className={cn(
             "w-full flex items-center gap-2.5 rounded-xl transition-all duration-150 group relative",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background",
             collapsed ? "px-2 py-1.5 justify-center" : "px-2.5 py-1.5",
             isActive
               ? "bg-card border border-border/60 text-foreground shadow-sm"
               : "text-foreground/80 hover:text-foreground hover:bg-card/60 border border-transparent"
           )}
         >
+
           <div className="relative shrink-0">
             <item.icon
               className={cn(
