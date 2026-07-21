@@ -53,6 +53,10 @@ const AdminDashboard = () => {
       navigate("/admin/verticals/advocacia");
       return;
     }
+    if (id === "paypal-sandbox") {
+      navigate("/admin/paypal-sandbox");
+      return;
+    }
     setActiveTab(id);
   };
   const queryClient = useQueryClient();
