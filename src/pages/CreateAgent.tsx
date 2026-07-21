@@ -7,8 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText } from "lucide-react";
+import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText, ChevronDown, Activity, XCircle } from "lucide-react";
 import { Wand } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -68,15 +69,14 @@ const CreateAgentPage = () => {
   const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
 
+  // 4 macro-passos + Diagnóstico final · reduz de 8 para 5 telas · P1 da auditoria UX.
+  // Cada macro agrupa sub-seções relacionadas (identidade, execução, cérebro, guardrails).
   const steps = [
-    { icon: Bot, label: t("create_agent.step_name", { defaultValue: "Nome & Objetivo" }) },
-    { icon: FileText, label: t("create_agent.step_instructions", { defaultValue: "Instruções" }) },
-    { icon: Zap, label: t("create_agent.step_actions", { defaultValue: "Ações" }) },
-    { icon: Globe, label: t("create_agent.step_channels", { defaultValue: "Canais" }) },
-    { icon: Database, label: t("create_agent.step_knowledge", { defaultValue: "Conhecimento" }) },
-    { icon: Plug, label: t("create_agent.step_integrations", { defaultValue: "Integrações" }) },
-    { icon: Shield, label: t("create_agent.step_limits", { defaultValue: "Limites" }) },
-    { icon: Clock, label: t("create_agent.step_schedule", { defaultValue: "Agendamento" }) },
+    { icon: Bot, label: t("create_agent.step_identity", { defaultValue: "Identidade" }) },
+    { icon: Zap, label: t("create_agent.step_execution", { defaultValue: "Execução" }) },
+    { icon: Database, label: t("create_agent.step_brain", { defaultValue: "Cérebro" }) },
+    { icon: Shield, label: t("create_agent.step_guardrails", { defaultValue: "Guardrails" }) },
+    { icon: Activity, label: t("create_agent.step_diagnostic", { defaultValue: "Diagnóstico" }) },
   ];
   const [saving, setSaving] = useState(false);
   const [showTemplateSuggestions, setShowTemplateSuggestions] = useState(false);
@@ -522,6 +522,7 @@ const CreateAgentPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* MACRO 0 · IDENTIDADE (nome+objetivo+setor + instruções+tom) */}
             {currentStep === 0 && (
               <>
                 <div className="space-y-2">
@@ -537,7 +538,7 @@ const CreateAgentPage = () => {
                       setObjective(e.target.value);
                       if (e.target.value.trim().length > 5) setShowTemplateSuggestions(true);
                     }}
-                    className="glass min-h-[120px]"
+                    className="glass min-h-[100px]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -548,139 +549,198 @@ const CreateAgentPage = () => {
                     ))}
                   </div>
                 </div>
-              </>
-            )}
-
-            {currentStep === 1 && (
-              <>
+                <div className="h-px bg-border/50 my-2" />
                 <div className="space-y-2">
                   <Label>{t("create_agent.instructions_rules", { defaultValue: "Instruções e Regras" })}</Label>
-                  <Textarea placeholder={t("create_agent.instructions_placeholder", { defaultValue: "Defina as regras de comportamento do agente..." })} value={instructions} onChange={e => setInstructions(e.target.value)} className="glass min-h-[200px]" />
+                  <Textarea placeholder={t("create_agent.instructions_placeholder", { defaultValue: "Defina as regras de comportamento do agente..." })} value={instructions} onChange={e => setInstructions(e.target.value)} className="glass min-h-[140px]" />
                 </div>
                 <div className="space-y-2">
                   <Label>{t("create_agent.tone", { defaultValue: "Tom de Voz" })}</Label>
                   <div className="flex flex-wrap gap-2">
-                    {toneOptions.map(t => (
-                      <Badge key={t} variant="secondary" onClick={() => setTone(t)} className={`cursor-pointer transition-colors px-3 py-1 ${tone === t ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{t}</Badge>
+                    {toneOptions.map(to => (
+                      <Badge key={to} variant="secondary" onClick={() => setTone(to)} className={`cursor-pointer transition-colors px-3 py-1 ${tone === to ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{to}</Badge>
                     ))}
                   </div>
                 </div>
               </>
             )}
 
-            {currentStep === 2 && (
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">{t("create_agent.actions_desc", { defaultValue: "Selecione as ações que o agente pode executar:" })}</p>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {actionOptions.map(action => (
-                    <div key={action} onClick={() => toggleItem(action, selectedActions, setSelectedActions)} className={`flex items-center gap-3 p-3 rounded-lg glass cursor-pointer transition-all ${selectedActions.includes(action) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
-                      <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedActions.includes(action) ? "border-primary bg-primary" : "border-muted-foreground/30"}`}>
-                        {selectedActions.includes(action) && <CheckCircle className="h-3 w-3 text-primary-foreground" />}
+            {/* MACRO 1 · EXECUÇÃO (ações + canais) */}
+            {currentStep === 1 && (
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <Label className="text-sm">Ações que o agente pode executar</Label>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {actionOptions.map(action => (
+                      <div key={action} onClick={() => toggleItem(action, selectedActions, setSelectedActions)} className={`flex items-center gap-3 p-3 rounded-lg glass cursor-pointer transition-all ${selectedActions.includes(action) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
+                        <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedActions.includes(action) ? "border-primary bg-primary" : "border-muted-foreground/30"}`}>
+                          {selectedActions.includes(action) && <CheckCircle className="h-3 w-3 text-primary-foreground" />}
+                        </div>
+                        <span className="text-sm">{action}</span>
                       </div>
-                      <span className="text-sm">{action}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {channelOptions.map(ch => (
-                  <div key={ch} onClick={() => toggleItem(ch, selectedChannels, setSelectedChannels)} className={`flex items-center gap-3 p-4 rounded-lg glass cursor-pointer transition-all ${selectedChannels.includes(ch) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
-                    <Globe className={`h-5 w-5 ${selectedChannels.includes(ch) ? "text-primary" : "text-muted-foreground"}`} />
-                    <span className="text-sm font-medium">{ch}</span>
-                    {selectedChannels.includes(ch) && <CheckCircle className="h-4 w-4 text-primary ml-auto" />}
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
-
-            {currentStep === 4 && (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>{t("create_agent.knowledge_base", { defaultValue: "Base de Conhecimento" })}</Label>
-                  <Textarea placeholder={t("create_agent.knowledge_placeholder", { defaultValue: "Cole textos, FAQs, documentos ou links que o agente deve usar como referência." })} value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)} className="glass min-h-[150px]" />
                 </div>
-                <div
-                  className="glass rounded-lg p-4 neon-border text-center cursor-pointer hover:bg-accent/30 transition-colors opacity-60"
-                  onClick={() => toast.info("Upload de arquivos estará disponível em breve!")}
-                >
-                  <Database className="h-8 w-8 text-primary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Arraste arquivos ou clique para upload</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV - Em breve</p>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 5 && (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {integrationOptions.map(ig => (
-                  <div key={ig} onClick={() => toggleItem(ig, selectedIntegrations, setSelectedIntegrations)} className={`flex items-center justify-between p-4 rounded-lg glass cursor-pointer transition-all ${selectedIntegrations.includes(ig) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
-                    <div className="flex items-center gap-3">
-                      <Plug className={`h-5 w-5 ${selectedIntegrations.includes(ig) ? "text-primary" : "text-muted-foreground"}`} />
-                      <span className="text-sm font-medium">{ig}</span>
-                    </div>
-                    <Badge variant="secondary" className={`text-xs ${selectedIntegrations.includes(ig) ? "bg-primary/20 text-primary" : ""}`}>
-                      {selectedIntegrations.includes(ig) ? t("integrations.status_connected", { defaultValue: "Conectado" }) : t("integrations.connect", { defaultValue: "Conectar" })}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {currentStep === 6 && (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>{t("create_agent.exec_limit", { defaultValue: "Limite de Execuções/Dia" })}</Label>
-                  <Input type="number" value={execLimit} onChange={e => setExecLimit(e.target.value)} className="glass" />
-                </div>
-                <div className="space-y-2">
-                  <Label>{t("create_agent.timeout", { defaultValue: "Timeout por Ação (segundos)" })}</Label>
-                  <Input type="number" value={timeout} onChange={e => setTimeoutVal(e.target.value)} className="glass" />
-                </div>
-                <div className="space-y-2">
-                  <Label>{t("create_agent.audit_level", { defaultValue: "Nível de Auditoria" })}</Label>
-                  <div className="flex gap-2">
-                    {auditLevels.map(l => (
-                      <Badge key={l} variant="secondary" onClick={() => setAuditLevel(l)} className={`cursor-pointer transition-colors px-3 py-1 ${auditLevel === l ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{l}</Badge>
+                <div className="h-px bg-border/50" />
+                <div className="space-y-3">
+                  <Label className="text-sm">Canais de operação</Label>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {channelOptions.map(ch => (
+                      <div key={ch} onClick={() => toggleItem(ch, selectedChannels, setSelectedChannels)} className={`flex items-center gap-3 p-3 rounded-lg glass cursor-pointer transition-all ${selectedChannels.includes(ch) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
+                        <Globe className={`h-4 w-4 ${selectedChannels.includes(ch) ? "text-primary" : "text-muted-foreground"}`} />
+                        <span className="text-sm font-medium">{ch}</span>
+                        {selectedChannels.includes(ch) && <CheckCircle className="h-4 w-4 text-primary ml-auto" />}
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
             )}
 
-            {currentStep === 7 && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-4 rounded-lg glass cursor-pointer" onClick={() => setIs24h(!is24h)}>
-                  <div className={`w-4 h-4 rounded border flex items-center justify-center ${is24h ? "border-primary bg-primary" : "border-muted-foreground/30"}`}>
-                    {is24h && <CheckCircle className="h-3 w-3 text-primary-foreground" />}
-                  </div>
-                  <Clock className="h-5 w-5 text-primary" />
-                  <span className="text-sm">{t("create_agent.always_on", { defaultValue: "Ativar execução 24/7 (sem limites de horário)" })}</span>
+            {/* MACRO 2 · CÉREBRO (conhecimento + integrações) */}
+            {currentStep === 2 && (
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label>{t("create_agent.knowledge_base", { defaultValue: "Base de Conhecimento" })}</Label>
+                  <Textarea placeholder={t("create_agent.knowledge_placeholder", { defaultValue: "Cole textos, FAQs, documentos ou links que o agente deve usar como referência." })} value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)} className="glass min-h-[140px]" />
                 </div>
-                {!is24h && (
-                  <>
-                    <div className="grid sm:grid-cols-2 gap-4">
+                <div className="h-px bg-border/50" />
+                <div className="space-y-3">
+                  <Label className="text-sm">Integrações disponíveis</Label>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {integrationOptions.map(ig => (
+                      <div key={ig} onClick={() => toggleItem(ig, selectedIntegrations, setSelectedIntegrations)} className={`flex items-center justify-between p-3 rounded-lg glass cursor-pointer transition-all ${selectedIntegrations.includes(ig) ? "neon-border bg-primary/5" : "hover:neon-border"}`}>
+                        <div className="flex items-center gap-3">
+                          <Plug className={`h-4 w-4 ${selectedIntegrations.includes(ig) ? "text-primary" : "text-muted-foreground"}`} />
+                          <span className="text-sm font-medium">{ig}</span>
+                        </div>
+                        <Badge variant="secondary" className={`text-[10px] ${selectedIntegrations.includes(ig) ? "bg-primary/20 text-primary" : ""}`}>
+                          {selectedIntegrations.includes(ig) ? "Conectado" : "Conectar"}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* MACRO 3 · GUARDRAILS (limites + agendamento — accordion "Avançado") */}
+            {currentStep === 3 && (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Valores padrão funcionam pra maioria dos casos. Expanda só se quiser ajustar.
+                </p>
+                <Collapsible defaultOpen>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg glass hover:bg-accent/30 transition-colors">
+                    <span className="text-sm font-medium flex items-center gap-2"><Shield className="h-4 w-4 text-primary" /> Limites e auditoria</span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 space-y-3">
+                    <div className="grid sm:grid-cols-2 gap-3">
                       <div className="space-y-2">
-                        <Label>{t("create_agent.start_time", { defaultValue: "Horário de Início" })}</Label>
-                        <Input type="time" className="glass" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                        <Label className="text-xs">Execuções/dia</Label>
+                        <Input type="number" value={execLimit} onChange={e => setExecLimit(e.target.value)} className="glass" />
                       </div>
                       <div className="space-y-2">
-                        <Label>{t("create_agent.end_time", { defaultValue: "Horário de Fim" })}</Label>
-                        <Input type="time" className="glass" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                        <Label className="text-xs">Timeout (segundos)</Label>
+                        <Input type="number" value={timeout} onChange={e => setTimeoutVal(e.target.value)} className="glass" />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("create_agent.active_days", { defaultValue: "Dias da Semana" })}</Label>
+                      <Label className="text-xs">Nível de auditoria</Label>
                       <div className="flex gap-2">
-                        {weekDays.map(d => (
-                          <Badge key={d} variant="secondary" onClick={() => toggleItem(d, selectedDays, setSelectedDays)} className={`cursor-pointer transition-colors px-3 py-1 ${selectedDays.includes(d) ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{d}</Badge>
+                        {auditLevels.map(l => (
+                          <Badge key={l} variant="secondary" onClick={() => setAuditLevel(l)} className={`cursor-pointer transition-colors px-3 py-1 ${auditLevel === l ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{l}</Badge>
                         ))}
                       </div>
                     </div>
-                  </>
-                )}
+                  </CollapsibleContent>
+                </Collapsible>
+                <Collapsible>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg glass hover:bg-accent/30 transition-colors">
+                    <span className="text-sm font-medium flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> Agendamento</span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 space-y-3">
+                    <div className="flex items-center gap-3 p-3 rounded-lg glass cursor-pointer" onClick={() => setIs24h(!is24h)}>
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center ${is24h ? "border-primary bg-primary" : "border-muted-foreground/30"}`}>
+                        {is24h && <CheckCircle className="h-3 w-3 text-primary-foreground" />}
+                      </div>
+                      <span className="text-sm">Execução 24/7 (sem limites de horário)</span>
+                    </div>
+                    {!is24h && (
+                      <>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label className="text-xs">Início</Label>
+                            <Input type="time" className="glass" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-xs">Fim</Label>
+                            <Input type="time" className="glass" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs">Dias da semana</Label>
+                          <div className="flex gap-2 flex-wrap">
+                            {weekDays.map(d => (
+                              <Badge key={d} variant="secondary" onClick={() => toggleItem(d, selectedDays, setSelectedDays)} className={`cursor-pointer transition-colors px-3 py-1 ${selectedDays.includes(d) ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{d}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
+              </div>
+            )}
+
+            {/* MACRO 4 · DIAGNÓSTICO · health check pré-ativação */}
+            {currentStep === 4 && (
+              <div className="space-y-4">
+                <div className="text-center pb-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-3">
+                    <Activity className="h-3 w-3" /> Pronto pra ativar
+                  </div>
+                  <h3 className="text-lg font-semibold">Diagnóstico do agente</h3>
+                  <p className="text-xs text-muted-foreground mt-1">Rodei 4 checks antes de você ativar. Verde = pode ativar.</p>
+                </div>
+                {(() => {
+                  const checks = [
+                    { label: "Identidade definida", pass: !!name.trim() && !!objective.trim(), hint: "Informe nome e objetivo em Identidade." },
+                    { label: "Instruções mínimas", pass: instructions.trim().length >= 20, hint: "Escreva pelo menos 20 caracteres de instruções." },
+                    { label: "Ao menos 1 ação selecionada", pass: selectedActions.length > 0, hint: "Volte em Execução e escolha uma ação." },
+                    { label: "Ao menos 1 canal conectado", pass: selectedChannels.length > 0, hint: "Volte em Execução e escolha um canal." },
+                  ];
+                  const allPass = checks.every(c => c.pass);
+                  return (
+                    <>
+                      <div className="space-y-2">
+                        {checks.map((c, i) => (
+                          <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border ${c.pass ? "border-success/30 bg-success/5" : "border-destructive/30 bg-destructive/5"}`}>
+                            {c.pass
+                              ? <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                              : <XCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />}
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium">{c.label}</p>
+                              {!c.pass && <p className="text-xs text-muted-foreground mt-0.5">{c.hint}</p>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {allPass && (
+                        <div className="p-4 rounded-lg border border-success/40 bg-success/10 text-sm">
+                          <p className="font-medium text-success flex items-center gap-2">
+                            <Rocket className="h-4 w-4" /> Tudo certo · agente pronto pra operar
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {selectedActions.length} ações · {selectedChannels.length} canais · {selectedIntegrations.length} integrações · {is24h ? "24/7" : `${startTime}–${endTime}`}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             )}
           </CardContent>

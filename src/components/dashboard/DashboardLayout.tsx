@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
+import NotificationPanel from "./NotificationPanel";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import PrimaryCTA from "./PrimaryCTA";
@@ -174,6 +175,13 @@ const DashboardLayout = () => {
             )}
 
             {/* Toggle Iniciante/Avançado movido para o rodapé do sidebar · evita duplicidade */}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div><NotificationPanel /></div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Notificações · alertas dos agentes</TooltipContent>
+            </Tooltip>
 
             <Tooltip>
               <TooltipTrigger asChild>

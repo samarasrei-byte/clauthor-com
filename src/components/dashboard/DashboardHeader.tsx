@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
-import NotificationPanel from "./NotificationPanel";
+// NotificationPanel foi promovido pro topbar global (DashboardLayout) · fica visível em toda rota do dashboard, inclusive perto dos resultados de diagnóstico.
 import QuickActions from "./QuickActions";
 
 interface DashboardHeaderProps {
@@ -71,7 +71,6 @@ const DashboardHeader = ({ locale, remainingCredits, credits }: DashboardHeaderP
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <NotificationPanel />
         <QuickActions />
       </div>
     </motion.div>
