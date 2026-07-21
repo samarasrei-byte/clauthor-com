@@ -159,6 +159,14 @@ const FilesLibrary = () => {
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
     >
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={createFolder} className="h-8 gap-1.5 text-xs">
+          <FolderOpen className="h-3.5 w-3.5" /> Nova pasta
+        </Button>
+        <Button size="sm" onClick={() => inputRef.current?.click()} disabled={uploadMutation.isPending} className="h-8 gap-1.5 text-xs">
+          <Upload className="h-3.5 w-3.5" /> Enviar
+        </Button>
+      </BreadcrumbActions>
       {/* Drop overlay */}
       <AnimatePresence>
         {dragging && (
