@@ -17,6 +17,8 @@ export interface SidebarChild {
   id: string;
   label: string;
   icon?: React.ElementType;
+  /** Fala/descrição contextual usada em tooltip e narração TTS ao clicar. */
+  description?: string;
 }
 
 export interface SidebarItem {
@@ -27,6 +29,8 @@ export interface SidebarItem {
   group?: string;
   children?: SidebarChild[];
   colorClass?: string;
+  /** Fala/descrição contextual usada em tooltip e narração TTS ao clicar. */
+  description?: string;
   /** Se true, exibe cadeado sobre o ícone (acesso bloqueado / paywall). */
   locked?: boolean;
 }
@@ -61,6 +65,24 @@ const readList = (key: string): string[] => {
     const raw = localStorage.getItem(key);
     return raw ? (JSON.parse(raw) as string[]) : [];
   } catch { return []; }
+};
+
+/**
+ * Cancela qualquer fala ativa e narra o texto informado usando Web Speech API.
+ * Falha silenciosamente em navegadores sem suporte (Safari em iframes, etc).
+ */
+const speakSidebar = (text: string) => {
+  try {
+    const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
+    if (!synth || !text) return;
+    synth.cancel(); // pausa fala anterior · requisito #2
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "pt-BR";
+    u.rate = 1.05;
+    u.pitch = 1;
+    u.volume = 0.9;
+    synth.speak(u);
+  } catch { /* noop */ }
 };
 
 /**
@@ -184,9 +206,15 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
         <button
           onClick={() => {
-            if (hasChildren && !collapsed) toggleGroup(item.id);
-            else onItemChange(item.id);
+            if (hasChildren && !collapsed) {
+              toggleGroup(item.id);
+            } else {
+              speakSidebar(item.description ? `${item.label}. ${item.description}` : item.label);
+              onItemChange(item.id);
+            }
           }}
+          title={item.description ? `${item.label} · ${item.description}` : item.label}
+          aria-label={item.description ? `${item.label}. ${item.description}` : item.label}
           className={cn(
             "w-full flex items-center gap-2.5 rounded-xl transition-all duration-150 group relative",
             collapsed ? "px-2 py-1.5 justify-center" : "px-2.5 py-1.5",
@@ -265,8 +293,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           )}
 
           {collapsed && (
-            <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-card border border-border/40 text-xs font-medium opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
-              {item.label}
+            <div className="absolute left-full ml-3 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border/60 text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-normal max-w-[220px] z-50 shadow-xl">
+              <div className="font-semibold mb-0.5">{item.label}</div>
+              {item.description && (
+                <div className="text-[10.5px] text-muted-foreground leading-snug">{item.description}</div>
+              )}
             </div>
           )}
         </button>
@@ -287,7 +318,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   return (
                     <button
                       key={child.id}
-                      onClick={() => onItemChange(child.id)}
+                      onClick={() => {
+                        speakSidebar(child.description ? `${child.label}. ${child.description}` : child.label);
+                        onItemChange(child.id);
+                      }}
+                      title={child.description ? `${child.label} · ${child.description}` : child.label}
+                      aria-label={child.description ? `${child.label}. ${child.description}` : child.label}
                       className={cn(
                         "w-full flex items-center gap-2 px-2 py-1 rounded-lg text-[11.5px] font-medium transition-all",
                         isChildActive
@@ -316,7 +352,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       animate={{ width: collapsed ? 64 : 244 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
       className={cn(
-        "h-full flex flex-col shrink-0 relative",
+        "flex flex-col shrink-0 relative max-h-full",
         // Floating rounded card (Trello / Obsidian Red direction)
         "rounded-2xl border border-border/60 bg-card/95 backdrop-blur-xl",
         "shadow-2xl shadow-black/40 ring-1 ring-white/[0.03]"
