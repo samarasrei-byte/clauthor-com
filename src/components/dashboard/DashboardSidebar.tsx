@@ -318,7 +318,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   return (
                     <button
                       key={child.id}
-                      onClick={() => onItemChange(child.id)}
+                      onClick={() => {
+                        speakSidebar(child.description ? `${child.label}. ${child.description}` : child.label);
+                        onItemChange(child.id);
+                      }}
+                      title={child.description ? `${child.label} · ${child.description}` : child.label}
+                      aria-label={child.description ? `${child.label}. ${child.description}` : child.label}
                       className={cn(
                         "w-full flex items-center gap-2 px-2 py-1 rounded-lg text-[11.5px] font-medium transition-all",
                         isChildActive
