@@ -116,6 +116,7 @@ const AdvocaciaPainelConfigLazy = lazyRetry(() => import("./pages/AdvocaciaPaine
 const AdvocaciaPainelMCPLazy = lazyRetry(() => import("./pages/MCPAssistente"));
 const AdvocaciaExecucoesLazy = lazyRetry(() => import("./pages/AdvocaciaExecucoes"));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
+const AdminPaypalSandbox = lazyRetry(() => import("./pages/AdminPaypalSandbox"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
 const InvestorPitch = lazyRetry(() => import("./pages/InvestorPitch"));
