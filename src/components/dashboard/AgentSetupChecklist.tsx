@@ -148,10 +148,10 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             <Shield className="h-4.5 w-4.5 text-primary" />
           </div>
           <div>
-            <h3 className="font-display font-semibold text-sm">
+            <h3 className="dash-title text-sm">
               {t("setup_checklist.title", { defaultValue: "Agent Setup" })}
             </h3>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="dash-label">
               {overallPct === 100
                 ? t("setup_checklist.all_done", { defaultValue: "✅ All agents configured!" })
                 : t("setup_checklist.progress", {
@@ -163,7 +163,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold text-primary">{overallPct}%</span>
+          <span className="dash-kpi text-xs text-primary">{overallPct}%</span>
           <Progress value={overallPct} className="w-20 h-2" />
         </div>
       </div>
