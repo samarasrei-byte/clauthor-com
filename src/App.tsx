@@ -303,6 +303,8 @@ const App = () => (
                   <Route path="/admin/verticals/advocacia" element={<AdminAdvocaciaVertical />} />
                   <Route path="/admin/kpis" element={<AdminKpiDashboard />} />
                   <Route path="/admin/roi-config" element={<AdminRoiConfig />} />
+                  <Route path="/admin/paypal-sandbox" element={<AdminPaypalSandbox />} />
+
 
                 </Route>
 
