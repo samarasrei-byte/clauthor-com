@@ -34,7 +34,7 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
                 <div
                   aria-current={state === "current" ? "step" : undefined}
                   className={
-                    "flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-medium transition-colors " +
+                    "flex items-center justify-center w-6 h-6 rounded-full dash-eyebrow font-medium transition-colors " +
                     (state === "done"
                       ? "bg-primary text-primary-foreground"
                       : state === "current"
@@ -46,7 +46,7 @@ export default function FunnelStepper({ current, className }: FunnelStepperProps
                 </div>
                 <span
                   className={
-                    "hidden sm:inline text-xs truncate " +
+                    "hidden sm:inline dash-label truncate " +
                     (state === "current"
                       ? "text-foreground font-medium"
                       : state === "done"
