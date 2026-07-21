@@ -237,6 +237,7 @@ const DashboardLayout = () => {
               className={showGlobalSidebar ? "h-full lg:transition-[padding] lg:duration-200" : "h-full"}
               style={showGlobalSidebar ? { paddingLeft: `var(--sb-safe, 0px)` } : undefined}
             >
+              <DashboardBreadcrumb />
               <RouteTransition />
             </div>
           </div>
