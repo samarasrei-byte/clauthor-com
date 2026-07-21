@@ -248,21 +248,21 @@ function StatCell({
       : "text-muted-foreground/60";
   const DeltaIcon = delta == null ? Minus : delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between gap-1.5 text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
         <span className="flex items-center gap-1.5">
-          <Icon className="h-3 w-3" />
+          <Icon className="h-3 w-3" strokeWidth={1.75} />
           {label}
         </span>
         {spark && spark.length >= 2 && (
           <MiniSparkline data={spark} color={sparkColor || "hsl(var(--primary))"} width={48} height={16} />
         )}
       </div>
-      <div className="font-display text-2xl sm:text-3xl font-semibold tabular-nums leading-none">{display}</div>
+      <div className="font-display text-[28px] sm:text-[32px] font-semibold tabular-nums leading-none tracking-[-0.02em]">{display}</div>
       <div className="flex items-center gap-1.5">
-        <span className="text-[10px] text-muted-foreground/60">{sub}</span>
+        <span className="text-[11px] text-muted-foreground/60">{sub}</span>
         {delta != null && (
-          <span className={`inline-flex items-center gap-0.5 text-[10px] tabular-nums ${deltaColor}`}>
+          <span className={`inline-flex items-center gap-0.5 text-[10px] font-medium tabular-nums ${deltaColor}`}>
             <DeltaIcon className="h-2.5 w-2.5" />
             {delta > 0 ? "+" : ""}
             {delta}%
