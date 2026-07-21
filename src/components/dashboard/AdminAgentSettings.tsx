@@ -277,7 +277,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
 
               {/* Prompt */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block flex items-center gap-2">
+                <label className="dash-label mb-2 flex items-center gap-2">
                   Prompt / Instruções
                   {(!instructions || instructions.trim().length < 10) && (
                     <Badge className="bg-warning/15 text-warning text-[8px] border-0">SEM PROMPT</Badge>
@@ -289,7 +289,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
                   placeholder="Defina o comportamento, tom de voz e regras..."
                   className="min-h-[140px] bg-accent/20 border-white/[0.08] font-mono text-xs"
                 />
-                <p className="text-[10px] text-muted-foreground mt-1">{instructions.length} chars</p>
+                <p className="dash-eyebrow mt-1">{instructions.length} chars</p>
               </div>
 
               {/* Channels */}
