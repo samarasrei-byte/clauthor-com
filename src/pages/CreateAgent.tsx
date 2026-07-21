@@ -698,6 +698,15 @@ const CreateAgentPage = () => {
             {/* MACRO 4 · DIAGNÓSTICO · health check pré-ativação */}
             {currentStep === 4 && (
               <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(3)}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Voltar para Guardrails"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  Voltar para Guardrails
+                </button>
                 <div className="text-center pb-2">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-3">
                     <Activity className="h-3 w-3" /> Pronto pra ativar
