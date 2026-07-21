@@ -104,14 +104,14 @@ export function FirstDeliveryCard({ onOpenApprovals }: Props) {
             <Diamond className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/90 mb-1.5">
+            <div className="dash-eyebrow flex items-center gap-2 text-primary/90 mb-1.5">
               <CheckCircle2 className="h-3 w-3" />
               Primeiro entregável aprovado
             </div>
-            <h3 className="font-display text-base md:text-lg font-semibold text-foreground tracking-tight truncate">
+            <h3 className="dash-title text-base md:text-lg truncate">
               {approval.title}
             </h3>
-            <p className="text-xs md:text-sm text-muted-foreground mt-1">
+            <p className="dash-label text-xs md:text-sm mt-1">
               Você aprovou seu primeiro output para <span className="text-foreground">{company}</span>.
               Este é o começo do seu histórico auditável · cada execução do seu squad fica registrada.
             </p>
