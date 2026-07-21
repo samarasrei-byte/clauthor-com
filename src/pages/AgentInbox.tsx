@@ -110,15 +110,15 @@ export default function AgentInbox() {
     queryFn: async () => {
       const { data } = await supabase
         .from("whatsapp_messages")
-        .select("id, content, direction, created_at, phone_number")
+        .select("id, text_body, direction, created_at, conversation_id")
         .order("created_at", { ascending: false })
         .limit(100);
       return (data ?? []).map<Thread>((m: any) => ({
         id: `wa-${m.id}`,
         channel: "whatsapp",
-        title: m.phone_number || "WhatsApp",
-        preview: m.content || "",
-        body: m.content || "",
+        title: `WhatsApp · ${(m.conversation_id || "").slice(0, 8)}`,
+        preview: m.text_body || "(mídia)",
+        body: m.text_body || "(mensagem sem texto)",
         timestamp: m.created_at,
         unread: m.direction === "inbound",
         fromMe: m.direction === "outbound",
