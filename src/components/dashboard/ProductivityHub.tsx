@@ -414,12 +414,12 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
         <div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 mb-3">
             <CalendarDays className="h-3 w-3 text-primary" strokeWidth={1.75} />
-            <span className="text-[10px] font-medium tracking-wide text-primary uppercase">Central de Produtividade</span>
+            <span className="dash-eyebrow text-primary">Central de Produtividade</span>
           </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">
+          <h1 className="dash-hero-title">
             Central de Produtividade
           </h1>
-          <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
+          <p className="dash-label normal-case tracking-normal text-muted-foreground mt-1.5 max-w-2xl">
             Organize sua rotina, acompanhe seus compromissos, gerencie seus e-mails e receba um resumo inteligente do seu dia.
           </p>
         </div>
