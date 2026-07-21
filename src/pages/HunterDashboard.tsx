@@ -98,8 +98,8 @@ const HunterDashboard = () => {
         <Card className="border-primary/40 bg-primary/5">
           <CardContent className="p-4 flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="font-semibold text-foreground">Comece configurando seu Hunter em 4 passos</p>
-              <p className="text-sm text-muted-foreground">LinkedIn → ICP → Mensagem → Ativar</p>
+              <p className="dash-title text-sm">Comece configurando seu Hunter em 4 passos</p>
+              <p className="dash-label mt-0.5">LinkedIn → ICP → Mensagem → Ativar</p>
             </div>
             <Button asChild><Link to="/hunter-linkedin">Começar agora</Link></Button>
           </CardContent>
