@@ -352,7 +352,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       animate={{ width: collapsed ? 64 : 244 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
       className={cn(
-        "h-full flex flex-col shrink-0 relative",
+        "flex flex-col shrink-0 relative max-h-full",
         // Floating rounded card (Trello / Obsidian Red direction)
         "rounded-2xl border border-border/60 bg-card/95 backdrop-blur-xl",
         "shadow-2xl shadow-black/40 ring-1 ring-white/[0.03]"
