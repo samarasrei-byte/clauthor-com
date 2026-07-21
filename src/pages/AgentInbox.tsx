@@ -18,6 +18,7 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 import { Link } from "react-router-dom";
 
 import { supabase } from "@/integrations/supabase/client";
