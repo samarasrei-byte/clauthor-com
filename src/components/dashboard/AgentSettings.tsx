@@ -96,8 +96,8 @@ const AgentSettings = () => {
       ) : agents.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center">
           <Bot className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-          <h3 className="font-display text-lg font-bold mb-2">Nenhum agente encontrado</h3>
-          <p className="text-muted-foreground text-sm">Crie um agente primeiro para configurar</p>
+          <h3 className="dash-title mb-2">Nenhum agente encontrado</h3>
+          <p className="dash-label">Crie um agente primeiro para configurar</p>
         </div>
       ) : (
         <div className="space-y-3">
