@@ -121,16 +121,16 @@ export default function ThorTokenAlert({ onOpenThor, onBuyCredits, className }: 
           </div>
           <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="outline" className="text-[10px] font-mono uppercase tracking-widest gap-1 border-primary/40 text-primary">
+              <Badge variant="outline" className="dash-eyebrow gap-1 border-primary/40 text-primary">
                 <Wand className="h-3 w-3" /> Thor · alerta
               </Badge>
-              <Badge variant="outline" className={cn("text-[10px] uppercase tracking-widest", tone.chip)}>
+              <Badge variant="outline" className={cn("dash-eyebrow", tone.chip)}>
                 {level.threshold}% consumido
               </Badge>
             </div>
             <div>
-              <h3 className="font-display font-bold text-lg leading-tight">{headline}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{impact}</p>
+              <h3 className="dash-title text-lg leading-tight">{headline}</h3>
+              <p className="dash-label normal-case tracking-normal mt-1">{impact}</p>
             </div>
             <div className="flex flex-wrap gap-2 pt-1">
               <Button
