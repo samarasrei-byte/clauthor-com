@@ -356,83 +356,46 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
           </ScrollArea>
         </div>
 
-        {/* Message Detail */}
+        {/* Message Detail — native platform skin */}
         <AnimatePresence mode="wait">
-          {selectedThread ? (
+          {selectedThread && selectedThreadInfo ? (
             <motion.div
               key={selectedThread}
               initial={{ opacity: 0, x: 8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
-              className="flex-1 flex flex-col min-w-0"
+              className="flex-1 flex flex-col min-w-0 relative"
             >
-              {/* Thread Header */}
-              <div className="flex items-center justify-between p-3 border-b border-border/10">
-                <div className="flex items-center gap-2.5">
-                  <button
-                    onClick={() => setSelectedThread(null)}
-                    className="sm:hidden p-1 hover:bg-muted/10 rounded"
-                  >
-                    <ChevronRight className="h-4 w-4 rotate-180 text-muted-foreground" />
-                  </button>
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Bot className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <p className="text-[11.5px] font-semibold text-foreground">{selectedThreadInfo?.agentName}</p>
-                    <div className="flex items-center gap-1.5">
-                      {selectedThreadInfo && (
-                        <Badge variant="outline" className="text-[8px] px-1.5 py-0 h-4 border-border/20">
-                          {CHANNEL_CONFIG[selectedThreadInfo.channel]?.label || "Chat"}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {selectedThreadInfo?.agentId && onOpenChat && (
-                  <button
-                    onClick={() => onOpenChat({ id: selectedThreadInfo.agentId!, name: selectedThreadInfo.agentName })}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium hover:bg-primary/15 transition-colors"
-                  >
-                    Abrir Chat <ArrowUpRight className="h-3 w-3" />
-                  </button>
-                )}
-              </div>
-
-              {/* Messages */}
-              <ScrollArea className="flex-1 p-3">
-                <div className="space-y-2.5 max-w-2xl">
-                  {threadMessages.map(msg => (
-                    <div
-                      key={msg.id}
-                      className={cn(
-                        "flex gap-2",
-                        msg.role === "user" ? "justify-end" : "justify-start"
-                      )}
-                    >
-                      {msg.role !== "user" && (
-                        <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                          <Bot className="h-3 w-3 text-primary" strokeWidth={1.5} />
-                        </div>
-                      )}
-                      <div className={cn(
-                        "max-w-[75%] px-3 py-2 rounded-xl text-[11px] leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-primary text-primary-foreground rounded-br-sm"
-                          : "bg-muted/30 text-foreground border border-border/10 rounded-bl-sm"
-                      )}>
-                        {msg.content}
-                      </div>
-                      {msg.role === "user" && (
-                        <div className="w-6 h-6 rounded-md bg-muted/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <User className="h-3 w-3 text-muted-foreground" strokeWidth={1.5} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
+              {onOpenChat && selectedThreadInfo.agentId && (
+                <button
+                  onClick={() => onOpenChat({ id: selectedThreadInfo.agentId!, name: selectedThreadInfo.agentName })}
+                  className="absolute top-2 right-2 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-background/80 backdrop-blur border border-border/20 text-foreground text-[10px] font-medium hover:bg-background transition-colors shadow-sm"
+                >
+                  Abrir Chat interno <ArrowUpRight className="h-3 w-3" />
+                </button>
+              )}
+              <PlatformChatSkin
+                platform={(selectedThreadInfo.channel === "all" ? "dashboard" : selectedThreadInfo.channel) as PlatformKey}
+                contactName={selectedThreadInfo.agentName}
+                contactSubtitle={
+                  selectedThreadInfo.channel === "whatsapp" ? "online"
+                  : selectedThreadInfo.channel === "linkedin" ? "Agente · Ativo agora"
+                  : selectedThreadInfo.channel === "instagram" ? "Ativo(a) agora"
+                  : selectedThreadInfo.channel === "facebook" ? "Ativo(a) agora"
+                  : selectedThreadInfo.channel === "tiktok" ? "Online"
+                  : selectedThreadInfo.channel === "email" ? "Caixa de entrada"
+                  : "Assistente IA"
+                }
+                messages={skinMessages}
+                onBack={() => setSelectedThread(null)}
+                onSend={(text) => {
+                  notify.info("Envio em conexão", {
+                    description: "Conecte a plataforma para enviar mensagens reais a partir daqui.",
+                  });
+                }}
+              />
             </motion.div>
+
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
