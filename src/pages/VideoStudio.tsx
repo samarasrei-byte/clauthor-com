@@ -439,6 +439,15 @@ export default function VideoStudio() {
         />
       </Helmet>
 
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={() => setFilesPickerOpen(true)} className="h-8 gap-1.5 text-xs">
+          <FolderOpen strokeWidth={1.5} className="h-3.5 w-3.5" /> Biblioteca
+        </Button>
+        <Button size="sm" onClick={() => setPaletteOpen(true)} className="h-8 gap-1.5 text-xs">
+          <CommandIcon strokeWidth={1.5} className="h-3.5 w-3.5" /> Comandos
+        </Button>
+      </BreadcrumbActions>
+
       <CopilotTour />
 
       <div className="h-full overflow-y-auto bg-background pb-24">
