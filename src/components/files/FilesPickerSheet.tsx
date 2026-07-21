@@ -301,6 +301,22 @@ export default function FilesPickerSheet({
               className="max-h-[85vh] max-w-[90vw] rounded-lg shadow-2xl bg-black"
               onClick={(e) => e.stopPropagation()}
             />
+          ) : preview.kind === "audio" ? (
+            <div
+              className="w-[90vw] max-w-lg rounded-lg shadow-2xl bg-card border border-border/60 p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
+                  <FileAudio className="h-5 w-5 text-violet-500" strokeWidth={1.6} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{preview.name}</p>
+                  <p className="text-[11px] text-muted-foreground">Áudio</p>
+                </div>
+              </div>
+              <audio src={preview.url} controls autoPlay className="w-full" />
+            </div>
           ) : (
             <iframe
               src={preview.url}
