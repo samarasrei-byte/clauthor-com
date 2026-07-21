@@ -272,6 +272,8 @@ const App = () => (
                   <Route path="/control-tower" element={<Navigate to="/dashboard?tab=operations-center" replace />} />
                   <Route path="/neural-network" element={<FeatureGate flag="neural"><AgentNeuralNetwork /></FeatureGate>} />
                   <Route path="/scrum" element={<FeatureGate flag="scrum"><ScrumBoard /></FeatureGate>} />
+                  <Route path="/kanban" element={<Kanban2050 />} />
+                  <Route path="/dashboard/kanban" element={<Kanban2050 />} />
                   <Route path="/hunter" element={<FeatureGate flag="hunter"><HunterDashboard /></FeatureGate>} />
                   <Route path="/hunter-linkedin" element={<FeatureGate flag="hunter"><HunterLinkedIn /></FeatureGate>} />
                   <Route path="/hunter-icp" element={<FeatureGate flag="hunter"><HunterICP /></FeatureGate>} />
