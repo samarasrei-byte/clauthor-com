@@ -12,6 +12,7 @@ import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
 import GlobalDashboardSidebar from "./GlobalDashboardSidebar";
 import PrimaryCTA from "./PrimaryCTA";
 import RouteTransition from "./RouteTransition";
+import DashboardBreadcrumb from "./DashboardBreadcrumb";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -236,6 +237,7 @@ const DashboardLayout = () => {
               className={showGlobalSidebar ? "h-full lg:transition-[padding] lg:duration-200" : "h-full"}
               style={showGlobalSidebar ? { paddingLeft: `var(--sb-safe, 0px)` } : undefined}
             >
+              <DashboardBreadcrumb />
               <RouteTransition />
             </div>
           </div>
