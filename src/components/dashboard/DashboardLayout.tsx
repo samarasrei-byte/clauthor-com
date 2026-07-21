@@ -238,7 +238,9 @@ const DashboardLayout = () => {
 
 
         <FloatingDock />
-        <PrimaryCTA />
+        {/* Suprime CTA flutuante em rotas de checkout/onboarding para evitar
+            competição com a ação primária da página (contratação). */}
+        {!/^\/(checkout|dashboard\/checkout|contratar|dashboard\/contratar|create-agent|hire|departamento-ativo|dashboard\/departamento-ativo)/.test(location.pathname) && <PrimaryCTA />}
 
 
         <Suspense fallback={null}>
