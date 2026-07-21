@@ -126,7 +126,7 @@ const HunterDashboard = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="dash-title text-base flex items-center gap-2">
             🔥 Leads quentes <Badge variant="secondary">{hotLeads.length}</Badge>
           </CardTitle>
         </CardHeader>
