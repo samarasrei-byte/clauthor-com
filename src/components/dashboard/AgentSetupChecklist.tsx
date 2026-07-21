@@ -233,7 +233,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
 
       {/* Show more if some are hidden */}
       {pendingCount > visibleChecklists.length && (
-        <p className="text-[10px] text-muted-foreground text-center">
+        <p className="dash-label text-center">
           +{pendingCount - visibleChecklists.length} {t("setup_checklist.more_pending", { defaultValue: "agents pending" })}
         </p>
       )}
