@@ -489,6 +489,10 @@ const ApprovalsCenter = () => {
 
   return (
     <div className="space-y-6">
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs"><Wand2 className="h-3.5 w-3.5" />Regras</Button>
+        <Button size="sm" className="h-8 gap-1.5 text-xs"><Zap className="h-3.5 w-3.5" />Aprovar lote</Button>
+      </BreadcrumbActions>
       {/* ── Hero header ─────────────────────────────────────────── */}
       <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-background via-background to-primary/5 p-6">
         <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
