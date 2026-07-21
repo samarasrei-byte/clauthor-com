@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBeginnerMode } from "@/hooks/useBeginnerMode";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+
 
 export interface SidebarChild {
   id: string;
