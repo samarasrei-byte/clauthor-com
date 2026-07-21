@@ -80,17 +80,17 @@ export default function WowKpiCard() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
-          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+          <div className="dash-label flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-[0.16em]">
             <Timer className="h-3 w-3" /> p50 TTFV
           </div>
-          <div className="text-lg font-mono font-semibold">{fmtMs(p50)}</div>
+          <div className="dash-kpi text-lg">{fmtMs(p50)}</div>
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
-          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+          <div className="dash-label flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-[0.16em]">
             <Timer className="h-3 w-3" /> p90 TTFV
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-mono font-semibold">{fmtMs(p90)}</span>
+            <span className="dash-kpi text-lg">{fmtMs(p90)}</span>
             {p90 != null && (
               <Badge
                 variant={meetsTarget ? "default" : "destructive"}
@@ -102,16 +102,16 @@ export default function WowKpiCard() {
           </div>
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
-          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+          <div className="dash-label flex items-center gap-1.5 mb-1 text-[10px] uppercase tracking-[0.16em]">
             <Users className="h-3 w-3" /> Iniciaram
           </div>
-          <div className="text-lg font-mono font-semibold">{started}</div>
+          <div className="dash-kpi text-lg">{started}</div>
           <div className="text-[10px] text-muted-foreground">amostra ttfv: {sample}</div>
         </div>
         <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Conversão → 1º wow</div>
+          <div className="dash-label mb-1 text-[10px] uppercase tracking-[0.16em]">Conversão → 1º wow</div>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-mono font-semibold">{conv.toFixed(1)}%</span>
+            <span className="dash-kpi text-lg">{conv.toFixed(1)}%</span>
             <span className="text-[10px] text-muted-foreground">({approved}/{started})</span>
           </div>
         </div>
