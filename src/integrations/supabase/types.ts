@@ -3597,6 +3597,54 @@ export type Database = {
         }
         Relationships: []
       }
+      paypal_sandbox_tests: {
+        Row: {
+          action: string
+          admin_user_id: string
+          amount: number | null
+          approve_url: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          error_message: string | null
+          id: string
+          order_id: string | null
+          raw_response: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          action: string
+          admin_user_id: string
+          amount?: number | null
+          approve_url?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          raw_response?: Json | null
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string
+          amount?: number | null
+          approve_url?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          raw_response?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pending_actions: {
         Row: {
           action_type: string
