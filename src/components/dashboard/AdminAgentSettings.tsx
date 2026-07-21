@@ -259,7 +259,7 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
             <div className="px-4 pb-5 space-y-5 border-t border-white/[0.06] pt-4">
               {/* Status Toggle */}
               <div className="flex items-center gap-3">
-                <label className="text-xs font-medium text-muted-foreground">Status:</label>
+                <label className="dash-label">Status:</label>
                 <div className="flex gap-1.5">
                   {["draft", "active", "paused", "archived"].map((s) => (
                     <Button key={s} variant={status === s ? "default" : "ghost"} size="sm" onClick={() => setStatus(s)} className="text-xs capitalize">
