@@ -4,7 +4,9 @@ import App from "./App.tsx";
 import "./index.css";
 import "./i18n";
 import { captureReferralFromURL } from "./lib/referral";
+import { initSentry } from "./lib/sentry";
 
+initSentry();
 captureReferralFromURL();
 
 createRoot(document.getElementById("root")!).render(
