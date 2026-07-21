@@ -104,14 +104,14 @@ function AlertRow({ alert, onOpen }: { alert: AgentAlert; onOpen: () => void }) 
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold truncate">{alert.title}</span>
-          <span className={cn("text-[9px] px-1.5 py-0.5 rounded", cls.pill)}>{alert.metric}</span>
+          <span className="dash-title text-xs truncate">{alert.title}</span>
+          <span className={cn("dash-eyebrow px-1.5 py-0.5 rounded", cls.pill)}>{alert.metric}</span>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{alert.message}</p>
+        <p className="dash-label mt-0.5 line-clamp-2">{alert.message}</p>
       </div>
       <button
         onClick={onOpen}
-        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-medium text-primary hover:bg-primary/10 transition-colors shrink-0"
+        className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg dash-label text-primary hover:bg-primary/10 transition-colors shrink-0"
       >
         Analisar <ArrowRight className="h-3 w-3" />
       </button>
