@@ -83,10 +83,10 @@ const AdminAgentSettings = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="font-display text-xl font-bold flex items-center gap-2">
+        <h2 className="dash-title flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" /> Configurações de Agentes - Admin
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="dash-label mt-1">
           Gerencie prompts, integrações e canais de todos os agentes da plataforma
         </p>
       </div>
@@ -103,9 +103,9 @@ const AdminAgentSettings = () => {
           <div key={s.label} className="glass-card rounded-xl p-3 border border-white/[0.06]">
             <div className="flex items-center gap-2 mb-1">
               <s.icon className={`h-3.5 w-3.5 ${s.color}`} />
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{s.label}</span>
+              <span className="dash-eyebrow">{s.label}</span>
             </div>
-            <p className="font-display text-lg font-bold">{s.value}</p>
+            <p className="dash-kpi">{s.value}</p>
           </div>
         ))}
       </div>
