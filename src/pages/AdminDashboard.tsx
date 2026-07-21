@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Bot, DollarSign, TrendingUp, ShoppingBag, CheckCircle, XCircle, Clock, BarChart3, Shield, Activity, Coins, ListOrdered, Mail, Phone, Building, Zap, LayoutDashboard, CreditCard, Store, Wallet, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle } from "lucide-react";
+import { Users, Bot, DollarSign, TrendingUp, ShoppingBag, CheckCircle, XCircle, Clock, BarChart3, Shield, Activity, Coins, ListOrdered, Mail, Phone, Building, Zap, LayoutDashboard, CreditCard, Store, Wallet, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle, FlaskConical } from "lucide-react";
 import { Wand } from "lucide-react";
 import { Brain } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
