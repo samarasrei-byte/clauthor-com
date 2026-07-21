@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
+import { BreadcrumbActions } from "@/components/dashboard/DashboardBreadcrumb";
 
 type FileType = "video" | "audio" | "image" | "pdf" | "doc" | "brandbook" | "logo" | "marketing" | "other";
 
