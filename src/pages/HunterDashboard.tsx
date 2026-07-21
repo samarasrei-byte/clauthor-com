@@ -116,8 +116,8 @@ const HunterDashboard = () => {
             <CardContent className="p-5 flex items-center gap-4">
               <Icon className={`w-8 h-8 ${color}`} />
               <div>
-                <p className="text-3xl font-bold text-foreground">{value}</p>
-                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="dash-kpi text-3xl">{value}</p>
+                <p className="dash-label mt-0.5">{label}</p>
               </div>
             </CardContent>
           </Card>
