@@ -113,7 +113,7 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
 
             {data.slugs.length > 0 && (
               <div className="space-y-2">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+                <p className="dash-eyebrow text-muted-foreground/60">
                   {data.slugs.length} {t("checkout.agents_included_label", { defaultValue: "agent(s) included" })}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
