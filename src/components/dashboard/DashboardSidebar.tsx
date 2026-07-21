@@ -365,19 +365,22 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   return (
                     <button
                       key={child.id}
+                      data-sb-item={child.id}
                       onClick={() => {
                         speakSidebar(child.description ? `${child.label}. ${child.description}` : child.label);
                         onItemChange(child.id);
                       }}
-                      title={child.description ? `${child.label} · ${child.description}` : child.label}
                       aria-label={child.description ? `${child.label}. ${child.description}` : child.label}
+                      aria-current={isChildActive ? "page" : undefined}
                       className={cn(
                         "w-full flex items-center gap-2 px-2 py-1 rounded-lg text-[11.5px] font-medium transition-all",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background",
                         isChildActive
                           ? "bg-primary/10 text-primary font-semibold"
                           : "text-foreground/75 hover:text-foreground hover:bg-card/60"
                       )}
                     >
+
                       <ChildIcon className="h-3 w-3 shrink-0" strokeWidth={1.75} />
                       <span className="truncate">{child.label}</span>
                     </button>
