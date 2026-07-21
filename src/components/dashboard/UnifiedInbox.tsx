@@ -92,10 +92,14 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
 
     for (const msg of messages) {
       const key = msg.agent_id || msg.agent_name || "general";
-      const channel: ChannelType = (msg.metadata as any)?.channel === "whatsapp"
-        ? "whatsapp"
-        : (msg.metadata as any)?.channel === "email"
-        ? "email"
+      const rawChannel = (msg.metadata as any)?.channel as string | undefined;
+      const channel: ChannelType =
+        rawChannel === "whatsapp" ? "whatsapp"
+        : rawChannel === "email" ? "email"
+        : rawChannel === "linkedin" ? "linkedin"
+        : rawChannel === "instagram" ? "instagram"
+        : rawChannel === "facebook" ? "facebook"
+        : rawChannel === "tiktok" ? "tiktok"
         : "dashboard";
 
       if (!threadMap.has(key)) {
@@ -140,12 +144,28 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
 
   const selectedThreadInfo = threads.find(t => t.id === selectedThread);
 
+  // Adapt DB messages to the skin's shape
+  const skinMessages: SkinMessage[] = useMemo(() => {
+    return threadMessages.map((m: any) => ({
+      id: m.id,
+      content: m.content,
+      role: m.role === "user" ? "user" : (m.role === "assistant" ? "assistant" : "contact"),
+      created_at: m.created_at,
+      status: m.role === "user" ? "read" : undefined,
+    }));
+  }, [threadMessages]);
+
   const channelTabs: { id: ChannelType; label: string; count: number }[] = [
     { id: "all", label: "Todos", count: threads.length },
     { id: "dashboard", label: "Chat", count: threads.filter(t => t.channel === "dashboard").length },
     { id: "whatsapp", label: "WhatsApp", count: threads.filter(t => t.channel === "whatsapp").length },
+    { id: "linkedin", label: "LinkedIn", count: threads.filter(t => t.channel === "linkedin").length },
+    { id: "instagram", label: "Instagram", count: threads.filter(t => t.channel === "instagram").length },
+    { id: "facebook", label: "Messenger", count: threads.filter(t => t.channel === "facebook").length },
+    { id: "tiktok", label: "TikTok", count: threads.filter(t => t.channel === "tiktok").length },
     { id: "email", label: "E-mail", count: threads.filter(t => t.channel === "email").length },
   ];
+
 
   return (
     <div className="h-full flex flex-col gap-4 p-4 sm:p-6">
