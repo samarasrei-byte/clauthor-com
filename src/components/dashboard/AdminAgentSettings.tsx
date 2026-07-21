@@ -149,7 +149,7 @@ const AdminAgentSettings = () => {
         </div>
       </div>
 
-      <p className="text-xs text-muted-foreground">{filtered.length} agentes encontrados</p>
+      <p className="dash-label">{filtered.length} agentes encontrados</p>
 
       {/* Agent List */}
       {isLoading ? (
