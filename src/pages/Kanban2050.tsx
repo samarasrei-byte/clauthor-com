@@ -812,6 +812,15 @@ export default function Kanban2050() {
         />
       </Helmet>
 
+      <BreadcrumbActions>
+        <Button size="sm" variant="outline" onClick={() => setCmdOpen(true)} className="h-8 gap-1.5 text-xs">
+          <CmdIcon className="h-3.5 w-3.5" /> ⌘K
+        </Button>
+        <Button size="sm" onClick={() => firstColId && createTask(firstColId)} className="h-8 gap-1.5 text-xs">
+          <Plus className="h-3.5 w-3.5" /> Nova tarefa
+        </Button>
+      </BreadcrumbActions>
+
       <div className="h-full flex flex-col overflow-hidden">
         {/* HEADER */}
         <header className="shrink-0 px-4 sm:px-6 pt-4 pb-3 border-b border-border/40 bg-background/60 backdrop-blur">
