@@ -169,16 +169,16 @@ const HeroBriefing = ({
       <div className="relative p-6 sm:p-8 flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-10">
         {/* Coluna esquerda: greeting + status + CTA */}
         <div className="flex-1 min-w-0 space-y-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground/70">
+          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
             <span className={`h-1.5 w-1.5 rounded-full ${isLive ? "bg-success animate-pulse" : "bg-muted-foreground/40"}`} />
             {isLive ? "operação ativa" : agentsCount ? "aguardando ordem" : "conta nova"}
           </div>
 
           <div>
-            <h1 className="dash-hero-title font-display text-2xl sm:text-3xl font-bold leading-tight">
+            <h1 className="dash-hero-title font-display text-2xl sm:text-[2rem] font-bold leading-[1.05] tracking-[-0.02em]">
               {greeting}, {firstName}.
             </h1>
-            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{statusLine}</p>
+            <p className="text-[13px] text-muted-foreground mt-2 leading-relaxed max-w-xl">{statusLine}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
