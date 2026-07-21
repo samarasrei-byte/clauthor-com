@@ -80,10 +80,10 @@ const AgentSettings = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold flex items-center gap-2">
+          <h2 className="dash-title flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" /> Configurações dos Agentes
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="dash-label mt-1">
             Edite prompts, integrações e canais de cada agente
           </p>
         </div>
