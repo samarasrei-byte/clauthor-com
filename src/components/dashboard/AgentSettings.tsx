@@ -80,10 +80,10 @@ const AgentSettings = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold flex items-center gap-2">
+          <h2 className="dash-title flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" /> Configurações dos Agentes
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="dash-label mt-1">
             Edite prompts, integrações e canais de cada agente
           </p>
         </div>
@@ -96,8 +96,8 @@ const AgentSettings = () => {
       ) : agents.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center">
           <Bot className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-          <h3 className="font-display text-lg font-bold mb-2">Nenhum agente encontrado</h3>
-          <p className="text-muted-foreground text-sm">Crie um agente primeiro para configurar</p>
+          <h3 className="dash-title mb-2">Nenhum agente encontrado</h3>
+          <p className="dash-label">Crie um agente primeiro para configurar</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -251,7 +251,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
             <Bot className="h-5 w-5 text-primary" />
           </div>
           <div className="text-left">
-            <p className="font-display font-semibold text-sm">{agent.name}</p>
+            <p className="dash-title text-sm">{agent.name}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
               <Badge variant="secondary" className={`text-[9px] ${agent.status === "active" ? "bg-success/20 text-success" : ""}`}>{agent.status}</Badge>
@@ -275,7 +275,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
             <div className="px-4 pb-5 space-y-5 border-t border-white/[0.06] pt-4">
               {/* Objective */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Objetivo do Agente</label>
+                <label className="dash-label mb-2 block">Objetivo do Agente</label>
                 <Input
                   value={objective}
                   onChange={(e) => setObjective(e.target.value)}
@@ -286,7 +286,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
               {/* Instructions / Prompt */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                <label className="dash-label mb-2 block">
                   Prompt / Instruções do Agente
                 </label>
                 <Textarea
@@ -302,7 +302,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
               {/* Channels */}
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Canais de Comunicação</label>
+                <label className="dash-label mb-2 block">Canais de Comunicação</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {CHANNEL_OPTIONS.map((ch) => {
                     const active = channels.includes(ch.id);
@@ -542,7 +542,7 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
 
   return (
     <div>
-      <label className="text-xs font-medium text-muted-foreground mb-1 block">
+      <label className="dash-label mb-1 block">
         Integrações {agentKey ? `- ${agentName}` : "- Genéricas"}
       </label>
       <p className="text-[10px] text-muted-foreground/60 mb-3">
