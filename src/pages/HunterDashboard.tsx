@@ -19,11 +19,22 @@ interface HotLead {
 
 const HunterDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ enviados: 0, aceitos: 0, responderam: 0 });
   const [hotLeads, setHotLeads] = useState<HotLead[]>([]);
   const [hasSession, setHasSession] = useState(false);
   const [unreadInbox, setUnreadInbox] = useState(0);
+
+  // ⌘K → "Nova campanha Hunter" jumps straight into ICP wizard
+  useEffect(() => {
+    if (searchParams.get("new") === "1") {
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+      navigate("/hunter-icp");
+    }
+  }, [searchParams, navigate, setSearchParams]);
 
   useEffect(() => {
     if (!user) return;
