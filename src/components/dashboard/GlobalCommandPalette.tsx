@@ -107,6 +107,19 @@ export default function GlobalCommandPalette() {
     };
   }, []);
 
+  const { signOut } = useAuth();
+  const toggleTheme = () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch { /* noop */ }
+    trackKpi("cmdk_selected", { target: "panel", label: `theme:${isDark ? "dark" : "light"}` });
+    setOpen(false);
+  };
+  const doSignOut = async () => {
+    trackKpi("cmdk_selected", { target: "panel", label: "signout" });
+    setOpen(false);
+    await signOut();
+  };
+
   // KPI: track opens
   useEffect(() => {
     if (open) trackKpi("cmdk_opened", {});
