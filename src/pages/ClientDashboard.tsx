@@ -57,7 +57,7 @@ const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
 const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
 const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
 import { useFloatingDock } from "@/components/dashboard/FloatingDock";
-const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
+
 
 const ClientDashboard = () => {
   const { user, isAdmin } = useAuth();
