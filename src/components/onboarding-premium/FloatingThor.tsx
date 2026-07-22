@@ -65,15 +65,19 @@ export function FloatingThor() {
       id: "talk",
       label: "Falar com Thor",
       icon: MessageCircle,
-      onClick: () => setOpen(false),
-      disabled: true,
+      onClick: () => {
+        window.dispatchEvent(new CustomEvent("cmdk:open"));
+        setOpen(false);
+      },
     },
     {
       id: "help",
       label: "Central de ajuda",
       icon: LifeBuoy,
-      onClick: () => setOpen(false),
-      disabled: true,
+      onClick: () => {
+        window.open("https://docs.lovable.dev", "_blank", "noopener");
+        setOpen(false);
+      },
     },
   ];
 
