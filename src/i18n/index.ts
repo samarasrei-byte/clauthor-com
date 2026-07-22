@@ -69,6 +69,8 @@ i18n
       pt: { translation: pt },
       en: { translation: en },
     },
+    // GTM 2026 · Brasil-first: default sempre pt, exceto se o usuário
+    // trocou manualmente (localStorage). Navigator não decide mais.
     fallbackLng: "pt",
     supportedLngs,
     load: "languageOnly",
@@ -79,11 +81,12 @@ i18n
       defaultVariables: canonicalInterpolationContext("pt"),
     },
     detection: {
-      order: ["localStorage", "navigator", "htmlTag"],
+      // Só respeita escolha explícita (localStorage) ou htmlTag ssr.
+      // Removido "navigator" — evita EN acidental em BR/US devs.
+      order: ["localStorage", "htmlTag"],
       caches: ["localStorage"],
       convertDetectedLanguage: (lng: string) => {
         const lower = lng.toLowerCase();
-        // Preserve pt-PT distinction
         if (lower === "pt-pt") return "pt-pt";
         return lng.split("-")[0];
       },

@@ -66,7 +66,7 @@ const Navbar = () => {
         { label: t("nav.my_agents"), href: "/agents" },
       ]
     : [
-        { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
+        { label: t("nav.departments", { defaultValue: "Departamentos" }), href: "/departamentos" },
         { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
         { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
       ];
@@ -196,9 +196,13 @@ const Navbar = () => {
                 <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-normal">
                   <Link to="/auth">{t("nav.login")}</Link>
                 </Button>
-                <PremiumCTAButton variant="outline" size="sm" showArrow={false} onClick={() => navigate("/auth", { state: { signup: true } })}>
+                <Button
+                  size="sm"
+                  onClick={() => navigate("/auth", { state: { signup: true } })}
+                  className="h-8 text-[13px] rounded-full font-medium px-4 bg-foreground text-background hover:bg-foreground/90"
+                >
                   {t("auth.create_account")}
-                </PremiumCTAButton>
+                </Button>
               </>
             )}
           </div>
@@ -235,10 +239,9 @@ const Navbar = () => {
                     { href: "/agents", label: t("nav.my_agents") },
                   ]
                 : [
-                    { href: "/departamentos", label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }) },
+                    { href: "/departamentos", label: t("nav.departments", { defaultValue: "Departamentos" }) },
                     { href: "/how-it-works", label: t("nav.how_it_works", { defaultValue: "Como funciona" }) },
                     { href: "/pricing", label: t("nav.pricing", { defaultValue: "Preços" }) },
-                    { href: "/community", label: t("nav.community", { defaultValue: "Comunidade" }) },
                   ]
               ).map((item) => (
                 <Link
