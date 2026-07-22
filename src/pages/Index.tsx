@@ -994,7 +994,12 @@ const HomePage = () => {
       </section>
 
       <Footer />
-      <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+      {/* Modal só monta quando aberto — evita carregar chunk até o clique */}
+      {demoOpen && (
+        <Suspense fallback={null}>
+          <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+        </Suspense>
+      )}
 
     </div>
   );
