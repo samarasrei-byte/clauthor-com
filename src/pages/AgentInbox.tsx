@@ -439,7 +439,7 @@ function EmptyInbox() {
 }
 
 function ThreadDetail({ thread }: { thread: Thread }) {
-  const def = CHANNELS.find((c) => c.id === thread.channel)!;
+  const def = BASE_CHANNELS.find((c) => c.id === thread.channel)!;
   const Icon = def.icon;
   return (
     <div className="space-y-5">
