@@ -20,6 +20,8 @@ import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import PanelMockup from "@/components/landing/PanelMockup";
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import LiveOpsSection from "@/components/landing/LiveOpsSection";
+import DemoWalkthroughModal from "@/components/landing/DemoWalkthroughModal";
+import LandingFAQ from "@/components/landing/LandingFAQ";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -117,6 +119,9 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [seedPrompt, setSeedPrompt] = useState<string>("");
   const chatRef = useRef<HTMLDivElement | null>(null);
+  const [demoOpen, setDemoOpen] = useState(false);
+
+
 
   const PAIN_QUIZ = PAIN_QUIZ_IDS.map((p) => ({
     ...p,
@@ -403,9 +408,15 @@ const HomePage = () => {
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
+            <button
+              onClick={() => setDemoOpen(true)}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-colors"
+            >
+              Ver demonstração
+            </button>
             <Link
               to="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-white/60 hover:text-white transition-colors"
             >
               {t("home.cta_view_pricing")}
             </Link>
@@ -941,6 +952,8 @@ const HomePage = () => {
       </Suspense>
 
 
+      <LandingFAQ />
+
       {/* ═══════════ CTA FINAL (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="CTA">
         <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
@@ -977,6 +990,8 @@ const HomePage = () => {
       </section>
 
       <Footer />
+      <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+
     </div>
   );
 };
