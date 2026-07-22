@@ -66,7 +66,7 @@ const Navbar = () => {
         { label: t("nav.my_agents"), href: "/agents" },
       ]
     : [
-        { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
+        { label: t("nav.departments", { defaultValue: "Departamentos" }), href: "/departamentos" },
         { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
         { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
       ];
