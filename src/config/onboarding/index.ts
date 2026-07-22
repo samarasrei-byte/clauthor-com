@@ -4,8 +4,16 @@ import { defaultSquadFlow } from "./default-squad";
 import { defaultDepartmentFlow } from "./default-department";
 import { defaultAgentFlow } from "./default-agent";
 import { reputacaoFlow } from "./reputacao";
+import { comercialFlow } from "./comercial";
+import { financeiroFlow } from "./financeiro";
+import { rhFlow } from "./rh";
 
-const SPECIALIZED: OnboardingFlow[] = [reputacaoFlow];
+const SPECIALIZED: OnboardingFlow[] = [
+  reputacaoFlow,
+  comercialFlow,
+  financeiroFlow,
+  rhFlow,
+];
 
 const DEFAULTS: Record<SubjectType, OnboardingFlow> = {
   squad: defaultSquadFlow,
@@ -30,4 +38,12 @@ export function resolveOnboardingFlow(
   return match ?? DEFAULTS[subjectType];
 }
 
-export { defaultSquadFlow, defaultDepartmentFlow, defaultAgentFlow, reputacaoFlow };
+export {
+  defaultSquadFlow,
+  defaultDepartmentFlow,
+  defaultAgentFlow,
+  reputacaoFlow,
+  comercialFlow,
+  financeiroFlow,
+  rhFlow,
+};
