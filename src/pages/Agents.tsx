@@ -116,7 +116,7 @@ const AgentsPage = () => {
           </h1>
           <p className="text-muted-foreground">{t("agents.subtitle", { defaultValue: "Gerencie seus funcionários de IA" })}</p>
         </div>
-        <Link to="/create-agent">
+        <Link to="/create-agent" data-onboarding="agent-new">
           <Button className="neon-glow">
             <Plus className="h-4 w-4 mr-2" /> {t("agents.new_agent", { defaultValue: "Novo Agente" })}
           </Button>
@@ -139,10 +139,11 @@ const AgentsPage = () => {
           </Link>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-onboarding="agent-list">
           {agents.map((a, i) => (
             <motion.div
               key={a.id}
+              data-onboarding="agent-card"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}

@@ -180,6 +180,7 @@ const IntegrationsPage = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15 }}
         className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+        data-onboarding="integrations-list"
       >
         {filtered.map((connector, i) => {
           const connected = isConnected(connector);
@@ -195,6 +196,7 @@ const IntegrationsPage = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.03 }}
+              data-onboarding={`integration-${connector.integrationKey}`}
               onClick={() => openDetail(connector)}
               className={`group relative flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-200 hover:bg-muted/10 ${
                 connected
