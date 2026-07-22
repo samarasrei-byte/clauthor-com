@@ -38,6 +38,7 @@ const AgentTraces = lazyRetry(() => import("./pages/AgentTraces"));
 const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
 const FirstOutputFlow = lazyRetry(() => import("./pages/FirstOutputFlow"));
 const WhatsAppInbox = lazyRetry(() => import("./pages/WhatsAppInbox"));
+const WhatsAppPair = lazyRetry(() => import("./pages/WhatsAppPair"));
 
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
@@ -253,6 +254,8 @@ const App = () => (
                   <Route path="/dashboard/departamento-ativo/:slug" element={<DepartmentActivated />} />
 
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
+                  <Route path="/whatsapp/pair" element={<ProtectedRoute><WhatsAppPair /></ProtectedRoute>} />
+                  <Route path="/dashboard/whatsapp/pair" element={<ProtectedRoute><WhatsAppPair /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
 
 
