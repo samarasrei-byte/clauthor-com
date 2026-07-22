@@ -906,17 +906,6 @@ const ClientDashboard = () => {
       {/* ThorLiveGuide is rendered globally by FloatingDock (bottom-center zone). */}
 
 
-      {!hasPendingCheckout && !showEmptyState && (
-        <Suspense fallback={null}>
-          <QuickStartWizard
-            isOpen={showQuickStart}
-            onClose={() => setShowQuickStart(false)}
-            onTeach={() => { setShowCompanyOnboarding(true); setShowQuickStart(false); }}
-            onHire={() => { setActiveSection("library"); setShowQuickStart(false); }}
-            onCommand={() => { setActiveSection("omnix"); setOmnixMounted(true); setShowQuickStart(false); }}
-          />
-        </Suspense>
-      )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
       {/* Fluxo Zero-Fricção: walkthrough conversacional do Thor (Tela 4) e modal de ativação (Tela 5).
