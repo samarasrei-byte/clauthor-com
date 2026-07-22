@@ -990,6 +990,8 @@ const HomePage = () => {
       </section>
 
       <Footer />
+      <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+
     </div>
   );
 };
