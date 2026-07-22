@@ -9,6 +9,7 @@
  *   com o webhook URL + verify_token para colar no Meta.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTenantId } from "@/hooks/useTenantId";
@@ -150,6 +151,8 @@ function SetupCard({ tenantId, onConfigured }: { tenantId: string; onConfigured:
 export default function WhatsAppInbox() {
   const { data: tenantId } = useTenantId();
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedConv, setSelectedConv] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -166,6 +169,20 @@ export default function WhatsAppInbox() {
       return (data as WAConfig | null) ?? null;
     },
   });
+
+  // ⌘K → "Nova conversa WhatsApp": se não há config, manda parear; senão, foca no rascunho.
+  useEffect(() => {
+    if (searchParams.get("new") !== "1") return;
+    if (configQuery.isLoading) return;
+    searchParams.delete("new");
+    setSearchParams(searchParams, { replace: true });
+    if (!configQuery.data) {
+      toast.info("Conecte um número WhatsApp primeiro.");
+      navigate("/whatsapp/pair");
+    } else {
+      toast.success("Selecione uma conversa ou aguarde a próxima mensagem.");
+    }
+  }, [searchParams, configQuery.isLoading, configQuery.data, navigate, setSearchParams]);
 
   const convsQuery = useQuery({
     queryKey: ["wa-conversations", tenantId],

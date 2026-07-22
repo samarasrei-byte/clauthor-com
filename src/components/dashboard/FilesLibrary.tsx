@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Search, FileVideo, FileAudio, FileImage, FileText, Palette, Layers, File as FileIcon, Trash2, Copy, FolderOpen, HardDrive, Filter, Grid3x3, List, Download, ArrowUpRight, Plus, Cloud } from "lucide-react";
@@ -70,6 +71,15 @@ const FilesLibrary = () => {
   const [dragging, setDragging] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
   const [extraFolders, setExtraFolders] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ⌘K → "Enviar arquivo" abre o seletor de arquivos direto
+  useEffect(() => {
+    if (searchParams.get("upload") !== "1") return;
+    searchParams.delete("upload");
+    setSearchParams(searchParams, { replace: true });
+    setTimeout(() => inputRef.current?.click(), 150);
+  }, [searchParams, setSearchParams]);
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files", tenantId],
