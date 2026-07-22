@@ -36,7 +36,7 @@ const Footer = () => {
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_company", { defaultValue: "Empresa" })}</p>
               <Link to="/enterprise" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Enterprise</Link>
               <Link to="/developers" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Developers</Link>
-              <Link to="/pitch" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_pitch")}</Link>
+              
             </div>
 
             <div className="space-y-2.5">
