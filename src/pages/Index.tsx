@@ -17,11 +17,17 @@ import Footer from "@/components/Footer";
 import FunnelResumeBanner from "@/components/funnel/FunnelResumeBanner";
 import { SQUADS } from "@/data/squads";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
-import PanelMockup from "@/components/landing/PanelMockup";
-import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
-import LiveOpsSection from "@/components/landing/LiveOpsSection";
-import DemoWalkthroughModal from "@/components/landing/DemoWalkthroughModal";
-import LandingFAQ from "@/components/landing/LandingFAQ";
+// Below-the-fold: lazy-load para reduzir JS inicial da home (~600KB)
+const PanelMockup = lazy(() => import("@/components/landing/PanelMockup"));
+const ThorConciergeChat = lazy(() => import("@/components/landing/ThorConciergeChat"));
+const LiveOpsSection = lazy(() => import("@/components/landing/LiveOpsSection"));
+const DemoWalkthroughModal = lazy(() => import("@/components/landing/DemoWalkthroughModal"));
+const LandingFAQ = lazy(() => import("@/components/landing/LandingFAQ"));
+
+// Fallback leve e sem CLS — preserva altura aproximada da seção
+const SectionSkeleton = ({ minHeight = "360px" }: { minHeight?: string }) => (
+  <div style={{ minHeight }} aria-hidden="true" className="w-full" />
+);
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -306,7 +312,9 @@ const HomePage = () => {
                   {t("home.thor_status")}
                 </span>
               </div>
-              <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
+              <Suspense fallback={<SectionSkeleton minHeight="360px" />}>
+                <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
+              </Suspense>
             </div>
           </motion.div>
 
@@ -624,7 +632,9 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ PROVA DE VIDA · operação em tempo real ═══════════ */}
-      <LiveOpsSection />
+      <Suspense fallback={<SectionSkeleton minHeight="480px" />}>
+        <LiveOpsSection />
+      </Suspense>
 
 
 
@@ -855,7 +865,9 @@ const HomePage = () => {
             </p>
           </div>
 
-          <PanelMockup />
+          <Suspense fallback={<SectionSkeleton minHeight="520px" />}>
+            <PanelMockup />
+          </Suspense>
         </div>
       </section>
 
@@ -942,7 +954,9 @@ const HomePage = () => {
       </Suspense>
 
 
-      <LandingFAQ />
+      <Suspense fallback={<SectionSkeleton minHeight="420px" />}>
+        <LandingFAQ />
+      </Suspense>
 
       {/* ═══════════ CTA FINAL (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="CTA">
@@ -980,7 +994,12 @@ const HomePage = () => {
       </section>
 
       <Footer />
-      <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+      {/* Modal só monta quando aberto — evita carregar chunk até o clique */}
+      {demoOpen && (
+        <Suspense fallback={null}>
+          <DemoWalkthroughModal open={demoOpen} onOpenChange={setDemoOpen} />
+        </Suspense>
+      )}
 
     </div>
   );
