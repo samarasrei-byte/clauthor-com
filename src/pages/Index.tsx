@@ -334,20 +334,20 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="w-full max-w-6xl"
+            className="dark w-full max-w-6xl bg-black text-white rounded-3xl p-6 sm:p-8 border border-white/10 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.5)]"
           >
             <div className="flex items-end justify-between mb-6 px-1">
               <div className="text-left">
-                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/70 mb-1">
                   {t("home.squads_eyebrow")}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
                   {t("home.squads_title")}
                 </h2>
               </div>
               <Link
                 to="/squads"
-                className="hidden sm:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="hidden sm:inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors"
               >
                 {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -361,32 +361,32 @@ const HomePage = () => {
                   <Link
                     key={squad.slug}
                     to={href}
-                    className="group text-left rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-card/80 transition-all"
+                    className="group text-left rounded-2xl border border-white/10 bg-white/[0.04] p-5 hover:border-primary/40 hover:bg-white/[0.07] transition-all"
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
                         <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-white/70">
                         {squad.agents} {t("home.squads_agents_short")}
                       </span>
                     </div>
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1.5">
                       {squad.category}
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">{squad.name}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
+                    <h3 className="text-lg font-semibold text-white mb-2">{squad.name}</h3>
+                    <p className="text-sm text-white/70 leading-relaxed line-clamp-2 mb-4">
                       {squad.tagline}
                     </p>
-                    <div className="flex items-center justify-between pt-3 border-t border-border">
+                    <div className="flex items-center justify-between pt-3 border-t border-white/10">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-[10px] text-muted-foreground">{t("home.squads_from")}</span>
-                        <span className="text-lg font-semibold text-foreground">
+                        <span className="text-[10px] text-white/70">{t("home.squads_from")}</span>
+                        <span className="text-lg font-semibold text-white">
                           {squad.tiers[0].price.toLocaleString("pt-BR")}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">{t("home.squads_per_month")}</span>
+                        <span className="text-[10px] text-white/70">{t("home.squads_per_month")}</span>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                      <ArrowRight className="h-4 w-4 text-white/70 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 );
@@ -396,7 +396,7 @@ const HomePage = () => {
             <div className="mt-6 flex sm:hidden justify-center">
               <Link
                 to="/squads"
-                className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+                className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white"
               >
                 {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
