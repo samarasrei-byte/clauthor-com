@@ -954,7 +954,9 @@ const HomePage = () => {
       </Suspense>
 
 
-      <LandingFAQ />
+      <Suspense fallback={<SectionSkeleton minHeight="420px" />}>
+        <LandingFAQ />
+      </Suspense>
 
       {/* ═══════════ CTA FINAL (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="CTA">
