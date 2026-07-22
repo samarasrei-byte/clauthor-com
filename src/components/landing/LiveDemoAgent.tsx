@@ -246,7 +246,7 @@ const LiveDemoAgent = () => {
 
         {/* Subtle label below */}
         <div className="text-center mt-3">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/65">
             {t("demo_chat.auto_label")}
           </span>
         </div>

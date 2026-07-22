@@ -33,10 +33,10 @@ export default function LiveOpsCases() {
               <h3 className="text-xl font-semibold text-white tracking-tight">
                 {study.companyName}
               </h3>
-              <p className="text-sm text-white/50 mt-0.5">{study.industry}</p>
+              <p className="text-sm text-white/70 mt-0.5">{study.industry}</p>
             </div>
             {study.departmentUsed && (
-              <span className="shrink-0 text-[10px] uppercase tracking-[0.14em] text-white/50 border border-white/15 rounded-full px-3 py-1">
+              <span className="shrink-0 text-[10px] uppercase tracking-[0.14em] text-white/70 border border-white/15 rounded-full px-3 py-1">
                 {study.departmentUsed}
               </span>
             )}

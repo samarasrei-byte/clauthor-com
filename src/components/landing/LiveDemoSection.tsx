@@ -178,7 +178,7 @@ export default function LiveDemoSection() {
                       onChange={(e) => setCompany(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && startDemo()}
                       placeholder="Ex: TechNova, Acme Corp..."
-                      className="flex-1 bg-muted/10 border border-border rounded-xl px-4 py-3 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:border-primary/30 transition-colors"
+                      className="flex-1 bg-muted/10 border border-border rounded-xl px-4 py-3 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/30 transition-colors"
                       maxLength={50}
                     />
                     <button
@@ -191,7 +191,7 @@ export default function LiveDemoSection() {
                       <span className="sm:hidden">Executar</span>
                     </button>
                   </div>
-                  <p className="font-mono text-[10px] text-muted-foreground/40 text-center">
+                  <p className="font-mono text-[10px] text-muted-foreground/65 text-center">
                     ↑ Experimente com qualquer empresa - a simulação é instantânea
                   </p>
                 </motion.div>

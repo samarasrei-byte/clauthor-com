@@ -95,7 +95,7 @@ const CompetitiveMoat = () => {
           ))}
         </motion.div>
 
-        <p className="font-mono text-[9px] text-muted-foreground/30 text-center mt-4 uppercase tracking-wider">
+        <p className="font-mono text-[9px] text-muted-foreground/60 text-center mt-4 uppercase tracking-wider">
           {t("home.moat_disclaimer", { defaultValue: "* Comparação baseada em funcionalidades públicas disponíveis em março de 2026." })}
         </p>
       </div>

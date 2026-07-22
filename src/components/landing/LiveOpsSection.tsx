@@ -17,7 +17,7 @@ export default function LiveOpsSection() {
       <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32 space-y-20">
         {/* Header */}
         <div className="max-w-3xl">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-white/50 mb-6">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-white/70 mb-6">
             A Clauthor por dentro
           </p>
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.035em] leading-[1.02] text-white mb-6">
@@ -36,7 +36,7 @@ export default function LiveOpsSection() {
         {/* Camada 2 · feed */}
         <div className="grid lg:grid-cols-5 gap-8 items-start">
           <div className="lg:col-span-2 space-y-4">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/50">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/70">
               Feed operacional
             </p>
             <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white tracking-[-0.02em] leading-tight">
@@ -55,7 +55,7 @@ export default function LiveOpsSection() {
         {/* Camada 3 · casos */}
         <div className="pt-8 border-t border-white/10">
           <div className="mb-10 max-w-2xl">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/50 mb-3">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/70 mb-3">
               Resultado auditável
             </p>
             <h3 className="font-display text-3xl sm:text-4xl font-semibold text-white tracking-[-0.025em] leading-tight">
