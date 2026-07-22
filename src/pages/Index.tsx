@@ -734,7 +734,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ COMO FUNCIONA (3 passos) ═══════════ */}
-      <section className="border-t border-border/60 bg-card/30" aria-label="Como funciona">
+      <section className="bg-card/30" aria-label="Como funciona">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
