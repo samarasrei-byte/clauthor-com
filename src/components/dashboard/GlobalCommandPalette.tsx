@@ -28,6 +28,12 @@ import {
   PlayCircle,
   Plus,
   LogOut,
+  Video,
+  Target,
+  Phone,
+  Upload,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -43,6 +49,15 @@ type StaticItem = {
 };
 
 const STATIC_ITEMS: StaticItem[] = [
+  // ── Criar (ações rápidas) ──
+  { label: "Novo vídeo (Veo 3)", path: "/video-studio?new=1", icon: Video, group: "Criar", keywords: "gerar video veo3 clip" },
+  { label: "Nova campanha Hunter", path: "/dashboard/hunter?new=1", icon: Target, group: "Criar", keywords: "prospeccao linkedin lead outbound" },
+  { label: "Novo agente", path: "/create-agent", icon: Plus, group: "Criar", keywords: "wizard criar bot" },
+  { label: "Nova conversa WhatsApp", path: "/dashboard/whatsapp?new=1", icon: Phone, group: "Criar", keywords: "mensagem chat zap" },
+  { label: "Falar com Thor", path: "/thor", icon: MessageSquare, group: "Criar", keywords: "chat copiloto assistente ia voz elevenlabs" },
+  { label: "Enviar arquivo", path: "/dashboard/arquivos?upload=1", icon: Upload, group: "Criar", keywords: "upload documento imagem video" },
+
+  // ── Navegação ──
   { label: "Painel", path: "/dashboard", icon: Home, group: "Navegação" },
   { label: "Meus arquivos", path: "/dashboard/arquivos", icon: FolderOpen, group: "Navegação" },
   { label: "Inbox unificado", path: "/dashboard/inbox", icon: Inbox, group: "Navegação", keywords: "whatsapp linkedin instagram mensagens" },
@@ -50,18 +65,19 @@ const STATIC_ITEMS: StaticItem[] = [
   { label: "Video Studio", path: "/video-studio", icon: Clapperboard, group: "Navegação", keywords: "veo vídeo geração" },
   { label: "Rastros de execução", path: "/dashboard/traces", icon: Activity, group: "Navegação" },
 
+  // ── Time ──
   { label: "Meus departamentos", path: "/meus-departamentos", icon: Building2, group: "Time" },
   { label: "Meus squads", path: "/meus-squads", icon: Users, group: "Time" },
   { label: "Meus agentes", path: "/agents", icon: Bot, group: "Time" },
 
+  // ── Catálogo ──
   { label: "Catálogo · Departamentos", path: "/departamentos", icon: Building2, group: "Catálogo" },
   { label: "Catálogo · Squads", path: "/squads", icon: Users, group: "Catálogo" },
   { label: "Marketplace", path: "/marketplace", icon: Sparkles, group: "Catálogo" },
 
-  { label: "Criar agente", path: "/create-agent", icon: Plus, group: "Ações", keywords: "novo wizard" },
-  { label: "Integrações", path: "/integrations", icon: Plug, group: "Ações" },
-  { label: "Falar com Thor", path: "/thor", icon: MessageSquare, group: "Ações" },
-  { label: "Preços", path: "/pricing", icon: FileText, group: "Ações" },
+  // ── Configurações ──
+  { label: "Integrações", path: "/integrations", icon: Plug, group: "Configurações", keywords: "conectar redes sociais api" },
+  { label: "Preços", path: "/pricing", icon: FileText, group: "Configurações" },
 ];
 
 type UserAgent = { id: string; name: string; status: string | null };
