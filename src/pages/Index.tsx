@@ -17,11 +17,17 @@ import Footer from "@/components/Footer";
 import FunnelResumeBanner from "@/components/funnel/FunnelResumeBanner";
 import { SQUADS } from "@/data/squads";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
-import PanelMockup from "@/components/landing/PanelMockup";
-import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
-import LiveOpsSection from "@/components/landing/LiveOpsSection";
-import DemoWalkthroughModal from "@/components/landing/DemoWalkthroughModal";
-import LandingFAQ from "@/components/landing/LandingFAQ";
+// Below-the-fold: lazy-load para reduzir JS inicial da home (~600KB)
+const PanelMockup = lazy(() => import("@/components/landing/PanelMockup"));
+const ThorConciergeChat = lazy(() => import("@/components/landing/ThorConciergeChat"));
+const LiveOpsSection = lazy(() => import("@/components/landing/LiveOpsSection"));
+const DemoWalkthroughModal = lazy(() => import("@/components/landing/DemoWalkthroughModal"));
+const LandingFAQ = lazy(() => import("@/components/landing/LandingFAQ"));
+
+// Fallback leve e sem CLS — preserva altura aproximada da seção
+const SectionSkeleton = ({ minHeight = "360px" }: { minHeight?: string }) => (
+  <div style={{ minHeight }} aria-hidden="true" className="w-full" />
+);
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
