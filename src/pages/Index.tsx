@@ -312,7 +312,9 @@ const HomePage = () => {
                   {t("home.thor_status")}
                 </span>
               </div>
-              <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
+              <Suspense fallback={<SectionSkeleton minHeight="360px" />}>
+                <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
+              </Suspense>
             </div>
           </motion.div>
 
