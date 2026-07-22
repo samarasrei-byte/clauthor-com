@@ -602,7 +602,7 @@ const HomePage = () => {
           </div>
 
           {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
-          <div className="relative mt-20 pt-12 border-t border-white/10">
+          <div className="relative mt-20 pt-12">
             <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
               {t("home.scale_eyebrow")}
             </p>
