@@ -952,6 +952,8 @@ const HomePage = () => {
       </Suspense>
 
 
+      <LandingFAQ />
+
       {/* ═══════════ CTA FINAL (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="CTA">
         <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
