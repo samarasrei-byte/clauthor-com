@@ -182,24 +182,21 @@ const HomePage = () => {
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
   return (
-    <div className="light relative overflow-x-hidden bg-background text-foreground">
+    <div className="relative overflow-x-hidden bg-background text-foreground">
       <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative overflow-hidden isolate"
-        style={{
-          background:
-            "linear-gradient(to bottom, #F5F5F7 0%, #F5F5F7 55%, #4a4a4a 82%, #1a1a1a 94%, #0A0A0A 100%)",
-        }}
+        className="relative overflow-hidden isolate bg-[linear-gradient(to_bottom,#F5F5F7_0%,#F5F5F7_55%,#4a4a4a_82%,#1a1a1a_94%,#0A0A0A_100%)] dark:bg-[linear-gradient(to_bottom,#0A0A0A_0%,#0A0A0A_100%)]"
         aria-label="Hero"
       >
-        {/* Textura pontilhada sutil · showroom Apple/Tesla */}
+        {/* Textura pontilhada sutil · showroom Apple/Tesla (light) / grid discreto (dark) */}
         <div
           aria-hidden
-          className="absolute inset-0 pointer-events-none z-0 opacity-[0.35]"
+          className="absolute inset-0 pointer-events-none z-0 opacity-[0.35] dark:opacity-[0.15]"
           style={{
-            backgroundImage: "radial-gradient(#D2D2D7 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
             backgroundSize: "22px 22px",
+            color: "var(--hero-dot, #D2D2D7)",
             maskImage: "radial-gradient(ellipse 70% 55% at 50% 20%, black 40%, transparent 85%)",
             WebkitMaskImage: "radial-gradient(ellipse 70% 55% at 50% 20%, black 40%, transparent 85%)",
           }}
@@ -213,9 +210,9 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D2D2D7] bg-white px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1D1D1F]/60 shadow-sm mb-6 sm:mb-8"
+            className="inline-flex items-center gap-2 rounded-full border border-[#D2D2D7] dark:border-white/15 bg-white dark:bg-white/[0.06] px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1D1D1F]/60 dark:text-white/70 shadow-sm mb-6 sm:mb-8"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#1D1D1F]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1D1D1F] dark:bg-white" />
             {t("home.hero_badge")}
           </motion.div>
 
@@ -223,22 +220,22 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[36px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.03] max-w-5xl mb-5 sm:mb-6 text-[#1D1D1F]"
+            className="font-display text-[36px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.03] max-w-5xl mb-5 sm:mb-6 text-[#1D1D1F] dark:text-white"
           >
             <span>Primeiro entendemos sua empresa.</span>
             <br />
-            <span className="text-[#86868B]">Depois montamos a IA certa.</span>
+            <span className="text-[#86868B] dark:text-white/55">Depois montamos a IA certa.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-[15px] sm:text-base md:text-lg text-[#86868B] max-w-2xl mb-8 leading-relaxed px-1"
+            className="text-[15px] sm:text-base md:text-lg text-[#86868B] dark:text-white/65 max-w-2xl mb-8 leading-relaxed px-1"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
-            <span className="text-[#1D1D1F] font-semibold">seu porte, orçamento e cenário</span>.
+            <span className="text-[#1D1D1F] dark:text-white font-semibold">seu porte, orçamento e cenário</span>.
             De uma pequena operação a um time enterprise.
 
           </motion.p>
@@ -255,10 +252,10 @@ const HomePage = () => {
               { icon: Building2, value: "SMB → Enterprise", label: "escala sob medida" },
               { icon: Zap, value: "Só o necessário", label: "sem inflar contrato" },
             ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#D2D2D7] text-[13px] shadow-sm">
-                <s.icon className="h-3.5 w-3.5 text-[#1D1D1F]/70" strokeWidth={1.75} />
-                <span className="font-medium text-[#1D1D1F]">{s.value}</span>
-                <span className="text-xs text-[#86868B] hidden sm:inline">{s.label}</span>
+              <div key={s.label} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-white/[0.06] border border-[#D2D2D7] dark:border-white/15 text-[13px] shadow-sm">
+                <s.icon className="h-3.5 w-3.5 text-[#1D1D1F]/70 dark:text-white/70" strokeWidth={1.75} />
+                <span className="font-medium text-[#1D1D1F] dark:text-white">{s.value}</span>
+                <span className="text-xs text-[#86868B] dark:text-white/55 hidden sm:inline">{s.label}</span>
               </div>
             ))}
           </motion.div>
@@ -279,18 +276,19 @@ const HomePage = () => {
                   key={item.id}
                   type="button"
                   onClick={() => pickPain(item)}
-                  className="group flex items-start gap-3 text-left rounded-2xl border border-[#D2D2D7]/70 bg-white p-5 hover:border-[#1D1D1F]/25 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all"
+                  className="group flex items-start gap-3 text-left rounded-2xl border border-[#D2D2D7]/70 dark:border-white/10 bg-white dark:bg-white/[0.04] p-5 hover:border-[#1D1D1F]/25 dark:hover:border-white/25 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] hover:-translate-y-0.5 transition-all"
                 >
-                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-[#F5F5F7] border border-[#D2D2D7]/70 flex items-center justify-center group-hover:bg-[#1D1D1F] transition-colors">
-                    <Icon className="h-4 w-4 text-[#1D1D1F]/70 group-hover:text-white transition-colors" strokeWidth={1.75} />
+                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.06] border border-[#D2D2D7]/70 dark:border-white/10 flex items-center justify-center group-hover:bg-[#1D1D1F] dark:group-hover:bg-white transition-colors">
+                    <Icon className="h-4 w-4 text-[#1D1D1F]/70 dark:text-white/70 group-hover:text-white dark:group-hover:text-[#0A0A0A] transition-colors" strokeWidth={1.75} />
                   </span>
-                  <span className="text-sm text-[#1D1D1F] leading-snug font-medium">
+                  <span className="text-sm text-[#1D1D1F] dark:text-white leading-snug font-medium">
                     {item.label}
                   </span>
                 </button>
               );
             })}
           </motion.div>
+
 
 
           {/* Chat qualificador · Thor concierge (recebe seedPrompt do quiz) */}
