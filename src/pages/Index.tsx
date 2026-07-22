@@ -865,7 +865,9 @@ const HomePage = () => {
             </p>
           </div>
 
-          <PanelMockup />
+          <Suspense fallback={<SectionSkeleton minHeight="520px" />}>
+            <PanelMockup />
+          </Suspense>
         </div>
       </section>
 
