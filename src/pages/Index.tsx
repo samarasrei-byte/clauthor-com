@@ -240,7 +240,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6 leading-relaxed"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
