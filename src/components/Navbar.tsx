@@ -308,15 +308,13 @@ const Navbar = () => {
                     <Button asChild variant="ghost" className="w-full h-10 text-[14px] font-normal" onClick={() => setMobileOpen(false)}>
                       <Link to="/auth">{t("nav.login")}</Link>
                     </Button>
-                    <PremiumCTAButton
-                      variant="red"
+                    <Button
                       size="sm"
-                      showArrow={false}
-                      className="w-full"
+                      className="w-full h-10 text-[14px] rounded-full font-medium bg-foreground text-background hover:bg-foreground/90"
                       onClick={() => { setMobileOpen(false); navigate("/auth", { state: { signup: true } }); }}
                     >
                       {t("auth.create_account")}
-                    </PremiumCTAButton>
+                    </Button>
                   </>
                 )}
               </div>
