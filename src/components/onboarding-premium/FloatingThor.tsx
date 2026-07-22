@@ -45,8 +45,11 @@ export function FloatingThor() {
       id: "learn",
       label: "Aprender esta tela",
       icon: BookOpen,
-      onClick: () => setOpen(false),
-      disabled: true,
+      onClick: () => {
+        // Dispara HelpBubble da rota atual (se montado)
+        window.dispatchEvent(new CustomEvent("clauthor:help-bubble:open"));
+        setOpen(false);
+      },
     },
     {
       id: "next",

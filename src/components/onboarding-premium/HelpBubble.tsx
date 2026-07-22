@@ -43,6 +43,20 @@ export function HelpBubble({ routeKey, message, onAccept }: HelpBubbleProps) {
     }
   }, [first, dismissed]);
 
+  // Permite que FloatingThor (ou qualquer surface) force-abra o balão desta rota.
+  // Uso: window.dispatchEvent(new CustomEvent("clauthor:help-bubble:open", { detail: { routeKey } }))
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ routeKey?: string }>).detail;
+      if (!detail?.routeKey || detail.routeKey === routeKey) {
+        setDismissed(false);
+        setOpen(true);
+      }
+    };
+    window.addEventListener("clauthor:help-bubble:open", handler as EventListener);
+    return () => window.removeEventListener("clauthor:help-bubble:open", handler as EventListener);
+  }, [routeKey]);
+
   return (
     <AnimatePresence>
       {open && (
