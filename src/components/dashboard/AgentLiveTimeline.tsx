@@ -212,7 +212,7 @@ const AgentLiveTimeline = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="font-semibold text-sm truncate">{entry.agent_name}</span>
-                          <ArrowRight className="h-3 w-3 text-muted-foreground/50 shrink-0" />
+                          <ArrowRight className="h-3 w-3 text-muted-foreground/70 shrink-0" />
                           <span className={cn("text-sm font-medium flex items-center gap-1", config.color)}>
                             <Icon className="h-3.5 w-3.5" />
                             {config.label}

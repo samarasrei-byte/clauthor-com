@@ -95,7 +95,7 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
     return (
       <div className="text-center py-12 space-y-3">
         <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border/20 flex items-center justify-center mx-auto">
-          <FileText className="h-7 w-7 text-muted-foreground/50" />
+          <FileText className="h-7 w-7 text-muted-foreground/70" />
         </div>
         <h3 className="dash-title text-lg">{t("results.empty_title")}</h3>
         <p className="dash-label text-sm max-w-md mx-auto">

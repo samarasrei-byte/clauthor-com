@@ -106,7 +106,7 @@ const PayPalInlineButtons = ({ planId, onApprove, onError, onCancel, disabled }:
       )}
       <div ref={containerRef} className={loading ? "hidden" : ""} />
       {!loading && (
-        <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/50">
+        <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/70">
           <ShieldCheck className="h-3 w-3" />
           <span>{t("checkout.trust_footer", { defaultValue: "Secure payment via PayPal • Data protected" })}</span>
         </div>

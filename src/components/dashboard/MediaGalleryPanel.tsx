@@ -507,11 +507,11 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
               {item.kind === "video" ? (
                 item.url ? (
                   <video src={item.url} poster={item.thumbnail ?? undefined} controls autoPlay playsInline className="max-w-full max-h-[85vh] object-contain" />
-                ) : <Film className="h-16 w-16 text-white/40" />
+                ) : <Film className="h-16 w-16 text-white/65" />
               ) : (
                 item.url ? (
                   <img src={item.url} alt={item.title} className="max-w-full max-h-[85vh] object-contain" />
-                ) : <ImageIcon className="h-16 w-16 text-white/40" />
+                ) : <ImageIcon className="h-16 w-16 text-white/65" />
               )}
               <Badge className="absolute top-3 left-3 bg-background/90 text-foreground backdrop-blur">
                 {item.kind === "video" ? "Vídeo" : "Arte"} · {item.meta}

@@ -311,7 +311,7 @@ const KanbanBoard = () => {
         {/* Search + Agent + Time window */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/50" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/70" />
             <Input
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
@@ -363,7 +363,7 @@ const KanbanBoard = () => {
         {/* Priority filter */}
 
         <div className="flex items-center gap-2">
-          <Filter className="h-3 w-3 text-muted-foreground/50" />
+          <Filter className="h-3 w-3 text-muted-foreground/70" />
           <div className="flex gap-1">
             {(["all", "critical", "high", "medium", "low"] as const).map(p => (
               <button
@@ -411,7 +411,7 @@ const KanbanBoard = () => {
               {/* Open */}
               {statusGroups.open.length > 0 && (
                 <div className="mb-4">
-                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/50 mb-2 pl-1">A fazer</p>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/70 mb-2 pl-1">A fazer</p>
                   {statusGroups.open.sort((a, b) => (PRIORITY_CONFIG[b.priority]?.weight || 0) - (PRIORITY_CONFIG[a.priority]?.weight || 0)).map(task => (
                     <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "in_progress" })} onDelete={(id) => deleteTask.mutate(id)} />
                   ))}
@@ -425,7 +425,7 @@ const KanbanBoard = () => {
                     <FocusRow key={task.id} task={task} onToggle={() => {}} onDelete={(id) => deleteTask.mutate(id)} done />
                   ))}
                   {statusGroups.done.length > 10 && (
-                    <p className="text-[10px] text-muted-foreground/30 pl-7 font-mono">+ {statusGroups.done.length - 10} concluídas</p>
+                    <p className="text-[10px] text-muted-foreground/60 pl-7 font-mono">+ {statusGroups.done.length - 10} concluídas</p>
                   )}
                 </div>
               )}
@@ -468,7 +468,7 @@ const KanbanBoard = () => {
                     {colTasks.map(task => <TaskCard key={task.id} task={task} onDragStart={setDraggedTask} onDragEnd={() => { setDraggedTask(null); setDragOverStatus(null); }} onDelete={id => deleteTask.mutate(id)} isDragged={draggedTask === task.id} onStatusChange={(id, s) => updateStatus.mutate({ taskId: id, newStatus: s })} />)}
                   </AnimatePresence>
                   {colTasks.length === 0 && (
-                    <div className="flex flex-col items-center py-8 text-muted-foreground/30">
+                    <div className="flex flex-col items-center py-8 text-muted-foreground/60">
                       <config.icon className="h-6 w-6 mb-1" />
                       <span className="text-[10px]">Sem missões</span>
                     </div>
@@ -539,7 +539,7 @@ const KanbanBoard = () => {
                         <Clock className="h-2.5 w-2.5" />
                         {new Date(task.created_at).toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                       </span>
-                      <button onClick={() => deleteTask.mutate(task.id)} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground/40 hover:text-destructive">
+                      <button onClick={() => deleteTask.mutate(task.id)} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground/65 hover:text-destructive">
                         <Trash2 className="h-3 w-3" />
                       </button>
                     </div>
@@ -618,7 +618,7 @@ const KanbanBoard = () => {
                             </span>
                           )}
                           <button onClick={() => deleteTask.mutate(task.id)} className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                            <Trash2 className="h-3 w-3 text-muted-foreground/40 hover:text-destructive" />
+                            <Trash2 className="h-3 w-3 text-muted-foreground/65 hover:text-destructive" />
                           </button>
                         </div>
                       );
@@ -661,7 +661,7 @@ const TaskCard = ({ task, onDragStart, onDragEnd, onDelete, isDragged, onStatusC
         <div className="flex items-start justify-between gap-1.5">
           <p className="text-xs font-medium leading-snug line-clamp-2 flex-1">{task.title}</p>
           <button onClick={() => onDelete(task.id)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 shrink-0">
-            <Trash2 className="h-3 w-3 text-muted-foreground/40 hover:text-destructive" />
+            <Trash2 className="h-3 w-3 text-muted-foreground/65 hover:text-destructive" />
           </button>
         </div>
         {task.description && <p className="text-[10px] text-muted-foreground line-clamp-1">{task.description}</p>}
@@ -717,13 +717,13 @@ const FocusRow = ({ task, onToggle, onDelete, done }: {
           {task.title}
         </p>
         {task.description && !done && (
-          <p className="text-[10px] text-muted-foreground/50 mt-0.5 line-clamp-1 font-mono">{task.description}</p>
+          <p className="text-[10px] text-muted-foreground/70 mt-0.5 line-clamp-1 font-mono">{task.description}</p>
         )}
       </div>
       <div className="flex items-center gap-2 shrink-0">
         {!done && <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", pr.color === "text-destructive" ? "bg-destructive" : pr.color === "text-primary" ? "bg-primary" : pr.color === "text-accent-amber" ? "bg-accent-amber" : "bg-muted-foreground/30")} title={pr.label} />}
         {task.due_date && !done && (
-          <span className={cn("text-[10px] font-mono", isOverdue ? "text-destructive" : "text-muted-foreground/40")}>
+          <span className={cn("text-[10px] font-mono", isOverdue ? "text-destructive" : "text-muted-foreground/65")}>
             {new Date(task.due_date).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
           </span>
         )}
@@ -733,7 +733,7 @@ const FocusRow = ({ task, onToggle, onDelete, done }: {
           </span>
         )}
         <button onClick={() => onDelete(task.id)} className="opacity-0 group-hover:opacity-100 transition-opacity">
-          <Trash2 className="h-3 w-3 text-muted-foreground/30 hover:text-destructive" />
+          <Trash2 className="h-3 w-3 text-muted-foreground/60 hover:text-destructive" />
         </button>
       </div>
     </motion.div>

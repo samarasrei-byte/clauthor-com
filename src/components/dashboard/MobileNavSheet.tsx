@@ -49,7 +49,7 @@ const MobileNavSheet = ({ sidebarItems, activeSection, breadcrumbLabel, onNaviga
               <input
                 type="text"
                 placeholder={t("dashboard.search_nav", { defaultValue: "Buscar..." })}
-                className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+                className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary/30"
                 onChange={(e) => {
                   const val = e.target.value.toLowerCase();
                   const items = document.querySelectorAll("[data-mobile-nav-item]");
@@ -69,7 +69,7 @@ const MobileNavSheet = ({ sidebarItems, activeSection, breadcrumbLabel, onNaviga
                 <div key={item.id} data-mobile-nav-item data-label={item.label}>
                   {showGroup && (
                     <div className="px-3 pt-4 pb-1.5 first:pt-1">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/65">{item.group}</span>
                     </div>
                   )}
                   <SheetClose asChild>

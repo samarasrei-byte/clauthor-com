@@ -364,7 +364,7 @@ const WarRoomLive = () => {
 
           {filteredFeed.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Eye className="h-8 w-8 text-muted-foreground/30 mb-3" />
+              <Eye className="h-8 w-8 text-muted-foreground/60 mb-3" />
               <p className="text-sm text-muted-foreground">Nenhuma atividade ainda</p>
               <p className="text-xs text-muted-foreground/60 mt-1">
                 Quando seus agentes começarem a trabalhar, você verá tudo aqui em tempo real

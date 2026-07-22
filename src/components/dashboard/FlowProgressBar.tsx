@@ -34,7 +34,7 @@ const FlowProgressBar = ({ currentStep, className }: FlowProgressBarProps) => {
                   "w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-colors",
                   isCompleted && "bg-primary border-primary text-primary-foreground",
                   isCurrent && "border-primary text-primary bg-primary/10",
-                  !isCompleted && !isCurrent && "border-border/30 text-muted-foreground/40"
+                  !isCompleted && !isCurrent && "border-border/30 text-muted-foreground/65"
                 )}
                 initial={false}
                 animate={isCompleted ? { scale: [1, 1.15, 1] } : {}}
@@ -44,7 +44,7 @@ const FlowProgressBar = ({ currentStep, className }: FlowProgressBarProps) => {
               </motion.div>
               <span className={cn(
                 "text-[9px] font-medium whitespace-nowrap",
-                isCurrent ? "text-primary" : isCompleted ? "text-foreground/60" : "text-muted-foreground/40"
+                isCurrent ? "text-primary" : isCompleted ? "text-foreground/60" : "text-muted-foreground/65"
               )}>
                 {step.label}
               </span>

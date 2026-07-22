@@ -280,7 +280,7 @@ const AgentRoom = () => {
             className="text-center"
           >
             <div className="w-24 h-24 rounded-full bg-muted/20 flex items-center justify-center mx-auto mb-4">
-              <Bot className="h-12 w-12 text-muted-foreground/30" />
+              <Bot className="h-12 w-12 text-muted-foreground/60" />
             </div>
             <h3 className="font-display text-lg font-bold mb-2">Sala Vazia</h3>
             <p className="text-muted-foreground text-sm mb-4">Crie seu primeiro agente para começar</p>

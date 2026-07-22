@@ -818,7 +818,7 @@ Apenas o texto, sem introduções.`;
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder={t("meeting.topic_placeholder")}
                   rows={3}
-                  className="w-full resize-none rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-6 py-5 pr-16 text-sm md:text-base text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all shadow-xl"
+                  className="w-full resize-none rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-6 py-5 pr-16 text-sm md:text-base text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all shadow-xl"
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); startMeeting(); } }}
                 />
                 <button
@@ -1080,7 +1080,7 @@ Apenas o texto, sem introduções.`;
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder={t("meeting.ask_team")}
-                        className="w-full h-12 rounded-xl bg-card/60 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
+                        className="w-full h-12 rounded-xl bg-card/60 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
                         onKeyDown={(e) => { if (e.key === "Enter") handleSendInput(); }}
                       />
                     </div>

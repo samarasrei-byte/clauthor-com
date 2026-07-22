@@ -593,7 +593,7 @@ const ApprovalsCenter = () => {
                 return (
                   <Card className="border-dashed bg-muted/10">
                     <div className="py-20 text-center space-y-2">
-                      <EmptyIcon className="h-8 w-8 mx-auto text-muted-foreground/40" strokeWidth={1.4} />
+                      <EmptyIcon className="h-8 w-8 mx-auto text-muted-foreground/65" strokeWidth={1.4} />
                       <p className="text-sm text-muted-foreground">Nada em "{STATUS_META[s].label}" por enquanto.</p>
                     </div>
                   </Card>
@@ -854,7 +854,7 @@ const MetricCard = ({ icon: Icon, label, value, accent }: { icon: React.ElementT
         accent ? ACCENTS[accent] : "bg-muted text-muted-foreground")}>
         <Icon className="h-3.5 w-3.5" strokeWidth={1.8} />
       </div>
-      <ArrowUpRight className="h-3 w-3 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <ArrowUpRight className="h-3 w-3 text-muted-foreground/65 opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
     <div className="text-2xl font-semibold tracking-tight">{value}</div>
     <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mt-0.5">{label}</div>
@@ -1397,7 +1397,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
 
   return (
     <div className="aspect-[16/10] bg-gradient-to-br from-muted/40 to-muted/10 flex items-center justify-center">
-      <Eye className="h-6 w-6 text-muted-foreground/40" />
+      <Eye className="h-6 w-6 text-muted-foreground/65" />
     </div>
   );
 };

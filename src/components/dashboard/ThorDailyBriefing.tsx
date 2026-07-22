@@ -162,14 +162,14 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
             </div>
             <div>
               <h3 className="font-display text-sm font-bold">Daily Briefing</h3>
-              <p className="font-mono text-[10px] text-muted-foreground/50 uppercase tracking-wider">THOR · {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}</p>
+              <p className="font-mono text-[10px] text-muted-foreground/70 uppercase tracking-wider">THOR · {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-muted-foreground/40 hover:text-primary"
+              className="h-7 w-7 text-muted-foreground/65 hover:text-primary"
               onClick={handlePlayBriefing}
               title={isSpeaking ? "Parar" : "Ouvir briefing"}
             >
@@ -187,7 +187,7 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-muted-foreground/30 hover:text-muted-foreground"
+              className="h-7 w-7 text-muted-foreground/60 hover:text-muted-foreground"
               onClick={handleDismiss}
             >
               <X className="h-3.5 w-3.5" />
@@ -221,7 +221,7 @@ const ThorDailyBriefing = ({ data, onGoToThor, onDismiss }: ThorDailyBriefingPro
           >
             <button
               onClick={handleDismiss}
-              className="text-[10px] font-mono text-muted-foreground/40 hover:text-muted-foreground transition-colors uppercase tracking-wider"
+              className="text-[10px] font-mono text-muted-foreground/65 hover:text-muted-foreground transition-colors uppercase tracking-wider"
             >
               {t("dashboard.briefing_dismiss", { defaultValue: "Entendido" })}
             </button>

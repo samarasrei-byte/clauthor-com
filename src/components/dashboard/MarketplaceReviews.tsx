@@ -37,7 +37,7 @@ const StarRating = ({ rating, size = "sm", interactive = false, onChange }: { ra
         key={s}
         className={cn(
           size === "sm" ? "h-3 w-3" : "h-4 w-4",
-          s <= rating ? "fill-warning text-warning" : "text-muted-foreground/30",
+          s <= rating ? "fill-warning text-warning" : "text-muted-foreground/60",
           interactive && "cursor-pointer hover:text-warning transition-colors"
         )}
         onClick={() => interactive && onChange?.(s)}

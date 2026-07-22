@@ -615,7 +615,7 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
                       </div>
                     );
                   })}
-                  <p className="text-[9px] text-muted-foreground/50">
+                  <p className="text-[9px] text-muted-foreground/70">
                     🔐 Credenciais salvas automaticamente no seu workspace
                     {saving && " • Salvando..."}
                   </p>

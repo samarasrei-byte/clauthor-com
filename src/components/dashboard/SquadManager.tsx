@@ -260,7 +260,7 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
                     </Badge>
                   )}
                   {squadAgents.length === 0 && (
-                    <span className="text-[10px] text-muted-foreground/50 italic">Sem agentes</span>
+                    <span className="text-[10px] text-muted-foreground/70 italic">Sem agentes</span>
                   )}
                 </div>
 
@@ -290,7 +290,7 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-2 border-t border-border/10">
-                  <span className="text-[9px] text-muted-foreground/50 font-mono">
+                  <span className="text-[9px] text-muted-foreground/70 font-mono">
                     {new Date(squad.created_at).toLocaleDateString("pt-BR")}
                   </span>
                   <button

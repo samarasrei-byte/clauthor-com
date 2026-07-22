@@ -84,7 +84,7 @@ export default function PaymentHistoryTable() {
         <div className="p-8 text-center text-muted-foreground text-sm">Loading...</div>
       ) : payments.length === 0 ? (
         <div className="p-8 text-center">
-          <Coins className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+          <Coins className="h-10 w-10 text-muted-foreground/60 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">No transactions recorded yet.</p>
           <p className="text-xs text-muted-foreground/60 mt-1">Your token purchases and upgrades will appear here.</p>
         </div>

@@ -37,7 +37,7 @@ export default function AdminMarketplacePanel({ pendingAgents, locale }: AdminMa
       <CardContent>
         {pendingAgents.length === 0 ? (
           <div className="text-center py-12 space-y-3">
-            <Wand className="h-10 w-10 text-muted-foreground/30 mx-auto" />
+            <Wand className="h-10 w-10 text-muted-foreground/60 mx-auto" />
             <p className="text-muted-foreground">{t("dashboard.marketplace_empty", { defaultValue: "O marketplace será populado quando usuários publicarem seus agentes." })}</p>
           </div>
         ) : (

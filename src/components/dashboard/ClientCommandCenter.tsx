@@ -255,7 +255,7 @@ const ClientCommandCenter = ({
                     onChange={(e) => setCommand(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCommand(command)}
                     placeholder={t("cmd.input_placeholder", { defaultValue: "O que você quer que sua empresa faça agora?" })}
-                    className="flex-1 bg-transparent border-none outline-none text-base md:text-lg font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-14"
+                    className="flex-1 bg-transparent border-none outline-none text-base md:text-lg font-display font-medium text-foreground placeholder:text-muted-foreground/65 px-2 h-14"
                   />
                   <Button 
                     size="lg" 
@@ -339,7 +339,7 @@ const ClientCommandCenter = ({
                               "flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 relative overflow-hidden",
                               isActive ? "bg-primary/10 border-primary/50 shadow-[0_0_20px_hsl(var(--primary)/0.15)] text-primary" : 
                               isDone ? "bg-card border-border/40 text-muted-foreground" : 
-                              "bg-transparent border-transparent text-muted-foreground/40"
+                              "bg-transparent border-transparent text-muted-foreground/65"
                             )}
                           >
                             {isActive && (

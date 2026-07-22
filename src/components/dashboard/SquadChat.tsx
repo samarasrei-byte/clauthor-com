@@ -318,13 +318,13 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
 
         {mode === "individual" && (
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t("squad.search_agent")}
-              className="w-full bg-background/50 border border-border/30 rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
+              className="w-full bg-background/50 border border-border/30 rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground/65 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
             />
           </div>
         )}
@@ -335,7 +335,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
         <div className="flex-1 overflow-y-auto">
           {filteredAgents.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-6">
-              <Bot className="h-10 w-10 text-muted-foreground/30 mb-3" />
+              <Bot className="h-10 w-10 text-muted-foreground/60 mb-3" />
               <p className="text-sm text-muted-foreground">
                 {activeAgents.length === 0 ? t("squad.no_active_agents") : t("squad.no_results")}
               </p>
@@ -608,7 +608,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                     }}
                     placeholder={mode === "grupo" ? t("squad.msg_group_placeholder") : t("squad.msg_agent_placeholder", { name: selectedAgent?.name || "" })}
                     rows={1}
-                    className="w-full resize-none bg-background/60 border border-border/30 rounded-2xl px-4 py-3 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all max-h-32"
+                    className="w-full resize-none bg-background/60 border border-border/30 rounded-2xl px-4 py-3 text-sm placeholder:text-muted-foreground/65 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all max-h-32"
                     style={{ minHeight: "44px" }}
                   />
                 </div>

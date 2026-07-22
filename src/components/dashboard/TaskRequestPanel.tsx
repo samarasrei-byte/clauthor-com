@@ -145,7 +145,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSimpleSubmit(); } }}
                   placeholder='Ex: "Quero criar uma campanha para a Copa do Mundo"'
                   rows={2}
-                  className="w-full px-4 py-3 pr-12 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
+                  className="w-full px-4 py-3 pr-12 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
                 />
                 <button
                   onClick={handleSimpleSubmit}
@@ -158,7 +158,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
 
               {/* Quick tasks */}
               <div className="space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">Tarefas populares</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">Tarefas populares</p>
                 <div className="flex flex-wrap gap-1.5">
                   {QUICK_TASKS.map(({ icon: Icon, label, color }) => (
                     <button
@@ -234,7 +234,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                         className="flex items-center justify-between px-3 py-2.5 text-sm rounded-xl border border-border/30 hover:border-primary/40 hover:bg-primary/5 transition-all text-left group"
                       >
                         <span>{opt}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-primary transition-colors" />
+                        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-primary transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -278,7 +278,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                   onChange={(e) => setStrategicInput(e.target.value)}
                   placeholder="Ex: Quero dobrar as vendas no próximo trimestre usando IA para prospecção e automação de follow-up..."
                   rows={3}
-                  className="w-full px-4 py-3 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
+                  className="w-full px-4 py-3 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
                 />
               </div>
 
@@ -289,7 +289,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                   onChange={(e) => setStrategicContext(e.target.value)}
                   placeholder="Ex: Somos uma empresa B2B com 50 funcionários, atuamos em SaaS..."
                   rows={2}
-                  className="w-full px-4 py-3 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
+                  className="w-full px-4 py-3 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all resize-none"
                 />
               </div>
 

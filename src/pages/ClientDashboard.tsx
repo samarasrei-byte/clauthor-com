@@ -784,7 +784,7 @@ const ClientDashboard = () => {
                       <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
                       <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
                     </button>
-                    <span className="text-xs text-muted-foreground/40">•</span>
+                    <span className="text-xs text-muted-foreground/65">•</span>
                     <span className="text-xs font-medium text-foreground">{selectedAgent.name}</span>
                   </div>
                   <div className="flex-1 min-h-0">

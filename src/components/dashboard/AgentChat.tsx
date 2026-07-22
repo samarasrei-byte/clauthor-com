@@ -602,7 +602,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
 
       {/* AI Disclaimer */}
       <div className="px-4 pt-2 shrink-0">
-        <p className="text-[10px] text-muted-foreground/50 text-center">
+        <p className="text-[10px] text-muted-foreground/70 text-center">
           IA com streaming em tempo real + voz. Não substitui aconselhamento profissional.
         </p>
       </div>

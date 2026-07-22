@@ -92,7 +92,7 @@ const ContentPipelinePanel = () => {
       <div className="space-y-2">
         {items.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground text-sm">
-            <FileText className="h-8 w-8 mx-auto mb-2 text-muted-foreground/30" />
+            <FileText className="h-8 w-8 mx-auto mb-2 text-muted-foreground/60" />
             Nenhum roteiro gerado ainda. Clique em "Gerar" para começar!
           </div>
         ) : items.map((task: any) => (

@@ -368,7 +368,7 @@ const AdminSimulationsPanel = () => {
                     <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2 flex items-center gap-1.5">
                       <AlertTriangle className="h-3 w-3" /> Objeções
                     </p>
-                    <ul className="space-y-1 text-sm list-disc list-inside marker:text-muted-foreground/50">
+                    <ul className="space-y-1 text-sm list-disc list-inside marker:text-muted-foreground/70">
                       {analysis.objections.map((o, i) => <li key={i}>{o}</li>)}
                     </ul>
                   </div>

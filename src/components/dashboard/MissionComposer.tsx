@@ -314,7 +314,7 @@ const MissionComposer = () => {
                       "border-border/30 hover:border-border/50"
                     }`}>
                       <div className="cursor-grab active:cursor-grabbing pt-1">
-                        <GripVertical className="h-4 w-4 text-muted-foreground/40" />
+                        <GripVertical className="h-4 w-4 text-muted-foreground/65" />
                       </div>
 
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
