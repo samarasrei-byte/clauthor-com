@@ -85,7 +85,7 @@ export default function DemoWalkthroughModal({
   const handleOpenChange = (v: boolean) => {
     if (v) {
       setStep(0);
-      trackKpi("home_demo_walkthrough_opened", { source: "hero" });
+      trackKpi("home_demo_walkthrough_opened", { source: "landing" });
     } else {
       trackKpi("home_demo_walkthrough_closed", { last_step: step + 1 });
     }
@@ -186,7 +186,7 @@ export default function DemoWalkthroughModal({
                 <Link
                   to="/departamentos"
                   onClick={() => {
-                    trackKpi("home_demo_walkthrough_cta", { action: "departments" });
+                    trackKpi("home_demo_walkthrough_cta", { label: "departments" });
                     handleOpenChange(false);
                   }}
                   className="inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity"
