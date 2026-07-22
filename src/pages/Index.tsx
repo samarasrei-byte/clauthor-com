@@ -632,7 +632,9 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ PROVA DE VIDA · operação em tempo real ═══════════ */}
-      <LiveOpsSection />
+      <Suspense fallback={<SectionSkeleton minHeight="480px" />}>
+        <LiveOpsSection />
+      </Suspense>
 
 
 
