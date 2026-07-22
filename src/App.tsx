@@ -254,6 +254,8 @@ const App = () => (
                   <Route path="/dashboard/departamento-ativo/:slug" element={<DepartmentActivated />} />
 
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
+                  <Route path="/whatsapp/pair" element={<ProtectedRoute><WhatsAppPair /></ProtectedRoute>} />
+                  <Route path="/dashboard/whatsapp/pair" element={<ProtectedRoute><WhatsAppPair /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
 
 
