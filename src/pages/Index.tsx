@@ -408,9 +408,15 @@ const HomePage = () => {
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
+            <button
+              onClick={() => setDemoOpen(true)}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-colors"
+            >
+              Ver demonstração
+            </button>
             <Link
               to="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-white/60 hover:text-white transition-colors"
             >
               {t("home.cta_view_pricing")}
             </Link>
