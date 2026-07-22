@@ -76,7 +76,7 @@ const ClientDashboard = () => {
   });
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
-  const [showQuickStart, setShowQuickStart] = useState(false);
+  
   const [showDiagnosisRecap, setShowDiagnosisRecap] = useState(false);
   const [diagnosisRecapData, setDiagnosisRecapData] = useState<{
     diagnosis: ReturnType<typeof loadDiagnosis>;
