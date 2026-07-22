@@ -797,7 +797,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ COMPARATIVO CLT vs CLAUTHOR ═══════════ */}
-      <section className="border-t border-border/60" aria-label="Comparativo">
+      <section aria-label="Comparativo">
         <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
