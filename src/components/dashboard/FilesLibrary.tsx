@@ -71,6 +71,15 @@ const FilesLibrary = () => {
   const [dragging, setDragging] = useState(false);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
   const [extraFolders, setExtraFolders] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ⌘K → "Enviar arquivo" abre o seletor de arquivos direto
+  useEffect(() => {
+    if (searchParams.get("upload") !== "1") return;
+    searchParams.delete("upload");
+    setSearchParams(searchParams, { replace: true });
+    setTimeout(() => inputRef.current?.click(), 150);
+  }, [searchParams, setSearchParams]);
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files", tenantId],
