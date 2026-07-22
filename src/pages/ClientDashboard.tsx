@@ -57,7 +57,7 @@ const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
 const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
 const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
 import { useFloatingDock } from "@/components/dashboard/FloatingDock";
-const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
+
 
 const ClientDashboard = () => {
   const { user, isAdmin } = useAuth();
@@ -76,7 +76,7 @@ const ClientDashboard = () => {
   });
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
-  const [showQuickStart, setShowQuickStart] = useState(false);
+  
   const [showDiagnosisRecap, setShowDiagnosisRecap] = useState(false);
   const [diagnosisRecapData, setDiagnosisRecapData] = useState<{
     diagnosis: ReturnType<typeof loadDiagnosis>;
@@ -906,17 +906,6 @@ const ClientDashboard = () => {
       {/* ThorLiveGuide is rendered globally by FloatingDock (bottom-center zone). */}
 
 
-      {!hasPendingCheckout && !showEmptyState && (
-        <Suspense fallback={null}>
-          <QuickStartWizard
-            isOpen={showQuickStart}
-            onClose={() => setShowQuickStart(false)}
-            onTeach={() => { setShowCompanyOnboarding(true); setShowQuickStart(false); }}
-            onHire={() => { setActiveSection("library"); setShowQuickStart(false); }}
-            onCommand={() => { setActiveSection("omnix"); setOmnixMounted(true); setShowQuickStart(false); }}
-          />
-        </Suspense>
-      )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
       {/* Fluxo Zero-Fricção: walkthrough conversacional do Thor (Tela 4) e modal de ativação (Tela 5).
