@@ -429,9 +429,7 @@ const HomePage = () => {
                 { slug: "anthropic", label: "Anthropic" },
                 { slug: "googlegemini", label: "Gemini" },
                 { slug: "paypal", label: "PayPal" },
-                { slug: "whatsapp", label: "WhatsApp" },
                 { slug: "linkedin", label: "LinkedIn" },
-                { slug: "meta", label: "Meta" },
                 { slug: "supabase", label: "Supabase" },
               ].map((brand) => (
                 <img
