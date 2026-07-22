@@ -211,7 +211,7 @@ const HomePage = () => {
             WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
           }}
         />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-14 pb-16 sm:pt-20 sm:pb-20">
 
 
         <div className="flex flex-col items-center text-center">
