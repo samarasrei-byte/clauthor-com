@@ -229,7 +229,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
+            className="font-display text-[38px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-5"
           >
             <span className="text-foreground">Primeiro entendemos sua empresa.</span>
             <br />
