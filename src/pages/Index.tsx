@@ -251,12 +251,13 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-white/75 max-w-2xl mb-6 leading-relaxed"
+            className="text-base md:text-lg text-neutral-600 max-w-2xl mb-6 leading-relaxed"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
-            <span className="text-white font-medium">seu porte, orçamento e cenário</span>.
+            <span className="text-foreground font-semibold">seu porte, orçamento e cenário</span>.
             De uma pequena operação a um time enterprise.
+
           </motion.p>
 
           {/* Pílulas consultivas · foco em resultado, não em volume */}
