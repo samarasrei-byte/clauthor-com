@@ -105,3 +105,17 @@ rg "text-(white|foreground|muted-foreground)/(30|40|50)\b" src/components/dashbo
 ```
 
 Zero matches = pronto para deploy.
+
+O ESLint (`eslint.config.js`, regra `no-restricted-syntax`) também bloqueia
+`text-{white|foreground|muted-foreground}/(30|40|50)` e
+`placeholder:text-*/(20|30|40)` em qualquer arquivo `.ts`/`.tsx`.
+
+## Testes de regressão visual
+
+- **Header** (`e2e/header-visual.spec.ts`) — captura o `<header>` em top/meio/fim
+  do scroll nos viewports desktop e mobile e valida que a altura não muda
+  (nenhuma "faixa preta" surgindo no scroll) e que não há overflow horizontal.
+- **Sidebar** (`e2e/sidebar-visual.spec.ts`) — cobre a curva da base, o scroll
+  interno e a largura em rotas autenticadas.
+
+Rode `bunx playwright test e2e/header-visual.spec.ts --project=desktop-chromium`.
