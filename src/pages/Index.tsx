@@ -880,7 +880,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section className="border-y border-border/60" aria-label="Depoimentos">
+      <section className="bg-card/30" aria-label="Depoimentos">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
