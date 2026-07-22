@@ -222,7 +222,7 @@ const HomePage = () => {
           }}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-14 pb-16 sm:pt-20 sm:pb-20">
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 pt-10 pb-14 sm:pt-20 sm:pb-20">
 
 
         <div className="flex flex-col items-center text-center">
@@ -230,7 +230,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-5"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.05] px-3.5 py-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.14em] sm:tracking-[0.16em] text-primary mb-4 sm:mb-5"
           >
             <Network className="h-3.5 w-3.5" strokeWidth={2} />
             {t("home.hero_badge")}
@@ -240,7 +240,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[38px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-5"
+            className="font-display text-[32px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.03em] leading-[1.05] sm:leading-[1.02] max-w-5xl mb-4 sm:mb-5"
           >
             <span className="text-foreground">Primeiro entendemos sua empresa.</span>
             <br />
@@ -251,7 +251,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-neutral-600 max-w-2xl mb-6 leading-relaxed"
+            className="text-[15px] sm:text-base md:text-lg text-neutral-700 max-w-2xl mb-6 leading-relaxed px-1"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
@@ -272,13 +272,14 @@ const HomePage = () => {
               { icon: Building2, value: "SMB → Enterprise", label: "escala sob medida" },
               { icon: Zap, value: "Só o necessário", label: "sem inflar contrato" },
             ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
-                <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
-                <span className="font-display font-bold text-foreground">{s.value}</span>
-                <span className="text-xs text-muted-foreground">{s.label}</span>
+              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/70 border border-neutral-200 text-[13px] shadow-sm">
+                <s.icon className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
+                <span className="font-display font-bold text-neutral-900">{s.value}</span>
+                <span className="text-xs text-neutral-600 hidden sm:inline">{s.label}</span>
               </div>
             ))}
           </motion.div>
+
 
 
           {/* Quiz de dor · seis caminhos claros */}
