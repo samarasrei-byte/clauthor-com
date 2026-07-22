@@ -407,28 +407,29 @@ const HomePage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
+            className="mt-10 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto"
           >
             <button
               onClick={() => startFlow("hero_primary")}
-              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-neutral-900 text-sm font-semibold hover:bg-neutral-100 transition-colors min-h-[48px]"
             >
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
               onClick={() => setDemoOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors min-h-[48px]"
             >
               Ver demonstração
             </button>
             <Link
               to="/pricing"
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-white/75 hover:text-white transition-colors underline-offset-4 hover:underline"
             >
               {t("home.cta_view_pricing")}
             </Link>
           </motion.div>
+
         </div>
         </div>
       </section>
