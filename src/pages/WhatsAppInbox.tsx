@@ -9,6 +9,7 @@
  *   com o webhook URL + verify_token para colar no Meta.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTenantId } from "@/hooks/useTenantId";
