@@ -211,7 +211,7 @@ const HomePage = () => {
             WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
           }}
         />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-14 pb-16 sm:pt-20 sm:pb-20">
 
 
         <div className="flex flex-col items-center text-center">
@@ -219,7 +219,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-8"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-5"
           >
             <Network className="h-3.5 w-3.5" strokeWidth={2} />
             {t("home.hero_badge")}
@@ -229,7 +229,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
+            className="font-display text-[38px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-5"
           >
             <span className="text-foreground">Primeiro entendemos sua empresa.</span>
             <br />
@@ -240,7 +240,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6 leading-relaxed"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
@@ -253,7 +253,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-wrap items-center justify-center gap-2 mb-10"
+            className="flex flex-wrap items-center justify-center gap-2 mb-6"
           >
             {[
               { icon: Network, value: "Diagnóstico", label: "primeiro, sempre" },
@@ -414,8 +414,23 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ STACK STRIP · integrações reais (prova de infra, não de clientes) ═══════════ */}
+      <section aria-label="Integrações e infraestrutura" className="border-y border-border/60 bg-card/30">
+        <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+          <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground shrink-0">
+            Rodando sobre
+          </span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-2 text-sm text-muted-foreground/80">
+            {["OpenAI", "Anthropic", "Google Gemini", "PayPal", "WhatsApp", "LinkedIn", "Meta Ads", "Supabase"].map((name) => (
+              <span key={name} className="font-medium tracking-tight">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* ═══════════ DOIS CAMINHOS + ESCALA · seção dark unificada ═══════════ */}
+
       <section
         className="dark relative bg-black text-white overflow-hidden"
         aria-label="Squad ou Departamento"
