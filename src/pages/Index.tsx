@@ -240,11 +240,11 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-6 leading-relaxed"
+            className="text-base md:text-lg text-white/75 max-w-2xl mb-6 leading-relaxed"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
-            <span className="text-foreground font-medium">seu porte, orçamento e cenário</span>.
+            <span className="text-white font-medium">seu porte, orçamento e cenário</span>.
             De uma pequena operação a um time enterprise.
           </motion.p>
 
@@ -416,15 +416,31 @@ const HomePage = () => {
 
       {/* ═══════════ STACK STRIP · integrações reais (prova de infra, não de clientes) ═══════════ */}
       <section aria-label="Integrações e infraestrutura" className="border-y border-border/60 bg-card/30">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-10">
           <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground shrink-0">
             Rodando sobre
           </span>
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-2 text-sm text-muted-foreground/80">
-            {["OpenAI", "Anthropic", "Google Gemini", "PayPal", "WhatsApp", "LinkedIn", "Meta Ads", "Supabase"].map((name) => (
-              <span key={name} className="font-medium tracking-tight">
-                {name}
-              </span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-8 gap-y-4">
+            {[
+              { slug: "openai", label: "OpenAI" },
+              { slug: "anthropic", label: "Anthropic" },
+              { slug: "googlegemini", label: "Gemini" },
+              { slug: "paypal", label: "PayPal" },
+              { slug: "whatsapp", label: "WhatsApp" },
+              { slug: "linkedin", label: "LinkedIn" },
+              { slug: "meta", label: "Meta" },
+              { slug: "supabase", label: "Supabase" },
+            ].map((brand) => (
+              <img
+                key={brand.slug}
+                src={`https://cdn.simpleicons.org/${brand.slug}/9ca3af`}
+                alt={brand.label}
+                title={brand.label}
+                loading="lazy"
+                width={22}
+                height={22}
+                className="h-[22px] w-auto opacity-70 hover:opacity-100 transition-opacity"
+              />
             ))}
           </div>
         </div>
