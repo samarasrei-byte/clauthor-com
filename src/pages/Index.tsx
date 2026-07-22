@@ -414,8 +414,23 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ STACK STRIP · integrações reais (prova de infra, não de clientes) ═══════════ */}
+      <section aria-label="Integrações e infraestrutura" className="border-y border-border/60 bg-card/30">
+        <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+          <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground shrink-0">
+            Rodando sobre
+          </span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-2 text-sm text-muted-foreground/80">
+            {["OpenAI", "Anthropic", "Google Gemini", "PayPal", "WhatsApp", "LinkedIn", "Meta Ads", "Supabase"].map((name) => (
+              <span key={name} className="font-medium tracking-tight">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* ═══════════ DOIS CAMINHOS + ESCALA · seção dark unificada ═══════════ */}
+
       <section
         className="dark relative bg-black text-white overflow-hidden"
         aria-label="Squad ou Departamento"
