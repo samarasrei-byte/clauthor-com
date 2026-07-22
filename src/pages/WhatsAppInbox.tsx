@@ -151,6 +151,8 @@ function SetupCard({ tenantId, onConfigured }: { tenantId: string; onConfigured:
 export default function WhatsAppInbox() {
   const { data: tenantId } = useTenantId();
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedConv, setSelectedConv] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
