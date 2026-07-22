@@ -266,6 +266,18 @@ export default function GlobalCommandPalette() {
             </CommandGroup>
           </div>
         ))}
+
+        <CommandSeparator />
+        <CommandGroup heading="Sistema">
+          <CommandItem value="alternar tema dark light" onSelect={toggleTheme}>
+            <Moon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>Alternar tema (claro/escuro)</span>
+          </CommandItem>
+          <CommandItem value="sair logout" onSelect={doSignOut}>
+            <LogOut className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>Sair da conta</span>
+          </CommandItem>
+        </CommandGroup>
       </CommandList>
     </CommandDialog>
   );
