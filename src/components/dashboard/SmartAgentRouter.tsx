@@ -210,7 +210,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Ex: "Quero criar uma campanha para a Copa do Mundo"'
-            className="w-full h-12 px-4 pr-12 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
+            className="w-full h-12 px-4 pr-12 text-sm rounded-xl bg-background/60 border border-border/40 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
           />
           <button
             type="submit"
@@ -263,7 +263,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
               {/* Contracted agents first */}
               {contractedSuggestions.length > 0 && (
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50 flex items-center gap-1.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 flex items-center gap-1.5">
                     <CheckCircle2 className="h-3 w-3 text-success" />
                     Seus agentes contratados
                   </p>
@@ -294,7 +294,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
                             {dept?.label || "Agente especializado"} · {s.reason}
                           </span>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-success transition-colors shrink-0" />
+                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-success transition-colors shrink-0" />
                       </motion.button>
                     );
                   })}
@@ -304,7 +304,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
               {/* Other suggestions (not contracted) */}
               {otherSuggestions.length > 0 && (
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50 flex items-center gap-1.5">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 flex items-center gap-1.5">
                     <Wand className="h-3 w-3 text-primary/60" />
                     Agentes recomendados
                   </p>
@@ -332,7 +332,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
                             {dept?.label || "Agente especializado"} · {s.reason}
                           </span>
                         </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-primary transition-colors shrink-0" />
+                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-primary transition-colors shrink-0" />
                       </motion.button>
                     );
                   })}

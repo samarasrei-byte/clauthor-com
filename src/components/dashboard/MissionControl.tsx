@@ -134,7 +134,7 @@ const AgentNodeCard = ({ agent, isSelected, onClick }: { agent: AgentNode; isSel
 const ConnectionLine = () => (
   <div className="flex items-center">
     <div className="w-6 h-px bg-border/30" />
-    <ChevronRight className="h-3 w-3 text-muted-foreground/30 -mx-1" />
+    <ChevronRight className="h-3 w-3 text-muted-foreground/60 -mx-1" />
   </div>
 );
 

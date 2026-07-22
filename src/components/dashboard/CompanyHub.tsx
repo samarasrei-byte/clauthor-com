@@ -215,7 +215,7 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
 
         {Object.keys(departmentGroups.groups).length === 0 ? (
           <div className="glass-card rounded-xl p-8 text-center border border-border/10">
-            <Building2 className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
+            <Building2 className="h-10 w-10 mx-auto text-muted-foreground/60 mb-3" />
             <p className="text-sm text-muted-foreground mb-3">Nenhum departamento ativo ainda</p>
             <Button size="sm" className="text-xs" onClick={() => onNavigate("library")}>
               <Plus className="h-3.5 w-3.5 mr-1.5" /> Explorar Marketplace

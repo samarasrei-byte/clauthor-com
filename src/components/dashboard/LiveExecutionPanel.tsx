@@ -107,7 +107,7 @@ export default function LiveExecutionPanel() {
       <section className="glass-card rounded-2xl p-4 min-h-[400px]">
         {!activeRunId ? (
           <div className="flex flex-col items-center justify-center h-full text-center gap-2 py-16">
-            <Radio className="h-10 w-10 text-muted-foreground/30" />
+            <Radio className="h-10 w-10 text-muted-foreground/60" />
             <p className="text-sm text-muted-foreground">Selecione uma execução para acompanhar em tempo real.</p>
           </div>
         ) : (

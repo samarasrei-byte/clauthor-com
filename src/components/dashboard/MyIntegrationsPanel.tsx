@@ -102,7 +102,7 @@ const MyIntegrationsPanel = ({ onNavigate }: Props) => {
               {connected ? (
                 <CheckCircle className="h-3.5 w-3.5 text-success shrink-0" />
               ) : (
-                <Circle className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0" />
+                <Circle className="h-3.5 w-3.5 text-muted-foreground/65 shrink-0" />
               )}
             </button>
           );

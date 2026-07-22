@@ -198,7 +198,7 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
       </Card>
 
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="flex items-center justify-center gap-4 py-3 text-[10px] text-muted-foreground/50">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="flex items-center justify-center gap-4 py-3 text-[10px] text-muted-foreground/70">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" /> PCI-DSS Compliant</span>
         <span>•</span>
         <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> SSL/TLS 256-bit</span>

@@ -227,7 +227,7 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
                         {log.execution_time_ms && <span>• {log.execution_time_ms}ms</span>}
                       </div>
                     </div>
-                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/65 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -285,7 +285,7 @@ const DeliverablesHub = ({ onNavigate }: DeliverablesHubProps) => {
                       {report.period && <span>• {report.period}</span>}
                     </div>
                   </div>
-                  <Eye className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Eye className="h-3.5 w-3.5 text-muted-foreground/65 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               ))}
             </div>

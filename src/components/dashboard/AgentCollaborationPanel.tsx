@@ -219,11 +219,11 @@ export default function AgentCollaborationPanel({
                       <span className={cn("font-semibold", config.color)}>{event.agentName}</span>
                       {event.targetAgent && (
                         <>
-                          <ArrowRight className="h-2.5 w-2.5 text-muted-foreground/40" />
+                          <ArrowRight className="h-2.5 w-2.5 text-muted-foreground/65" />
                           <span className="font-medium text-foreground/80">{event.targetAgent}</span>
                         </>
                       )}
-                      <span className="text-muted-foreground/50 ml-auto text-[9px]">
+                      <span className="text-muted-foreground/70 ml-auto text-[9px]">
                         {new Date(event.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                       </span>
                     </div>

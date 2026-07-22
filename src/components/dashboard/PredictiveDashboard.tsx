@@ -510,7 +510,7 @@ const PredictiveDashboard = () => {
       {/* Predictions */}
       {predictions.length === 0 ? (
         <Card className="p-8 text-center bg-card/30 border-border/20">
-          <Brain className="h-8 w-8 mx-auto text-muted-foreground/40 mb-3" />
+          <Brain className="h-8 w-8 mx-auto text-muted-foreground/65 mb-3" />
           <p className="text-sm text-muted-foreground">
             Dados insuficientes para previsões. Use seus agentes por alguns dias para gerar análises.
           </p>

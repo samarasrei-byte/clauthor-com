@@ -107,7 +107,7 @@ export default function AutonomyStatusBar({
           <span className="text-xs font-semibold text-muted-foreground">Nível de Autonomia</span>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="text-muted-foreground/40 hover:text-muted-foreground transition-colors">
+              <button className="text-muted-foreground/65 hover:text-muted-foreground transition-colors">
                 <Info className="h-3.5 w-3.5" />
               </button>
             </PopoverTrigger>
@@ -157,7 +157,7 @@ export default function AutonomyStatusBar({
                   ? cn(l.bgColor, l.color, "ring-1 ring-current/30")
                   : isActive
                     ? "bg-border/20 border-border/30 text-muted-foreground"
-                    : "bg-transparent border-border/10 text-muted-foreground/30",
+                    : "bg-transparent border-border/10 text-muted-foreground/60",
                 !readonly && "cursor-pointer hover:opacity-80"
               )}
             >

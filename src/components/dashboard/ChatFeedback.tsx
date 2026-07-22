@@ -66,7 +66,7 @@ const ChatFeedback = ({ userMessage, assistantMessage, agentId }: ChatFeedbackPr
   if (submitted) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 mt-1.5">
-        <span className="text-[10px] text-muted-foreground/50">
+        <span className="text-[10px] text-muted-foreground/70">
           {rating === "positive" ? "👍" : "👎"} Feedback registrado
         </span>
       </motion.div>
@@ -79,7 +79,7 @@ const ChatFeedback = ({ userMessage, assistantMessage, agentId }: ChatFeedbackPr
         <Button
           variant="ghost"
           size="icon"
-          className={`h-6 w-6 ${rating === "positive" ? "text-primary" : "text-muted-foreground/40 hover:text-primary"}`}
+          className={`h-6 w-6 ${rating === "positive" ? "text-primary" : "text-muted-foreground/65 hover:text-primary"}`}
           onClick={() => handleRating("positive")}
           title="Resposta útil"
         >
@@ -88,7 +88,7 @@ const ChatFeedback = ({ userMessage, assistantMessage, agentId }: ChatFeedbackPr
         <Button
           variant="ghost"
           size="icon"
-          className={`h-6 w-6 ${rating === "negative" ? "text-destructive" : "text-muted-foreground/40 hover:text-destructive"}`}
+          className={`h-6 w-6 ${rating === "negative" ? "text-destructive" : "text-muted-foreground/65 hover:text-destructive"}`}
           onClick={() => handleRating("negative")}
           title="Resposta pode melhorar"
         >

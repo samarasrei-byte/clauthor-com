@@ -88,8 +88,8 @@ export default function CompanyBoardGate({ agentName, onSetupCompany, onSkip }: 
               <p className="text-xs font-medium text-foreground">{m.title}</p>
               <p className="text-[10px] text-muted-foreground">{m.desc}</p>
               <div className="flex items-center justify-center gap-1">
-                <Clock className="h-2.5 w-2.5 text-muted-foreground/50" />
-                <span className="text-[10px] text-muted-foreground/50">{m.time}</span>
+                <Clock className="h-2.5 w-2.5 text-muted-foreground/70" />
+                <span className="text-[10px] text-muted-foreground/70">{m.time}</span>
               </div>
             </motion.div>
           ))}

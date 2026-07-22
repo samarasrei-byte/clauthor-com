@@ -243,7 +243,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://suaempresa.com.br"
-                        className="w-full h-14 pl-12 pr-4 rounded-xl bg-card/50 border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 text-base"
+                        className="w-full h-14 pl-12 pr-4 rounded-xl bg-card/50 border border-border/40 text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/30 text-base"
                         onKeyDown={(e) => e.key === "Enter" && handleScanUrl()}
                       />
                     </div>

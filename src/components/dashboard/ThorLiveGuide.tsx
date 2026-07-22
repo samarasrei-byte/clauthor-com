@@ -334,7 +334,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
 
       {/* Mode label underneath */}
       <motion.span
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase tracking-[0.25em] text-muted-foreground/40"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase tracking-[0.25em] text-muted-foreground/65"
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
@@ -595,7 +595,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             {isTyping && <span className="inline-block w-[2px] h-[12px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
           </p>
           {!isTyping && currentMessage && (
-            <span className="mt-1.5 inline-flex items-center gap-1 text-[9.5px] text-muted-foreground/50 group-hover/msg:text-primary/70 transition-colors">
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[9.5px] text-muted-foreground/70 group-hover/msg:text-primary/70 transition-colors">
               <Volume2 className="h-2.5 w-2.5" />
               {isSpeaking ? "Falando…" : "Clique para ouvir de novo"}
             </span>
@@ -639,7 +639,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           <button
             onClick={onDismiss}
             aria-label="Encerrar tour"
-            className="h-7 px-2 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+            className="h-7 px-2 text-[10px] text-muted-foreground/70 hover:text-muted-foreground transition-colors"
           >
             Encerrar
           </button>

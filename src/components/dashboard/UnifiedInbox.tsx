@@ -215,7 +215,7 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
           {/* Search */}
           <div className="p-3 border-b border-border/10">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/50" />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/70" />
               <Input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -339,7 +339,7 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
                           )}>
                             {thread.agentName}
                           </span>
-                          <span className="text-[9px] text-muted-foreground/50 whitespace-nowrap">
+                          <span className="text-[9px] text-muted-foreground/70 whitespace-nowrap">
                             {formatDistanceToNow(new Date(thread.lastMessageAt), { addSuffix: false, locale: pt })}
                           </span>
                         </div>
@@ -404,10 +404,10 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
             >
               <div className="text-center">
                 <div className="w-12 h-12 rounded-xl bg-muted/10 flex items-center justify-center mx-auto mb-3">
-                  <InboxIcon className="h-5 w-5 text-muted-foreground/30" />
+                  <InboxIcon className="h-5 w-5 text-muted-foreground/60" />
                 </div>
-                <p className="text-[11px] text-muted-foreground/50">Selecione uma conversa</p>
-                <p className="text-[9.5px] text-muted-foreground/30 mt-1">
+                <p className="text-[11px] text-muted-foreground/70">Selecione uma conversa</p>
+                <p className="text-[9.5px] text-muted-foreground/60 mt-1">
                   WhatsApp · Chat · E-mail - tudo aqui
                 </p>
               </div>

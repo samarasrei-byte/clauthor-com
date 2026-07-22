@@ -208,7 +208,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
                   {check.done ? (
                     <CheckCircle className="h-3 w-3 text-primary shrink-0" />
                   ) : (
-                    <Circle className="h-3 w-3 text-muted-foreground/40 shrink-0" />
+                    <Circle className="h-3 w-3 text-muted-foreground/65 shrink-0" />
                   )}
                   <span className={check.done ? "text-muted-foreground line-through" : "text-foreground"}>
                     {check.label}

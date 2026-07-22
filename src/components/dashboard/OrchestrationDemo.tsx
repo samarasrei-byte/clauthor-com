@@ -229,7 +229,7 @@ const OrchestrationDemo = () => {
                         </div>
                         <ArrowRightLeft className={`h-3.5 w-3.5 transition-colors ${
                           step.phase === "executing" ? "text-primary animate-pulse" :
-                          step.phase === "complete" ? "text-accent-emerald" : "text-muted-foreground/40"
+                          step.phase === "complete" ? "text-accent-emerald" : "text-muted-foreground/65"
                         }`} />
                         <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center`}>
                           <Bot className="h-3.5 w-3.5 text-white" />

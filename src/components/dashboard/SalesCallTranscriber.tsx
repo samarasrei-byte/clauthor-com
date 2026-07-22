@@ -214,7 +214,7 @@ const SalesCallTranscriber = () => {
             <div className="space-y-2">
               {savedCalls.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground text-sm">
-                  <Mic className="h-8 w-8 mx-auto mb-2 text-muted-foreground/30" />
+                  <Mic className="h-8 w-8 mx-auto mb-2 text-muted-foreground/60" />
                   Nenhuma chamada transcrita ainda.
                 </div>
               ) : savedCalls.map((call: any) => (
@@ -227,7 +227,7 @@ const SalesCallTranscriber = () => {
                       <span className="text-sm font-medium truncate block">{call.title}</span>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{call.content?.slice(0, 150)}...</p>
                       <div className="flex items-center gap-2 mt-1.5">
-                        <Clock className="h-3 w-3 text-muted-foreground/50" />
+                        <Clock className="h-3 w-3 text-muted-foreground/70" />
                         <span className="text-[10px] text-muted-foreground">{formatDate(call.created_at)}</span>
                         <Badge variant="outline" className="text-[9px] h-4">
                           <Wand className="h-2.5 w-2.5 mr-0.5" /> Na KB

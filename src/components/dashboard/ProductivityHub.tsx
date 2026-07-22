@@ -155,7 +155,7 @@ const AgendaCard = () => {
                 )}
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground/65 group-hover:text-muted-foreground/80 transition-colors" />
           </li>
         ))}
       </ul>

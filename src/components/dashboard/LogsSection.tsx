@@ -104,7 +104,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
       <div className="glass-card rounded-2xl overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <Activity className="h-10 w-10 text-muted-foreground/30 mx-auto" />
+            <Activity className="h-10 w-10 text-muted-foreground/60 mx-auto" />
             <p className="text-muted-foreground font-medium">
               {recentLogs.length === 0 ? t("dashboard.no_logs_found") : "Nenhum log corresponde aos filtros."}
             </p>

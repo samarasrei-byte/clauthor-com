@@ -96,7 +96,7 @@ export default function NotificationPanel() {
         <ScrollArea className="max-h-[400px]">
           {notifications.length === 0 ? (
             <div className="py-12 text-center">
-              <Bell className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
+              <Bell className="h-8 w-8 text-muted-foreground/60 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">Nenhuma notificação</p>
             </div>
           ) : (
