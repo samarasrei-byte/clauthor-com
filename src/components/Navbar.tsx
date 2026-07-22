@@ -99,19 +99,23 @@ const Navbar = () => {
 
           {/* Desktop Nav · P1 canônica: 4 diretas + "Mais" */}
           <div className="hidden md:flex items-center gap-0">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`px-3 py-1 rounded-md text-[13px] transition-colors ${
-                  location.pathname === item.href
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              const active = location.pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`relative px-3 py-1 rounded-md text-[13px] transition-colors ${
+                    active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                  {active && (
+                    <span className="absolute left-1/2 -translate-x-1/2 -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
+                  )}
+                </Link>
+              );
+            })}
 
             {/* "Mais" dropdown · Team Builder · Marketplace · Enterprise · Devs · API */}
             {!user && (
