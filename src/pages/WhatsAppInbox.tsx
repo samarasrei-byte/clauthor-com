@@ -170,6 +170,20 @@ export default function WhatsAppInbox() {
     },
   });
 
+  // ⌘K → "Nova conversa WhatsApp": se não há config, manda parear; senão, foca no rascunho.
+  useEffect(() => {
+    if (searchParams.get("new") !== "1") return;
+    if (configQuery.isLoading) return;
+    searchParams.delete("new");
+    setSearchParams(searchParams, { replace: true });
+    if (!configQuery.data) {
+      toast.info("Conecte um número WhatsApp primeiro.");
+      navigate("/whatsapp/pair");
+    } else {
+      toast.success("Selecione uma conversa ou aguarde a próxima mensagem.");
+    }
+  }, [searchParams, configQuery.isLoading, configQuery.data, navigate, setSearchParams]);
+
   const convsQuery = useQuery({
     queryKey: ["wa-conversations", tenantId],
     enabled: !!tenantId && !!configQuery.data,
