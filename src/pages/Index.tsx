@@ -222,7 +222,7 @@ const HomePage = () => {
           }}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-14 pb-16 sm:pt-20 sm:pb-20">
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 pt-10 pb-14 sm:pt-20 sm:pb-20">
 
 
         <div className="flex flex-col items-center text-center">
@@ -230,7 +230,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-5"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.05] px-3.5 py-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.14em] sm:tracking-[0.16em] text-primary mb-4 sm:mb-5"
           >
             <Network className="h-3.5 w-3.5" strokeWidth={2} />
             {t("home.hero_badge")}
@@ -240,7 +240,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[38px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-5"
+            className="font-display text-[32px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.03em] leading-[1.05] sm:leading-[1.02] max-w-5xl mb-4 sm:mb-5"
           >
             <span className="text-foreground">Primeiro entendemos sua empresa.</span>
             <br />
@@ -251,7 +251,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-neutral-600 max-w-2xl mb-6 leading-relaxed"
+            className="text-[15px] sm:text-base md:text-lg text-neutral-700 max-w-2xl mb-6 leading-relaxed px-1"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
@@ -272,13 +272,14 @@ const HomePage = () => {
               { icon: Building2, value: "SMB → Enterprise", label: "escala sob medida" },
               { icon: Zap, value: "Só o necessário", label: "sem inflar contrato" },
             ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
-                <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
-                <span className="font-display font-bold text-foreground">{s.value}</span>
-                <span className="text-xs text-muted-foreground">{s.label}</span>
+              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/70 border border-neutral-200 text-[13px] shadow-sm">
+                <s.icon className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
+                <span className="font-display font-bold text-neutral-900">{s.value}</span>
+                <span className="text-xs text-neutral-600 hidden sm:inline">{s.label}</span>
               </div>
             ))}
           </motion.div>
+
 
 
           {/* Quiz de dor · seis caminhos claros */}
@@ -406,28 +407,29 @@ const HomePage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
+            className="mt-10 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto"
           >
             <button
               onClick={() => startFlow("hero_primary")}
-              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-neutral-900 text-sm font-semibold hover:bg-neutral-100 transition-colors min-h-[48px]"
             >
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
               onClick={() => setDemoOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors min-h-[48px]"
             >
               Ver demonstração
             </button>
             <Link
               to="/pricing"
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-white/75 hover:text-white transition-colors underline-offset-4 hover:underline"
             >
               {t("home.cta_view_pricing")}
             </Link>
           </motion.div>
+
         </div>
         </div>
       </section>
@@ -600,7 +602,7 @@ const HomePage = () => {
           </div>
 
           {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
-          <div className="relative mt-20 pt-12 border-t border-white/10">
+          <div className="relative mt-20 pt-12">
             <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
               {t("home.scale_eyebrow")}
             </p>
@@ -732,7 +734,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ COMO FUNCIONA (3 passos) ═══════════ */}
-      <section className="border-t border-border/60 bg-card/30" aria-label="Como funciona">
+      <section className="bg-card/30" aria-label="Como funciona">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
@@ -795,7 +797,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ COMPARATIVO CLT vs CLAUTHOR ═══════════ */}
-      <section className="border-t border-border/60" aria-label="Comparativo">
+      <section aria-label="Comparativo">
         <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
@@ -878,7 +880,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section className="border-y border-border/60" aria-label="Depoimentos">
+      <section className="bg-card/30" aria-label="Depoimentos">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
