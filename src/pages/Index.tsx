@@ -189,7 +189,7 @@ const HomePage = () => {
         className="relative overflow-hidden isolate"
         style={{
           background:
-            "linear-gradient(to bottom, #F5F5F7 0%, #F5F5F7 62%, #1a1a1a 94%, #0A0A0A 100%)",
+            "linear-gradient(to bottom, #F5F5F7 0%, #F5F5F7 55%, #4a4a4a 82%, #1a1a1a 94%, #0A0A0A 100%)",
         }}
         aria-label="Hero"
       >
