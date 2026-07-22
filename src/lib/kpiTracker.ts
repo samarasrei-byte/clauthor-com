@@ -63,7 +63,11 @@ export type KpiEventName =
   | "home_demo_walkthrough_step"
   | "home_demo_walkthrough_closed"
   | "home_demo_walkthrough_cta"
-  | "home_faq_toggle";
+  | "home_faq_toggle"
+  | "onboarding_premium_started"
+  | "onboarding_premium_step"
+  | "onboarding_premium_completed"
+  | "onboarding_premium_skipped";
 
 
 export interface KpiEventPayload {
