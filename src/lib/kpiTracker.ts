@@ -67,7 +67,9 @@ export type KpiEventName =
   | "onboarding_premium_started"
   | "onboarding_premium_step"
   | "onboarding_premium_completed"
-  | "onboarding_premium_skipped";
+  | "onboarding_premium_skipped"
+  | "cmdk_opened"
+  | "cmdk_selected";
 
 
 export interface KpiEventPayload {
