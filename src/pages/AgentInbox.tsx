@@ -165,6 +165,17 @@ export default function AgentInbox() {
     [linkedinQuery.data, whatsappQuery.data, emailQuery.data],
   );
 
+  // Derive real connection status from data presence (honest state).
+  const CHANNELS: ChannelDef[] = useMemo(() => {
+    const connectedSet = new Set<Exclude<ChannelId, "all">>();
+    if ((linkedinQuery.data ?? []).length > 0) connectedSet.add("linkedin");
+    if ((whatsappQuery.data ?? []).length > 0) connectedSet.add("whatsapp");
+    if ((emailQuery.data ?? []).length > 0) connectedSet.add("email");
+    // E-mail (notificações) sempre acessível ao usuário logado
+    connectedSet.add("email");
+    return BASE_CHANNELS.map((c) => ({ ...c, connected: connectedSet.has(c.id) }));
+  }, [linkedinQuery.data, whatsappQuery.data, emailQuery.data]);
+
   const counts = useMemo(() => {
     const c: Record<ChannelId, number> = {
       all: allThreads.length,
