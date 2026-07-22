@@ -109,6 +109,8 @@ export interface KpiEventPayload {
   module?: string;
   required_departments?: string[];
   cta_department_id?: string;
+  label?: string;
+  last_step?: number;
 }
 
 
