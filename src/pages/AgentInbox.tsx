@@ -49,13 +49,13 @@ interface ChannelDef {
   connectHref?: string;
 }
 
-const CHANNELS: ChannelDef[] = [
-  { id: "linkedin",  label: "LinkedIn",  icon: Linkedin,      color: "text-[#0A66C2]", connected: true,  connectHref: "/dashboard/hunter" },
-  { id: "instagram", label: "Instagram", icon: Instagram,     color: "text-[#E4405F]", connected: false, connectHref: "/settings/social" },
-  { id: "whatsapp",  label: "WhatsApp",  icon: Phone,         color: "text-success",   connected: true,  connectHref: "/dashboard/whatsapp" },
-  { id: "facebook",  label: "Facebook",  icon: Facebook,      color: "text-[#1877F2]", connected: false, connectHref: "/settings/social" },
-  { id: "tiktok",    label: "TikTok",    icon: Music2,        color: "text-foreground",connected: false, connectHref: "/settings/social" },
-  { id: "email",     label: "E-mail",    icon: Mail,          color: "text-accent-blue", connected: true },
+const BASE_CHANNELS: Omit<ChannelDef, "connected">[] = [
+  { id: "linkedin",  label: "LinkedIn",  icon: Linkedin,      color: "text-[#0A66C2]", connectHref: "/dashboard/hunter" },
+  { id: "instagram", label: "Instagram", icon: Instagram,     color: "text-[#E4405F]", connectHref: "/integrations" },
+  { id: "whatsapp",  label: "WhatsApp",  icon: Phone,         color: "text-success",   connectHref: "/dashboard/whatsapp" },
+  { id: "facebook",  label: "Facebook",  icon: Facebook,      color: "text-[#1877F2]", connectHref: "/integrations" },
+  { id: "tiktok",    label: "TikTok",    icon: Music2,        color: "text-foreground",connectHref: "/integrations" },
+  { id: "email",     label: "E-mail",    icon: Mail,          color: "text-accent-blue" },
 ];
 
 interface Thread {
