@@ -119,6 +119,9 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [seedPrompt, setSeedPrompt] = useState<string>("");
   const chatRef = useRef<HTMLDivElement | null>(null);
+  const [demoOpen, setDemoOpen] = useState(false);
+
+
 
   const PAIN_QUIZ = PAIN_QUIZ_IDS.map((p) => ({
     ...p,
