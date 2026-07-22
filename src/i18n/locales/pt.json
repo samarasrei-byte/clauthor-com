@@ -9,7 +9,9 @@
     "admin": "Admin",
     "how_it_works": "Como Funciona",
     "my_agents": "Meus Agentes",
-    "integrations": "Integrações"
+    "integrations": "Integrações",
+    "departments": "Departamentos",
+    "community": "Comunidade"
   },
   "hero": {
     "badge": "Plataforma de Agentes Autônomos",
@@ -1236,7 +1238,8 @@
     "team_builder_label": "Montar Time",
     "team_builder_desc": "Escolha agentes e veja o custo em tempo real",
     "community": "Comunidade",
-    "api_docs": "API Docs"
+    "api_docs": "API Docs",
+    "more": "Mais"
   },
   "community": {
     "badge": "Comunidade CLAUTHOR",
@@ -2003,5 +2006,12 @@
     "pure_ai": "Puro IA",
     "configure_thor": "Configurar com THOR",
     "more_pending": "agentes pendentes"
+  },
+  "landing": {
+    "squads_title": "Ou explore os squads mais procurados",
+    "cta_view_departments": "Ver todos os departamentos",
+    "cta_view_pricing": "Ver preços →",
+    "paths_squad_see": "Ver squads",
+    "paths_dept_see": "Ver departamentos"
   }
 }
