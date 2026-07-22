@@ -432,11 +432,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════ STACK STRIP · integrações reais (prova de infra, não de clientes) ═══════════ */}
-      <section aria-label="Integrações e infraestrutura" className="border-y border-border/60 bg-card/30">
-        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-10">
+      {/* ═══════════ STACK STRIP · integrações reais (transição light→dark) ═══════════ */}
+      <section aria-label="Integrações e infraestrutura" className="dark relative bg-[#0A0A0A] text-white">
+        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
           <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-10">
-            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground shrink-0">
+            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/50 shrink-0">
               Rodando sobre
             </span>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-8 gap-y-4">
@@ -452,23 +452,24 @@ const HomePage = () => {
               ].map((brand) => (
                 <img
                   key={brand.slug}
-                  src={`https://cdn.simpleicons.org/${brand.slug}/9ca3af`}
+                  src={`https://cdn.simpleicons.org/${brand.slug}/ffffff`}
                   alt={brand.label}
                   title={brand.label}
                   loading="lazy"
                   width={22}
                   height={22}
-                  className="h-[22px] w-auto opacity-70 hover:opacity-100 transition-opacity"
+                  className="h-[22px] w-auto opacity-60 hover:opacity-100 transition-opacity"
                 />
               ))}
             </div>
           </div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/25 bg-primary/[0.06] text-[11px] font-mono uppercase tracking-[0.16em] text-primary/90 shrink-0">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/40 bg-primary/[0.10] text-[11px] font-mono uppercase tracking-[0.16em] text-primary shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             Beta fechado · vagas limitadas
           </div>
         </div>
       </section>
+
 
 
       <section
