@@ -203,7 +203,7 @@ const Navbar = () => {
                 <Button
                   size="sm"
                   onClick={() => navigate("/auth", { state: { signup: true } })}
-                  className="h-8 text-[13px] rounded-full font-medium px-4 bg-foreground text-background hover:bg-foreground/90"
+                  className="h-8 text-[13px] rounded-full font-medium px-4 bg-foreground text-background hover:bg-foreground/90 transition-shadow hover:shadow-[0_0_20px_-4px_hsl(var(--primary)/0.55)]"
                 >
                   {t("auth.create_account")}
                 </Button>
