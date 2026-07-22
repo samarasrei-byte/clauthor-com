@@ -149,8 +149,16 @@ export default function VideoStudio() {
   const copilotChatRef = useRef<HTMLDivElement | null>(null);
 
   // ?prompt= param pre-fills the final prompt (from Marketing agent link, etc)
+  // ?new=1 resets the copilot for a fresh video draft (from ⌘K → "Novo vídeo")
   useEffect(() => {
     const q = searchParams.get("prompt");
+    const fresh = searchParams.get("new");
+    if (fresh) {
+      copilot.reset();
+      toast.success("Novo vídeo — copiloto reiniciado");
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+    }
     if (q) {
       copilot.setFinalPrompt(q);
       searchParams.delete("prompt");
