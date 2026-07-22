@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CommandDialog,
@@ -24,18 +24,25 @@ import {
   Activity,
   FolderOpen,
   Search,
+  PauseCircle,
+  PlayCircle,
+  Plus,
+  LogOut,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
+import { trackKpi } from "@/lib/kpiTracker";
 
-type Item = {
+type StaticItem = {
   label: string;
-  hint?: string;
   path: string;
   icon: React.ComponentType<{ className?: string }>;
   group: string;
   keywords?: string;
 };
 
-const ITEMS: Item[] = [
+const STATIC_ITEMS: StaticItem[] = [
   { label: "Painel", path: "/dashboard", icon: Home, group: "Navegação" },
   { label: "Meus arquivos", path: "/dashboard/arquivos", icon: FolderOpen, group: "Navegação" },
   { label: "Inbox unificado", path: "/dashboard/inbox", icon: Inbox, group: "Navegação", keywords: "whatsapp linkedin instagram mensagens" },
@@ -51,15 +58,22 @@ const ITEMS: Item[] = [
   { label: "Catálogo · Squads", path: "/squads", icon: Users, group: "Catálogo" },
   { label: "Marketplace", path: "/marketplace", icon: Sparkles, group: "Catálogo" },
 
-  { label: "Criar agente", path: "/create-agent", icon: Sparkles, group: "Ações", keywords: "novo wizard" },
+  { label: "Criar agente", path: "/create-agent", icon: Plus, group: "Ações", keywords: "novo wizard" },
   { label: "Integrações", path: "/integrations", icon: Plug, group: "Ações" },
   { label: "Falar com Thor", path: "/thor", icon: MessageSquare, group: "Ações" },
   { label: "Preços", path: "/pricing", icon: FileText, group: "Ações" },
 ];
 
+type UserAgent = { id: string; name: string; status: string | null };
+type UserDept = { id: string; department_name: string; status: string | null };
+
 export default function GlobalCommandPalette() {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [agents, setAgents] = useState<UserAgent[]>([]);
+  const [departments, setDepartments] = useState<UserDept[]>([]);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -77,33 +91,140 @@ export default function GlobalCommandPalette() {
     };
   }, []);
 
-  const go = (path: string) => {
+  // KPI: track opens
+  useEffect(() => {
+    if (open) trackKpi("cmdk_opened", {});
+  }, [open]);
+
+  // Fetch user's real agents + departments when palette opens
+  useEffect(() => {
+    if (!open || !user) return;
+    let cancelled = false;
+    (async () => {
+      const [{ data: ag }, { data: dp }] = await Promise.all([
+        supabase.from("agents").select("id, name, status").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+        supabase.from("contracted_departments").select("id, department_name, status").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+      ]);
+      if (cancelled) return;
+      setAgents((ag ?? []) as UserAgent[]);
+      setDepartments((dp ?? []) as UserDept[]);
+    })();
+    return () => { cancelled = true; };
+  }, [open, user]);
+
+  const go = (path: string, label: string) => {
+    trackKpi("cmdk_selected", { target: "panel", label });
     setOpen(false);
     navigate(path);
   };
 
-  const groups = Array.from(new Set(ITEMS.map((i) => i.group)));
+  const toggleAgent = async (agent: UserAgent) => {
+    const nextStatus = agent.status === "paused" ? "active" : "paused";
+    trackKpi("cmdk_selected", { target: "panel", label: `${nextStatus}:agent:${agent.name}` });
+    setOpen(false);
+    const { error } = await supabase.from("agents").update({ status: nextStatus }).eq("id", agent.id);
+    if (error) {
+      toast({ title: "Falha ao atualizar agente", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: nextStatus === "paused" ? "Agente pausado" : "Agente ativado", description: agent.name });
+  };
+
+  const toggleDept = async (dept: UserDept) => {
+    const nextStatus = dept.status === "paused" ? "active" : "paused";
+    trackKpi("cmdk_selected", { target: "panel", label: `${nextStatus}:dept:${dept.department_name}` });
+    setOpen(false);
+    const { error } = await supabase.from("contracted_departments").update({ status: nextStatus }).eq("id", dept.id);
+    if (error) {
+      toast({ title: "Falha ao atualizar departamento", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: nextStatus === "paused" ? "Departamento pausado" : "Departamento ativado", description: dept.department_name });
+  };
+
+  const groups = useMemo(() => Array.from(new Set(STATIC_ITEMS.map((i) => i.group))), []);
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Buscar página, ação ou agente…" />
+      <CommandInput placeholder="Buscar página, agente, departamento ou ação…" value={query} onValueChange={setQuery} />
       <CommandList>
         <CommandEmpty>
           <div className="flex items-center gap-2 justify-center py-6 text-sm text-muted-foreground">
             <Search className="h-4 w-4" /> Nada encontrado.
           </div>
         </CommandEmpty>
+
+        {agents.length > 0 && (
+          <>
+            <CommandGroup heading="Meus agentes">
+              {agents.map((a) => {
+                const paused = a.status === "paused";
+                return (
+                  <div key={a.id} className="contents">
+                    <CommandItem
+                      value={`agente abrir ${a.name}`}
+                      onSelect={() => go(`/agents/${a.id}`, `open:agent:${a.name}`)}
+                    >
+                      <Bot className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <span>Abrir · {a.name}</span>
+                      <span className="ml-auto text-[11px] text-muted-foreground/70">{a.status ?? "—"}</span>
+                    </CommandItem>
+                    <CommandItem
+                      value={`${paused ? "ativar" : "pausar"} agente ${a.name}`}
+                      onSelect={() => toggleAgent(a)}
+                    >
+                      {paused ? <PlayCircle className="mr-2 h-4 w-4 text-muted-foreground" /> : <PauseCircle className="mr-2 h-4 w-4 text-muted-foreground" />}
+                      <span>{paused ? "Ativar" : "Pausar"} · {a.name}</span>
+                    </CommandItem>
+                  </div>
+                );
+              })}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
+
+        {departments.length > 0 && (
+          <>
+            <CommandGroup heading="Meus departamentos">
+              {departments.map((d) => {
+                const paused = d.status === "paused";
+                return (
+                  <div key={d.id} className="contents">
+                    <CommandItem
+                      value={`departamento abrir ${d.department_name}`}
+                      onSelect={() => go(`/departamento-ativo/${d.id}`, `open:dept:${d.department_name}`)}
+                    >
+                      <Building2 className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <span>Abrir · {d.department_name}</span>
+                      <span className="ml-auto text-[11px] text-muted-foreground/70">{d.status ?? "—"}</span>
+                    </CommandItem>
+                    <CommandItem
+                      value={`${paused ? "ativar" : "pausar"} departamento ${d.department_name}`}
+                      onSelect={() => toggleDept(d)}
+                    >
+                      {paused ? <PlayCircle className="mr-2 h-4 w-4 text-muted-foreground" /> : <PauseCircle className="mr-2 h-4 w-4 text-muted-foreground" />}
+                      <span>{paused ? "Ativar" : "Pausar"} · {d.department_name}</span>
+                    </CommandItem>
+                  </div>
+                );
+              })}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
+
         {groups.map((g, idx) => (
           <div key={g}>
             {idx > 0 && <CommandSeparator />}
             <CommandGroup heading={g}>
-              {ITEMS.filter((i) => i.group === g).map((i) => {
+              {STATIC_ITEMS.filter((i) => i.group === g).map((i) => {
                 const Icon = i.icon;
                 return (
                   <CommandItem
                     key={i.path + i.label}
                     value={`${i.label} ${i.keywords ?? ""} ${i.group}`}
-                    onSelect={() => go(i.path)}
+                    onSelect={() => go(i.path, i.label)}
                   >
                     <Icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     <span>{i.label}</span>
