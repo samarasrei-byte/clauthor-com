@@ -186,39 +186,22 @@ const HomePage = () => {
       <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative overflow-hidden isolate bg-grain"
+        className="relative overflow-hidden isolate"
         style={{
           background:
-            "linear-gradient(to bottom, #ffffff 0%, #fafafa 35%, #1a1a1a 85%, #0A0A0A 100%)",
+            "linear-gradient(to bottom, #F5F5F7 0%, #F5F5F7 62%, #1a1a1a 94%, #0A0A0A 100%)",
         }}
         aria-label="Hero"
       >
-        {/* Aurora glow · sutil no topo claro, mais forte no fundo escuro */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none z-0">
-          <motion.div
-            animate={{ x: [0, 60, -30, 0], y: [0, -40, 30, 0], scale: [1, 1.15, 0.95, 1] }}
-            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[8%] left-[8%] w-[520px] h-[520px] rounded-full blur-[140px] will-change-transform opacity-30"
-            style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.35), transparent 65%)" }}
-          />
-          <motion.div
-            animate={{ x: [0, -50, 40, 0], y: [0, 40, -30, 0], scale: [1, 0.9, 1.1, 1] }}
-            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-[10%] right-[6%] w-[520px] h-[520px] rounded-full blur-[140px] will-change-transform"
-            style={{ background: "radial-gradient(circle, #6366f1aa, transparent 65%)" }}
-          />
-        </div>
-        {/* Grid overlay futurista · escurece no bottom */}
+        {/* Textura pontilhada sutil · showroom Apple/Tesla */}
         <div
           aria-hidden
-          className="absolute inset-0 opacity-[0.06] pointer-events-none z-0"
+          className="absolute inset-0 pointer-events-none z-0 opacity-[0.35]"
           style={{
-            backgroundImage:
-              "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            color: "#000",
-            maskImage: "radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%)",
+            backgroundImage: "radial-gradient(#D2D2D7 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+            maskImage: "radial-gradient(ellipse 70% 55% at 50% 20%, black 40%, transparent 85%)",
+            WebkitMaskImage: "radial-gradient(ellipse 70% 55% at 50% 20%, black 40%, transparent 85%)",
           }}
         />
 
