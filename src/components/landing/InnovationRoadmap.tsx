@@ -207,7 +207,7 @@ const InnovationRoadmap = () => {
           viewport={{ once: true }}
           className="mt-10 text-center"
         >
-          <p className="font-mono text-[11px] text-muted-foreground/40 uppercase tracking-[0.2em]">
+          <p className="font-mono text-[11px] text-muted-foreground/65 uppercase tracking-[0.2em]">
             {t("roadmap.waitlist_teaser")}
           </p>
         </motion.div>

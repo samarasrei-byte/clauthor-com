@@ -438,7 +438,7 @@ const HomePage = () => {
       <section aria-label="Integrações e infraestrutura" className="dark relative bg-[#0A0A0A] text-white">
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
           <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-10">
-            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/50 shrink-0">
+            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/70 shrink-0">
               Rodando sobre
             </span>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-8 gap-y-4">
@@ -496,12 +496,12 @@ const HomePage = () => {
         <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32">
           {/* ── Header ─────────────────────────────────────────────── */}
           <div className="mb-16 max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
               Dois caminhos
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
               Comece com um squad.{" "}
-              <span className="text-white/40">Escale para um departamento.</span>
+              <span className="text-white/65">Escale para um departamento.</span>
             </h2>
             <p className="text-lg text-white/60 max-w-xl">
               Você escolhe o tamanho da mordida. Do primeiro time vertical ao departamento inteiro.
@@ -524,7 +524,7 @@ const HomePage = () => {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   ● Squad
                 </span>
-                <span className="text-[11px] text-white/40">Comece rápido</span>
+                <span className="text-[11px] text-white/65">Comece rápido</span>
               </div>
 
               <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
@@ -544,8 +544,8 @@ const HomePage = () => {
 
               <div className="flex items-center justify-between pt-6 border-t border-white/10">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/50">A partir de</div>
-                  <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/50">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/70">A partir de</div>
+                  <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/70">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
                   {t("home.paths_squad_see")}
@@ -572,7 +572,7 @@ const HomePage = () => {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   {t("home.paths_dept_badge")}
                 </span>
-                <span className="text-[11px] text-white/50">{t("home.paths_dept_recommended")}</span>
+                <span className="text-[11px] text-white/70">{t("home.paths_dept_recommended")}</span>
               </div>
 
               <h3 className="relative text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
@@ -590,8 +590,8 @@ const HomePage = () => {
 
               <div className="relative flex items-center justify-between pt-6 border-t border-white/15">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/50">{t("home.paths_dept_from")}</div>
-                  <div className="text-2xl font-semibold text-white">R$ 1.477<span className="text-sm font-normal text-white/50">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/70">{t("home.paths_dept_from")}</div>
+                  <div className="text-2xl font-semibold text-white">R$ 1.477<span className="text-sm font-normal text-white/70">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
                   {t("home.paths_dept_see")}
@@ -603,7 +603,7 @@ const HomePage = () => {
 
           {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
           <div className="relative mt-20 pt-12">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/65 mb-8 text-center">
               {t("home.scale_eyebrow")}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
@@ -628,7 +628,7 @@ const HomePage = () => {
                     duration={2}
                     className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
                   />
-                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-white/50">
+                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-white/70">
                     {s.label}
                   </div>
                   {s.sub && (
@@ -862,7 +862,7 @@ const HomePage = () => {
       <section className="dark bg-black text-white" aria-label="Painel">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
               {t("home.panel_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">

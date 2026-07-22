@@ -82,7 +82,7 @@ const LiveKpi = ({ label, base, incrementEvery, step = 1, formatter, delta, acce
       >
         {display}
       </div>
-      <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-white/50">
+      <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-white/70">
         <ArrowUpRight className="h-2.5 w-2.5 text-primary" />
         {delta}
       </div>
@@ -106,7 +106,7 @@ const PanelMockup = () => {
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           <span className="text-[10px] font-mono text-white/60">clauthor.com/dashboard</span>
         </div>
-        <span className="ml-auto text-[10px] font-mono uppercase tracking-[0.14em] text-white/40">
+        <span className="ml-auto text-[10px] font-mono uppercase tracking-[0.14em] text-white/65">
           live · 24/7
         </span>
       </div>
@@ -115,7 +115,7 @@ const PanelMockup = () => {
 
         {/* Sidebar */}
         <aside className="col-span-3 border-r border-white/10 p-4 space-y-1 bg-black/20">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40 px-2 pb-2">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/65 px-2 pb-2">
             Departamentos
           </div>
           {DEPTS.map((d) => (
@@ -124,7 +124,7 @@ const PanelMockup = () => {
               className={`flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs transition-colors ${
                 d.active
                   ? "bg-white/[0.08] text-white border border-white/10"
-                  : "text-white/50 hover:text-white/70"
+                  : "text-white/70 hover:text-white/70"
               }`}
             >
               <div className="flex items-center gap-2 min-w-0">
@@ -149,7 +149,7 @@ const PanelMockup = () => {
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">
+                <div className="text-[10px] uppercase tracking-[0.14em] text-white/65">
                   Departamento Comercial
                 </div>
                 <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/25">
@@ -215,7 +215,7 @@ const PanelMockup = () => {
             </div>
             {AGENT_LINES.map((line, i) => (
               <div key={i} className="text-[11px] font-mono text-white/70 leading-relaxed pl-8">
-                <span className="text-white/30">›</span>{" "}
+                <span className="text-white/60">›</span>{" "}
                 <Typewriter text={line} delay={i * 900} />
               </div>
             ))}

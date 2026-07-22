@@ -155,7 +155,7 @@ export default function DemoWalkthroughModal({
                 transition={{ duration: 0.3 }}
                 className="flex-1"
               >
-                <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-white/50 mb-4">
+                <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-white/70 mb-4">
                   {current.kicker}
                 </p>
                 <h3 className="font-display text-2xl md:text-[28px] font-semibold tracking-[-0.02em] leading-[1.15] text-white mb-4">
@@ -178,7 +178,7 @@ export default function DemoWalkthroughModal({
                 Anterior
               </button>
 
-              <span className="font-mono text-[11px] tracking-[0.2em] text-white/40 tabular-nums">
+              <span className="font-mono text-[11px] tracking-[0.2em] text-white/65 tabular-nums">
                 {String(step + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
               </span>
 

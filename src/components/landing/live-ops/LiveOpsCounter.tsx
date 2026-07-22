@@ -67,7 +67,7 @@ export default function LiveOpsCounter() {
             >
               {/* Top row · index + status */}
               <div className="flex items-center justify-between mb-8">
-                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/40 tabular-nums">
+                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/65 tabular-nums">
                   {String(i + 1).padStart(2, "0")} / {String(METRICS.length).padStart(2, "0")}
                 </span>
                 <div className="flex items-center gap-1.5">
@@ -75,7 +75,7 @@ export default function LiveOpsCounter() {
                     className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_hsl(var(--primary))]"
                     aria-hidden
                   />
-                  <span className="text-[10px] uppercase tracking-[0.24em] text-white/50">
+                  <span className="text-[10px] uppercase tracking-[0.24em] text-white/70">
                     Auditável
                   </span>
                 </div>
@@ -100,7 +100,7 @@ export default function LiveOpsCounter() {
               <p className="text-[15px] font-medium text-white leading-snug mb-1.5">
                 {m.label}
               </p>
-              <p className="text-[13px] text-white/50 leading-relaxed">{m.sub}</p>
+              <p className="text-[13px] text-white/70 leading-relaxed">{m.sub}</p>
 
               {/* Hover hairline accent */}
               <span

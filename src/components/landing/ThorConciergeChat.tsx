@@ -836,7 +836,7 @@ export default function ThorConciergeChat({
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-xl",
               "bg-primary text-primary-foreground hover:bg-primary/90",
-              "disabled:bg-muted disabled:text-muted-foreground/40",
+              "disabled:bg-muted disabled:text-muted-foreground/65",
               "shadow-[0_0_20px_hsl(var(--primary)/0.35)] hover:shadow-[0_0_28px_hsl(var(--primary)/0.5)]",
               "active:scale-95 transition-all group shrink-0",
             )}
@@ -860,7 +860,7 @@ export default function ThorConciergeChat({
               {input.length} / 2000
             </span>
           ) : (
-            <span className="font-medium text-muted-foreground/40">Thor · Clauthor</span>
+            <span className="font-medium text-muted-foreground/65">Thor · Clauthor</span>
           )}
         </div>
       </footer>

@@ -57,7 +57,7 @@ export default function LiveOpsFeed() {
           <span className="h-2.5 w-2.5 rounded-full bg-white/20" aria-hidden />
           <span className="h-2.5 w-2.5 rounded-full bg-primary/70" aria-hidden />
         </div>
-        <span className="text-[10px] uppercase tracking-[0.22em] text-white/40 font-mono">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-white/65 font-mono">
           clauthor · ops feed
         </span>
         <span className="text-[10px] uppercase tracking-[0.18em] text-primary/80 font-mono">
@@ -83,9 +83,9 @@ export default function LiveOpsFeed() {
               transition={{ duration: 0.35, ease: "easeOut" }}
               className="flex flex-wrap gap-x-2 gap-y-0.5 py-1"
             >
-              <span className="text-white/30">[{item.time}]</span>
+              <span className="text-white/60">[{item.time}]</span>
               <span className="text-primary/85">{item.dept}</span>
-              <span className="text-white/30">·</span>
+              <span className="text-white/60">·</span>
               <span className="text-white">{item.agent}</span>
               <span className="text-white/70">{item.action}</span>
               {item.impact && (
