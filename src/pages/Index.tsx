@@ -20,6 +20,8 @@ import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import PanelMockup from "@/components/landing/PanelMockup";
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import LiveOpsSection from "@/components/landing/LiveOpsSection";
+import DemoWalkthroughModal from "@/components/landing/DemoWalkthroughModal";
+import LandingFAQ from "@/components/landing/LandingFAQ";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
