@@ -51,9 +51,9 @@ type StaticItem = {
 const STATIC_ITEMS: StaticItem[] = [
   // ── Criar (ações rápidas) ──
   { label: "Novo vídeo (Veo 3)", path: "/video-studio?new=1", icon: Video, group: "Criar", keywords: "gerar video veo3 clip" },
-  { label: "Nova campanha Hunter", path: "/dashboard/hunter?new=1", icon: Target, group: "Criar", keywords: "prospeccao linkedin lead outbound" },
+  { label: "Nova campanha Hunter", path: "/hunter?new=1", icon: Target, group: "Criar", keywords: "prospeccao linkedin lead outbound" },
   { label: "Novo agente", path: "/create-agent", icon: Plus, group: "Criar", keywords: "wizard criar bot" },
-  { label: "Nova conversa WhatsApp", path: "/dashboard/whatsapp?new=1", icon: Phone, group: "Criar", keywords: "mensagem chat zap" },
+  { label: "Nova conversa WhatsApp", path: "/whatsapp?new=1", icon: Phone, group: "Criar", keywords: "mensagem chat zap" },
   { label: "Falar com Thor", path: "/thor", icon: MessageSquare, group: "Criar", keywords: "chat copiloto assistente ia voz elevenlabs" },
   { label: "Enviar arquivo", path: "/dashboard/arquivos?upload=1", icon: Upload, group: "Criar", keywords: "upload documento imagem video" },
 
