@@ -213,9 +213,9 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.05] px-3.5 py-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.14em] sm:tracking-[0.16em] text-primary mb-4 sm:mb-5"
+            className="inline-flex items-center gap-2 rounded-full border border-[#D2D2D7] bg-white px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1D1D1F]/60 shadow-sm mb-6 sm:mb-8"
           >
-            <Network className="h-3.5 w-3.5" strokeWidth={2} />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1D1D1F]" />
             {t("home.hero_badge")}
           </motion.div>
 
@@ -223,22 +223,22 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-[32px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.03em] leading-[1.05] sm:leading-[1.02] max-w-5xl mb-4 sm:mb-5"
+            className="font-display text-[36px] sm:text-5xl md:text-[58px] lg:text-[68px] font-semibold tracking-[-0.035em] leading-[1.03] max-w-5xl mb-5 sm:mb-6 text-[#1D1D1F]"
           >
-            <span className="text-foreground">Primeiro entendemos sua empresa.</span>
+            <span>Primeiro entendemos sua empresa.</span>
             <br />
-            <span className="gradient-text">Depois montamos a IA certa.</span>
+            <span className="text-[#86868B]">Depois montamos a IA certa.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-[15px] sm:text-base md:text-lg text-neutral-700 max-w-2xl mb-6 leading-relaxed px-1"
+            className="text-[15px] sm:text-base md:text-lg text-[#86868B] max-w-2xl mb-8 leading-relaxed px-1"
           >
             Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
             e dores · e recomenda apenas os agentes que fazem sentido para o{" "}
-            <span className="text-foreground font-semibold">seu porte, orçamento e cenário</span>.
+            <span className="text-[#1D1D1F] font-semibold">seu porte, orçamento e cenário</span>.
             De uma pequena operação a um time enterprise.
 
           </motion.p>
@@ -248,17 +248,17 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-wrap items-center justify-center gap-2 mb-6"
+            className="flex flex-wrap items-center justify-center gap-2 mb-8"
           >
             {[
               { icon: Network, value: "Diagnóstico", label: "primeiro, sempre" },
               { icon: Building2, value: "SMB → Enterprise", label: "escala sob medida" },
               { icon: Zap, value: "Só o necessário", label: "sem inflar contrato" },
             ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/70 border border-neutral-200 text-[13px] shadow-sm">
-                <s.icon className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
-                <span className="font-display font-bold text-neutral-900">{s.value}</span>
-                <span className="text-xs text-neutral-600 hidden sm:inline">{s.label}</span>
+              <div key={s.label} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#D2D2D7] text-[13px] shadow-sm">
+                <s.icon className="h-3.5 w-3.5 text-[#1D1D1F]/70" strokeWidth={1.75} />
+                <span className="font-medium text-[#1D1D1F]">{s.value}</span>
+                <span className="text-xs text-[#86868B] hidden sm:inline">{s.label}</span>
               </div>
             ))}
           </motion.div>
@@ -270,7 +270,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10"
+            className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-12"
           >
             {PAIN_QUIZ.map((item) => {
               const Icon = item.icon;
@@ -279,18 +279,19 @@ const HomePage = () => {
                   key={item.id}
                   type="button"
                   onClick={() => pickPain(item)}
-                  className="group flex items-start gap-3 text-left rounded-2xl border border-border bg-card p-4 hover:border-primary/50 hover:bg-card/80 hover:-translate-y-0.5 transition-all"
+                  className="group flex items-start gap-3 text-left rounded-2xl border border-[#D2D2D7]/70 bg-white p-5 hover:border-[#1D1D1F]/25 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 transition-all"
                 >
-                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
+                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-[#F5F5F7] border border-[#D2D2D7]/70 flex items-center justify-center group-hover:bg-[#1D1D1F] transition-colors">
+                    <Icon className="h-4 w-4 text-[#1D1D1F]/70 group-hover:text-white transition-colors" strokeWidth={1.75} />
                   </span>
-                  <span className="text-sm text-foreground leading-snug font-medium">
+                  <span className="text-sm text-[#1D1D1F] leading-snug font-medium">
                     {item.label}
                   </span>
                 </button>
               );
             })}
           </motion.div>
+
 
           {/* Chat qualificador · Thor concierge (recebe seedPrompt do quiz) */}
           <motion.div
