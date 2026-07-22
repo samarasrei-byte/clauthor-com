@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 // Single-channel: AssistantHierarchy decides which (if any) modal to show.
 const AssistantHierarchy = lazy(() => import("@/components/AssistantHierarchy"));
 const LiveTasksTicker = lazy(() => import("@/components/dashboard/LiveTasksTicker"));
+const GlobalCommandPalette = lazy(() => import("@/components/dashboard/GlobalCommandPalette"));
 
 
 
@@ -259,6 +260,7 @@ const DashboardLayout = () => {
         <Suspense fallback={null}>
           <AssistantHierarchy />
           <LiveTasksTicker />
+          <GlobalCommandPalette />
         </Suspense>
       </div>
     </FloatingDockProvider>
