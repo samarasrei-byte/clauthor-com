@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Bot, DollarSign, TrendingUp, ShoppingBag, CheckCircle, XCircle, Clock, BarChart3, Shield, Activity, Coins, ListOrdered, Mail, Phone, Building, Zap, LayoutDashboard, CreditCard, Store, Wallet, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle, FlaskConical } from "lucide-react";
+import { Users, Bot, DollarSign, TrendingUp, ShoppingBag, CheckCircle, XCircle, Clock, BarChart3, Shield, Activity, Coins, ListOrdered, Mail, Phone, Building, Zap, LayoutDashboard, CreditCard, Store, Wallet, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle, FlaskConical, ClipboardList } from "lucide-react";
 import { Wand } from "lucide-react";
 import { Brain } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -55,6 +55,10 @@ const AdminDashboard = () => {
     }
     if (id === "paypal-sandbox") {
       navigate("/admin/paypal-sandbox");
+      return;
+    }
+    if (id === "clientes") {
+      navigate("/admin/clientes");
       return;
     }
     setActiveTab(id);
@@ -206,6 +210,7 @@ const AdminDashboard = () => {
     { id: "margin", label: "Margem por Depto", icon: TrendingUp, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
+    { id: "clientes", label: "Clientes (Onboardings)", icon: ClipboardList, group: t("dashboard.management", { defaultValue: "Gestão" }) },
     { id: "paypal-sandbox", label: "Sandbox PayPal", icon: FlaskConical, group: t("dashboard.system", { defaultValue: "Sistema" }) },
   ];
 

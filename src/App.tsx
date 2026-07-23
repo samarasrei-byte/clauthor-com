@@ -59,6 +59,8 @@ const WhatsAppPair = lazyRetry(() => import("./pages/WhatsAppPair"));
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
 const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
+const AdminClientIntakes = lazyRetry(() => import("./pages/AdminClientIntakes"));
+const ClientIntake = lazyRetry(() => import("./pages/ClientIntake"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
@@ -230,6 +232,7 @@ const App = () => (
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/intake/:token" element={<ClientIntake />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<FeatureGate flag="team_builder" fallback="/"><TeamBuilder /></FeatureGate>} />
                   <Route path="/enterprise" element={<Enterprise />} />
@@ -329,6 +332,7 @@ const App = () => (
                   <Route path="/admin/kpis" element={<AdminKpiDashboard />} />
                   <Route path="/admin/roi-config" element={<AdminRoiConfig />} />
                   <Route path="/admin/paypal-sandbox" element={<AdminPaypalSandbox />} />
+                  <Route path="/admin/clientes" element={<AdminClientIntakes />} />
 
 
                 </Route>
