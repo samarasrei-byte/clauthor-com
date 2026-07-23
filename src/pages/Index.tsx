@@ -305,10 +305,10 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.28 }}
             className="w-full max-w-3xl mb-16"
           >
-            <div className="dark rounded-3xl bg-black text-white p-4 sm:p-6 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.4)] border border-white/10">
+            <div className="rounded-3xl bg-white dark:bg-white/[0.04] p-4 sm:p-6 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.15)] border border-[#D2D2D7]/70 dark:border-white/10">
               <div className="flex items-center gap-2 mb-4 px-2">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
+                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#86868B] dark:text-white/60">
                   {t("home.thor_status")}
                 </span>
               </div>
