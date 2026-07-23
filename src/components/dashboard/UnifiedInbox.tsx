@@ -187,6 +187,20 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
         </div>
       </div>
 
+      {/* Playful team-per-channel hero — always visible, ludic */}
+      <InboxTeamHero
+        activeChannel={activeChannel === "all" ? "all" : (activeChannel as SellerChannel)}
+        hiredByChannel={{
+          linkedin:  threads.filter(t => t.channel === "linkedin"  && !!t.agentId).length,
+          whatsapp:  threads.filter(t => t.channel === "whatsapp"  && !!t.agentId).length,
+          instagram: threads.filter(t => t.channel === "instagram" && !!t.agentId).length,
+          facebook:  threads.filter(t => t.channel === "facebook"  && !!t.agentId).length,
+          tiktok:    threads.filter(t => t.channel === "tiktok"    && !!t.agentId).length,
+          email:     threads.filter(t => t.channel === "email"     && !!t.agentId).length,
+        }}
+        onSelectChannel={(c) => { setActiveChannel(c); setSelectedThread(null); }}
+      />
+
       {/* Channel Tabs */}
       <div className="flex items-center gap-1 p-0.5 bg-muted/30 rounded-lg w-fit">
         {channelTabs.map(tab => (
