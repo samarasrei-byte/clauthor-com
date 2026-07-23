@@ -106,12 +106,28 @@ export default function ClientIntake() {
         if (!res.ok) { setNotFound(true); return; }
         const data = await res.json();
         const existing = (data.answers ?? {}) as Record<string, unknown>;
+
+        // Merge local draft (offline resume)
+        let localDraft: Record<string, unknown> = {};
+        let draftInput = "";
+        let draftMulti: string[] = [];
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            localDraft = parsed.answers ?? {};
+            draftInput = parsed.input ?? "";
+            draftMulti = Array.isArray(parsed.multi) ? parsed.multi : [];
+          }
+        } catch { /* noop */ }
+
         const seed = {
+          ...localDraft,
           ...existing,
-          client_name: existing.client_name ?? data.client_name ?? "",
-          company_name: existing.company_name ?? data.company_name ?? "",
-          contact_email: existing.contact_email ?? data.contact_email ?? "",
-          contact_phone: existing.contact_phone ?? data.contact_phone ?? "",
+          client_name: existing.client_name ?? localDraft.client_name ?? data.client_name ?? "",
+          company_name: existing.company_name ?? localDraft.company_name ?? data.company_name ?? "",
+          contact_email: existing.contact_email ?? localDraft.contact_email ?? data.contact_email ?? "",
+          contact_phone: existing.contact_phone ?? localDraft.contact_phone ?? data.contact_phone ?? "",
         };
         setAnswers(seed);
         if (data.status === "completed") { setDone(true); return; }
@@ -123,6 +139,9 @@ export default function ClientIntake() {
           idx = i;
         }
         setStep(idx);
+        setInput(draftInput);
+        setMulti(draftMulti);
+        setResumed(Object.keys(localDraft).length > 0 || Object.keys(existing).length > 0);
         setMessages([{ role: "thor", text: interp(QUESTIONS[idx].prompt, seed) }]);
       } catch {
         setNotFound(true);
@@ -131,6 +150,15 @@ export default function ClientIntake() {
       }
     })();
   }, [token]);
+
+  // Autosave local draft (answers + partial input/multi) — resume-safe
+  useEffect(() => {
+    if (loading || done) return;
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ answers, input, multi, step, ts: Date.now() }));
+      setLastSavedAt(Date.now());
+    } catch { /* quota noop */ }
+  }, [answers, input, multi, step, loading, done, DRAFT_KEY]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -155,8 +183,12 @@ export default function ClientIntake() {
           complete,
         }),
       });
+      setLastSavedAt(Date.now());
+      if (complete) {
+        try { localStorage.removeItem(DRAFT_KEY); } catch { /* noop */ }
+      }
     } catch (e) {
-      toast.error("Falha ao salvar. Tente novamente.");
+      toast.error("Falha ao salvar no servidor — mantive um rascunho local.");
       throw e;
     }
   };
