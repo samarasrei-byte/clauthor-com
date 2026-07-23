@@ -4,7 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot,
+  ThumbsUp, MessageCircle, Database, ChevronDown,
+} from "lucide-react";
 import { toast } from "sonner";
 import { getSocialSellerConfig } from "@/components/inbox/SocialSellerToggle";
 import { Link } from "react-router-dom";
@@ -15,7 +26,18 @@ type Engager = {
   reaction: "like" | "comment";
   snippet?: string;
   suggestedMessage: string;
+  liked?: boolean;
+  commented?: boolean;
+  sentToCrm?: string;
 };
+
+const CRM_OPTIONS = [
+  { id: "hubspot", name: "HubSpot" },
+  { id: "pipedrive", name: "Pipedrive" },
+  { id: "salesforce", name: "Salesforce" },
+  { id: "zoho", name: "Zoho CRM" },
+  { id: "rdstation", name: "RD Station" },
+] as const;
 
 const HunterPostEngagers = () => {
   const [postUrl, setPostUrl] = useState("");
@@ -86,6 +108,34 @@ const HunterPostEngagers = () => {
     next.has(i) ? next.delete(i) : next.add(i);
     setSelected(next);
   };
+
+  const updateEngager = (i: number, patch: Partial<Engager>) => {
+    setEngagers((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
+  };
+
+  const likePost = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    updateEngager(i, { liked: true });
+    toast.success(`Like agendado para o post de ${engagers[i].name}`, {
+      description: "Job enviado ao Hunter (PhantomBuster).",
+    });
+  };
+
+  const commentPost = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    updateEngager(i, { commented: true });
+    toast.success(`Comentário agendado no post de ${engagers[i].name}`, {
+      description: "Enviado ao Approvals Center antes de publicar.",
+    });
+  };
+
+  const sendToCrm = (i: number, crm: typeof CRM_OPTIONS[number]) => {
+    updateEngager(i, { sentToCrm: crm.name });
+    toast.success(`${engagers[i].name} enviado para ${crm.name}`, {
+      description: "Lead criado com origem 'LinkedIn Post Engagers'.",
+    });
+  };
+
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -173,6 +223,48 @@ const HunterPostEngagers = () => {
                   {selected.has(i) && <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />}
                 </div>
                 <div className="mt-3 p-3 rounded bg-background border text-sm">{e.suggestedMessage}</div>
+                <div className="mt-3 flex flex-wrap items-center gap-2" onClick={(ev) => ev.stopPropagation()}>
+                  <Button
+                    size="sm"
+                    variant={e.liked ? "secondary" : "outline"}
+                    className="h-7 gap-1.5 text-xs"
+                    disabled={e.liked}
+                    onClick={(ev) => likePost(i, ev)}
+                  >
+                    <ThumbsUp className="h-3 w-3" /> {e.liked ? "Like agendado" : "Curtir post"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={e.commented ? "secondary" : "outline"}
+                    className="h-7 gap-1.5 text-xs"
+                    disabled={e.commented}
+                    onClick={(ev) => commentPost(i, ev)}
+                  >
+                    <MessageCircle className="h-3 w-3" /> {e.commented ? "Comentário agendado" : "Comentar"}
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant={e.sentToCrm ? "secondary" : "outline"}
+                        className="h-7 gap-1.5 text-xs"
+                      >
+                        <Database className="h-3 w-3" />
+                        {e.sentToCrm ? `Em ${e.sentToCrm}` : "Enviar ao CRM"}
+                        <ChevronDown className="h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuLabel className="text-xs">Escolher CRM</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {CRM_OPTIONS.map((crm) => (
+                        <DropdownMenuItem key={crm.id} onClick={() => sendToCrm(i, crm)}>
+                          {crm.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             ))}
             <Button className="w-full gap-2" onClick={sendToApproval}>
