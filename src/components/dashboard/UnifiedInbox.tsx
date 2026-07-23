@@ -19,6 +19,7 @@ import { notify, toastWithUndo } from "@/lib/notify";
 import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
 import { PlatformKey } from "@/components/inbox/platformThemes";
 import SocialSellerToggle, { SellerChannel } from "@/components/inbox/SocialSellerToggle";
+import ChannelAgentRecommender from "@/components/inbox/ChannelAgentRecommender";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
@@ -208,17 +209,23 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
 
       {/* Social Seller per-channel autonomy */}
       {activeChannel !== "all" && (
-        <SocialSellerToggle
-          channel={activeChannel as SellerChannel}
-          channelLabel={channelTabs.find((t) => t.id === activeChannel)?.label ?? activeChannel}
-          agents={Array.from(
-            new Map(
-              threads
-                .filter((t) => t.agentId)
-                .map((t) => [t.agentId!, { id: t.agentId!, name: t.agentName }]),
-            ).values(),
-          )}
-        />
+        <div className="space-y-2">
+          <ChannelAgentRecommender
+            channel={activeChannel as SellerChannel}
+            hasAgents={threads.some((t) => t.channel === activeChannel && !!t.agentId)}
+          />
+          <SocialSellerToggle
+            channel={activeChannel as SellerChannel}
+            channelLabel={channelTabs.find((t) => t.id === activeChannel)?.label ?? activeChannel}
+            agents={Array.from(
+              new Map(
+                threads
+                  .filter((t) => t.agentId)
+                  .map((t) => [t.agentId!, { id: t.agentId!, name: t.agentName }]),
+              ).values(),
+            )}
+          />
+        </div>
       )}
 
       {/* Main Content */}
