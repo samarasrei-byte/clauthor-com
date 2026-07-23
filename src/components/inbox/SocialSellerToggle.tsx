@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { Bot, ShieldCheck, Zap } from "lucide-react";
+import { Bot, ShieldCheck, Zap, Cpu, AlertTriangle, KeyRound } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { notify } from "@/lib/notify";
+import { AGENT_MODELS, DEFAULT_SOCIAL_SELLER_MODEL, getModel } from "@/lib/ai-models/registry";
+import { SELLER_CHANNELS, type SellerChannelId } from "@/lib/social-seller/channels";
 
-export type SellerChannel =
-  | "dashboard" | "whatsapp" | "email" | "linkedin"
-  | "instagram" | "facebook" | "tiktok";
+export type SellerChannel = "dashboard" | SellerChannelId;
 
 export interface SocialSellerConfig {
   enabled: boolean;
   requireApproval: boolean;
   agentId?: string | null;
   agentName?: string | null;
+  modelId?: string;
 }
 
 const STORAGE_KEY = "clauthor:social-seller:v1";
