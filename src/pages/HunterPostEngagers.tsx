@@ -23,6 +23,7 @@ const HunterPostEngagers = () => {
   const [loading, setLoading] = useState(false);
   const [engagers, setEngagers] = useState<Engager[]>([]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const sellerConfig = getSocialSellerConfig("linkedin");
 
   const extract = async () => {
     if (!postUrl.includes("linkedin.com")) {
