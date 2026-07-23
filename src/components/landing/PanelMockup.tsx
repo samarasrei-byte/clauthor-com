@@ -92,7 +92,11 @@ const LiveKpi = ({ label, base, incrementEvery, step = 1, formatter, delta, acce
 
 const PanelMockup = () => {
   return (
-    <div className="relative rounded-t-3xl border-t border-x border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-[0_-30px_80px_-30px_hsl(0_85%_55%/0.15)]">
+    // Mockup do produto = sempre dark, independente do tema da página.
+    // Isso preserva o contraste do texto white/xx sobre black/xx que foi
+    // desenhado para o dashboard real (que só existe em dark). Antes,
+    // em light mode, o mockup ficava ilegível (branco sobre cinza claro).
+    <div className="relative rounded-t-3xl border-t border-x border-white/10 bg-neutral-950 overflow-hidden shadow-[0_-30px_80px_-30px_hsl(0_85%_55%/0.25)]">
       {/* Mobile: horizontal scroll preserves the desktop dashboard look
           without collapsing KPI labels over values. */}
       <div className="overflow-x-auto md:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -224,7 +228,7 @@ const PanelMockup = () => {
       </div>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-transparent pointer-events-none" />
     </div>
 
   );
