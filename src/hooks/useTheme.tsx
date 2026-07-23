@@ -30,11 +30,25 @@ export const ThemeProvider = forwardRef<HTMLDivElement, { children: ReactNode }>
       return getSystemTheme();
     });
 
-    // Aplica a classe .light/.dark no <html>
+    // Aplica a classe .light/.dark no <html> (ambas necessárias:
+    // .light para overrides custom em index.css e .dark para os variants
+    // `dark:*` do Tailwind (darkMode: "class") funcionarem).
     useEffect(() => {
       const root = document.documentElement;
-      if (theme === "light") root.classList.add("light");
-      else root.classList.remove("light");
+      // Transição suave global entre light/dark (premium feel)
+      root.style.setProperty(
+        "transition",
+        "background-color 320ms ease, color 320ms ease, border-color 320ms ease"
+      );
+      if (theme === "light") {
+        root.classList.add("light");
+        root.classList.remove("dark");
+        root.style.colorScheme = "light";
+      } else {
+        root.classList.add("dark");
+        root.classList.remove("light");
+        root.style.colorScheme = "dark";
+      }
       localStorage.setItem(STORAGE_KEY, theme);
     }, [theme]);
 
