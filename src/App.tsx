@@ -119,6 +119,7 @@ const HunterMensagem = lazyRetry(() => import("./pages/HunterMensagem"));
 const HunterAtivar = lazyRetry(() => import("./pages/HunterAtivar"));
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
 const HunterInbox = lazyRetry(() => import("./pages/HunterInbox"));
+const HunterPostEngagers = lazyRetry(() => import("./pages/HunterPostEngagers"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const AgentMetricsDetail = lazyRetry(() => import("./pages/AgentMetricsDetail"));
 const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
@@ -303,6 +304,7 @@ const App = () => (
                   <Route path="/hunter-ativar" element={<FeatureGate flag="hunter"><HunterAtivar /></FeatureGate>} />
                   <Route path="/hunter-lead/:id" element={<FeatureGate flag="hunter"><HunterLeadDetail /></FeatureGate>} />
                   <Route path="/hunter-inbox" element={<FeatureGate flag="hunter"><HunterInbox /></FeatureGate>} />
+                  <Route path="/hunter/post-engagers" element={<FeatureGate flag="hunter"><HunterPostEngagers /></FeatureGate>} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                   <Route path="/comercial/funil" element={<ComercialFunil />} />

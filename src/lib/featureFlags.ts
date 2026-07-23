@@ -19,7 +19,7 @@ type FlagKey =
   | "team_builder";// TeamBuilder standalone
 
 const DEFAULTS: Record<FlagKey, boolean> = {
-  hunter: false,
+  hunter: true,
   mcp: false,
   scrum: false,
   neural: false,
