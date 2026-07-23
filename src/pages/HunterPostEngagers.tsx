@@ -109,6 +109,34 @@ const HunterPostEngagers = () => {
     setSelected(next);
   };
 
+  const updateEngager = (i: number, patch: Partial<Engager>) => {
+    setEngagers((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
+  };
+
+  const likePost = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    updateEngager(i, { liked: true });
+    toast.success(`Like agendado para o post de ${engagers[i].name}`, {
+      description: "Job enviado ao Hunter (PhantomBuster).",
+    });
+  };
+
+  const commentPost = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    updateEngager(i, { commented: true });
+    toast.success(`Comentário agendado no post de ${engagers[i].name}`, {
+      description: "Enviado ao Approvals Center antes de publicar.",
+    });
+  };
+
+  const sendToCrm = (i: number, crm: typeof CRM_OPTIONS[number]) => {
+    updateEngager(i, { sentToCrm: crm.name });
+    toast.success(`${engagers[i].name} enviado para ${crm.name}`, {
+      description: "Lead criado com origem 'LinkedIn Post Engagers'.",
+    });
+  };
+
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div>
