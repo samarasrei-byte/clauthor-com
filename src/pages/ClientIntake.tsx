@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Loader2, Send, CheckCircle2, Sparkles, Linkedin, MessageCircle,
   Mail, Instagram, Facebook, Music2, Users, Database, Target,
+  Clock, Zap, TrendingUp, Save,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -68,6 +69,7 @@ type Msg = { role: "thor" | "user"; text: string };
 
 export default function ClientIntake() {
   const { token } = useParams<{ token: string }>();
+  const DRAFT_KEY = `intake_draft_${token ?? "anon"}`;
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
@@ -77,6 +79,8 @@ export default function ClientIntake() {
   const [multi, setMulti] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [resumed, setResumed] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const current = QUESTIONS[step];
@@ -102,12 +106,28 @@ export default function ClientIntake() {
         if (!res.ok) { setNotFound(true); return; }
         const data = await res.json();
         const existing = (data.answers ?? {}) as Record<string, unknown>;
+
+        // Merge local draft (offline resume)
+        let localDraft: Record<string, unknown> = {};
+        let draftInput = "";
+        let draftMulti: string[] = [];
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            localDraft = parsed.answers ?? {};
+            draftInput = parsed.input ?? "";
+            draftMulti = Array.isArray(parsed.multi) ? parsed.multi : [];
+          }
+        } catch { /* noop */ }
+
         const seed = {
+          ...localDraft,
           ...existing,
-          client_name: existing.client_name ?? data.client_name ?? "",
-          company_name: existing.company_name ?? data.company_name ?? "",
-          contact_email: existing.contact_email ?? data.contact_email ?? "",
-          contact_phone: existing.contact_phone ?? data.contact_phone ?? "",
+          client_name: existing.client_name ?? localDraft.client_name ?? data.client_name ?? "",
+          company_name: existing.company_name ?? localDraft.company_name ?? data.company_name ?? "",
+          contact_email: existing.contact_email ?? localDraft.contact_email ?? data.contact_email ?? "",
+          contact_phone: existing.contact_phone ?? localDraft.contact_phone ?? data.contact_phone ?? "",
         };
         setAnswers(seed);
         if (data.status === "completed") { setDone(true); return; }
@@ -119,6 +139,9 @@ export default function ClientIntake() {
           idx = i;
         }
         setStep(idx);
+        setInput(draftInput);
+        setMulti(draftMulti);
+        setResumed(Object.keys(localDraft).length > 0 || Object.keys(existing).length > 0);
         setMessages([{ role: "thor", text: interp(QUESTIONS[idx].prompt, seed) }]);
       } catch {
         setNotFound(true);
@@ -127,6 +150,15 @@ export default function ClientIntake() {
       }
     })();
   }, [token]);
+
+  // Autosave local draft (answers + partial input/multi) — resume-safe
+  useEffect(() => {
+    if (loading || done) return;
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ answers, input, multi, step, ts: Date.now() }));
+      setLastSavedAt(Date.now());
+    } catch { /* quota noop */ }
+  }, [answers, input, multi, step, loading, done, DRAFT_KEY]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -151,8 +183,12 @@ export default function ClientIntake() {
           complete,
         }),
       });
+      setLastSavedAt(Date.now());
+      if (complete) {
+        try { localStorage.removeItem(DRAFT_KEY); } catch { /* noop */ }
+      }
     } catch (e) {
-      toast.error("Falha ao salvar. Tente novamente.");
+      toast.error("Falha ao salvar no servidor — mantive um rascunho local.");
       throw e;
     }
   };
@@ -197,8 +233,23 @@ export default function ClientIntake() {
     return { visibleTotal: total, visibleDone: doneCount };
   }, [answers, step, done]);
   const progress = Math.min(100, Math.round((visibleDone / Math.max(1, visibleTotal)) * 100));
+  const etaMinutes = Math.max(1, Math.ceil((visibleTotal - visibleDone) * 0.25)); // ~15s/pergunta
 
   const selectedChannels = Array.isArray(answers.channels) ? (answers.channels as string[]) : [];
+
+  // Preview de automação · volumes por canal em tempo real
+  const CH_KEY: Record<string, string> = {
+    LinkedIn: "volume_linkedin", WhatsApp: "volume_whatsapp", "E-mail": "volume_email",
+    Instagram: "volume_instagram", Facebook: "volume_facebook", TikTok: "volume_tiktok",
+  };
+  const channelVolumes = selectedChannels.map((c) => {
+    const raw = answers[CH_KEY[c]];
+    const n = typeof raw === "string" ? parseInt(raw, 10) : typeof raw === "number" ? raw : 0;
+    return { channel: c, daily: Number.isFinite(n) ? n : 0 };
+  });
+  const dailyTotal = channelVolumes.reduce((s, x) => s + x.daily, 0);
+  const monthlyTotal = dailyTotal * 22; // dias úteis
+  const impactReplies = Math.round(monthlyTotal * 0.08); // taxa média de resposta 8%
 
   if (loading) {
     return (
@@ -259,6 +310,11 @@ export default function ClientIntake() {
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span className="hidden sm:inline">Thor</span>
               <span className="tabular-nums">{visibleDone}/{visibleTotal}</span>
+              {!done && (
+                <span className="hidden sm:inline-flex items-center gap-1 pl-2 border-l border-border/60 tabular-nums">
+                  <Clock className="w-3 h-3" /> ~{etaMinutes} min
+                </span>
+              )}
             </div>
           </div>
           <div className="h-1 bg-muted overflow-hidden">
@@ -266,33 +322,73 @@ export default function ClientIntake() {
           </div>
         </header>
 
-        {/* Live summary chips */}
+        {/* Banner de retomada */}
+        {resumed && !done && (
+          <div className="border-b border-primary/20 bg-primary/5">
+            <div className="max-w-3xl mx-auto px-4 py-1.5 flex items-center gap-2 text-[11px] text-primary">
+              <Save className="w-3 h-3" />
+              <span>Retomamos de onde você parou.</span>
+              {lastSavedAt && (
+                <span className="text-primary/70 ml-auto tabular-nums">
+                  Salvo {new Date(lastSavedAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Live summary chips + Preview de automação */}
         {(selectedChannels.length > 0 || answers.team_size || answers.crm_choice) && (
           <div className="border-b border-border/40 bg-muted/30">
-            <div className="max-w-3xl mx-auto px-4 py-2 flex flex-wrap items-center gap-1.5 text-xs">
-              {selectedChannels.length > 0 && (
-                <div className="flex items-center gap-1.5">
-                  <Target className="w-3.5 h-3.5 text-muted-foreground" />
-                  {selectedChannels.map((c) => {
-                    const Icon = CHANNEL_ICONS[c];
-                    return (
-                      <Badge key={c} variant="secondary" className="gap-1 font-normal">
-                        {Icon && <Icon className="w-3 h-3" />} {c}
-                      </Badge>
-                    );
-                  })}
+            <div className="max-w-3xl mx-auto px-4 py-2 space-y-2 text-xs">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {selectedChannels.length > 0 && (
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <Target className="w-3.5 h-3.5 text-muted-foreground" />
+                    {selectedChannels.map((c) => {
+                      const Icon = CHANNEL_ICONS[c];
+                      const vol = channelVolumes.find((v) => v.channel === c)?.daily ?? 0;
+                      return (
+                        <Badge key={c} variant="secondary" className="gap-1 font-normal tabular-nums">
+                          {Icon && <Icon className="w-3 h-3" />} {c}
+                          {vol > 0 && <span className="text-primary font-semibold ml-0.5">· {vol}/dia</span>}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                )}
+                {answers.team_size ? (
+                  <Badge variant="outline" className="gap-1 font-normal">
+                    <Users className="w-3 h-3" /> Time: {String(answers.team_size)}
+                  </Badge>
+                ) : null}
+                {answers.crm_choice ? (
+                  <Badge variant="outline" className="gap-1 font-normal">
+                    <Database className="w-3 h-3" /> {String(answers.crm_choice)}
+                  </Badge>
+                ) : null}
+              </div>
+
+              {dailyTotal > 0 && (
+                <div className="rounded-lg border border-primary/20 bg-background/60 px-3 py-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                    <Zap className="w-3 h-3" /> Cenário previsto
+                  </div>
+                  <div className="flex items-center gap-1 tabular-nums">
+                    <span className="text-muted-foreground">Diário:</span>
+                    <span className="font-semibold text-foreground">{dailyTotal.toLocaleString("pt-BR")}</span>
+                  </div>
+                  <div className="flex items-center gap-1 tabular-nums">
+                    <span className="text-muted-foreground">Mensal:</span>
+                    <span className="font-semibold text-foreground">{monthlyTotal.toLocaleString("pt-BR")}</span>
+                  </div>
+                  <div className="flex items-center gap-1 tabular-nums ml-auto">
+                    <TrendingUp className="w-3 h-3 text-primary" />
+                    <span className="text-muted-foreground">Respostas est.:</span>
+                    <span className="font-semibold text-primary">~{impactReplies.toLocaleString("pt-BR")}/mês</span>
+                  </div>
                 </div>
               )}
-              {answers.team_size ? (
-                <Badge variant="outline" className="gap-1 font-normal">
-                  <Users className="w-3 h-3" /> Time: {String(answers.team_size)}
-                </Badge>
-              ) : null}
-              {answers.crm_choice ? (
-                <Badge variant="outline" className="gap-1 font-normal">
-                  <Database className="w-3 h-3" /> {String(answers.crm_choice)}
-                </Badge>
-              ) : null}
             </div>
           </div>
         )}
