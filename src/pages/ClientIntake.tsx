@@ -69,6 +69,7 @@ type Msg = { role: "thor" | "user"; text: string };
 
 export default function ClientIntake() {
   const { token } = useParams<{ token: string }>();
+  const DRAFT_KEY = `intake_draft_${token ?? "anon"}`;
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
@@ -78,6 +79,8 @@ export default function ClientIntake() {
   const [multi, setMulti] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [resumed, setResumed] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const current = QUESTIONS[step];
