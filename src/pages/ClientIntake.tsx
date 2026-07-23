@@ -98,8 +98,11 @@ export default function ClientIntake() {
   }, [token]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+    const el = scrollRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" }));
+  }, [messages, submitting]);
+
 
   const persist = async (patch: Record<string, unknown>, complete = false) => {
     const nextAnswers = { ...answers, ...patch };
