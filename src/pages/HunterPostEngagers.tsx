@@ -70,8 +70,11 @@ const HunterPostEngagers = () => {
       toast.error("Selecione ao menos um engajador");
       return;
     }
+    const followUp = sellerConfig.enabled
+      ? `Respostas dos leads serão tratadas por ${sellerConfig.agentName || "Social Seller LinkedIn"}${sellerConfig.requireApproval ? " (com aprovação)" : " (automático)"}.`
+      : "Ative o Social Seller LinkedIn no Inbox para respostas automáticas.";
     toast.success(`${selected.size} mensagens enviadas ao Approvals Center`, {
-      description: "Você aprova cada uma antes do envio real no LinkedIn.",
+      description: followUp,
     });
     setEngagers([]);
     setSelected(new Set());
