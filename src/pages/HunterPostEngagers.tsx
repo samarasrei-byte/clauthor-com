@@ -99,6 +99,21 @@ const HunterPostEngagers = () => {
         </p>
       </div>
 
+      <div className="rounded-lg border border-border/40 bg-muted/20 p-3 flex items-center gap-3 text-sm">
+        <Bot className="h-4 w-4 text-primary shrink-0" />
+        {sellerConfig.enabled ? (
+          <span>
+            <strong>Follow-up ativo:</strong> {sellerConfig.agentName || "Social Seller LinkedIn"} vai continuar a conversa
+            {sellerConfig.requireApproval ? " com aprovação humana." : " automaticamente."}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">
+            Social Seller LinkedIn desativado.{" "}
+            <Link to="/dashboard/inbox" className="text-primary underline">Ativar no Inbox</Link> para respostas automáticas.
+          </span>
+        )}
+      </div>
+
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
