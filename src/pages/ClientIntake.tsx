@@ -251,6 +251,18 @@ export default function ClientIntake() {
   const monthlyTotal = dailyTotal * 22; // dias úteis
   const impactReplies = Math.round(monthlyTotal * 0.08); // taxa média de resposta 8%
 
+  // 💰 Estimativa de investimento mensal
+  // Regras: G8 = R$ 2.500 fixo por bloco de 1.000 leads/mês
+  //         Squad LinkedIn (SDR + Social Seller + Hunter + Closer + CRM) = R$ 1.200/mês
+  //         Tokens de agentes ≈ R$ 7,50 por mensagem/dia (30–40 msgs/dia ≈ R$ 225–300)
+  const leadBlocks = Math.max(1, Math.ceil(monthlyTotal / 1000));
+  const g8Cost = dailyTotal > 0 ? 2500 * leadBlocks : 0;
+  const hasLinkedIn = selectedChannels.includes("LinkedIn");
+  const squadCost = hasLinkedIn ? 1200 : 0;
+  const tokensCost = dailyTotal > 0 ? Math.max(50, Math.round(dailyTotal * 7.5)) : 0;
+  const totalMonthly = g8Cost + squadCost + tokensCost;
+  const fmtBRL = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+
   if (loading) {
     return (
       <div className="min-h-dvh grid place-items-center bg-background">
