@@ -59,6 +59,8 @@ const WhatsAppPair = lazyRetry(() => import("./pages/WhatsAppPair"));
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
 const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
+const AdminClientIntakes = lazyRetry(() => import("./pages/AdminClientIntakes"));
+const ClientIntake = lazyRetry(() => import("./pages/ClientIntake"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
