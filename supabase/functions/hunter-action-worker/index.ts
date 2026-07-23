@@ -232,8 +232,8 @@ Deno.serve(async (req) => {
 
       await service.from("hunter_logs").insert({
         user_id: job.user_id,
-        level: shouldRetry ? "warn" : "error",
-        message: `${job.action} falhou (tentativa ${job.attempt}/${job.max_attempts}): ${message.slice(0, 300)}`,
+        tipo: shouldRetry ? "warn" : "error",
+        mensagem: `${job.action} falhou (tentativa ${job.attempt}/${job.max_attempts}): ${message.slice(0, 300)}`,
       });
 
       return new Response(JSON.stringify({ ok: false, jobId, error: message, willRetry: shouldRetry }), {
