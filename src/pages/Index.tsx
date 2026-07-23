@@ -949,21 +949,21 @@ const HomePage = () => {
         <LandingFAQ />
       </Suspense>
 
-      {/* ═══════════ CTA FINAL (dark) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="CTA">
+      {/* ═══════════ CTA FINAL ═══════════ */}
+      <section className="bg-white dark:bg-[#0A0A0A] border-t border-[#D2D2D7]/60 dark:border-white/10" aria-label="CTA">
         <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-white mb-8"
+            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-[#1D1D1F] dark:text-white mb-8"
           >
             {t("home.final_title1")}
             <br />
             <span className="text-primary">{t("home.final_title2")}</span>
           </motion.h2>
-          <p className="text-lg text-white/60 max-w-lg mx-auto mb-12">
+          <p className="text-lg text-[#86868B] dark:text-white/60 max-w-lg mx-auto mb-12">
             {t("home.final_desc")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -976,7 +976,7 @@ const HomePage = () => {
             </button>
             <Link
               to="/thor"
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/60 dark:hover:text-white transition-colors"
             >
               {t("home.final_thor")}
             </Link>
