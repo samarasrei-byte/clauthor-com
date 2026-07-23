@@ -999,3 +999,25 @@ body.presentation-mode:hover {
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   background-size: 220px 220px;
 }
+
+/* ============================================================
+ * MODO SIMPLES · fonte +2px, alvos de toque 44px+ (WCAG AA idoso)
+ * Ativado via <html class="simple-mode"> ou wrapper .simple-mode
+ * ============================================================ */
+.simple-mode {
+  font-size: 15px;
+}
+.simple-mode button,
+.simple-mode a,
+.simple-mode [role="button"] {
+  min-height: 44px;
+}
+.simple-mode input,
+.simple-mode textarea,
+.simple-mode select {
+  min-height: 48px;
+  font-size: 16px; /* previne zoom iOS */
+}
+.simple-mode .text-xs { font-size: 0.8125rem; }
+.simple-mode .text-sm { font-size: 0.9375rem; }
+.simple-mode .text-base { font-size: 1.0625rem; }
