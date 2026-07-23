@@ -18,6 +18,7 @@ import { pt } from "date-fns/locale";
 import { notify, toastWithUndo } from "@/lib/notify";
 import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
 import { PlatformKey } from "@/components/inbox/platformThemes";
+import SocialSellerToggle, { SellerChannel } from "@/components/inbox/SocialSellerToggle";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
@@ -204,6 +205,21 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
           </button>
         ))}
       </div>
+
+      {/* Social Seller per-channel autonomy */}
+      {activeChannel !== "all" && (
+        <SocialSellerToggle
+          channel={activeChannel as SellerChannel}
+          channelLabel={channelTabs.find((t) => t.id === activeChannel)?.label ?? activeChannel}
+          agents={Array.from(
+            new Map(
+              threads
+                .filter((t) => t.agentId)
+                .map((t) => [t.agentId!, { id: t.agentId!, name: t.agentName }]),
+            ).values(),
+          )}
+        />
+      )}
 
       {/* Main Content */}
       <div className="flex-1 flex gap-3 min-h-0 rounded-xl border border-border/10 bg-card/30 overflow-hidden">
