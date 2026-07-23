@@ -271,32 +271,9 @@ const HomePage = () => {
 
 
 
-          {/* Quiz de dor · seis caminhos claros */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-12"
-          >
-            {PAIN_QUIZ.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => pickPain(item)}
-                  className="group flex items-start gap-3 text-left rounded-2xl border border-[#D2D2D7]/70 dark:border-white/10 bg-white dark:bg-white/[0.04] p-5 hover:border-[#1D1D1F]/25 dark:hover:border-white/25 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] hover:-translate-y-0.5 transition-all"
-                >
-                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.06] border border-[#D2D2D7]/70 dark:border-white/10 flex items-center justify-center group-hover:bg-[#1D1D1F] dark:group-hover:bg-white transition-colors">
-                    <Icon className="h-4 w-4 text-[#1D1D1F]/70 dark:text-white/70 group-hover:text-white dark:group-hover:text-[#0A0A0A] transition-colors" strokeWidth={1.75} />
-                  </span>
-                  <span className="text-sm text-[#1D1D1F] dark:text-white leading-snug font-medium">
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
-          </motion.div>
+          {/* Grid de dor removido · as mesmas opções aparecem como sugestões
+              dentro do chat do Thor logo abaixo (evita duplicação de conteúdo). */}
+
 
 
 
