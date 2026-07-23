@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot } from "lucide-react";
 import { toast } from "sonner";
+import { getSocialSellerConfig } from "@/components/inbox/SocialSellerToggle";
+import { Link } from "react-router-dom";
 
 type Engager = {
   name: string;
