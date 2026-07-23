@@ -233,8 +233,23 @@ export default function ClientIntake() {
     return { visibleTotal: total, visibleDone: doneCount };
   }, [answers, step, done]);
   const progress = Math.min(100, Math.round((visibleDone / Math.max(1, visibleTotal)) * 100));
+  const etaMinutes = Math.max(1, Math.ceil((visibleTotal - visibleDone) * 0.25)); // ~15s/pergunta
 
   const selectedChannels = Array.isArray(answers.channels) ? (answers.channels as string[]) : [];
+
+  // Preview de automação · volumes por canal em tempo real
+  const CH_KEY: Record<string, string> = {
+    LinkedIn: "volume_linkedin", WhatsApp: "volume_whatsapp", "E-mail": "volume_email",
+    Instagram: "volume_instagram", Facebook: "volume_facebook", TikTok: "volume_tiktok",
+  };
+  const channelVolumes = selectedChannels.map((c) => {
+    const raw = answers[CH_KEY[c]];
+    const n = typeof raw === "string" ? parseInt(raw, 10) : typeof raw === "number" ? raw : 0;
+    return { channel: c, daily: Number.isFinite(n) ? n : 0 };
+  });
+  const dailyTotal = channelVolumes.reduce((s, x) => s + x.daily, 0);
+  const monthlyTotal = dailyTotal * 22; // dias úteis
+  const impactReplies = Math.round(monthlyTotal * 0.08); // taxa média de resposta 8%
 
   if (loading) {
     return (
