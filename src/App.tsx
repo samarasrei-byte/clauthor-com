@@ -119,6 +119,7 @@ const HunterMensagem = lazyRetry(() => import("./pages/HunterMensagem"));
 const HunterAtivar = lazyRetry(() => import("./pages/HunterAtivar"));
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
 const HunterInbox = lazyRetry(() => import("./pages/HunterInbox"));
+const HunterPostEngagers = lazyRetry(() => import("./pages/HunterPostEngagers"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const AgentMetricsDetail = lazyRetry(() => import("./pages/AgentMetricsDetail"));
 const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
