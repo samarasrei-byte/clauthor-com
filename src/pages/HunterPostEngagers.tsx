@@ -4,7 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot,
+  ThumbsUp, MessageCircle, Database, ChevronDown,
+} from "lucide-react";
 import { toast } from "sonner";
 import { getSocialSellerConfig } from "@/components/inbox/SocialSellerToggle";
 import { Link } from "react-router-dom";
@@ -15,7 +26,18 @@ type Engager = {
   reaction: "like" | "comment";
   snippet?: string;
   suggestedMessage: string;
+  liked?: boolean;
+  commented?: boolean;
+  sentToCrm?: string;
 };
+
+const CRM_OPTIONS = [
+  { id: "hubspot", name: "HubSpot" },
+  { id: "pipedrive", name: "Pipedrive" },
+  { id: "salesforce", name: "Salesforce" },
+  { id: "zoho", name: "Zoho CRM" },
+  { id: "rdstation", name: "RD Station" },
+] as const;
 
 const HunterPostEngagers = () => {
   const [postUrl, setPostUrl] = useState("");
