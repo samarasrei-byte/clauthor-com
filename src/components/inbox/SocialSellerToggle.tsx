@@ -38,7 +38,7 @@ function writeAll(map: ConfigMap) {
 }
 
 export function getSocialSellerConfig(channel: SellerChannel): SocialSellerConfig {
-  return readAll()[channel] ?? { enabled: false, requireApproval: true };
+  return readAll()[channel] ?? { enabled: false, requireApproval: true, modelId: DEFAULT_SOCIAL_SELLER_MODEL };
 }
 
 interface Props {
