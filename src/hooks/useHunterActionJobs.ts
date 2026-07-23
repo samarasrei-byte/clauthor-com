@@ -85,16 +85,17 @@ export function useHunterActionJobs({ jobIds, limit = 100, enabled = true }: Opt
 
   const retryJob = useCallback(async (jobId: string) => {
     // Reset the job and let the worker pick it up.
+    const patch = {
+      status: "queued",
+      attempt: 1,
+      error: null,
+      next_retry_at: null,
+      finished_at: null,
+      started_at: null,
+    } as never;
     const { error } = await supabase
       .from("hunter_action_jobs" as never)
-      .update({
-        status: "queued",
-        attempt: 1,
-        error: null,
-        next_retry_at: null,
-        finished_at: null,
-        started_at: null,
-      })
+      .update(patch)
       .eq("id", jobId);
     if (error) throw error;
     // Kick the worker
