@@ -463,35 +463,26 @@ const HomePage = () => {
 
 
       <section
-        className="dark relative bg-black text-white overflow-hidden"
+        className="relative bg-white dark:bg-[#0A0A0A] overflow-hidden"
         aria-label="Squad ou Departamento"
       >
-        {/* Grain overlay */}
+        {/* Glow atmosférico sutil */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-          }}
-        />
-        {/* Glow atmosférico */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/[0.08] blur-[120px]"
+          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/[0.04] blur-[120px]"
         />
 
         <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32">
           {/* ── Header ─────────────────────────────────────────────── */}
           <div className="mb-16 max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-4">
               Dois caminhos
             </p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-[#1D1D1F] dark:text-white mb-6">
               Comece com um squad.{" "}
-              <span className="text-white/65">Escale para um departamento.</span>
+              <span className="text-[#86868B] dark:text-white/65">Escale para um departamento.</span>
             </h2>
-            <p className="text-lg text-white/60 max-w-xl">
+            <p className="text-lg text-[#86868B] dark:text-white/60 max-w-xl">
               Você escolhe o tamanho da mordida. Do primeiro time vertical ao departamento inteiro.
             </p>
           </div>
@@ -506,43 +497,43 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 backdrop-blur-sm transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-[#D2D2D7]/70 dark:border-white/10 bg-[#FBFBFD] dark:bg-white/[0.03] hover:bg-white dark:hover:bg-white/[0.06] hover:border-[#1D1D1F]/25 dark:hover:border-white/20 hover:shadow-[0_25px_60px_-25px_rgba(0,0,0,0.15)] transition-all flex flex-col min-h-[360px]"
             >
               <div className="flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   ● Squad
                 </span>
-                <span className="text-[11px] text-white/65">Comece rápido</span>
+                <span className="text-[11px] text-[#86868B] dark:text-white/65">Comece rápido</span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
+              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-4">
                 Comece rápido.
               </h3>
-              <p className="text-base text-white/60 leading-relaxed mb-8 flex-1">
+              <p className="text-base text-[#86868B] dark:text-white/60 leading-relaxed mb-8 flex-1">
                 Um time vertical de 4 a 7 agentes de IA para resolver{" "}
-                <span className="text-white">uma dor específica</span>. Ativação em minutos, sem
+                <span className="text-[#1D1D1F] dark:text-white">uma dor específica</span>. Ativação em minutos, sem
                 equipe técnica. Ideal para PME e profissionais liberais.
               </p>
 
-              <ul className="space-y-2 mb-8 text-sm text-white/80">
+              <ul className="space-y-2 mb-8 text-sm text-[#1D1D1F]/80 dark:text-white/80">
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Reputação IA, Atendimento 24h, SDR, Financeiro, Conteúdo</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Self-serve, sem onboarding pesado</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Cancelamento livre</li>
               </ul>
 
-              <div className="flex items-center justify-between pt-6 border-t border-white/10">
+              <div className="flex items-center justify-between pt-6 border-t border-[#D2D2D7]/70 dark:border-white/10">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/70">A partir de</div>
-                  <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/70">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-[#86868B] dark:text-white/70">A partir de</div>
+                  <div className="text-2xl font-semibold text-[#1D1D1F] dark:text-white">R$ 597<span className="text-sm font-normal text-[#86868B] dark:text-white/70">/mês</span></div>
                 </div>
-                <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
+                <span className="text-sm font-semibold inline-flex items-center gap-1 text-[#1D1D1F] dark:text-white group-hover:text-primary transition-colors">
                   {t("home.paths_squad_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </motion.button>
 
-            {/* Departamento · core empresa · destaque com fundo vermelho sutil */}
+            {/* Departamento · destaque escuro para contraste Apple */}
             <motion.button
               onClick={() => {
                 trackKpi("home_path_select", { section: "departamento" });
@@ -550,11 +541,11 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/[0.12] via-white/[0.04] to-white/[0.02] border border-primary/30 hover:border-primary/50 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.5)] transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl overflow-hidden bg-[#1D1D1F] dark:bg-white/[0.04] border border-[#1D1D1F] dark:border-primary/30 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.4)] transition-all flex flex-col min-h-[360px]"
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-primary/20 blur-[100px]"
+                className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-primary/25 blur-[100px]"
               />
               <div className="relative flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
@@ -589,9 +580,9 @@ const HomePage = () => {
             </motion.button>
           </div>
 
-          {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
-          <div className="relative mt-20 pt-12">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/65 mb-8 text-center">
+          {/* ── Escala · faixa de prova ─── */}
+          <div className="relative mt-20 pt-12 border-t border-[#D2D2D7]/60 dark:border-white/10">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-[#86868B] dark:text-white/65 mb-8 text-center">
               {t("home.scale_eyebrow")}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
@@ -614,13 +605,13 @@ const HomePage = () => {
                     prefix={s.prefix}
                     suffix={s.suffix}
                     duration={2}
-                    className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
+                    className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-[#1D1D1F] dark:text-white"}`}
                   />
-                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-white/70">
+                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-[#86868B] dark:text-white/70">
                     {s.label}
                   </div>
                   {s.sub && (
-                    <div className="mt-1 text-[10px] text-white/35 line-through decoration-white/25">
+                    <div className="mt-1 text-[10px] text-[#86868B]/60 dark:text-white/35 line-through decoration-[#86868B]/40 dark:decoration-white/25">
                       {s.sub}
                     </div>
                   )}
