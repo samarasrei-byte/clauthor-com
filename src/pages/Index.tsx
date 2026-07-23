@@ -401,20 +401,20 @@ const HomePage = () => {
           >
             <button
               onClick={() => startFlow("hero_primary")}
-              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-neutral-900 text-sm font-semibold hover:bg-neutral-100 transition-colors min-h-[48px]"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#1D1D1F] text-white dark:bg-white dark:text-[#0A0A0A] text-sm font-semibold hover:bg-black dark:hover:bg-neutral-100 transition-colors min-h-[48px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)]"
             >
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
               onClick={() => setDemoOpen(true)}
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors min-h-[48px]"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-[#D2D2D7] dark:border-white/30 bg-white dark:bg-transparent text-[#1D1D1F] dark:text-white text-sm font-medium hover:bg-[#F5F5F7] dark:hover:bg-white/10 transition-colors min-h-[48px]"
             >
               Ver demonstração
             </button>
             <Link
               to="/pricing"
-              className="text-sm text-white/75 hover:text-white transition-colors underline-offset-4 hover:underline"
+              className="text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/75 dark:hover:text-white transition-colors underline-offset-4 hover:underline"
             >
               {t("home.cta_view_pricing")}
             </Link>
