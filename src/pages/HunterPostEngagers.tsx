@@ -223,6 +223,48 @@ const HunterPostEngagers = () => {
                   {selected.has(i) && <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />}
                 </div>
                 <div className="mt-3 p-3 rounded bg-background border text-sm">{e.suggestedMessage}</div>
+                <div className="mt-3 flex flex-wrap items-center gap-2" onClick={(ev) => ev.stopPropagation()}>
+                  <Button
+                    size="sm"
+                    variant={e.liked ? "secondary" : "outline"}
+                    className="h-7 gap-1.5 text-xs"
+                    disabled={e.liked}
+                    onClick={(ev) => likePost(i, ev)}
+                  >
+                    <ThumbsUp className="h-3 w-3" /> {e.liked ? "Like agendado" : "Curtir post"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={e.commented ? "secondary" : "outline"}
+                    className="h-7 gap-1.5 text-xs"
+                    disabled={e.commented}
+                    onClick={(ev) => commentPost(i, ev)}
+                  >
+                    <MessageCircle className="h-3 w-3" /> {e.commented ? "Comentário agendado" : "Comentar"}
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant={e.sentToCrm ? "secondary" : "outline"}
+                        className="h-7 gap-1.5 text-xs"
+                      >
+                        <Database className="h-3 w-3" />
+                        {e.sentToCrm ? `Em ${e.sentToCrm}` : "Enviar ao CRM"}
+                        <ChevronDown className="h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuLabel className="text-xs">Escolher CRM</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {CRM_OPTIONS.map((crm) => (
+                        <DropdownMenuItem key={crm.id} onClick={() => sendToCrm(i, crm)}>
+                          {crm.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             ))}
             <Button className="w-full gap-2" onClick={sendToApproval}>
