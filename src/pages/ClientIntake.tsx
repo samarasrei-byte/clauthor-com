@@ -247,7 +247,7 @@ export default function ClientIntake() {
 
           {/* Composer */}
           {!done && current && (
-            <Card className="p-3 mt-2 border-border/60 shadow-sm">
+            <Card className="p-3 mb-4 border-border/60 shadow-md shrink-0 sticky bottom-4">
               {current.type === "choice" && (
                 <div className="flex flex-wrap gap-2">
                   {current.options!.map((opt) => (
