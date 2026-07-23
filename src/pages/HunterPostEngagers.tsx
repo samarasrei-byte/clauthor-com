@@ -143,8 +143,7 @@ const HunterPostEngagers = () => {
           user_id: user.id,
           nome: "Post Engagers · " + new Date().toLocaleDateString("pt-BR"),
           status: "ativa",
-          origem: "post_engagers",
-        } as never)
+        })
         .select("id")
         .single();
       if (campErr || !newCamp) { toast.error("Falha ao criar campanha"); return null; }
