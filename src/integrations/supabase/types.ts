@@ -2599,6 +2599,87 @@ export type Database = {
         }
         Relationships: []
       }
+      hunter_action_jobs: {
+        Row: {
+          action: string
+          attempt: number
+          campaign_id: string | null
+          created_at: string
+          error: string | null
+          finished_at: string | null
+          id: string
+          lead_id: string | null
+          max_attempts: number
+          next_retry_at: string | null
+          payload: Json
+          provider: string
+          queued_at: string
+          result: Json | null
+          started_at: string | null
+          status: string
+          tenant_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          attempt?: number
+          campaign_id?: string | null
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          lead_id?: string | null
+          max_attempts?: number
+          next_retry_at?: string | null
+          payload?: Json
+          provider: string
+          queued_at?: string
+          result?: Json | null
+          started_at?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          attempt?: number
+          campaign_id?: string | null
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          lead_id?: string | null
+          max_attempts?: number
+          next_retry_at?: string | null
+          payload?: Json
+          provider?: string
+          queued_at?: string
+          result?: Json | null
+          started_at?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_action_jobs_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hunter_action_jobs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hunter_campaigns: {
         Row: {
           cargo_alvo: string
@@ -2759,13 +2840,17 @@ export type Database = {
         Row: {
           campaign_id: string
           cargo: string
+          commented_at: string | null
           created_at: string
           empresa: string
           icebreaker: string
           id: string
+          liked_at: string | null
           linkedin_url: string
+          linkedin_urn: string | null
           nome_completo: string
           notas: string
+          sent_to_crm: Json
           status: string
           updated_at: string
           user_id: string
@@ -2773,13 +2858,17 @@ export type Database = {
         Insert: {
           campaign_id: string
           cargo?: string
+          commented_at?: string | null
           created_at?: string
           empresa?: string
           icebreaker?: string
           id?: string
+          liked_at?: string | null
           linkedin_url?: string
+          linkedin_urn?: string | null
           nome_completo?: string
           notas?: string
+          sent_to_crm?: Json
           status?: string
           updated_at?: string
           user_id: string
@@ -2787,13 +2876,17 @@ export type Database = {
         Update: {
           campaign_id?: string
           cargo?: string
+          commented_at?: string | null
           created_at?: string
           empresa?: string
           icebreaker?: string
           id?: string
+          liked_at?: string | null
           linkedin_url?: string
+          linkedin_urn?: string | null
           nome_completo?: string
           notas?: string
+          sent_to_crm?: Json
           status?: string
           updated_at?: string
           user_id?: string
