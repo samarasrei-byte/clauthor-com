@@ -184,7 +184,7 @@ export default function ClientIntake() {
         <title>Onboarding do Cliente · Clauthor × G8</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30 flex flex-col">
+      <div className="h-dvh overflow-hidden bg-gradient-to-b from-background to-muted/30 flex flex-col">
         {/* Header co-branded */}
         <header className="border-b border-border/60 bg-background/80 backdrop-blur sticky top-0 z-10">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
