@@ -1660,6 +1660,54 @@ export type Database = {
           },
         ]
       }
+      client_intakes: {
+        Row: {
+          answers: Json
+          client_name: string | null
+          company_name: string | null
+          completed_at: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          status: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          client_name?: string | null
+          company_name?: string | null
+          completed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          client_name?: string | null
+          company_name?: string | null
+          completed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clipper_clips: {
         Row: {
           caption: string | null
