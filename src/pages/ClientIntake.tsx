@@ -251,6 +251,18 @@ export default function ClientIntake() {
   const monthlyTotal = dailyTotal * 22; // dias úteis
   const impactReplies = Math.round(monthlyTotal * 0.08); // taxa média de resposta 8%
 
+  // 💰 Estimativa de investimento mensal
+  // Regras: G8 = R$ 2.500 fixo por bloco de 1.000 leads/mês
+  //         Squad LinkedIn (SDR + Social Seller + Hunter + Closer + CRM) = R$ 1.200/mês
+  //         Tokens de agentes ≈ R$ 7,50 por mensagem/dia (30–40 msgs/dia ≈ R$ 225–300)
+  const leadBlocks = Math.max(1, Math.ceil(monthlyTotal / 1000));
+  const g8Cost = dailyTotal > 0 ? 2500 * leadBlocks : 0;
+  const hasLinkedIn = selectedChannels.includes("LinkedIn");
+  const squadCost = hasLinkedIn ? 1200 : 0;
+  const tokensCost = dailyTotal > 0 ? Math.max(50, Math.round(dailyTotal * 7.5)) : 0;
+  const totalMonthly = g8Cost + squadCost + tokensCost;
+  const fmtBRL = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+
   if (loading) {
     return (
       <div className="min-h-dvh grid place-items-center bg-background">
@@ -387,6 +399,35 @@ export default function ClientIntake() {
                     <span className="text-muted-foreground">Respostas est.:</span>
                     <span className="font-semibold text-primary">~{impactReplies.toLocaleString("pt-BR")}/mês</span>
                   </div>
+                </div>
+              )}
+
+              {totalMonthly > 0 && (
+                <div className="rounded-lg border border-primary/20 bg-background/60 px-3 py-2 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                    💰 Investimento estimado / mês
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 tabular-nums">
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">G8 · {leadBlocks}k leads</span>
+                      <span className="font-semibold text-foreground">{fmtBRL(g8Cost)}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">Squad LinkedIn</span>
+                      <span className="font-semibold text-foreground">{hasLinkedIn ? fmtBRL(squadCost) : "—"}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">Tokens agentes</span>
+                      <span className="font-semibold text-foreground">~{fmtBRL(tokensCost)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between border-t border-border/60 pt-1.5">
+                    <span className="text-[11px] text-muted-foreground">Total mensal estimado</span>
+                    <span className="text-sm font-bold text-primary tabular-nums">{fmtBRL(totalMonthly)}</span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-tight">
+                    G8: R$ 2.500 fixo por 1.000 leads/mês · Squad (SDR + Social Seller + Hunter + Closer + CRM): R$ 1.200/mês · Tokens variam por uso (≈ R$ 200–300 p/ 30–40 msgs/dia).
+                  </p>
                 </div>
               )}
             </div>
