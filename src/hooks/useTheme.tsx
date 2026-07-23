@@ -14,9 +14,9 @@ export const ThemeProvider = forwardRef<HTMLDivElement, { children: ReactNode }>
   ({ children }, _ref) => {
     const [theme, setThemeState] = useState<Theme>(() => {
       if (typeof window !== "undefined") {
-        return (localStorage.getItem("clauthor-theme") as Theme) || "dark";
+        return (localStorage.getItem("clauthor-theme") as Theme) || "light";
       }
-      return "dark";
+      return "light";
     });
 
     useEffect(() => {
