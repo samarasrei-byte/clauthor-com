@@ -14,19 +14,35 @@ import FeatureGate from "@/components/FeatureGate";
 
 // Retry wrapper for stale chunk errors after deploys
 function lazyRetry(factory: () => Promise<any>) {
-  return lazy(() =>
-    factory().catch((err) => {
-      const key = "chunk_reload_" + Date.now().toString(36);
-      const lastReload = sessionStorage.getItem("chunk_last_reload");
-      const now = Date.now();
-      // Only reload if we haven't reloaded in the last 10 seconds
-      if (!lastReload || now - parseInt(lastReload) > 10000) {
-        sessionStorage.setItem("chunk_last_reload", now.toString());
-        window.location.reload();
+  return lazy(async () => {
+    try {
+      return await factory();
+    } catch (err: any) {
+      const msg = String(err?.message || err);
+      const isChunkError =
+        /Failed to fetch dynamically imported module|Importing a module script failed|ChunkLoadError|Loading chunk .* failed/i.test(
+          msg
+        );
+      if (!isChunkError) throw err;
+
+      // One retry after a short delay (network hiccup)
+      try {
+        await new Promise((r) => setTimeout(r, 400));
+        return await factory();
+      } catch {
+        // Stale deploy: hard reload once (guarded to avoid loops)
+        const lastReload = sessionStorage.getItem("chunk_last_reload");
+        const now = Date.now();
+        if (!lastReload || now - parseInt(lastReload) > 10000) {
+          sessionStorage.setItem("chunk_last_reload", now.toString());
+          window.location.reload();
+          // Return a never-resolving promise so React doesn't paint an error while reloading
+          return new Promise(() => {}) as any;
+        }
+        throw err;
       }
-      throw err;
-    })
-  );
+    }
+  });
 }
 
 // Lazy load all pages for faster initial load
