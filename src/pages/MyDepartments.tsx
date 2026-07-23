@@ -95,12 +95,6 @@ const MyDepartments = () => {
           </p>
         </div>
 
-        <Button asChild size="sm" className="gap-1.5 shadow-sm w-full sm:w-auto shrink-0">
-          <Link to="/dashboard/departamentos">
-            <Plus className="h-3.5 w-3.5" />
-            Novo departamento
-          </Link>
-        </Button>
       </header>
 
       {loading && (
