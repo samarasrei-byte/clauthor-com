@@ -18,6 +18,7 @@ import { pt } from "date-fns/locale";
 import { notify, toastWithUndo } from "@/lib/notify";
 import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
 import { PlatformKey } from "@/components/inbox/platformThemes";
+import SocialSellerToggle, { SellerChannel } from "@/components/inbox/SocialSellerToggle";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
