@@ -401,6 +401,35 @@ export default function ClientIntake() {
                   </div>
                 </div>
               )}
+
+              {totalMonthly > 0 && (
+                <div className="rounded-lg border border-primary/20 bg-background/60 px-3 py-2 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                    💰 Investimento estimado / mês
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 tabular-nums">
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">G8 · {leadBlocks}k leads</span>
+                      <span className="font-semibold text-foreground">{fmtBRL(g8Cost)}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">Squad LinkedIn</span>
+                      <span className="font-semibold text-foreground">{hasLinkedIn ? fmtBRL(squadCost) : "—"}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1">
+                      <span className="text-muted-foreground">Tokens agentes</span>
+                      <span className="font-semibold text-foreground">~{fmtBRL(tokensCost)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between border-t border-border/60 pt-1.5">
+                    <span className="text-[11px] text-muted-foreground">Total mensal estimado</span>
+                    <span className="text-sm font-bold text-primary tabular-nums">{fmtBRL(totalMonthly)}</span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-tight">
+                    G8: R$ 2.500 fixo por 1.000 leads/mês · Squad (SDR + Social Seller + Hunter + Closer + CRM): R$ 1.200/mês · Tokens variam por uso (≈ R$ 200–300 p/ 30–40 msgs/dia).
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}
