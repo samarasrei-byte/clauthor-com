@@ -57,6 +57,10 @@ const AdminDashboard = () => {
       navigate("/admin/paypal-sandbox");
       return;
     }
+    if (id === "clientes") {
+      navigate("/admin/clientes");
+      return;
+    }
     setActiveTab(id);
   };
   const queryClient = useQueryClient();
