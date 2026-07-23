@@ -207,16 +207,10 @@ const FilesLibrary = () => {
               Cofre central de vídeos, imagens, brandbooks, logos e materiais que alimentam seus agentes de IA. Arraste pra cá e use em qualquer lugar.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <input
-              ref={inputRef} type="file" multiple className="hidden"
-              onChange={(e) => e.target.files && uploadMutation.mutate(e.target.files)}
-            />
-            <Button variant="outline" className="gap-1.5" onClick={createFolder}><FolderOpen className="h-3.5 w-3.5" />Nova pasta</Button>
-            <Button onClick={() => inputRef.current?.click()} disabled={uploadMutation.isPending} className="gap-1.5">
-              <Upload className="h-3.5 w-3.5" /> Enviar arquivos
-            </Button>
-          </div>
+          <input
+            ref={inputRef} type="file" multiple className="hidden"
+            onChange={(e) => e.target.files && uploadMutation.mutate(e.target.files)}
+          />
         </div>
 
         {/* Quick stats inline */}
