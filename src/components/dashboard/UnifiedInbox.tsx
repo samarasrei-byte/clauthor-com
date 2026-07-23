@@ -19,6 +19,7 @@ import { notify, toastWithUndo } from "@/lib/notify";
 import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSkin";
 import { PlatformKey } from "@/components/inbox/platformThemes";
 import SocialSellerToggle, { SellerChannel } from "@/components/inbox/SocialSellerToggle";
+import ChannelAgentRecommender from "@/components/inbox/ChannelAgentRecommender";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
