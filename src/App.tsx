@@ -62,6 +62,7 @@ const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const MyDepartments = lazyRetry(() => import("./pages/MyDepartments"));
+const SimpleMode = lazyRetry(() => import("./pages/SimpleMode"));
 const MySquads = lazyRetry(() => import("./pages/MySquads"));
 const Arquivos = lazyRetry(() => import("./pages/Arquivos"));
 
@@ -247,6 +248,7 @@ const App = () => (
                 {/* Dashboard pages with minimal header + sidebar only */}
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
+                  <Route path="/dashboard/simples" element={<SimpleMode />} />
                   <Route path="/dashboard/ativacao" element={<ActivationStatus />} />
                   <Route path="/dashboard/inbox" element={<AgentInbox />} />
                   <Route path="/dashboard/traces" element={<AgentTraces />} />
