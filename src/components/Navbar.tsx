@@ -83,12 +83,12 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter] duration-300 backdrop-blur-2xl ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300 backdrop-blur-2xl ${
         scrolled
-          ? "bg-background/75 supports-[backdrop-filter]:bg-background/60"
-          : "bg-background/55 supports-[backdrop-filter]:bg-background/35"
-      } ${mobileOpen ? "z-[9999] bg-background/95 backdrop-blur-2xl" : ""}`}
-      style={{ boxShadow: 'none', borderBottom: 'none' }}
+          ? "bg-background/95 supports-[backdrop-filter]:bg-background/85 border-b border-border/40"
+          : "bg-background/85 supports-[backdrop-filter]:bg-background/70 border-b border-transparent"
+      } ${mobileOpen ? "z-[9999] bg-background/98 backdrop-blur-2xl" : ""}`}
+      style={{ boxShadow: 'none' }}
     >
       <div className="max-w-[1120px] mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-12">
