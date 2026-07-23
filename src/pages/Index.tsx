@@ -192,7 +192,7 @@ const HomePage = () => {
       <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative overflow-hidden isolate bg-[#FBFBFD] dark:bg-[#0A0A0A]"
+        className="relative overflow-hidden isolate bg-[#FBFBFD] dark:bg-black"
         aria-label="Hero"
       >
         {/* Textura pontilhada sutil · showroom Apple/Tesla (light) / grid discreto (dark) */}
@@ -401,7 +401,7 @@ const HomePage = () => {
           >
             <button
               onClick={() => startFlow("hero_primary")}
-              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#1D1D1F] text-white dark:bg-white dark:text-[#0A0A0A] text-sm font-semibold hover:bg-black dark:hover:bg-neutral-100 transition-colors min-h-[48px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)]"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#1D1D1F] text-white dark:bg-white dark:text-black text-sm font-semibold hover:bg-black dark:hover:bg-neutral-100 transition-colors min-h-[48px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)]"
             >
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -428,7 +428,7 @@ const HomePage = () => {
 
 
       <section
-        className="relative bg-white dark:bg-[#0A0A0A] overflow-hidden"
+        className="relative bg-white dark:bg-black overflow-hidden"
         aria-label="Squad ou Departamento"
       >
         {/* Glow atmosférico sutil */}
@@ -805,7 +805,7 @@ const HomePage = () => {
 
 
       {/* ═══════════ PAINEL PREVIEW ═══════════ */}
-      <section className="bg-[#FBFBFD] dark:bg-[#0A0A0A] border-y border-[#D2D2D7]/60 dark:border-white/10" aria-label="Painel">
+      <section className="bg-[#FBFBFD] dark:bg-black border-y border-[#D2D2D7]/60 dark:border-white/10" aria-label="Painel">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <p className="text-[11px] uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-4">
@@ -915,7 +915,7 @@ const HomePage = () => {
       </Suspense>
 
       {/* ═══════════ CTA FINAL ═══════════ */}
-      <section className="bg-white dark:bg-[#0A0A0A] border-t border-[#D2D2D7]/60 dark:border-white/10" aria-label="CTA">
+      <section className="bg-white dark:bg-black border-t border-[#D2D2D7]/60 dark:border-white/10" aria-label="CTA">
         <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
