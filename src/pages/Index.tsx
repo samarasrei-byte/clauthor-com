@@ -192,7 +192,7 @@ const HomePage = () => {
       <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative overflow-hidden isolate bg-[linear-gradient(to_bottom,#F5F5F7_0%,#F5F5F7_55%,#4a4a4a_82%,#1a1a1a_94%,#0A0A0A_100%)] dark:bg-[linear-gradient(to_bottom,#0A0A0A_0%,#0A0A0A_100%)]"
+        className="relative overflow-hidden isolate bg-[#FBFBFD] dark:bg-[#0A0A0A]"
         aria-label="Hero"
       >
         {/* Textura pontilhada sutil · showroom Apple/Tesla (light) / grid discreto (dark) */}
