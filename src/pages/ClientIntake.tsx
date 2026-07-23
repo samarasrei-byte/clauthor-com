@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Loader2, Send, CheckCircle2, Sparkles, Linkedin, MessageCircle,
   Mail, Instagram, Facebook, Music2, Users, Database, Target,
+  Clock, Zap, TrendingUp, Save,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
