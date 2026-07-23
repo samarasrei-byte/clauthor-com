@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { Bot, ShieldCheck, Zap } from "lucide-react";
+import { Bot, ShieldCheck, Zap, Cpu, AlertTriangle, KeyRound } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { notify } from "@/lib/notify";
+import { AGENT_MODELS, DEFAULT_SOCIAL_SELLER_MODEL, getModel } from "@/lib/ai-models/registry";
+import { SELLER_CHANNELS, type SellerChannelId } from "@/lib/social-seller/channels";
 
-export type SellerChannel =
-  | "dashboard" | "whatsapp" | "email" | "linkedin"
-  | "instagram" | "facebook" | "tiktok";
+export type SellerChannel = "dashboard" | SellerChannelId;
 
 export interface SocialSellerConfig {
   enabled: boolean;
   requireApproval: boolean;
   agentId?: string | null;
   agentName?: string | null;
+  modelId?: string;
 }
 
 const STORAGE_KEY = "clauthor:social-seller:v1";
@@ -37,7 +38,7 @@ function writeAll(map: ConfigMap) {
 }
 
 export function getSocialSellerConfig(channel: SellerChannel): SocialSellerConfig {
-  return readAll()[channel] ?? { enabled: false, requireApproval: true };
+  return readAll()[channel] ?? { enabled: false, requireApproval: true, modelId: DEFAULT_SOCIAL_SELLER_MODEL };
 }
 
 interface Props {
@@ -110,47 +111,97 @@ const SocialSellerToggle = ({ channel, channelLabel, agents = [] }: Props) => {
       </div>
 
       {config.enabled && (
-        <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border/10">
-          {agents.length > 0 && (
+        <div className="flex flex-col gap-2 pt-1 border-t border-border/10">
+          {/* Capability hint por canal */}
+          {channel !== "dashboard" && SELLER_CHANNELS[channel as SellerChannelId] && (() => {
+            const cap = SELLER_CHANNELS[channel as SellerChannelId];
+            const outboundBlocked = cap.canProspectColdOutbound === "unsupported";
+            return (
+              <div className={cn(
+                "flex items-start gap-1.5 rounded-md px-2 py-1.5 text-[10px] leading-tight",
+                outboundBlocked
+                  ? "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20"
+                  : "bg-muted/30 text-muted-foreground border border-border/10",
+              )}>
+                <AlertTriangle className="h-3 w-3 shrink-0 mt-0.5" strokeWidth={2} />
+                <span>{cap.caveats[0]}</span>
+              </div>
+            );
+          })()}
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Modelo IA */}
             <label className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              Agente:
+              <Cpu className="h-3 w-3" strokeWidth={2} />
+              Modelo:
               <select
-                value={config.agentId ?? ""}
+                value={config.modelId ?? DEFAULT_SOCIAL_SELLER_MODEL}
                 onChange={(e) => {
-                  const id = e.target.value || null;
-                  const name = agents.find((a) => a.id === id)?.name ?? null;
-                  update({ agentId: id, agentName: name });
+                  const modelId = e.target.value;
+                  const m = getModel(modelId);
+                  if (m && !m.available) {
+                    notify.info(`${m.label} requer chave própria`, {
+                      description: `Adicione o secret ${m.requiresSecret} nas configurações para ativar.`,
+                    });
+                    return;
+                  }
+                  update({ modelId });
                 }}
-                className="bg-muted/30 border border-border/10 rounded-md px-1.5 py-1 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
+                className="bg-muted/30 border border-border/10 rounded-md px-1.5 py-1 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30 max-w-[180px]"
               >
-                <option value="">Auto (roteamento)</option>
-                {agents.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.name}
+                {AGENT_MODELS.map((m) => (
+                  <option key={m.id} value={m.id} disabled={!m.available}>
+                    {m.label}{!m.available ? " · BYOK" : m.badge ? ` · ${m.badge}` : ""}
                   </option>
                 ))}
               </select>
+              {(() => {
+                const m = getModel(config.modelId ?? DEFAULT_SOCIAL_SELLER_MODEL);
+                return m && !m.available ? <KeyRound className="h-3 w-3 text-amber-500" /> : null;
+              })()}
             </label>
-          )}
 
-          <button
-            type="button"
-            onClick={() => update({ requireApproval: !config.requireApproval })}
-            className={cn(
-              "flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-medium transition-colors border",
-              config.requireApproval
-                ? "bg-primary/10 border-primary/20 text-primary"
-                : "bg-muted/20 border-border/10 text-muted-foreground hover:text-foreground",
+            {agents.length > 0 && (
+              <label className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                Agente:
+                <select
+                  value={config.agentId ?? ""}
+                  onChange={(e) => {
+                    const id = e.target.value || null;
+                    const name = agents.find((a) => a.id === id)?.name ?? null;
+                    update({ agentId: id, agentName: name });
+                  }}
+                  className="bg-muted/30 border border-border/10 rounded-md px-1.5 py-1 text-[10px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
+                >
+                  <option value="">Auto (roteamento)</option>
+                  {agents.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
             )}
-            aria-pressed={config.requireApproval}
-          >
-            {config.requireApproval ? (
-              <ShieldCheck className="h-3 w-3" strokeWidth={2} />
-            ) : (
-              <Zap className="h-3 w-3" strokeWidth={2} />
-            )}
-            {config.requireApproval ? "Human-in-the-loop" : "Autônomo"}
-          </button>
+
+            <button
+              type="button"
+              onClick={() => update({ requireApproval: !config.requireApproval })}
+              className={cn(
+                "flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-medium transition-colors border",
+                config.requireApproval
+                  ? "bg-primary/10 border-primary/20 text-primary"
+                  : "bg-muted/20 border-border/10 text-muted-foreground hover:text-foreground",
+              )}
+              aria-pressed={config.requireApproval}
+            >
+              {config.requireApproval ? (
+                <ShieldCheck className="h-3 w-3" strokeWidth={2} />
+              ) : (
+                <Zap className="h-3 w-3" strokeWidth={2} />
+              )}
+              {config.requireApproval ? "Human-in-the-loop" : "Autônomo (aprovações inteligentes)"}
+            </button>
+          </div>
         </div>
       )}
     </div>
