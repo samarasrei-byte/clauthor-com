@@ -98,8 +98,11 @@ export default function ClientIntake() {
   }, [token]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+    const el = scrollRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" }));
+  }, [messages, submitting]);
+
 
   const persist = async (patch: Record<string, unknown>, complete = false) => {
     const nextAnswers = { ...answers, ...patch };
@@ -184,7 +187,7 @@ export default function ClientIntake() {
         <title>Onboarding do Cliente · Clauthor × G8</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
-      <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30 flex flex-col">
+      <div className="h-dvh overflow-hidden bg-gradient-to-b from-background to-muted/30 flex flex-col">
         {/* Header co-branded */}
         <header className="border-b border-border/60 bg-background/80 backdrop-blur sticky top-0 z-10">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -209,12 +212,12 @@ export default function ClientIntake() {
         </header>
 
         {/* Chat */}
-        <main className="flex-1 max-w-3xl w-full mx-auto p-4 flex flex-col">
-          <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-3 py-4">
+        <main className="flex-1 min-h-0 max-w-3xl w-full mx-auto px-4 flex flex-col">
+          <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto space-y-3 py-4 scroll-smooth">
             {messages.map((m, i) => (
-              <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
+              <div key={i} className={cn("flex animate-in fade-in slide-in-from-bottom-2 duration-300", m.role === "user" ? "justify-end" : "justify-start")}>
                 <div className={cn(
-                  "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
+                  "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm",
                   m.role === "user"
                     ? "bg-primary text-primary-foreground rounded-br-sm"
                     : "bg-card border border-border rounded-bl-sm text-foreground",
@@ -223,6 +226,17 @@ export default function ClientIntake() {
                 </div>
               </div>
             ))}
+            {submitting && !done && (
+              <div className="flex justify-start animate-in fade-in duration-200">
+                <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+                  <div className="flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce" />
+                  </div>
+                </div>
+              </div>
+            )}
             {done && (
               <div className="flex justify-center pt-6">
                 <div className="text-center">
@@ -233,9 +247,10 @@ export default function ClientIntake() {
             )}
           </div>
 
+
           {/* Composer */}
           {!done && current && (
-            <Card className="p-3 mt-2 border-border/60 shadow-sm">
+            <Card className="p-3 mb-4 border-border/60 shadow-md shrink-0 sticky bottom-4">
               {current.type === "choice" && (
                 <div className="flex flex-wrap gap-2">
                   {current.options!.map((opt) => (
