@@ -20,6 +20,7 @@ import PlatformChatSkin, { SkinMessage } from "@/components/inbox/PlatformChatSk
 import { PlatformKey } from "@/components/inbox/platformThemes";
 import SocialSellerToggle, { SellerChannel } from "@/components/inbox/SocialSellerToggle";
 import ChannelAgentRecommender from "@/components/inbox/ChannelAgentRecommender";
+import InboxTeamHero from "@/components/inbox/InboxTeamHero";
 
 type ChannelType = "all" | "dashboard" | "whatsapp" | "email" | "linkedin" | "instagram" | "facebook" | "tiktok";
 
