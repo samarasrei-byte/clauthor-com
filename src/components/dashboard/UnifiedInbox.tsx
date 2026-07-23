@@ -206,6 +206,21 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
         ))}
       </div>
 
+      {/* Social Seller per-channel autonomy */}
+      {activeChannel !== "all" && (
+        <SocialSellerToggle
+          channel={activeChannel as SellerChannel}
+          channelLabel={channelTabs.find((t) => t.id === activeChannel)?.label ?? activeChannel}
+          agents={Array.from(
+            new Map(
+              threads
+                .filter((t) => t.agentId)
+                .map((t) => [t.agentId!, { id: t.agentId!, name: t.agentName }]),
+            ).values(),
+          )}
+        />
+      )}
+
       {/* Main Content */}
       <div className="flex-1 flex gap-3 min-h-0 rounded-xl border border-border/10 bg-card/30 overflow-hidden">
         {/* Thread List */}
