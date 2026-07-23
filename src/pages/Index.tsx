@@ -839,19 +839,19 @@ const HomePage = () => {
 
 
 
-      {/* ═══════════ PAINEL PREVIEW (dark) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="Painel">
+      {/* ═══════════ PAINEL PREVIEW ═══════════ */}
+      <section className="bg-[#FBFBFD] dark:bg-[#0A0A0A] border-y border-[#D2D2D7]/60 dark:border-white/10" aria-label="Painel">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-4">
               {t("home.panel_eyebrow")}
             </p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-[#1D1D1F] dark:text-white mb-6">
               {t("home.panel_title1")}
               <br />
               <span className="text-primary">{t("home.panel_title2")}</span>
             </h2>
-            <p className="text-lg text-white/60">
+            <p className="text-lg text-[#86868B] dark:text-white/60">
               {t("home.panel_desc")}
             </p>
           </div>
