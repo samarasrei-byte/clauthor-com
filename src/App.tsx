@@ -304,6 +304,7 @@ const App = () => (
                   <Route path="/hunter-ativar" element={<FeatureGate flag="hunter"><HunterAtivar /></FeatureGate>} />
                   <Route path="/hunter-lead/:id" element={<FeatureGate flag="hunter"><HunterLeadDetail /></FeatureGate>} />
                   <Route path="/hunter-inbox" element={<FeatureGate flag="hunter"><HunterInbox /></FeatureGate>} />
+                  <Route path="/hunter/post-engagers" element={<FeatureGate flag="hunter"><HunterPostEngagers /></FeatureGate>} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                   <Route path="/comercial/funil" element={<ComercialFunil />} />
