@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { Linkedin, Sparkles, Users, MessageSquare, ArrowRight, Loader2, CheckCircle2, Bot } from "lucide-react";
 import { toast } from "sonner";
+import { getSocialSellerConfig } from "@/components/inbox/SocialSellerToggle";
+import { Link } from "react-router-dom";
 
 type Engager = {
   name: string;
@@ -21,6 +23,7 @@ const HunterPostEngagers = () => {
   const [loading, setLoading] = useState(false);
   const [engagers, setEngagers] = useState<Engager[]>([]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const sellerConfig = getSocialSellerConfig("linkedin");
 
   const extract = async () => {
     if (!postUrl.includes("linkedin.com")) {
@@ -67,8 +70,11 @@ const HunterPostEngagers = () => {
       toast.error("Selecione ao menos um engajador");
       return;
     }
+    const followUp = sellerConfig.enabled
+      ? `Respostas dos leads serão tratadas por ${sellerConfig.agentName || "Social Seller LinkedIn"}${sellerConfig.requireApproval ? " (com aprovação)" : " (automático)"}.`
+      : "Ative o Social Seller LinkedIn no Inbox para respostas automáticas.";
     toast.success(`${selected.size} mensagens enviadas ao Approvals Center`, {
-      description: "Você aprova cada uma antes do envio real no LinkedIn.",
+      description: followUp,
     });
     setEngagers([]);
     setSelected(new Set());
@@ -91,6 +97,21 @@ const HunterPostEngagers = () => {
         <p className="dash-body text-muted-foreground mt-1">
           Cole a URL de um post no LinkedIn. O Social Seller extrai quem curtiu/comentou e gera mensagens personalizadas pra aprovação.
         </p>
+      </div>
+
+      <div className="rounded-lg border border-border/40 bg-muted/20 p-3 flex items-center gap-3 text-sm">
+        <Bot className="h-4 w-4 text-primary shrink-0" />
+        {sellerConfig.enabled ? (
+          <span>
+            <strong>Follow-up ativo:</strong> {sellerConfig.agentName || "Social Seller LinkedIn"} vai continuar a conversa
+            {sellerConfig.requireApproval ? " com aprovação humana." : " automaticamente."}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">
+            Social Seller LinkedIn desativado.{" "}
+            <Link to="/dashboard/inbox" className="text-primary underline">Ativar no Inbox</Link> para respostas automáticas.
+          </span>
+        )}
       </div>
 
       <Card>
