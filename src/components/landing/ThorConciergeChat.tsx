@@ -232,9 +232,15 @@ export default function ThorConciergeChat({
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages]);
 
-  // Foco inicial e após stream terminar.
+  // Refocar apenas após stream terminar (sem autofocus inicial · evita
+  // halo vermelho "preso" no idle da landing).
+  const hasStreamedRef = useRef(false);
   useEffect(() => {
-    if (!isStreaming) textareaRef.current?.focus();
+    if (isStreaming) {
+      hasStreamedRef.current = true;
+      return;
+    }
+    if (hasStreamedRef.current) textareaRef.current?.focus();
   }, [isStreaming]);
 
   // Cancela stream ao desmontar.
