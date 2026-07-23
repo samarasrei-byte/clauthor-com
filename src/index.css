@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 96%;
 
     --card: 0 0% 7%;
@@ -116,7 +116,7 @@
 
   /* .dark scope · reaplica a paleta escura mesmo quando um ancestor usa .light */
   .dark {
-    --background: 0 0% 4%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 96%;
     --card: 0 0% 7%;
     --card-foreground: 0 0% 96%;
