@@ -35,11 +35,12 @@ export const ThemeProvider = forwardRef<HTMLDivElement, { children: ReactNode }>
     // `dark:*` do Tailwind (darkMode: "class") funcionarem).
     useEffect(() => {
       const root = document.documentElement;
-      // Transição suave global entre light/dark (premium feel)
-      root.style.setProperty(
-        "transition",
-        "background-color 320ms ease, color 320ms ease, border-color 320ms ease"
-      );
+      // Ativa transição suave apenas durante o toggle (evita flash ao scrollar)
+      root.classList.add("theme-transition");
+      const cleanup = window.setTimeout(() => {
+        root.classList.remove("theme-transition");
+      }, 320);
+
       if (theme === "light") {
         root.classList.add("light");
         root.classList.remove("dark");
@@ -50,6 +51,7 @@ export const ThemeProvider = forwardRef<HTMLDivElement, { children: ReactNode }>
         root.style.colorScheme = "dark";
       }
       localStorage.setItem(STORAGE_KEY, theme);
+      return () => window.clearTimeout(cleanup);
     }, [theme]);
 
     // Sincroniza com prefers-color-scheme do SO enquanto o usuário não pinar manualmente
