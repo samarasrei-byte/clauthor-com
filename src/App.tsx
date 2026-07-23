@@ -232,6 +232,7 @@ const App = () => (
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/intake/:token" element={<ClientIntake />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<FeatureGate flag="team_builder" fallback="/"><TeamBuilder /></FeatureGate>} />
                   <Route path="/enterprise" element={<Enterprise />} />
