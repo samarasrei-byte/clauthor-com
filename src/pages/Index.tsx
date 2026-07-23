@@ -192,7 +192,7 @@ const HomePage = () => {
       <FunnelResumeBanner />
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative overflow-hidden isolate bg-[linear-gradient(to_bottom,#F5F5F7_0%,#F5F5F7_55%,#4a4a4a_82%,#1a1a1a_94%,#0A0A0A_100%)] dark:bg-[linear-gradient(to_bottom,#0A0A0A_0%,#0A0A0A_100%)]"
+        className="relative overflow-hidden isolate bg-[#FBFBFD] dark:bg-[#0A0A0A]"
         aria-label="Hero"
       >
         {/* Textura pontilhada sutil · showroom Apple/Tesla (light) / grid discreto (dark) */}
@@ -305,10 +305,10 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.28 }}
             className="w-full max-w-3xl mb-16"
           >
-            <div className="dark rounded-3xl bg-black text-white p-4 sm:p-6 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.4)] border border-white/10">
+            <div className="rounded-3xl bg-white dark:bg-white/[0.04] p-4 sm:p-6 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.15)] border border-[#D2D2D7]/70 dark:border-white/10">
               <div className="flex items-center gap-2 mb-4 px-2">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
+                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#86868B] dark:text-white/60">
                   {t("home.thor_status")}
                 </span>
               </div>
@@ -324,20 +324,20 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="dark w-full max-w-6xl bg-black text-white rounded-3xl p-6 sm:p-8 border border-white/10 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.5)]"
+            className="w-full max-w-6xl bg-white dark:bg-white/[0.04] rounded-3xl p-6 sm:p-8 border border-[#D2D2D7]/70 dark:border-white/10 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.12)]"
           >
             <div className="flex items-end justify-between mb-6 px-1">
               <div className="text-left">
-                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/70 mb-1">
+                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-1">
                   {t("home.squads_eyebrow")}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white">
                   {t("home.squads_title")}
                 </h2>
               </div>
               <Link
                 to="/squads"
-                className="hidden sm:inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors"
+                className="hidden sm:inline-flex items-center gap-1 text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/70 dark:hover:text-white transition-colors"
               >
                 {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -351,32 +351,32 @@ const HomePage = () => {
                   <Link
                     key={squad.slug}
                     to={href}
-                    className="group text-left rounded-2xl border border-white/10 bg-white/[0.04] p-5 hover:border-primary/40 hover:bg-white/[0.07] transition-all"
+                    className="group text-left rounded-2xl border border-[#D2D2D7]/70 dark:border-white/10 bg-[#FBFBFD] dark:bg-white/[0.04] p-5 hover:border-[#1D1D1F]/25 dark:hover:border-primary/40 hover:bg-white dark:hover:bg-white/[0.07] hover:shadow-[0_20px_60px_-25px_rgba(0,0,0,0.12)] transition-all"
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
                         <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-white/70">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#86868B] dark:text-white/70">
                         {squad.agents} {t("home.squads_agents_short")}
                       </span>
                     </div>
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1.5">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-[#86868B] dark:text-white/70 mb-1.5">
                       {squad.category}
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">{squad.name}</h3>
-                    <p className="text-sm text-white/70 leading-relaxed line-clamp-2 mb-4">
+                    <h3 className="text-lg font-semibold text-[#1D1D1F] dark:text-white mb-2">{squad.name}</h3>
+                    <p className="text-sm text-[#86868B] dark:text-white/70 leading-relaxed line-clamp-2 mb-4">
                       {squad.tagline}
                     </p>
-                    <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between pt-3 border-t border-[#D2D2D7]/70 dark:border-white/10">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-[10px] text-white/70">{t("home.squads_from")}</span>
-                        <span className="text-lg font-semibold text-white">
+                        <span className="text-[10px] text-[#86868B] dark:text-white/70">{t("home.squads_from")}</span>
+                        <span className="text-lg font-semibold text-[#1D1D1F] dark:text-white">
                           {squad.tiers[0].price.toLocaleString("pt-BR")}
                         </span>
-                        <span className="text-[10px] text-white/70">{t("home.squads_per_month")}</span>
+                        <span className="text-[10px] text-[#86868B] dark:text-white/70">{t("home.squads_per_month")}</span>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-white/70 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                      <ArrowRight className="h-4 w-4 text-[#86868B] dark:text-white/70 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 );
@@ -386,7 +386,7 @@ const HomePage = () => {
             <div className="mt-6 flex sm:hidden justify-center">
               <Link
                 to="/squads"
-                className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white"
+                className="inline-flex items-center gap-1 text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/70 dark:hover:text-white"
               >
                 {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -401,20 +401,20 @@ const HomePage = () => {
           >
             <button
               onClick={() => startFlow("hero_primary")}
-              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-neutral-900 text-sm font-semibold hover:bg-neutral-100 transition-colors min-h-[48px]"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#1D1D1F] text-white dark:bg-white dark:text-[#0A0A0A] text-sm font-semibold hover:bg-black dark:hover:bg-neutral-100 transition-colors min-h-[48px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)]"
             >
               {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
               onClick={() => setDemoOpen(true)}
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors min-h-[48px]"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-full border border-[#D2D2D7] dark:border-white/30 bg-white dark:bg-transparent text-[#1D1D1F] dark:text-white text-sm font-medium hover:bg-[#F5F5F7] dark:hover:bg-white/10 transition-colors min-h-[48px]"
             >
               Ver demonstração
             </button>
             <Link
               to="/pricing"
-              className="text-sm text-white/75 hover:text-white transition-colors underline-offset-4 hover:underline"
+              className="text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/75 dark:hover:text-white transition-colors underline-offset-4 hover:underline"
             >
               {t("home.cta_view_pricing")}
             </Link>
@@ -425,10 +425,10 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ STACK STRIP · integrações reais (transição light→dark) ═══════════ */}
-      <section aria-label="Integrações e infraestrutura" className="dark relative bg-[#0A0A0A] text-white">
+      <section aria-label="Integrações e infraestrutura" className="relative bg-[#FBFBFD] dark:bg-[#0A0A0A] border-y border-[#D2D2D7]/60 dark:border-white/10">
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
           <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-10">
-            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/70 shrink-0">
+            <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 shrink-0">
               Rodando sobre
             </span>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-8 gap-y-4">
@@ -442,18 +442,18 @@ const HomePage = () => {
               ].map((brand) => (
                 <img
                   key={brand.slug}
-                  src={`https://cdn.simpleicons.org/${brand.slug}/ffffff`}
+                  src={`https://cdn.simpleicons.org/${brand.slug}/1D1D1F`}
                   alt={brand.label}
                   title={brand.label}
                   loading="lazy"
                   width={22}
                   height={22}
-                  className="h-[22px] w-auto opacity-60 hover:opacity-100 transition-opacity"
+                  className="h-[22px] w-auto opacity-60 hover:opacity-100 transition-opacity dark:invert"
                 />
               ))}
             </div>
           </div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/40 bg-primary/[0.10] text-[11px] font-mono uppercase tracking-[0.16em] text-primary shrink-0">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/[0.06] text-[11px] font-mono uppercase tracking-[0.16em] text-primary shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             Beta fechado · vagas limitadas
           </div>
@@ -463,35 +463,26 @@ const HomePage = () => {
 
 
       <section
-        className="dark relative bg-black text-white overflow-hidden"
+        className="relative bg-white dark:bg-[#0A0A0A] overflow-hidden"
         aria-label="Squad ou Departamento"
       >
-        {/* Grain overlay */}
+        {/* Glow atmosférico sutil */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-          }}
-        />
-        {/* Glow atmosférico */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/[0.08] blur-[120px]"
+          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/[0.04] blur-[120px]"
         />
 
         <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32">
           {/* ── Header ─────────────────────────────────────────────── */}
           <div className="mb-16 max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-4">
               Dois caminhos
             </p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-[#1D1D1F] dark:text-white mb-6">
               Comece com um squad.{" "}
-              <span className="text-white/65">Escale para um departamento.</span>
+              <span className="text-[#86868B] dark:text-white/65">Escale para um departamento.</span>
             </h2>
-            <p className="text-lg text-white/60 max-w-xl">
+            <p className="text-lg text-[#86868B] dark:text-white/60 max-w-xl">
               Você escolhe o tamanho da mordida. Do primeiro time vertical ao departamento inteiro.
             </p>
           </div>
@@ -506,43 +497,43 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 backdrop-blur-sm transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-[#D2D2D7]/70 dark:border-white/10 bg-[#FBFBFD] dark:bg-white/[0.03] hover:bg-white dark:hover:bg-white/[0.06] hover:border-[#1D1D1F]/25 dark:hover:border-white/20 hover:shadow-[0_25px_60px_-25px_rgba(0,0,0,0.15)] transition-all flex flex-col min-h-[360px]"
             >
               <div className="flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   ● Squad
                 </span>
-                <span className="text-[11px] text-white/65">Comece rápido</span>
+                <span className="text-[11px] text-[#86868B] dark:text-white/65">Comece rápido</span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
+              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-4">
                 Comece rápido.
               </h3>
-              <p className="text-base text-white/60 leading-relaxed mb-8 flex-1">
+              <p className="text-base text-[#86868B] dark:text-white/60 leading-relaxed mb-8 flex-1">
                 Um time vertical de 4 a 7 agentes de IA para resolver{" "}
-                <span className="text-white">uma dor específica</span>. Ativação em minutos, sem
+                <span className="text-[#1D1D1F] dark:text-white">uma dor específica</span>. Ativação em minutos, sem
                 equipe técnica. Ideal para PME e profissionais liberais.
               </p>
 
-              <ul className="space-y-2 mb-8 text-sm text-white/80">
+              <ul className="space-y-2 mb-8 text-sm text-[#1D1D1F]/80 dark:text-white/80">
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Reputação IA, Atendimento 24h, SDR, Financeiro, Conteúdo</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Self-serve, sem onboarding pesado</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Cancelamento livre</li>
               </ul>
 
-              <div className="flex items-center justify-between pt-6 border-t border-white/10">
+              <div className="flex items-center justify-between pt-6 border-t border-[#D2D2D7]/70 dark:border-white/10">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/70">A partir de</div>
-                  <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/70">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-[#86868B] dark:text-white/70">A partir de</div>
+                  <div className="text-2xl font-semibold text-[#1D1D1F] dark:text-white">R$ 597<span className="text-sm font-normal text-[#86868B] dark:text-white/70">/mês</span></div>
                 </div>
-                <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
+                <span className="text-sm font-semibold inline-flex items-center gap-1 text-[#1D1D1F] dark:text-white group-hover:text-primary transition-colors">
                   {t("home.paths_squad_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </motion.button>
 
-            {/* Departamento · core empresa · destaque com fundo vermelho sutil */}
+            {/* Departamento · destaque escuro para contraste Apple */}
             <motion.button
               onClick={() => {
                 trackKpi("home_path_select", { section: "departamento" });
@@ -550,11 +541,11 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/[0.12] via-white/[0.04] to-white/[0.02] border border-primary/30 hover:border-primary/50 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.5)] transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl overflow-hidden bg-[#1D1D1F] dark:bg-white/[0.04] border border-[#1D1D1F] dark:border-primary/30 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.4)] transition-all flex flex-col min-h-[360px]"
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-primary/20 blur-[100px]"
+                className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-primary/25 blur-[100px]"
               />
               <div className="relative flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
@@ -589,9 +580,9 @@ const HomePage = () => {
             </motion.button>
           </div>
 
-          {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
-          <div className="relative mt-20 pt-12">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/65 mb-8 text-center">
+          {/* ── Escala · faixa de prova ─── */}
+          <div className="relative mt-20 pt-12 border-t border-[#D2D2D7]/60 dark:border-white/10">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-[#86868B] dark:text-white/65 mb-8 text-center">
               {t("home.scale_eyebrow")}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
@@ -614,13 +605,13 @@ const HomePage = () => {
                     prefix={s.prefix}
                     suffix={s.suffix}
                     duration={2}
-                    className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
+                    className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-[#1D1D1F] dark:text-white"}`}
                   />
-                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-white/70">
+                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-[#86868B] dark:text-white/70">
                     {s.label}
                   </div>
                   {s.sub && (
-                    <div className="mt-1 text-[10px] text-white/35 line-through decoration-white/25">
+                    <div className="mt-1 text-[10px] text-[#86868B]/60 dark:text-white/35 line-through decoration-[#86868B]/40 dark:decoration-white/25">
                       {s.sub}
                     </div>
                   )}
@@ -848,19 +839,19 @@ const HomePage = () => {
 
 
 
-      {/* ═══════════ PAINEL PREVIEW (dark) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="Painel">
+      {/* ═══════════ PAINEL PREVIEW ═══════════ */}
+      <section className="bg-[#FBFBFD] dark:bg-[#0A0A0A] border-y border-[#D2D2D7]/60 dark:border-white/10" aria-label="Painel">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#86868B] dark:text-white/70 mb-4">
               {t("home.panel_eyebrow")}
             </p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-[#1D1D1F] dark:text-white mb-6">
               {t("home.panel_title1")}
               <br />
               <span className="text-primary">{t("home.panel_title2")}</span>
             </h2>
-            <p className="text-lg text-white/60">
+            <p className="text-lg text-[#86868B] dark:text-white/60">
               {t("home.panel_desc")}
             </p>
           </div>
@@ -958,21 +949,21 @@ const HomePage = () => {
         <LandingFAQ />
       </Suspense>
 
-      {/* ═══════════ CTA FINAL (dark) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="CTA">
+      {/* ═══════════ CTA FINAL ═══════════ */}
+      <section className="bg-white dark:bg-[#0A0A0A] border-t border-[#D2D2D7]/60 dark:border-white/10" aria-label="CTA">
         <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-white mb-8"
+            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-[#1D1D1F] dark:text-white mb-8"
           >
             {t("home.final_title1")}
             <br />
             <span className="text-primary">{t("home.final_title2")}</span>
           </motion.h2>
-          <p className="text-lg text-white/60 max-w-lg mx-auto mb-12">
+          <p className="text-lg text-[#86868B] dark:text-white/60 max-w-lg mx-auto mb-12">
             {t("home.final_desc")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -985,7 +976,7 @@ const HomePage = () => {
             </button>
             <Link
               to="/thor"
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-[#86868B] hover:text-[#1D1D1F] dark:text-white/60 dark:hover:text-white transition-colors"
             >
               {t("home.final_thor")}
             </Link>
