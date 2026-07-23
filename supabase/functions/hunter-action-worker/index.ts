@@ -204,8 +204,8 @@ Deno.serve(async (req) => {
 
       await service.from("hunter_logs").insert({
         user_id: job.user_id,
-        level: "info",
-        message: `${job.action} · ${job.provider} · ${lead.nome_completo}`,
+        tipo: "info",
+        mensagem: `${job.action} · ${job.provider} · ${lead.nome_completo}`,
       });
 
       return new Response(JSON.stringify({ ok: true, jobId, result }), {
