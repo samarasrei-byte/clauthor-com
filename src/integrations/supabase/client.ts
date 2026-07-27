@@ -14,7 +14,12 @@ if (!SUPABASE_PUBLISHABLE_KEY) {
   throw new Error("VITE_SUPABASE_PUBLISHABLE_KEY está vazia");
 }
 
+// Teste temporário
+console.log("SUPABASE_URL:", SUPABASE_URL);
+console.log("SUPABASE_KEY:", SUPABASE_PUBLISHABLE_KEY);
+
 export const supabase = createClient<Database>(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
+);
 );
