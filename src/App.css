@@ -1,1 +1,87 @@
-/* Reset - no constraints on root */
+/* Responsive safeguards shared by public pages and authenticated areas. */
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+img,
+video,
+canvas {
+  height: auto;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  min-width: 0;
+}
+
+:where(p, h1, h2, h3, h4, h5, h6, li, a, button, td, th) {
+  overflow-wrap: break-word;
+}
+
+/* Keep wide data surfaces usable instead of clipping them on small screens. */
+:where([role="table"], .overflow-table, [data-responsive-table]) {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  /* The comparison remains a table, with horizontal touch scrolling. */
+  [aria-label="Comparativo"] .rounded-3xl.overflow-hidden {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [aria-label="Comparativo"] .rounded-3xl.overflow-hidden > * {
+    min-width: 38rem;
+  }
+
+  /* Avoid cramped card footers when translated labels are longer. */
+  [aria-label="Squad ou Departamento"] .group > div:last-child,
+  [aria-label="Departamentos"] .group > div:last-child {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  /* Modals and sheets must fit the dynamic mobile viewport. */
+  [role="dialog"] {
+    max-width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+}
+
+@media (max-width: 479px) {
+  /* Preserve readable page gutters on narrow phones. */
+  main section > .max-w-4xl,
+  main section > .max-w-5xl,
+  main section > .max-w-6xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  [aria-label="Hero"] h1 {
+    hyphens: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
