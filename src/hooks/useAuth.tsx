@@ -1,8 +1,14 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { AUTH_REDIRECT_URL } from "@/lib/auth-security";
 
 type UserRole = "admin" | "customer";
+
+interface AuthResult {
+  error: Error | null;
+  emailConfirmationRequired?: boolean;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -10,9 +16,9 @@ interface AuthContextType {
   role: UserRole | null;
   isAdmin: boolean;
   isLoading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signOut: () => Promise<void>;
+  signUp: (email: string, password: string, fullName: string) => Promise<AuthResult>;
+  signIn: (email: string, password: string) => Promise<AuthResult>;
+  signOut: () => Promise<AuthResult>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,88 +29,62 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<UserRole | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUserRole = async (userId: string) => {
+  const loadRole = async (userId: string): Promise<UserRole | null> => {
     const { data, error } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId);
-    
-    if (data && !error && data.length > 0) {
-      // Prioritize admin role if user has multiple roles
-      const hasAdmin = data.some((r: any) => r.role === "admin");
-      setRole(hasAdmin ? "admin" : (data[0].role as UserRole));
-    }
+
+    if (error || !data?.length) return null;
+    return data.some((entry) => entry.role === "admin")
+      ? "admin"
+      : (data[0].role as UserRole);
   };
 
   useEffect(() => {
     let mounted = true;
 
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (!mounted) return;
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Fetch role without blocking the callback
-          supabase
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", session.user.id)
-            .then(({ data }) => {
-              if (!mounted) return;
-              if (data && data.length > 0) {
-                const hasAdmin = data.some((r: any) => r.role === "admin");
-                setRole(hasAdmin ? "admin" : (data[0].role as UserRole));
-              }
-              setIsLoading(false);
-            });
-        } else {
-          setRole(null);
-          setIsLoading(false);
-        }
-      }
-    );
+    const applySession = async (nextSession: Session | null) => {
+      if (!mounted) return;
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
 
-    // THEN check for existing session — re-validate with getUser to catch bad_jwt
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!nextSession?.user) {
+        setRole(null);
+        setIsLoading(false);
+        return;
+      }
+
+      const nextRole = await loadRole(nextSession.user.id);
+      if (!mounted) return;
+      setRole(nextRole);
+      setIsLoading(false);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      void applySession(nextSession);
+    });
+
+    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
       if (!mounted) return;
 
-      if (session?.user) {
-        // Re-validate the token with Auth server; if it's stale/invalid (bad_jwt,
-        // missing sub claim, revoked signing key), sign out to clear the bogus
-        // localStorage state instead of leaving the user in a broken auth loop.
-        const { data: userData, error: userErr } = await supabase.auth.getUser();
-        if (!mounted) return;
-        if (userErr || !userData?.user) {
-          await supabase.auth.signOut().catch(() => {});
-          setSession(null);
-          setUser(null);
-          setRole(null);
-          setIsLoading(false);
-          return;
-        }
-        setSession(session);
-        setUser(session.user);
-        supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session.user.id)
-          .then(({ data }) => {
-            if (!mounted) return;
-            if (data && data.length > 0) {
-              const hasAdmin = data.some((r: any) => r.role === "admin");
-              setRole(hasAdmin ? "admin" : (data[0].role as UserRole));
-            }
-            setIsLoading(false);
-          });
-      } else {
-        setSession(null);
-        setUser(null);
-        setIsLoading(false);
-
+      if (!existingSession?.user) {
+        await applySession(null);
+        return;
       }
+
+      const { data, error } = await supabase.auth.getUser();
+      if (!mounted) return;
+
+      if (error || !data.user) {
+        await supabase.auth.signOut().catch(() => undefined);
+        await applySession(null);
+        return;
+      }
+
+      await applySession(existingSession);
     });
 
     return () => {
@@ -113,56 +93,63 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string): Promise<AuthResult> => {
     const { getStoredReferral } = await import("@/lib/referral");
     const ref = getStoredReferral();
-    const { error } = await supabase.auth.signUp({
-      email,
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
       password,
       options: {
-        emailRedirectTo: window.location.origin,
-        data: { full_name: fullName, ref_code: ref ?? null },
+        emailRedirectTo: AUTH_REDIRECT_URL,
+        data: { full_name: fullName.trim(), ref_code: ref ?? null },
       },
     });
+
     if (!error && ref) {
       try {
-        const { data: r } = await supabase
+        const { data: referral } = await supabase
           .from("referrals")
           .select("id, signups, bonus_credits")
           .eq("code", ref)
           .maybeSingle();
-        if (r) {
+        if (referral) {
           await supabase.from("referral_events").insert({
-            referral_id: r.id,
+            referral_id: referral.id,
             event_type: "signup",
-            metadata: { email, ts: new Date().toISOString() },
+            metadata: { ts: new Date().toISOString() },
           });
           await supabase
             .from("referrals")
             .update({
-              signups: (r.signups ?? 0) + 1,
-              bonus_credits: (r.bonus_credits ?? 0) + 500,
+              signups: (referral.signups ?? 0) + 1,
+              bonus_credits: (referral.bonus_credits ?? 0) + 500,
             })
-            .eq("id", r.id);
+            .eq("id", referral.id);
         }
-      } catch {/* silent */}
+      } catch {
+        // O cadastro não deve falhar se o registro opcional de indicação falhar.
+      }
     }
-    return { error };
+
+    return { error, emailConfirmationRequired: !error && !data.session };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string): Promise<AuthResult> => {
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     });
     return { error };
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-    setRole(null);
+  const signOut = async (): Promise<AuthResult> => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      setUser(null);
+      setSession(null);
+      setRole(null);
+    }
+    return { error };
   };
 
   return (
