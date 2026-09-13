@@ -83,7 +83,7 @@ function configured(name: string): boolean { return Boolean(Deno.env.get(name));
 function providerOrder(): AIProvider[] {
   const configuredOrder = csvEnv("AI_ROUTER_ORDER") as AIProvider[];
   if (configuredOrder.length > 0) return configuredOrder.filter((p) => ["lovable", "litellm", "openrouter", "openclaw"].includes(p));
-  return ["lovable", "litellm", "openrouter", "openclaw"];
+  return ["litellm", "openrouter", "openclaw"];
 }
 function shouldFallback(status: number): boolean { return status === 402 || status === 408 || status === 409 || status === 429 || status >= 500; }
 function requestBody(body: Record<string, any>, provider: AIProvider): Record<string, any> {
