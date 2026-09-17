@@ -1,28 +1,23 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
-// P1 · Consolidação: SalesChatbot, SupportChat, SocialProofToasts e
-// ExitIntentCapture não são mais renderizados no layout, o Thor é o único
-// concierge visível. Os arquivos seguem existindo por 1 sprint como legado.
 import AgentLivePreview from "./library/AgentLivePreview";
+
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 const CartFab = lazy(() => import("./CartFab"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 const NAVBAR_HIDDEN_ROUTES = ["/thor"];
-// Rotas de checkout / pós-checkout que devem ter layout limpo (sem Navbar/Thor)
 const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/", "/checkout"];
 
 const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
-  const isCheckoutRoute = CHECKOUT_ROUTE_PREFIXES.some((p) => location.pathname.startsWith(p));
-  const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
-  const showNavbar = !NAVBAR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
   const isHomePage = location.pathname === "/";
+  const isCheckoutRoute = CHECKOUT_ROUTE_PREFIXES.some((p) => location.pathname.startsWith(p));
+  const showThor = !isHomePage && !THOR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
+  const showNavbar = !isHomePage && !NAVBAR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
 
-  // Adiar hidratação de add-ons não-críticos (dialogs, greeter, gate) até o
-  // browser sinalizar idle · libera o LCP da rota atual primeiro.
   const [addonsReady, setAddonsReady] = useState(false);
   useEffect(() => {
     const w = window as any;
@@ -30,8 +25,8 @@ const AppLayout = () => {
       const id = w.requestIdleCallback(() => setAddonsReady(true), { timeout: 2500 });
       return () => w.cancelIdleCallback?.(id);
     }
-    const t = setTimeout(() => setAddonsReady(true), 1200);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setAddonsReady(true), 1200);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -41,21 +36,22 @@ const AppLayout = () => {
         <Outlet />
       </main>
 
-      <AgentLivePreview
-        agentName={testDriveAgent?.name || ""}
-        agentDesc="Converse com este agente antes de contratar"
-        isOpen={!!testDriveAgent}
-        onClose={() => setTestDriveAgent(null)}
-      />
+      {!isHomePage && (
+        <AgentLivePreview
+          agentName={testDriveAgent?.name || ""}
+          agentDesc="Converse com este agente antes de contratar"
+          isOpen={!!testDriveAgent}
+          onClose={() => setTestDriveAgent(null)}
+        />
+      )}
 
       {addonsReady && showThor && (
         <Suspense fallback={null}>
-          {/* Hierarquia única: 1º contato = só Thor (onboarding). Depois = greeting + updates. */}
           <AssistantHierarchy />
         </Suspense>
       )}
 
-      {!isCheckoutRoute && (
+      {!isHomePage && !isCheckoutRoute && (
         <Suspense fallback={null}>
           <CartFab />
         </Suspense>
