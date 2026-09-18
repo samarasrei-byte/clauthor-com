@@ -32,6 +32,25 @@ select {
   overflow-wrap: break-word;
 }
 
+.skip-to-content {
+  position: fixed;
+  z-index: 10000;
+  top: 0.75rem;
+  left: 50%;
+  transform: translate(-50%, -180%);
+  border-radius: 9999px;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: transform 160ms ease;
+}
+
+.skip-to-content:focus {
+  transform: translate(-50%, 0);
+}
+
 /* Keep wide data surfaces usable instead of clipping them on small screens. */
 :where([role="table"], .overflow-table, [data-responsive-table]) {
   max-width: 100%;
@@ -50,7 +69,6 @@ select {
 }
 
 @media (max-width: 1023px) {
-  /* Keep all home sections inside comfortable tablet gutters. */
   main section > .max-w-4xl,
   main section > .max-w-5xl,
   main section > .max-w-6xl {
@@ -63,6 +81,12 @@ select {
 }
 
 @media (max-width: 767px) {
+  .home-orientation-bar {
+    position: sticky;
+    top: 3rem;
+    z-index: 40;
+  }
+
   /* The orientation shortcuts stay on one touch-scrollable line. */
   aside[aria-label="Como começar"] nav {
     width: 100%;
@@ -189,7 +213,6 @@ select {
 }
 
 @media (max-width: 479px) {
-  /* Preserve readable page gutters on narrow phones. */
   main section > .max-w-4xl,
   main section > .max-w-5xl,
   main section > .max-w-6xl {

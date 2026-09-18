@@ -17,14 +17,16 @@ const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/", "/checko
 const HomeOrientationBar = () => {
   const goToChat = () => {
     const chatInput = document.querySelector<HTMLTextAreaElement>('textarea[placeholder*="Pergunte"]');
-    chatInput?.scrollIntoView({ behavior: "smooth", block: "center" });
-    window.setTimeout(() => chatInput?.focus(), 450);
+    if (!chatInput) return;
+
+    chatInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => chatInput.focus({ preventScroll: true }), 450);
   };
 
   return (
     <aside
       aria-label="Como começar"
-      className="border-b border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-xl"
+      className="home-orientation-bar border-b border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-xl"
     >
       <div className="mx-auto flex max-w-[1120px] flex-col gap-3 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex items-center gap-2">
@@ -32,7 +34,7 @@ const HomeOrientationBar = () => {
             1
           </span>
           <p className="text-xs font-medium text-foreground sm:text-sm">
-            Comece pelo que você precisa resolver.
+            Conte o que precisa resolver. Nós indicamos o próximo passo.
           </p>
         </div>
 
@@ -43,21 +45,21 @@ const HomeOrientationBar = () => {
             className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-primary/35 bg-primary/10 px-3 text-xs font-semibold text-foreground transition-colors hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
             <MessageCircle aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
-            Falar com o Thor
+            Começar diagnóstico
           </button>
           <Link
             to="/departamentos"
             className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-card/40 px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
             <Network aria-hidden="true" className="h-3.5 w-3.5" />
-            Ver departamentos
+            Explorar soluções
           </Link>
           <Link
             to="/pricing"
             className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-card/40 px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
             <Tag aria-hidden="true" className="h-3.5 w-3.5" />
-            Ver preços
+            Consultar preços
             <ArrowRight aria-hidden="true" className="h-3 w-3" />
           </Link>
         </nav>
@@ -90,7 +92,10 @@ const AppLayout = () => {
   return (
     <div className="min-h-dvh overflow-x-hidden bg-background">
       {showNavbar && <Navbar />}
-      <main className={showNavbar ? "pt-16" : ""}>
+      <a className="skip-to-content" href="#conteudo-principal">
+        Pular para o conteúdo
+      </a>
+      <main id="conteudo-principal" tabIndex={-1} className={showNavbar ? "pt-16" : ""}>
         {isHomePage && showNavbar && <HomeOrientationBar />}
         <Outlet />
       </main>
