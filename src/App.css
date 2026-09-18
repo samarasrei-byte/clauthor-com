@@ -40,16 +40,120 @@ select {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Home: fluid headings prevent abrupt size jumps between phone, tablet and desktop. */
+[aria-label="Hero"] h1 > span:first-child {
+  font-size: clamp(2.25rem, 7vw, 5.25rem);
+}
+
+[aria-label="Hero"] h1 > span:last-child {
+  font-size: clamp(1.55rem, 4.5vw, 3.375rem);
+}
+
+@media (max-width: 1023px) {
+  /* Keep all home sections inside comfortable tablet gutters. */
+  main section > .max-w-4xl,
+  main section > .max-w-5xl,
+  main section > .max-w-6xl {
+    width: 100%;
+  }
+
+  [aria-label="Hero"] .max-w-6xl {
+    padding-top: clamp(2rem, 6vw, 4rem);
+  }
+}
+
 @media (max-width: 767px) {
+  /* The orientation shortcuts stay on one touch-scrollable line. */
+  aside[aria-label="Como começar"] nav {
+    width: 100%;
+    max-width: 100%;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  aside[aria-label="Como começar"] nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  aside[aria-label="Como começar"] nav > * {
+    scroll-snap-align: start;
+  }
+
+  /* Home hero: less nesting space, full-width controls and a useful chat viewport. */
+  [aria-label="Hero"] > .max-w-6xl {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  [aria-label="Hero"] h1 {
+    max-width: 34rem;
+    text-wrap: balance;
+  }
+
+  [aria-label="Hero"] h1 > span:first-child {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+    line-height: 1.02;
+  }
+
+  [aria-label="Hero"] h1 > span:last-child {
+    margin-top: 0.65rem;
+    font-size: clamp(1.5rem, 7vw, 2.25rem);
+    line-height: 1.08;
+  }
+
+  [aria-label="Hero"] .max-w-3xl {
+    margin-bottom: 3rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl > div {
+    padding: 0.5rem;
+    border-radius: 1.25rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl > div > div {
+    min-height: min(31rem, calc(100dvh - 8rem));
+    border-radius: 1rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl header,
+  [aria-label="Hero"] .max-w-3xl footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl footer textarea {
+    min-height: 3.5rem;
+    padding-left: 1rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl footer form + div {
+    gap: 0.75rem;
+  }
+
   /* The comparison remains a table, with horizontal touch scrolling. */
   [aria-label="Comparativo"] .rounded-3xl.overflow-hidden {
+    max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
     -webkit-overflow-scrolling: touch;
+    border-radius: 1rem;
   }
 
   [aria-label="Comparativo"] .rounded-3xl.overflow-hidden > * {
-    min-width: 38rem;
+    min-width: 34rem;
+  }
+
+  [aria-label="Comparativo"] .rounded-3xl.overflow-hidden::after {
+    content: "Deslize para ver tudo";
+    position: sticky;
+    left: 1rem;
+    display: block;
+    width: max-content;
+    padding: 0.5rem 0 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   /* Avoid cramped card footers when translated labels are longer. */
@@ -57,6 +161,24 @@ select {
   [aria-label="Departamentos"] .group > div:last-child {
     gap: 0.75rem;
     flex-wrap: wrap;
+  }
+
+  [aria-label="Squad ou Departamento"] .group,
+  [aria-label="Departamentos"] .group {
+    min-height: auto;
+  }
+
+  /* Large vertical rhythms become proportionate on phones. */
+  [aria-label="Squad ou Departamento"] > div,
+  [aria-label="Departamentos"],
+  [aria-label="Como funciona"] > div,
+  [aria-label="Comparativo"] > div,
+  [aria-label="Painel"] > div,
+  [aria-label="Depoimentos"] > div,
+  [aria-label="Escala"],
+  [aria-label="CTA"] > div {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   /* Modals and sheets must fit the dynamic mobile viewport. */
@@ -76,7 +198,46 @@ select {
   }
 
   [aria-label="Hero"] h1 {
-    hyphens: auto;
+    hyphens: none;
+  }
+
+  [aria-label="Hero"] .max-w-3xl > div > div {
+    min-height: min(29rem, calc(100dvh - 6rem));
+  }
+
+  [aria-label="Hero"] .max-w-3xl header {
+    gap: 0.5rem;
+  }
+
+  [aria-label="Hero"] .max-w-3xl header button {
+    max-width: 8rem;
+    text-align: right;
+    line-height: 1.25;
+  }
+
+  [aria-label="Hero"] .max-w-3xl footer button:not([type="submit"]) {
+    min-height: 2.75rem;
+    text-align: left;
+  }
+
+  [aria-label="Squad ou Departamento"] .group,
+  [aria-label="Departamentos"] .group {
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+  }
+
+  [aria-label="Comparativo"] .rounded-3xl.overflow-hidden > * {
+    min-width: 31rem;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Reliable touch targets without changing compact desktop controls. */
+  [aria-label="Hero"] button,
+  [aria-label="Hero"] a,
+  aside[aria-label="Como começar"] button,
+  aside[aria-label="Como começar"] a {
+    min-height: 44px;
   }
 }
 
